@@ -1,3 +1,5 @@
+# lib
+
 ```sh
 pnpm build-theme
 pnpm build

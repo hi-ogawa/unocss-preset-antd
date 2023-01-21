@@ -3,7 +3,11 @@
   "private": true,
   "scripts": {
     "dev": "vite --no-clearScreen",
-    "build": "vite build"
+    "build": "run-s build:*",
+    "build:vite": "vite build",
+    "build:vercel": "bash misc/vercel/build.sh",
+    "release": "vercel deploy --prebuilt .",
+    "release-production": "vercel deploy --prebuilt . --prod"
   },
   "dependencies": {
     "@floating-ui/react-dom-interactions": "^0.13.3",
