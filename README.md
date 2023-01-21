@@ -5,7 +5,7 @@
 ```sh
 # development
 pnpm i
-pnpm setup
+pnpm dev-setup
 pnpm dev
 
 # publish demo app
