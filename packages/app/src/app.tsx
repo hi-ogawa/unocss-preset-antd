@@ -37,19 +37,23 @@ function Main() {
     <main className="flex flex-col items-center gap-3 m-2">
       <section className="flex flex-col gap-3 w-full max-w-lg border border-[var(--antd-colorBorderSecondary)] p-3">
         <h2 className="text-xl">Button</h2>
+        {/* prettier-ignore */}
         <div className="flex flex-col gap-3">
           <button className="antd-btn antd-btn-primary">btn-primary</button>
           <button className="antd-btn antd-btn-default">btn-default</button>
           <button className="antd-btn antd-btn-ghost">btn-ghost</button>
-          <button className="antd-btn antd-btn-primary" disabled>
-            btn-primary (disabled)
-          </button>
-          <button className="antd-btn antd-btn-default" disabled>
-            btn-default (disabled)
-          </button>
-          <button className="antd-btn antd-btn-ghost" disabled>
-            btn-ghost (disabled)
-          </button>
+          <button className="antd-btn antd-btn-primary" disabled>btn-primary (disabled)</button>
+          <button className="antd-btn antd-btn-default" disabled>btn-default (disabled)</button>
+          <button className="antd-btn antd-btn-ghost" disabled>btn-ghost (disabled)</button>
+        </div>
+      </section>
+      <section className="flex flex-col gap-3 w-full max-w-lg border border-[var(--antd-colorBorderSecondary)] p-3">
+        <h2 className="text-xl">Input</h2>
+        {/* prettier-ignore */}
+        <div className="flex flex-col gap-3">
+          <input className="px-2 antd-input" placeholder="input" />
+          <input className="px-2 antd-input" placeholder="input (disabled)" disabled />
+          <input className="px-2 antd-input" placeholder="input (error)" aria-invalid />
         </div>
       </section>
     </main>

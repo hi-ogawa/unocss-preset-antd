@@ -17,7 +17,7 @@ pnpm build-lib
 pnpm release-lib
 ```
 
-![image](https://user-images.githubusercontent.com/4232207/213860800-8520eeda-c02f-4e12-8f56-446f8a706387.png)
+![image](https://user-images.githubusercontent.com/4232207/213862118-f0fc1b3c-7cff-417f-8ad2-a97d1dcae202.png)
 
 ## examples
 

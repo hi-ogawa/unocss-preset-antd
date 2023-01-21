@@ -5,6 +5,11 @@ export function antdPreset(): Preset {
   return {
     name: "antd-preset",
     prefix: "antd-",
+    theme: {
+      aria: {
+        invalid: 'invalid="true"',
+      },
+    },
     shortcuts: {
       /**
        * pass theme variables via shortcuts, which can be used e.g. by
@@ -63,6 +68,16 @@ export function antdPreset(): Preset {
         bg-[var(--antd-colorPrimary)]
         not-disabled:hover:bg-[var(--antd-colorPrimaryHover)]
         not-disabled:active:bg-[var(--antd-colorPrimaryActive)]
+      `,
+      input: `
+        outline-none
+        transition
+        bg-[var(--antd-colorBgContainer)] border border-[var(--antd-colorBorder)]
+        disabled:(bg-[var(--antd-colorBgContainerDisabled)])
+        not-disabled:hover:border-[var(--antd-colorPrimary)]
+        not-disabled:focus:(border-[var(--antd-colorPrimary)] ring-2 ring-[var(--antd-colorPrimaryBorder)])
+        aria-invalid:!border-[var(--antd-colorError)]
+        aria-invalid:focus:(ring-2 ring-[var(--antd-colorErrorOutline)])
       `,
     },
   };
