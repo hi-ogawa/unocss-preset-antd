@@ -1,0 +1,18 @@
+/* fixed main height */
+html,
+body,
+#root {
+  --at-apply: "h-full";
+}
+
+/* light/dark theme */
+:root {
+  --at-apply: "antd-variables-default";
+}
+.dark {
+  --at-apply: "antd-variables-dark";
+}
+
+body {
+  --at-apply: "antd-body";
+}

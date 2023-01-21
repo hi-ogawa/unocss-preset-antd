@@ -1,0 +1,32 @@
+{
+  "name": "@hiogawa/unocss-preset-antd-app",
+  "private": true,
+  "scripts": {
+    "dev": "vite --no-clearScreen",
+    "build": "vite build"
+  },
+  "dependencies": {
+    "@floating-ui/react-dom-interactions": "^0.13.3",
+    "@headlessui/react": "^1.7.7",
+    "@hiogawa/unocss-preset-antd": "workspace:*",
+    "@hiogawa/utils": "1.0.0-pre.1",
+    "lodash": "^4.17.21",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-hook-form": "^7.42.1",
+    "react-hot-toast": "^2.4.0",
+    "react-remove-scroll": "^2.5.5"
+  },
+  "devDependencies": {
+    "@iconify-json/ri": "^1.1.4",
+    "@types/lodash": "^4.14.191",
+    "@types/node": "^16.18.11",
+    "@types/react": "^18.0.27",
+    "@types/react-dom": "^18.0.10",
+    "@unocss/reset": "^0.48.4",
+    "@vitejs/plugin-react": "^3.0.1",
+    "antd": "^5.1.6",
+    "unocss": "^0.48.4",
+    "vite": "^4.0.4"
+  }
+}

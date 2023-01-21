@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>unocss-preset-antd-app</title>
+    <meta
+      name="viewport"
+      content="width=device-width, height=device-height, initial-scale=1.0"
+    />
+    <!-- initialize light/dark theme as early as possible (cf. src/utils/use-theme-state.ts) -->
+    <script>
+      function __getTheme() {
+        return window.localStorage.getItem("theme") || "light";
+      }
+      function __setTheme(theme) {
+        window.localStorage.setItem("theme", theme);
+        __applyTheme(theme);
+      }
+      function __applyTheme(theme) {
+        if (theme === "dark") {
+          document.documentElement.classList.add("dark");
+        } else {
+          document.documentElement.classList.remove("dark");
+        }
+      }
+      __applyTheme(__getTheme());
+    </script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script src="./src/index.tsx" type="module"></script>
+  </body>
+</html>

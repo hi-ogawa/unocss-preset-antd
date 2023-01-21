@@ -1,0 +1,35 @@
+{
+  "name": "@hiogawa/unocss-preset-antd",
+  "version": "1.0.0-pre.1",
+  "type": "commonjs",
+  "main": "./dist/esbuild/index.js",
+  "types": "./dist/tsc/index.d.js",
+  "files": [
+    "dist/esbuild/index.js",
+    "dist/tsc/index.d.ts"
+  ],
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/hi-ogawa/unocss-preset-antd",
+    "directory": "packages/lib"
+  },
+  "scripts": {
+    "dev": "pnpm build:cjs --watch",
+    "build": "run-s build:*",
+    "build:cjs": "esbuild ./src/index.ts --bundle --outdir=./dist/esbuild --format=cjs",
+    "build:dts": "tsc --noEmit false --emitDeclarationOnly",
+    "build-theme": "pnpm -s ts ./src/build-theme.ts > ./src/theme.ts",
+    "ts": "node -r esbuild-register",
+    "release": "pnpm publish --no-git-checks --access public"
+  },
+  "devDependencies": {
+    "antd": "^5.1.6",
+    "esbuild": "^0.17.3",
+    "esbuild-register": "^3.4.2",
+    "unocss": "^0.48.4"
+  },
+  "peerDependencies": {
+    "unocss": "*"
+  }
+}
