@@ -18,3 +18,9 @@ body,
 body {
   --at-apply: "antd-body";
 }
+
+*,
+::before,
+::after {
+  --at-apply: "antd-reset";
+}

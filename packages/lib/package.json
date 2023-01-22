@@ -1,6 +1,6 @@
 {
   "name": "@hiogawa/unocss-preset-antd",
-  "version": "1.1.1",
+  "version": "1.2.0",
   "type": "commonjs",
   "main": "./dist/esbuild/index.js",
   "types": "./dist/tsc/index.d.js",
@@ -24,12 +24,14 @@
     "release": "pnpm publish --no-git-checks --access public"
   },
   "devDependencies": {
+    "@unocss/preset-uno": "^0.48.4",
     "antd": "^5.1.6",
     "esbuild": "^0.17.3",
     "esbuild-register": "^3.4.2",
     "unocss": "^0.48.4"
   },
   "peerDependencies": {
+    "@unocss/preset-uno": "*",
     "unocss": "*"
   }
 }

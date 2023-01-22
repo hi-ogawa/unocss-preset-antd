@@ -1,7 +1,8 @@
+import type { Theme } from "@unocss/preset-uno";
 import type { Preset } from "unocss";
 import { theme } from "./theme";
 
-export function antdPreset(): Preset {
+export function antdPreset(): Preset<Theme> {
   return {
     name: "antd-preset",
     prefix: "antd-",
@@ -10,6 +11,7 @@ export function antdPreset(): Preset {
         invalid: 'invalid="true"',
       },
     },
+    // prettier-ignore
     shortcuts: {
       /**
        * pass theme variables via shortcuts, which can be used e.g. by
@@ -27,12 +29,24 @@ export function antdPreset(): Preset {
       "variables-compact": [toCssVariables(theme.compact)],
 
       /**
-       * base style (e.g. body { --at-apply: "antd-body" })
+       * base style e.g.
+       *
+          body {
+            --at-apply: "antd-body";
+          }
+          *, ::before, ::after {
+            --at-apply: "antd-reset";
+          }
+       *
        */
-      body: `
-        font-[var(--antd-fontFamily)]
-        bg-[var(--antd-colorBgContainer)]
-        text-[var(--antd-colorText)]
+      "body": `
+        font-${VAR.fontFamily}
+        bg-${VAR.colorBgContainer}
+        text-${VAR.colorText}
+      `,
+      // default border color e.g. for card, divider, etc...
+      "reset": `
+        border-${VAR.colorBorderSecondary}
       `,
 
       /**
@@ -46,8 +60,8 @@ export function antdPreset(): Preset {
       link: `
         cursor-pointer
         transition
-        text-[var(--antd-colorPrimary)]
-        hover:text-[var(--antd-colorPrimaryHover)]
+        text-${VAR.colorPrimary}
+        hover:text-${VAR.colorPrimaryHover}
       `,
 
       /**
@@ -59,23 +73,23 @@ export function antdPreset(): Preset {
         disabled:(cursor-not-allowed opacity-50)
       `,
       "btn-text": `
-        not-disabled:hover:bg-[var(--antd-colorBgTextHover)]
-        not-disabled:active:bg-[var(--antd-colorBgTextActive)]
+        not-disabled:hover:bg-${VAR.colorBgTextHover}
+        not-disabled:active:bg-${VAR.colorBgTextActive}
       `,
       "btn-ghost": `
-        not-disabled:hover:text-[var(--antd-colorPrimaryHover)]
-        not-disabled:active:text-[var(--antd-colorPrimaryActive)]
+        not-disabled:hover:text-${VAR.colorPrimaryHover}
+        not-disabled:active:text-${VAR.colorPrimaryActive}
       `,
       "btn-default": `
-        border border-[var(--antd-colorBorder)]
-        not-disabled:hover:(text-[var(--antd-colorPrimaryHover)] border-[var(--antd-colorPrimaryHover)])
-        not-disabled:active:(text-[var(--antd-colorPrimaryActive)] border-[var(--antd-colorPrimaryActive)])
+        border border-${VAR.colorBorder}
+        not-disabled:hover:(text-${VAR.colorPrimaryHover} border-${VAR.colorPrimaryHover})
+        not-disabled:active:(text-${VAR.colorPrimaryActive} border-${VAR.colorPrimaryActive})
       `,
       "btn-primary": `
         text-white
-        bg-[var(--antd-colorPrimary)]
-        not-disabled:hover:bg-[var(--antd-colorPrimaryHover)]
-        not-disabled:active:bg-[var(--antd-colorPrimaryActive)]
+        bg-${VAR.colorPrimary}
+        not-disabled:hover:bg-${VAR.colorPrimaryHover}
+        not-disabled:active:bg-${VAR.colorPrimaryActive}
       `,
 
       /**
@@ -84,16 +98,23 @@ export function antdPreset(): Preset {
       input: `
         outline-none
         transition
-        bg-[var(--antd-colorBgContainer)] border border-[var(--antd-colorBorder)]
-        disabled:(bg-[var(--antd-colorBgContainerDisabled)])
-        not-disabled:hover:border-[var(--antd-colorPrimary)]
-        not-disabled:focus:(border-[var(--antd-colorPrimary)] ring-2 ring-[var(--antd-colorPrimaryBorder)])
-        aria-invalid:!border-[var(--antd-colorError)]
-        aria-invalid:focus:(ring-2 ring-[var(--antd-colorErrorOutline)])
+        bg-${VAR.colorBgContainer} border border-${VAR.colorBorder}
+        disabled:bg-${VAR.colorBgContainerDisabled}
+        not-disabled:hover:border-${VAR.colorPrimary}
+        not-disabled:focus:(border-${VAR.colorPrimary} ring-2 ring-${VAR.colorPrimaryBorder})
+        aria-invalid:!border-${VAR.colorError}
+        aria-invalid:focus:(ring-2 ring-${VAR.colorErrorOutline})
       `,
     },
   };
 }
+
+// shortcut authoring helper with IDE autocompletion e.g.
+//   VARS.colorText => "[var(--antd-colorText)]"
+// TODO: this cannot be used outside of "shortcuts" since scanner cannot resolve interpolation
+export const VAR = Object.fromEntries(
+  Object.keys(theme.default).map((k) => [k, `[var(--antd-${k})]`])
+) as { [K in keyof typeof theme.default]: string }; // IDE cannot follow the definition if Record<keyof typeof theme.default, string>
 
 function toCssVariables(
   tokens: Record<string, unknown>
