@@ -1,6 +1,6 @@
 {
   "name": "@hiogawa/unocss-preset-antd",
-  "version": "1.0.0",
+  "version": "1.1.1",
   "type": "commonjs",
   "main": "./dist/esbuild/index.js",
   "types": "./dist/tsc/index.d.js",
