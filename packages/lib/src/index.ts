@@ -38,10 +38,10 @@ export function antdPreset(): Preset {
       /**
        * misc
        */
-      spinner: `
+      spin: `
         animate-spin
         rounded-full
-        border-2 border-gray-500 border-t-gray-300 border-l-gray-300
+        border-1 border-transparent border-t-current
       `,
       link: `
         cursor-pointer

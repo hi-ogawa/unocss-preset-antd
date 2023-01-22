@@ -43,10 +43,22 @@ function Main() {
           <button className="antd-btn antd-btn-default">btn-default</button>
           <button className="antd-btn antd-btn-ghost">btn-ghost</button>
           <button className="antd-btn antd-btn-text">btn-text</button>
+        </div>
+        <h2 className="text-xl">Button (disabled)</h2>
+        {/* prettier-ignore */}
+        <div className="flex flex-col gap-3">
           <button className="antd-btn antd-btn-primary" disabled>btn-primary (disabled)</button>
           <button className="antd-btn antd-btn-default" disabled>btn-default (disabled)</button>
           <button className="antd-btn antd-btn-ghost" disabled>btn-ghost (disabled)</button>
           <button className="antd-btn antd-btn-text" disabled>btn-text (disabled)</button>
+        </div>
+        <h2 className="text-xl">Button (loading)</h2>
+        {/* prettier-ignore */}
+        <div className="flex flex-col gap-3">
+          <button className="antd-btn antd-btn-primary relative flex justify-center items-center" disabled>
+            btn-primary + antd-spin
+            <span className="antd-spin w-4 h-4 absolute right-2"></span>
+          </button>
         </div>
       </section>
       <section className="flex flex-col gap-3 w-full max-w-lg border border-[var(--antd-colorBorderSecondary)] p-3">
