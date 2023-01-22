@@ -36,7 +36,7 @@ export function antdPreset(): Preset {
       `,
 
       /**
-       * components
+       * misc
        */
       spinner: `
         animate-spin
@@ -49,14 +49,22 @@ export function antdPreset(): Preset {
         text-[var(--antd-colorPrimary)]
         hover:text-[var(--antd-colorPrimaryHover)]
       `,
+
+      /**
+       * button https://github.com/ant-design/ant-design/blob/db5913696b5286b02701b7451bb34eebbe34b464/components/button/style/index.ts
+       */
       btn: `
         cursor-pointer
         transition
         disabled:(cursor-not-allowed opacity-50)
       `,
+      "btn-text": `
+        not-disabled:hover:bg-[var(--antd-colorBgTextHover)]
+        not-disabled:active:bg-[var(--antd-colorBgTextActive)]
+      `,
       "btn-ghost": `
-        not-disabled:hover:(text-[var(--antd-colorPrimaryHover)])
-        not-disabled:active:(text-[var(--antd-colorPrimaryActive)])
+        not-disabled:hover:text-[var(--antd-colorPrimaryHover)]
+        not-disabled:active:text-[var(--antd-colorPrimaryActive)]
       `,
       "btn-default": `
         border border-[var(--antd-colorBorder)]
@@ -69,6 +77,10 @@ export function antdPreset(): Preset {
         not-disabled:hover:bg-[var(--antd-colorPrimaryHover)]
         not-disabled:active:bg-[var(--antd-colorPrimaryActive)]
       `,
+
+      /**
+       * input
+       */
       input: `
         outline-none
         transition

@@ -42,9 +42,11 @@ function Main() {
           <button className="antd-btn antd-btn-primary">btn-primary</button>
           <button className="antd-btn antd-btn-default">btn-default</button>
           <button className="antd-btn antd-btn-ghost">btn-ghost</button>
+          <button className="antd-btn antd-btn-text">btn-text</button>
           <button className="antd-btn antd-btn-primary" disabled>btn-primary (disabled)</button>
           <button className="antd-btn antd-btn-default" disabled>btn-default (disabled)</button>
           <button className="antd-btn antd-btn-ghost" disabled>btn-ghost (disabled)</button>
+          <button className="antd-btn antd-btn-text" disabled>btn-text (disabled)</button>
         </div>
       </section>
       <section className="flex flex-col gap-3 w-full max-w-lg border border-[var(--antd-colorBorderSecondary)] p-3">
@@ -53,7 +55,7 @@ function Main() {
         <div className="flex flex-col gap-3">
           <input className="px-2 antd-input" placeholder="input" />
           <input className="px-2 antd-input" placeholder="input (disabled)" disabled />
-          <input className="px-2 antd-input" placeholder="input (error)" aria-invalid />
+          <input className="px-2 antd-input" placeholder="input (aria-invalid)" aria-invalid />
         </div>
       </section>
     </main>
