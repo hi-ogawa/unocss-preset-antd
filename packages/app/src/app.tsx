@@ -56,7 +56,7 @@ function Main() {
         {/* prettier-ignore */}
         <div className="flex flex-col gap-3">
           <button className="antd-btn antd-btn-primary relative flex justify-center items-center" disabled>
-            btn-primary + antd-spin
+            btn-primary + spin
             <span className="antd-spin w-4 h-4 absolute right-2"></span>
           </button>
         </div>
