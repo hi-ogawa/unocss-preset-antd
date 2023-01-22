@@ -1,7 +1,8 @@
+import type { Theme } from "@unocss/preset-uno";
 import type { Preset } from "unocss";
 import { theme } from "./theme";
 
-export function antdPreset(): Preset {
+export function antdPreset(): Preset<Theme> {
   return {
     name: "antd-preset",
     prefix: "antd-",
