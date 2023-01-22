@@ -29,12 +29,24 @@ export function antdPreset(): Preset<Theme> {
       "variables-compact": [toCssVariables(theme.compact)],
 
       /**
-       * base style (e.g. body { --at-apply: "antd-body" })
+       * base style e.g.
+       *
+          body {
+            --at-apply: "antd-base-body";
+          }
+          *, ::before, ::after {
+            --at-apply: "antd-base-reset";
+          }
+       *
        */
-      body: `
+      "body": `
         font-${VAR.fontFamily}
         bg-${VAR.colorBgContainer}
         text-${VAR.colorText}
+      `,
+      // default border color e.g. for card, divider, etc...
+      "reset": `
+        border-${VAR.colorBorderSecondary}
       `,
 
       /**
@@ -65,19 +77,19 @@ export function antdPreset(): Preset<Theme> {
         not-disabled:active:bg-${VAR.colorBgTextActive}
       `,
       "btn-ghost": `
-        not-disabled:hover:text-[var(--antd-colorPrimaryHover)]
-        not-disabled:active:text-[var(--antd-colorPrimaryActive)]
+        not-disabled:hover:text-${VAR.colorPrimaryHover}
+        not-disabled:active:text-${VAR.colorPrimaryActive}
       `,
       "btn-default": `
-        border border-[var(--antd-colorBorder)]
-        not-disabled:hover:(text-[var(--antd-colorPrimaryHover)] border-[var(--antd-colorPrimaryHover)])
-        not-disabled:active:(text-[var(--antd-colorPrimaryActive)] border-[var(--antd-colorPrimaryActive)])
+        border border-${VAR.colorBorder}
+        not-disabled:hover:(text-${VAR.colorPrimaryHover} border-${VAR.colorPrimaryHover})
+        not-disabled:active:(text-${VAR.colorPrimaryActive} border-${VAR.colorPrimaryActive})
       `,
       "btn-primary": `
         text-white
-        bg-[var(--antd-colorPrimary)]
-        not-disabled:hover:bg-[var(--antd-colorPrimaryHover)]
-        not-disabled:active:bg-[var(--antd-colorPrimaryActive)]
+        bg-${VAR.colorPrimary}
+        not-disabled:hover:bg-${VAR.colorPrimaryHover}
+        not-disabled:active:bg-${VAR.colorPrimaryActive}
       `,
 
       /**
@@ -86,26 +98,12 @@ export function antdPreset(): Preset<Theme> {
       input: `
         outline-none
         transition
-        bg-[var(--antd-colorBgContainer)] border border-[var(--antd-colorBorder)]
-        disabled:(bg-[var(--antd-colorBgContainerDisabled)])
-        not-disabled:hover:border-[var(--antd-colorPrimary)]
-        not-disabled:focus:(border-[var(--antd-colorPrimary)] ring-2 ring-[var(--antd-colorPrimaryBorder)])
-        aria-invalid:!border-[var(--antd-colorError)]
-        aria-invalid:focus:(ring-2 ring-[var(--antd-colorErrorOutline)])
-      `,
-
-      /**
-       * card
-       */
-      card: `
-        border border-${VAR.colorBorderSecondary}
-      `,
-
-      /**
-       * divider
-       */
-      divider: `
-        border-t-1 border-t-${VAR.colorBorderSecondary}
+        bg-${VAR.colorBgContainer} border border-${VAR.colorBorder}
+        disabled:bg-${VAR.colorBgContainerDisabled}
+        not-disabled:hover:border-${VAR.colorPrimary}
+        not-disabled:focus:(border-${VAR.colorPrimary} ring-2 ring-${VAR.colorPrimaryBorder})
+        aria-invalid:!border-${VAR.colorError}
+        aria-invalid:focus:(ring-2 ring-${VAR.colorErrorOutline})
       `,
     },
   };
