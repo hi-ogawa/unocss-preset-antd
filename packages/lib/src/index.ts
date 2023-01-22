@@ -10,6 +10,7 @@ export function antdPreset(): Preset {
         invalid: 'invalid="true"',
       },
     },
+    // prettier-ignore
     shortcuts: {
       /**
        * pass theme variables via shortcuts, which can be used e.g. by
@@ -30,9 +31,9 @@ export function antdPreset(): Preset {
        * base style (e.g. body { --at-apply: "antd-body" })
        */
       body: `
-        font-[var(--antd-fontFamily)]
-        bg-[var(--antd-colorBgContainer)]
-        text-[var(--antd-colorText)]
+        font-${VAR.fontFamily}
+        bg-${VAR.colorBgContainer}
+        text-${VAR.colorText}
       `,
 
       /**
@@ -46,8 +47,8 @@ export function antdPreset(): Preset {
       link: `
         cursor-pointer
         transition
-        text-[var(--antd-colorPrimary)]
-        hover:text-[var(--antd-colorPrimaryHover)]
+        text-${VAR.colorPrimary}
+        hover:text-${VAR.colorPrimaryHover}
       `,
 
       /**
@@ -59,8 +60,8 @@ export function antdPreset(): Preset {
         disabled:(cursor-not-allowed opacity-50)
       `,
       "btn-text": `
-        not-disabled:hover:bg-[var(--antd-colorBgTextHover)]
-        not-disabled:active:bg-[var(--antd-colorBgTextActive)]
+        not-disabled:hover:bg-${VAR.colorBgTextHover}
+        not-disabled:active:bg-${VAR.colorBgTextActive}
       `,
       "btn-ghost": `
         not-disabled:hover:text-[var(--antd-colorPrimaryHover)]
@@ -94,6 +95,13 @@ export function antdPreset(): Preset {
     },
   };
 }
+
+// shortcut authoring helper with IDE autocompletion e.g.
+//   VARS.colorText => "[var(--antd-colorText)]"
+// TODO: this cannot be used outside of "shortcuts" since scanner cannot resolve interpolation
+export const VAR = Object.fromEntries(
+  Object.keys(theme.default).map((k) => [k, `[var(--antd-${k})]`])
+) as { [K in keyof typeof theme.default]: string }; // IDE cannot follow the definition if Record<keyof typeof theme.default, string>
 
 function toCssVariables(
   tokens: Record<string, unknown>
