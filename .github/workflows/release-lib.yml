@@ -9,7 +9,7 @@ jobs:
       - uses: pnpm/action-setup@v2
         with:
           version: 7
-      - uses: actions/setup-node@v2
+      - uses: actions/setup-node@v3
         with:
           node-version: 16
           # create .npmrc with NODE_AUTH_TOKEN https://github.com/actions/setup-node/blob/3dbcda8bc2eb5ec6aa3fbde01feaae3236952db8/src/authutil.ts#L48
