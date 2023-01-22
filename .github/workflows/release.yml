@@ -7,6 +7,9 @@
 # - https://vercel.com/guides/how-can-i-use-gitlab-pipelines-with-vercel
 # - https://docs.github.com/en/actions/security-guides/encrypted-secrets#creating-encrypted-secrets-for-a-repository
 
+# see also
+# - packages/app/misc/vercel/ci-setup.sh
+
 name: release
 on:
   push:
