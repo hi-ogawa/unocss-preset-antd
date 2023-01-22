@@ -1,3 +1,5 @@
+import React from "react";
+import { Drawer } from "./components/drawer";
 import { ThemeSelectButton } from "./components/misc";
 
 export function App() {
@@ -14,8 +16,16 @@ function AppInner() {
 }
 
 function Header() {
+  const [menuOpen, setMenuOpen] = React.useState(false);
+
   return (
     <header className="w-full flex justify-end items-center p-2 px-4 shadow-md shadow-black/[0.05] dark:shadow-black/[0.7]">
+      <button
+        className="pl-1 pr-3 py-1 btn btn-ghost flex items-center"
+        onClick={() => setMenuOpen(true)}
+      >
+        <span className="i-ri-menu-line w-5 h-5"></span>
+      </button>
       <h1 className="text-xl">UnoCSS Ant Design</h1>
       <div className="flex-1"></div>
       <div className="flex gap-3 flex items-center">
@@ -28,6 +38,23 @@ function Header() {
           <span className="i-ri-github-line w-6 h-6"></span>
         </a>
       </div>
+      <Drawer open={menuOpen} onClose={() => setMenuOpen(false)}>
+        <div className="h-full flex flex-col py-2 gap-4">
+          <div className="flex-none pl-5 py-1">
+            <button
+              className="btn btn-ghost flex items-center"
+              onClick={() => setMenuOpen(false)}
+            >
+              <span className="i-ri-menu-line w-5 h-5"></span>
+            </button>
+          </div>
+          <div className="flex-1 flex flex-col py-2 gap-4 overflow-x-auto">
+            <div className="flex flex-col items-center gap-2 px-4">
+              Drawer Menu
+            </div>
+          </div>
+        </div>
+      </Drawer>
     </header>
   );
 }
