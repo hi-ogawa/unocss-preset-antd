@@ -32,10 +32,10 @@ export function antdPreset(): Preset<Theme> {
        * base style e.g.
        *
           body {
-            --at-apply: "antd-base-body";
+            --at-apply: "antd-body";
           }
           *, ::before, ::after {
-            --at-apply: "antd-base-reset";
+            --at-apply: "antd-reset";
           }
        *
        */
