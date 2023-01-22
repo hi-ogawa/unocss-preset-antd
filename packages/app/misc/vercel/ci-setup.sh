@@ -17,3 +17,7 @@ cat > "$config_dir/auth.json" <<EOF
   "token": "$VERCEL_TOKEN"
 }
 EOF
+
+cat > "$config_dir/config.json" <<EOF
+{}
+EOF
