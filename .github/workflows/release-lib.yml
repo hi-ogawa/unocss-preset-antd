@@ -1,6 +1,6 @@
 name: release-lib
 on:
-  workflow_dispatch:
+  push:
 jobs:
   release-lib:
     runs-on: ubuntu-22.04
