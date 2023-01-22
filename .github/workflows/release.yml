@@ -13,6 +13,14 @@
 name: release
 on:
   workflow_dispatch:
+    inputs:
+      environment:
+        required: true
+        type: choice
+        options:
+          - staging
+          - production
+        default: production
 jobs:
   release:
     runs-on: ubuntu-22.04
@@ -32,7 +40,13 @@ jobs:
       - run: bash packages/app/misc/vercel/ci-setup.sh
         env:
           VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+      - run: pnpm release
+        if: inputs.environment == 'staging'
+        env:
+          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
       - run: pnpm release-production
+        if: inputs.environment == 'production'
         env:
           VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
           VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
