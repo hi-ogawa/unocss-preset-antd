@@ -18,4 +18,4 @@ jobs:
       - run: pnpm release-lib
         env:
           # actions/setup-node creates .npmrc https://github.com/actions/setup-node/blob/3dbcda8bc2eb5ec6aa3fbde01feaae3236952db8/src/authutil.ts#L48
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN  }}
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
