@@ -35,7 +35,7 @@ function Header() {
 function Main() {
   return (
     <main className="flex flex-col items-center gap-3 m-2">
-      <section className="flex flex-col gap-3 w-full max-w-lg border border-[var(--antd-colorBorderSecondary)] p-3">
+      <section className="flex flex-col gap-3 w-full max-w-lg antd-card p-3">
         <h2 className="text-xl">Button</h2>
         {/* prettier-ignore */}
         <div className="flex flex-col gap-3">
@@ -44,7 +44,8 @@ function Main() {
           <button className="antd-btn antd-btn-ghost">btn-ghost</button>
           <button className="antd-btn antd-btn-text">btn-text</button>
         </div>
-        <h2 className="text-xl">Button (disabled)</h2>
+        <div className="antd-divider mx-2"></div>
+        <h2 className="text-lg">Button (disabled)</h2>
         {/* prettier-ignore */}
         <div className="flex flex-col gap-3">
           <button className="antd-btn antd-btn-primary" disabled>btn-primary (disabled)</button>
@@ -52,7 +53,8 @@ function Main() {
           <button className="antd-btn antd-btn-ghost" disabled>btn-ghost (disabled)</button>
           <button className="antd-btn antd-btn-text" disabled>btn-text (disabled)</button>
         </div>
-        <h2 className="text-xl">Button (loading)</h2>
+        <div className="antd-divider mx-2"></div>
+        <h2 className="text-lg">Button (loading)</h2>
         {/* prettier-ignore */}
         <div className="flex flex-col gap-3">
           <button className="antd-btn antd-btn-primary relative flex justify-center items-center" disabled>
@@ -61,7 +63,7 @@ function Main() {
           </button>
         </div>
       </section>
-      <section className="flex flex-col gap-3 w-full max-w-lg border border-[var(--antd-colorBorderSecondary)] p-3">
+      <section className="flex flex-col gap-3 w-full max-w-lg antd-card p-3">
         <h2 className="text-xl">Input</h2>
         {/* prettier-ignore */}
         <div className="flex flex-col gap-3">

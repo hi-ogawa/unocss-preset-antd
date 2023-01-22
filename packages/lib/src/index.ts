@@ -92,6 +92,20 @@ export function antdPreset(): Preset {
         aria-invalid:!border-[var(--antd-colorError)]
         aria-invalid:focus:(ring-2 ring-[var(--antd-colorErrorOutline)])
       `,
+
+      /**
+       * card
+       */
+      card: `
+        border border-${VAR.colorBorderSecondary}
+      `,
+
+      /**
+       * divider
+       */
+      divider: `
+        border-t-1 border-t-${VAR.colorBorderSecondary}
+      `,
     },
   };
 }
