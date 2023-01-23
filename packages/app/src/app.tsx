@@ -1,16 +1,75 @@
 import React from "react";
+import {
+  NavLink,
+  Outlet,
+  RouteObject,
+  RouterProvider,
+  createBrowserRouter,
+} from "react-router-dom";
 import { Drawer } from "./components/drawer";
 import { ThemeSelectButton } from "./components/misc";
+import * as stories from "./components/stories";
 
 export function App() {
-  return <AppInner />;
+  return <RouterProvider router={router} />;
 }
 
-function AppInner() {
+//
+// router
+//
+
+const storiesRoutes = Object.entries(stories).map(
+  ([name, Fc]): RouteObject => ({
+    path: name.slice(5),
+    element: <Fc />,
+  })
+);
+
+const router = createBrowserRouter([
+  {
+    element: <Root />,
+    children: [
+      ...storiesRoutes,
+      {
+        path: "*",
+        element: <NotFound />,
+      },
+    ],
+  },
+]);
+
+//
+// Root
+//
+
+function Root() {
   return (
     <div className="h-full w-full flex flex-col relative">
       <Header />
-      <Main />
+      <div className="flex-1 flex">
+        <div className="flex-none w-[250px] border-r">
+          <div className="sticky top-0 p-1.5">
+            <ul className="flex flex-col gap-1.5">
+              {storiesRoutes.map((route) => (
+                <li key={route.path} className="flex">
+                  <NavLink
+                    // https://github.com/ant-design/ant-design/blob/8bcd3c16a4760bf45d3d5c995f50a74a97e43de2/components/menu/style/index.tsx
+                    className="flex-1 antd-btn antd-btn-text p-2 aria-current-page:(text-[var(--antd-colorPrimary)] bg-[var(--antd-controlItemBgActive)]) aria-current-page:dark:(text-white bg-[var(--antd-colorPrimary)])"
+                    to={"/" + route.path}
+                  >
+                    {route.path}
+                  </NavLink>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
+        <div className="flex-1">
+          <div className="m-4">
+            <Outlet />
+          </div>
+        </div>
+      </div>
     </div>
   );
 }
@@ -50,7 +109,7 @@ function Header() {
           </div>
           <div className="flex-1 flex flex-col py-2 gap-4 overflow-x-auto">
             <div className="flex flex-col items-center gap-2 px-4">
-              Drawer Menu
+              Drawer Example
             </div>
           </div>
         </div>
@@ -59,46 +118,6 @@ function Header() {
   );
 }
 
-function Main() {
-  return (
-    <main className="flex flex-col items-center gap-3 m-2">
-      <section className="flex flex-col gap-3 w-full max-w-lg border p-3">
-        <h2 className="text-xl">Button</h2>
-        {/* prettier-ignore */}
-        <div className="flex flex-col gap-3">
-          <button className="antd-btn antd-btn-primary">btn-primary</button>
-          <button className="antd-btn antd-btn-default">btn-default</button>
-          <button className="antd-btn antd-btn-ghost">btn-ghost</button>
-          <button className="antd-btn antd-btn-text">btn-text</button>
-        </div>
-        <div className="border-t mx-2"></div>
-        <h2 className="text-lg">Button (disabled)</h2>
-        {/* prettier-ignore */}
-        <div className="flex flex-col gap-3">
-          <button className="antd-btn antd-btn-primary" disabled>btn-primary (disabled)</button>
-          <button className="antd-btn antd-btn-default" disabled>btn-default (disabled)</button>
-          <button className="antd-btn antd-btn-ghost" disabled>btn-ghost (disabled)</button>
-          <button className="antd-btn antd-btn-text" disabled>btn-text (disabled)</button>
-        </div>
-        <div className="border-t mx-2"></div>
-        <h2 className="text-lg">Button (loading)</h2>
-        {/* prettier-ignore */}
-        <div className="flex flex-col gap-3">
-          <button className="antd-btn antd-btn-primary relative flex justify-center items-center" disabled>
-            btn-primary + spin
-            <span className="antd-spin w-4 h-4 absolute right-2"></span>
-          </button>
-        </div>
-      </section>
-      <section className="flex flex-col gap-3 w-full max-w-lg border p-3">
-        <h2 className="text-xl">Input</h2>
-        {/* prettier-ignore */}
-        <div className="flex flex-col gap-3">
-          <input className="px-2 antd-input" placeholder="input" />
-          <input className="px-2 antd-input" placeholder="input (disabled)" disabled />
-          <input className="px-2 antd-input" placeholder="input (aria-invalid)" aria-invalid />
-        </div>
-      </section>
-    </main>
-  );
+function NotFound() {
+  return <div className="uppercase">select a story from menu</div>;
 }

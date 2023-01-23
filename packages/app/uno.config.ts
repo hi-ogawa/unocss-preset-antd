@@ -8,6 +8,11 @@ import {
 } from "unocss";
 
 export default defineConfig({
+  theme: {
+    aria: {
+      "current-page": 'current="page"',
+    },
+  },
   presets: [
     antdPreset(),
     presetUno(),

@@ -42,6 +42,7 @@ importers:
       react-hook-form: ^7.42.1
       react-hot-toast: ^2.4.0
       react-remove-scroll: ^2.5.5
+      react-router-dom: ^6.7.0
       unocss: ^0.48.4
       vite: ^4.0.4
     dependencies:
@@ -55,6 +56,7 @@ importers:
       react-hook-form: 7.42.1_react@18.2.0
       react-hot-toast: 2.4.0_biqbaboplfbrettd7655fr4n2y
       react-remove-scroll: 2.5.5_3stiutgnnbnfnf3uowm5cip22i
+      react-router-dom: 6.7.0_biqbaboplfbrettd7655fr4n2y
     devDependencies:
       '@iconify-json/ri': 1.1.4
       '@types/lodash': 4.14.191
@@ -1124,6 +1126,11 @@ packages:
       react: 18.2.0
       react-dom: 18.2.0_react@18.2.0
     dev: true
+
+  /@remix-run/router/1.3.0:
+    resolution: {integrity: sha512-nwQoYb3m4DDpHTeOwpJEuDt8lWVcujhYYSFGLluC+9es2PyLjm+jjq3IeRBQbwBtPLJE/lkuHuGHr8uQLgmJRA==}
+    engines: {node: '>=14'}
+    dev: false
 
   /@rollup/pluginutils/5.0.2:
     resolution: {integrity: sha512-pTd9rIsP92h+B6wWwFbW8RkZv4hiR/xKsqre4SIuAOaOEQRxi0lqLke9k2/7WegC85GgUs9pjmOjCUi3In4vwA==}
@@ -4352,6 +4359,29 @@ packages:
       tslib: 2.4.1
       use-callback-ref: 1.3.0_3stiutgnnbnfnf3uowm5cip22i
       use-sidecar: 1.1.2_3stiutgnnbnfnf3uowm5cip22i
+    dev: false
+
+  /react-router-dom/6.7.0_biqbaboplfbrettd7655fr4n2y:
+    resolution: {integrity: sha512-jQtXUJyhso3kFw430+0SPCbmCmY1/kJv8iRffGHwHy3CkoomGxeYzMkmeSPYo6Egzh3FKJZRAL22yg5p2tXtfg==}
+    engines: {node: '>=14'}
+    peerDependencies:
+      react: '>=16.8'
+      react-dom: '>=16.8'
+    dependencies:
+      '@remix-run/router': 1.3.0
+      react: 18.2.0
+      react-dom: 18.2.0_react@18.2.0
+      react-router: 6.7.0_react@18.2.0
+    dev: false
+
+  /react-router/6.7.0_react@18.2.0:
+    resolution: {integrity: sha512-KNWlG622ddq29MAM159uUsNMdbX8USruoKnwMMQcs/QWZgFUayICSn2oB7reHce1zPj6CG18kfkZIunSSRyGHg==}
+    engines: {node: '>=14'}
+    peerDependencies:
+      react: '>=16.8'
+    dependencies:
+      '@remix-run/router': 1.3.0
+      react: 18.2.0
     dev: false
 
   /react-style-singleton/2.2.1_3stiutgnnbnfnf3uowm5cip22i:
