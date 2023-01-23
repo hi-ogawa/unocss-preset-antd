@@ -18,9 +18,9 @@ export function App() {
 // router
 //
 
-const storiesRoutes = Object.values(stories).map(
-  (Fc): RouteObject => ({
-    path: Fc.name.slice(5),
+const storiesRoutes = Object.entries(stories).map(
+  ([name, Fc]): RouteObject => ({
+    path: name.slice(5),
     element: <Fc />,
   })
 );
@@ -53,6 +53,7 @@ function Root() {
               {storiesRoutes.map((route) => (
                 <li key={route.path} className="flex">
                   <NavLink
+                    // https://github.com/ant-design/ant-design/blob/8bcd3c16a4760bf45d3d5c995f50a74a97e43de2/components/menu/style/index.tsx
                     className="flex-1 antd-btn antd-btn-text p-2 aria-current-page:(text-[var(--antd-colorPrimary)] bg-[var(--antd-controlItemBgActive)]) aria-current-page:dark:(text-white bg-[var(--antd-colorPrimary)])"
                     to={"/" + route.path}
                   >
