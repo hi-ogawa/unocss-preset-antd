@@ -80,7 +80,7 @@ function Header() {
   return (
     <header className="w-full flex justify-end items-center p-2 px-4 shadow-md shadow-black/[0.05] dark:shadow-black/[0.7]">
       <button
-        className="pl-1 pr-3 py-1 btn btn-ghost flex items-center"
+        className="pl-1 pr-3 py-1 antd-btn antd-btn-ghost flex items-center"
         onClick={() => setMenuOpen(true)}
       >
         <span className="i-ri-menu-line w-5 h-5"></span>
@@ -101,7 +101,7 @@ function Header() {
         <div className="h-full flex flex-col py-2 gap-4">
           <div className="flex-none pl-5 py-1">
             <button
-              className="btn btn-ghost flex items-center"
+              className="antd-btn antd-btn-ghost flex items-center"
               onClick={() => setMenuOpen(false)}
             >
               <span className="i-ri-menu-line w-5 h-5"></span>
