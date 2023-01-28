@@ -4,7 +4,7 @@ import {
   Outlet,
   RouteObject,
   RouterProvider,
-  createBrowserRouter,
+  createHashRouter,
 } from "react-router-dom";
 import { Drawer } from "./components/drawer";
 import { ThemeSelectButton } from "./components/misc";
@@ -25,7 +25,7 @@ const storiesRoutes = Object.entries(stories).map(
   })
 );
 
-const router = createBrowserRouter([
+const router = createHashRouter([
   {
     element: <Root />,
     children: [
