@@ -4,6 +4,7 @@ importers:
 
   .:
     specifiers:
+      '@hiogawa/unocss-typescript-dsl': ^1.0.3
       '@tsconfig/strictest': ^1.0.2
       '@typescript-eslint/eslint-plugin': ^5.48.2
       '@typescript-eslint/parser': ^5.48.2
@@ -13,6 +14,7 @@ importers:
       prettier: ^2.8.3
       typescript: ^4.9.4
     devDependencies:
+      '@hiogawa/unocss-typescript-dsl': 1.0.3
       '@tsconfig/strictest': 1.0.2
       '@typescript-eslint/eslint-plugin': 5.48.2_caon6io6stgpr7lz2rtbhekxqy
       '@typescript-eslint/parser': 5.48.2_7uibuqfxkfaozanbtbziikiqje
@@ -906,6 +908,18 @@ packages:
       react-dom: 18.2.0_react@18.2.0
     dev: false
 
+  /@hiogawa/unocss-typescript-dsl/1.0.3:
+    resolution: {integrity: sha512-TnCxDmryQiei0FquC/fLR1FZ1llCAaHAVciPrvfDkoclCWSlRwYAKfzgLGmfE/6KlCtydQh5CttXB0j8az9KMw==}
+    hasBin: true
+    peerDependencies:
+      '@unocss/config': '*'
+      '@unocss/core': '*'
+      magic-string: '*'
+    dependencies:
+      cac: 6.7.14
+      minimatch: 6.1.6
+    dev: true
+
   /@hiogawa/utils/1.0.0-pre.1:
     resolution: {integrity: sha512-WF8/oTtRcmnpxIYC7/Ptxh9EslElCFzFlKFPsunvH1ECRky+rM/iTcnm66QV6qbuRSfIi/0Z0A89ch3lMSv5vQ==}
     dev: false
@@ -1779,6 +1793,12 @@ packages:
     dependencies:
       balanced-match: 1.0.2
       concat-map: 0.0.1
+    dev: true
+
+  /brace-expansion/2.0.1:
+    resolution: {integrity: sha512-XnAIvQ8eM+kC6aULx6wuQiwVsnzsi9d3WxzV3FpWTGA19F621kwdbsAcFKXgKUHZWsy+mY6iL1sHTxWEFCytDA==}
+    dependencies:
+      balanced-match: 1.0.2
     dev: true
 
   /braces/3.0.2:
@@ -3005,6 +3025,13 @@ packages:
     resolution: {integrity: sha512-J7p63hRiAjw1NDEww1W7i37+ByIrOWO5XQQAzZ3VOcL0PNybwpfmV/N05zFAzwQ9USyEcX6t3UO+K5aqBQOIHw==}
     dependencies:
       brace-expansion: 1.1.11
+    dev: true
+
+  /minimatch/6.1.6:
+    resolution: {integrity: sha512-6bR3UIeh/DF8+p6A9Spyuy67ShOq42rOkHWi7eUe3Ua99Zo5lZfGC6lJJWkeoK4k9jQFT3Pl7czhTXimG2XheA==}
+    engines: {node: '>=10'}
+    dependencies:
+      brace-expansion: 2.0.1
     dev: true
 
   /minimist/1.2.7:
