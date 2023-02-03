@@ -20,7 +20,7 @@
     "build:cjs": "esbuild ./src/index.ts --bundle --outdir=./dist/esbuild --format=cjs",
     "build:dts": "tsc --noEmit false --emitDeclarationOnly",
     "build-theme": "pnpm -s ts ./src/build-theme.ts > ./src/theme.ts",
-    "tw-api": "unocss-typescript-dsl --out-file src/tw-api.ts",
+    "tw-api": "unocss-typescript-dsl --out-file src/tw-api.ts --filter-colors 'xxx'",
     "ts": "node -r esbuild-register",
     "release": "pnpm publish --no-git-checks --access public"
   },
