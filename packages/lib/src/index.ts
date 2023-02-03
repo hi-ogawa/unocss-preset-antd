@@ -1,6 +1,7 @@
 import type { Theme } from "@unocss/preset-uno";
 import type { Preset } from "unocss";
 import { theme } from "./theme";
+import { tw } from "./tw";
 
 // TODO: when "prefix" is overwritten by a user, it will become inconsistent with the generated tw-api. (i.e. all shortcuts will be broken)
 export function antdPreset(): Preset<Theme> {
@@ -53,11 +54,7 @@ export function antdPreset(): Preset<Theme> {
       /**
        * misc
        */
-      spin: `
-        animate-spin
-        rounded-full
-        border-1 border-transparent border-t-current
-      `,
+      spin: tw.animate_spin._("rounded-full").border_1.border_transparent.border_t_current.$,
       link: `
         cursor-pointer
         transition
