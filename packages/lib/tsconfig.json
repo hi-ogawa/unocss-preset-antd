@@ -1,10 +1,7 @@
 {
-  "extends": "@tsconfig/strictest",
+  "extends": "@tsconfig/strictest/tsconfig.json",
   "include": ["src"],
   "compilerOptions": {
-    "outDir": "dist/tsc",
-    "declaration": true,
-    "checkJs": false,
     "noEmit": true,
     "module": "esnext",
     "moduleResolution": "node",
