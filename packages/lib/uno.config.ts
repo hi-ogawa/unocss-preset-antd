@@ -9,7 +9,11 @@ import { antdPreset } from "./src";
 
 export default defineConfig({
   presets: [filterColors(presetUno()), antdPreset(), dummyPreset()],
-  rules: [dummyRule("ring-<num>")],
+  rules: [
+    dummyRule("ring-<num>"),
+    dummyRule("opacity-<percent>"),
+    dummyRule("rounded-full"),
+  ],
 });
 
 // strip out color palettes but keep current/transparent etc...

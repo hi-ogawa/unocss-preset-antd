@@ -1,4 +1,5 @@
 import type { Theme } from "@unocss/preset-uno";
+import { pickBy } from "lodash";
 import type { Preset } from "unocss";
 import { theme } from "./theme";
 import { tw } from "./tw";
@@ -12,13 +13,8 @@ export function antdPreset(): Preset<Theme> {
       aria: {
         invalid: 'invalid="true"',
       },
-      colors: Object.fromEntries(
-        Object.keys(theme.default)
-          .filter((k) => k.startsWith("color"))
-          .map((k) => [k, `var(--antd-${k})`])
-      ),
+      colors: pickBy(VARS, (_, k) => k.startsWith("color")),
     },
-    // prettier-ignore
     shortcuts: {
       /**
        * pass theme variables via shortcuts, which can be used e.g. by
@@ -46,74 +42,70 @@ export function antdPreset(): Preset<Theme> {
           }
        *
        */
-      "body": `
-        font-${VAR.fontFamily}
-        bg-${VAR.colorBgContainer}
-        text-${VAR.colorText}
-      `,
+      body: tw._(`font-[${VARS.fontFamily}]`).bg_colorBgContainer.text_colorText
+        .$,
+
       // default border color e.g. for card, divider, etc...
-      "reset": `
-        border-${VAR.colorBorderSecondary}
-      `,
+      reset: tw.border_colorBorderSecondary.$,
 
       /**
        * misc
        */
-      spin: tw.animate_spin._("rounded-full").border_1.border_transparent.border_t_current.$,
-      link: `
-        cursor-pointer
-        transition
-        text-${VAR.colorPrimary}
-        hover:text-${VAR.colorPrimaryHover}
-      `,
+      spin: tw.animate_spin.rounded_full.border_1.border_transparent
+        .border_t_current.$,
+
+      link: tw.cursor_pointer.transition.text_colorPrimary.hover(
+        tw.text_colorPrimaryHover
+      ).$,
 
       /**
        * button https://github.com/ant-design/ant-design/blob/db5913696b5286b02701b7451bb34eebbe34b464/components/button/style/index.ts
        */
-      btn: `
-        cursor-pointer
-        transition
-        disabled:(cursor-not-allowed opacity-50)
-      `,
-      "btn-text": `
-        not-disabled:hover:bg-${VAR.colorBgTextHover}
-        not-disabled:active:bg-${VAR.colorBgTextActive}
-      `,
-      "btn-ghost": `
-        not-disabled:hover:text-${VAR.colorPrimaryHover}
-        not-disabled:active:text-${VAR.colorPrimaryActive}
-      `,
-      "btn-default": `
-        border border-${VAR.colorBorder}
-        not-disabled:hover:(text-${VAR.colorPrimaryHover} border-${VAR.colorPrimaryHover})
-        not-disabled:active:(text-${VAR.colorPrimaryActive} border-${VAR.colorPrimaryActive})
-      `,
-      "btn-primary":
-        tw.text_white.bg_colorPrimary
-        .not_disabled(tw.hover(tw.bg_colorPrimaryHover).active(tw.bg_colorPrimaryActive))
-        .$,
+      btn: tw.cursor_pointer.transition.disabled(
+        tw.cursor_not_allowed.opacity_50
+      ).$,
+
+      "btn-text": tw.not_disabled(
+        tw.hover(tw.bg_colorBgTextHover).active(tw.bg_colorBgTextActive)
+      ).$,
+
+      "btn-ghost": tw.not_disabled(
+        tw.hover(tw.text_colorPrimaryHover).active(tw.text_colorPrimaryActive)
+      ).$,
+
+      "btn-default": tw.border.border_colorBorder.not_disabled(
+        tw
+          .hover(tw.text_colorPrimaryHover.border_colorPrimaryHover)
+          .active(tw.text_colorPrimaryActive.border_colorPrimaryActive)
+      ).$,
+
+      "btn-primary": tw.text_white.bg_colorPrimary.not_disabled(
+        tw.hover(tw.bg_colorPrimaryHover).active(tw.bg_colorPrimaryActive)
+      ).$,
 
       /**
        * input
        */
       input:
-        tw.outline_none.transition.bg_colorBgContainer.border_1.border_colorBorder
-        .disabled(tw.bg_colorBgContainerDisabled)
-        .not_disabled(
-          tw.hover(tw.border_colorPrimary)
-            .focus(tw.border_colorPrimary.ring_2.ring_colorPrimaryBorder)
-        )
-        .aria_invalid(tw.important(tw.border_colorError).focus(tw.ring_2.ring_colorErrorBorder))
-        .$,
+        tw.transition.bg_colorBgContainer.outline_none.border_1.border_colorBorder
+          .disabled(tw.bg_colorBgContainerDisabled)
+          .not_disabled(
+            tw
+              .hover(tw.border_colorPrimary)
+              .focus(tw.border_colorPrimary.ring_2.ring_colorPrimaryBorder)
+          )
+          .aria_invalid(
+            tw
+              .important(tw.border_colorError)
+              .focus(tw.ring_2.ring_colorErrorBorder)
+          ).$,
     },
   };
 }
 
-// shortcut authoring helper with IDE autocompletion e.g.
-//   VARS.colorText => "[var(--antd-colorText)]"
-// TODO: this cannot be used outside of "shortcuts" since scanner cannot resolve interpolation
-export const VAR = Object.fromEntries(
-  Object.keys(theme.default).map((k) => [k, `[var(--antd-${k})]`])
+// VARS.colorText => "var(--antd-colorText)"
+const VARS = Object.fromEntries(
+  Object.keys(theme.default).map((k) => [k, `var(--antd-${k})`])
 ) as { [K in keyof typeof theme.default]: string }; // IDE cannot follow the definition if Record<keyof typeof theme.default, string>
 
 function toCssVariables(

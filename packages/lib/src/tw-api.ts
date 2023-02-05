@@ -1439,6 +1439,8 @@ export type RuleStatic =
 ;
 
 export type RuleDynamic =
+  | `rounded_full`
+  | `opacity_${Autocomplete_percent}`
   | `ring_${Autocomplete_num}`
   | `${"top" | "left" | "right" | "bottom"}_${Autocomplete_num}`
   | `${"max_" | "min_" | ""}${"w" | "h"}_${Autocomplete_num}`
