@@ -31,12 +31,12 @@
   },
   "devDependencies": {
     "@types/lodash": "^4.14.191",
-    "@unocss/preset-uno": "^0.48.4",
-    "antd": "^5.1.6",
-    "esbuild": "^0.17.3",
+    "@unocss/preset-uno": "^0.48.5",
+    "antd": "^5.1.7",
+    "esbuild": "^0.17.5",
     "esbuild-register": "^3.4.2",
     "lodash": "^4.17.21",
-    "unocss": "^0.48.4"
+    "unocss": "^0.48.5"
   },
   "peerDependencies": {
     "@unocss/preset-uno": "*",
