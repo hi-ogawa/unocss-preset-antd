@@ -48,3 +48,16 @@ export function StoryInput() {
     </div>
   );
 }
+
+export function StoryTypography() {
+  return (
+    <div className="flex flex-col items-center gap-3 m-2">
+      <section className="flex flex-col gap-3 w-full max-w-lg border p-3">
+        <h2 className="text-xl">Typography</h2>
+        <div className="flex flex-col gap-3">
+          <a className="antd-link">Link Text</a>
+        </div>
+      </section>
+    </div>
+  );
+}
