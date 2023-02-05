@@ -242,7 +242,96 @@ export type Theme_colors =
   | `transparent`
   | `black`
   | `white`
-  | `primary`
+  | `colorPrimary`
+  | `colorSuccess`
+  | `colorWarning`
+  | `colorError`
+  | `colorInfo`
+  | `colorTextBase`
+  | `colorBgBase`
+  | `colorText`
+  | `colorTextSecondary`
+  | `colorTextTertiary`
+  | `colorTextQuaternary`
+  | `colorFill`
+  | `colorFillSecondary`
+  | `colorFillTertiary`
+  | `colorFillQuaternary`
+  | `colorBgLayout`
+  | `colorBgContainer`
+  | `colorBgElevated`
+  | `colorBgSpotlight`
+  | `colorBorder`
+  | `colorBorderSecondary`
+  | `colorPrimaryBg`
+  | `colorPrimaryBgHover`
+  | `colorPrimaryBorder`
+  | `colorPrimaryBorderHover`
+  | `colorPrimaryHover`
+  | `colorPrimaryActive`
+  | `colorPrimaryTextHover`
+  | `colorPrimaryText`
+  | `colorPrimaryTextActive`
+  | `colorSuccessBg`
+  | `colorSuccessBgHover`
+  | `colorSuccessBorder`
+  | `colorSuccessBorderHover`
+  | `colorSuccessHover`
+  | `colorSuccessActive`
+  | `colorSuccessTextHover`
+  | `colorSuccessText`
+  | `colorSuccessTextActive`
+  | `colorErrorBg`
+  | `colorErrorBgHover`
+  | `colorErrorBorder`
+  | `colorErrorBorderHover`
+  | `colorErrorHover`
+  | `colorErrorActive`
+  | `colorErrorTextHover`
+  | `colorErrorText`
+  | `colorErrorTextActive`
+  | `colorWarningBg`
+  | `colorWarningBgHover`
+  | `colorWarningBorder`
+  | `colorWarningBorderHover`
+  | `colorWarningHover`
+  | `colorWarningActive`
+  | `colorWarningTextHover`
+  | `colorWarningText`
+  | `colorWarningTextActive`
+  | `colorInfoBg`
+  | `colorInfoBgHover`
+  | `colorInfoBorder`
+  | `colorInfoBorderHover`
+  | `colorInfoHover`
+  | `colorInfoActive`
+  | `colorInfoTextHover`
+  | `colorInfoText`
+  | `colorInfoTextActive`
+  | `colorBgMask`
+  | `colorWhite`
+  | `colorLink`
+  | `colorLinkHover`
+  | `colorLinkActive`
+  | `colorFillContent`
+  | `colorFillContentHover`
+  | `colorFillAlter`
+  | `colorBgContainerDisabled`
+  | `colorBorderBg`
+  | `colorSplit`
+  | `colorTextPlaceholder`
+  | `colorTextDisabled`
+  | `colorTextHeading`
+  | `colorTextLabel`
+  | `colorTextDescription`
+  | `colorTextLightSolid`
+  | `colorHighlight`
+  | `colorBgTextHover`
+  | `colorBgTextActive`
+  | `colorIcon`
+  | `colorIconHover`
+  | `colorErrorOutline`
+  | `colorWarningOutline`
 ;
 
 export type Theme_fontFamily =
@@ -508,6 +597,7 @@ export type Theme_aria =
   | `readonly`
   | `required`
   | `selected`
+  | `invalid`
 ;
 
 export type Theme_animation_keyframes =
@@ -1349,6 +1439,12 @@ export type RuleStatic =
 ;
 
 export type RuleDynamic =
+  | `ring_${Autocomplete_num}`
+  | `${"top" | "left" | "right" | "bottom"}_${Autocomplete_num}`
+  | `${"max_" | "min_" | ""}${"w" | "h"}_${Autocomplete_num}`
+  | `${"max_" | "min_" | ""}${"w" | "h"}_full`
+  | `transition`
+  | `border`
   | `placeholder_opacity`
   | `placeholder_opacity_${Autocomplete_percent}`
   | `placeholder_${Theme_colors}`
@@ -1599,8 +1695,22 @@ export type Variant =
   | `dark`
   | `light`
   | `hover`
+  | `important`
+  | `aria_${Theme_aria}`
 ;
 
 export type Shortcut =
-  | never
+  | `variables_default`
+  | `variables_dark`
+  | `variables_compact`
+  | `body`
+  | `reset`
+  | `spin`
+  | `link`
+  | `btn`
+  | `btn_text`
+  | `btn_ghost`
+  | `btn_default`
+  | `btn_primary`
+  | `input`
 ;

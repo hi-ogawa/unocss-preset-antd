@@ -12,6 +12,11 @@ export function antdPreset(): Preset<Theme> {
       aria: {
         invalid: 'invalid="true"',
       },
+      colors: Object.fromEntries(
+        Object.keys(theme.default)
+          .filter((k) => k.startsWith("color"))
+          .map((k) => [k, `var(--antd-${k})`])
+      ),
     },
     // prettier-ignore
     shortcuts: {
@@ -83,26 +88,23 @@ export function antdPreset(): Preset<Theme> {
         not-disabled:hover:(text-${VAR.colorPrimaryHover} border-${VAR.colorPrimaryHover})
         not-disabled:active:(text-${VAR.colorPrimaryActive} border-${VAR.colorPrimaryActive})
       `,
-      "btn-primary": `
-        text-white
-        bg-${VAR.colorPrimary}
-        not-disabled:hover:bg-${VAR.colorPrimaryHover}
-        not-disabled:active:bg-${VAR.colorPrimaryActive}
-      `,
+      "btn-primary":
+        tw.text_white.bg_colorPrimary
+        .not_disabled(tw.hover(tw.bg_colorPrimaryHover).active(tw.bg_colorPrimaryActive))
+        .$,
 
       /**
        * input
        */
-      input: `
-        outline-none
-        transition
-        bg-${VAR.colorBgContainer} border border-${VAR.colorBorder}
-        disabled:bg-${VAR.colorBgContainerDisabled}
-        not-disabled:hover:border-${VAR.colorPrimary}
-        not-disabled:focus:(border-${VAR.colorPrimary} ring-2 ring-${VAR.colorPrimaryBorder})
-        aria-invalid:!border-${VAR.colorError}
-        aria-invalid:focus:(ring-2 ring-${VAR.colorErrorOutline})
-      `,
+      input:
+        tw.outline_none.transition.bg_colorBgContainer.border_1.border_colorBorder
+        .disabled(tw.bg_colorBgContainerDisabled)
+        .not_disabled(
+          tw.hover(tw.border_colorPrimary)
+            .focus(tw.border_colorPrimary.ring_2.ring_colorPrimaryBorder)
+        )
+        .aria_invalid(tw.important(tw.border_colorError).focus(tw.ring_2.ring_colorErrorBorder))
+        .$,
     },
   };
 }
