@@ -61,3 +61,31 @@ export function StoryTypography() {
     </div>
   );
 }
+
+export function StoryTab() {
+  return (
+    <div className="flex flex-col items-center gap-3 m-2">
+      <section className="flex flex-col gap-3 w-full max-w-lg border p-3">
+        <h2 className="text-xl">Tab</h2>
+        <div className="flex flex-col gap-3">
+          TODO: copy from
+          https://github.com/hi-ogawa/web-ext-vite-template/pull/12
+        </div>
+      </section>
+    </div>
+  );
+}
+
+export function StoryModal() {
+  return (
+    <div className="flex flex-col items-center gap-3 m-2">
+      <section className="flex flex-col gap-3 w-full max-w-lg border p-3">
+        <h2 className="text-xl">Modal</h2>
+        <div className="flex flex-col gap-3">
+          TODO: copy from
+          https://github.com/hi-ogawa/web-ext-vite-template/pull/12
+        </div>
+      </section>
+    </div>
+  );
+}
