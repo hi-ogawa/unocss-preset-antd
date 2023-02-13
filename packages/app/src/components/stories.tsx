@@ -1,3 +1,5 @@
+import React from "react";
+
 export function StoryButton() {
   return (
     <main className="flex flex-col items-center gap-3 m-2">
@@ -63,13 +65,35 @@ export function StoryTypography() {
 }
 
 export function StoryTab() {
+  // based on https://github.com/hi-ogawa/web-ext-vite-template/pull/12
+
+  const TABS = ["import", "export"] as const;
+  const [currentTab, setCurrentTab] =
+    React.useState<(typeof TABS)[number]>("import");
+
   return (
     <div className="flex flex-col items-center gap-3 m-2">
       <section className="flex flex-col gap-3 w-full max-w-lg border p-3">
         <h2 className="text-xl">Tab</h2>
-        <div className="flex flex-col gap-3">
-          TODO: copy from
-          https://github.com/hi-ogawa/web-ext-vite-template/pull/12
+        <div className="px-2 flex flex-col gap-2 h-full">
+          <ul className="antd-tablist gap-5 px-2">
+            {TABS.map((tab) => (
+              <li
+                key={tab}
+                className="antd-tab py-1.5 capitalize"
+                aria-selected={tab === currentTab}
+                onClick={() => {
+                  setCurrentTab(tab);
+                }}
+              >
+                {tab}
+              </li>
+            ))}
+          </ul>
+          <div className="flex-1 p-2">
+            {currentTab === "import" && <div>import tab content</div>}
+            {currentTab === "export" && <div>export tab content</div>}
+          </div>
         </div>
       </section>
     </div>
