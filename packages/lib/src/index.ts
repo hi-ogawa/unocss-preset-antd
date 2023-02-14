@@ -99,6 +99,14 @@ export function antdPreset(): Preset<Theme> {
               .important(tw.border_colorError)
               .focus(tw.ring_2.ring_colorErrorBorder)
           ).$,
+
+      /**
+       * tab
+       */
+      tablist: tw.flex.border_b.$,
+      tab: tw.transition.border_b_2.border_transparent.cursor_pointer
+        .hover(tw.text_colorPrimaryHover.border_colorPrimaryHover)
+        .aria_selected(tw.text_colorPrimary.border_colorPrimary).$,
     },
   };
 }
