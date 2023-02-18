@@ -1,6 +1,7 @@
 import {
   FloatingPortal,
   Placement,
+  arrow,
   autoUpdate,
   flip,
   offset,
@@ -20,23 +21,30 @@ interface PopoverRenderProps {
   open: boolean;
   setOpen: (open: boolean) => void;
   props: {};
+  arrowProps?: {};
 }
 
 export function Popover(props: {
   placement: Placement;
   reference: (renderProps: PopoverRenderProps) => React.ReactNode;
   floating: (renderProps: PopoverRenderProps) => React.ReactNode;
-  onClickReference?: React.MouseEventHandler<Element>;
 }) {
   const [open, setOpen] = React.useState(false);
+  const arrowRef = React.useRef<Element>(null);
 
-  const { reference, floating, context, x, y, strategy } = useFloating({
-    open,
-    onOpenChange: setOpen,
-    placement: props.placement,
-    middleware: [offset(5), flip(), shift()],
-    whileElementsMounted: autoUpdate,
-  });
+  const { reference, floating, context, x, y, strategy, middlewareData } =
+    useFloating({
+      open,
+      onOpenChange: setOpen,
+      placement: props.placement,
+      middleware: [
+        offset(17),
+        flip(),
+        shift(),
+        arrow({ element: arrowRef, padding: 10 }),
+      ].filter(Boolean),
+      whileElementsMounted: autoUpdate,
+    });
 
   const { getReferenceProps, getFloatingProps } = useInteractions([
     useClick(context),
@@ -52,7 +60,6 @@ export function Popover(props: {
         setOpen,
         props: getReferenceProps({
           ref: reference,
-          onClick: props.onClickReference,
         }),
       })}
       <FloatingPortal id={id}>
@@ -67,6 +74,14 @@ export function Popover(props: {
               position: strategy,
             },
           }),
+          arrowProps: {
+            ref: arrowRef,
+            style: {
+              top: middlewareData.arrow?.y ?? "",
+              left: middlewareData.arrow?.x ?? "",
+              position: "absolute",
+            },
+          },
         })}
       </FloatingPortal>
     </>
