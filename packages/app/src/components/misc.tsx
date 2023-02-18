@@ -34,7 +34,22 @@ export function ThemeSelectButton() {
         >
           <div className={tw.bg_colorBgElevated.shadow_2xl.$}>
             <ul className="flex flex-col gap-2 p-2">
-              {/* <li className={tw.antd_btn.antd_btn_text.p_1.px_2.$}>Use device theme</li> */}
+              <li
+                className={
+                  tw.antd_btn.antd_btn_text.p_1.px_2.flex.items_center.gap_2.$
+                }
+                onClick={() => {
+                  setTheme("system");
+                }}
+              >
+                <span
+                  className={cls(
+                    tw.i_ri_check_line.w_5.h_5.$,
+                    theme !== "system" && "invisible"
+                  )}
+                ></span>
+                Use system theme
+              </li>
               <li
                 className={
                   tw.antd_btn.antd_btn_text.p_1.px_2.flex.items_center.gap_2.$
