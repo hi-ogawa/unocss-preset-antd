@@ -10,20 +10,37 @@
     <!-- initialize light/dark theme as early as possible (cf. src/utils/use-theme-state.ts) -->
     <script>
       function __getTheme() {
-        return window.localStorage.getItem("theme") || "light";
+        return window.localStorage.getItem("theme") || "system";
       }
+
       function __setTheme(theme) {
         window.localStorage.setItem("theme", theme);
         __applyTheme(theme);
       }
+
+      const __prefersDark = window.matchMedia("(prefers-color-scheme: dark)");
+
       function __applyTheme(theme) {
+        const classList = document.documentElement.classList;
+        classList.remove("dark", "light");
+        if (theme === "system") {
+          theme = __prefersDark.matches ? "dark" : "light";
+        }
         if (theme === "dark") {
-          document.documentElement.classList.add("dark");
+          classList.add("dark");
         } else {
-          document.documentElement.classList.remove("dark");
+          classList.add("light");
         }
       }
-      __applyTheme(__getTheme());
+
+      function __initializeTheme() {
+        __applyTheme(__getTheme());
+        __prefersDark.addEventListener("change", () => {
+          __applyTheme(__getTheme());
+        });
+      }
+
+      __initializeTheme();
     </script>
   </head>
   <body>
