@@ -20,30 +20,5 @@ export function useThemeState() {
     __setTheme(state);
   }
 
-  useMatchMedia("(prefers-color-scheme: dark)", () => {
-    __setTheme(state);
-  });
-
   return [state, setStateWrapper] as const;
-}
-
-function useMatchMedia(query: string, onChange: () => void) {
-  const onChangeRef = useStableRef(onChange);
-
-  React.useEffect(() => {
-    const result = window.matchMedia(query);
-    const handler = (_e: MediaQueryListEvent) => {
-      onChangeRef.current();
-    };
-    result.addEventListener("change", handler);
-    return () => {
-      result.addEventListener("change", handler);
-    };
-  }, []);
-}
-
-function useStableRef<T>(value: T) {
-  const ref = React.useRef(value);
-  ref.current = value;
-  return ref;
 }

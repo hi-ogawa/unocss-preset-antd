@@ -12,29 +12,35 @@
       function __getTheme() {
         return window.localStorage.getItem("theme") || "system";
       }
+
       function __setTheme(theme) {
         window.localStorage.setItem("theme", theme);
         __applyTheme(theme);
       }
+
+      const __prefersDark = window.matchMedia("(prefers-color-scheme: dark)");
+
       function __applyTheme(theme) {
         const classList = document.documentElement.classList;
-        classList.remove("dark");
-        classList.remove("light");
+        classList.remove("dark", "light");
         if (theme === "system") {
-          // TODO: handle onChange
-          const query = window.matchMedia("(prefers-color-scheme: dark)");
-          if (query.matches) {
-            classList.add("dark");
-          } else {
-            classList.add("light");
-          }
-        } else if (theme === "dark") {
+          theme = __prefersDark.matches ? "dark" : "light";
+        }
+        if (theme === "dark") {
           classList.add("dark");
         } else {
           classList.add("light");
         }
       }
-      __applyTheme(__getTheme());
+
+      function __initializeTheme() {
+        __applyTheme(__getTheme());
+        __prefersDark.addEventListener("change", () => {
+          __applyTheme(__getTheme());
+        });
+      }
+
+      __initializeTheme();
     </script>
   </head>
   <body>

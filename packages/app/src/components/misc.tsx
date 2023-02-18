@@ -38,6 +38,7 @@ export function ThemeSelectButton() {
             <ul className="flex flex-col gap-2 p-2">
               {THEME_OPTIONS.map(([t, label]) => (
                 <li
+                  key={t}
                   className={
                     tw.antd_btn.antd_btn_text.p_1.px_2.flex.items_center.gap_2.$
                   }
