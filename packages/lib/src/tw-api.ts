@@ -1702,17 +1702,19 @@ export type Variant =
 ;
 
 export type Shortcut =
-  | `variables_default`
-  | `variables_dark`
-  | `variables_compact`
-  | `body`
-  | `reset`
-  | `spin`
-  | `link`
-  | `btn`
-  | `btn_text`
-  | `btn_ghost`
-  | `btn_default`
-  | `btn_primary`
+  | `tab`
+  | `tablist`
   | `input`
+  | `btn_primary`
+  | `btn_default`
+  | `btn_ghost`
+  | `btn_text`
+  | `btn`
+  | `link`
+  | `spin`
+  | `reset`
+  | `body`
+  | `variables_compact`
+  | `variables_dark`
+  | `variables_default`
 ;
