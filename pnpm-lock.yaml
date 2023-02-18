@@ -4,7 +4,7 @@ importers:
 
   .:
     specifiers:
-      '@hiogawa/unocss-typescript-dsl': 2.0.0-pre.0
+      '@hiogawa/unocss-typescript-dsl': 2.0.0-pre.2
       '@tsconfig/strictest': ^1.0.2
       '@typescript-eslint/eslint-plugin': ^5.50.0
       '@typescript-eslint/parser': ^5.50.0
@@ -15,7 +15,7 @@ importers:
       tsup: ^6.5.0
       typescript: ^4.9.5
     devDependencies:
-      '@hiogawa/unocss-typescript-dsl': 2.0.0-pre.0
+      '@hiogawa/unocss-typescript-dsl': 2.0.0-pre.2
       '@tsconfig/strictest': 1.0.2
       '@typescript-eslint/eslint-plugin': 5.50.0_go4drrxstycfikanvu45pi4vgq
       '@typescript-eslint/parser': 5.50.0_4vsywjlpuriuw3tl5oq6zy5a64
@@ -932,8 +932,8 @@ packages:
       react-dom: 18.2.0_react@18.2.0
     dev: false
 
-  /@hiogawa/unocss-typescript-dsl/2.0.0-pre.0:
-    resolution: {integrity: sha512-/9Je0XpWq46i8zHW1c5It1wXR9QYFFOvdTaFqrTz/GkPifgDDAbVJriCkEwcINiaiQPE7hqt8Daf1zH55OMP5g==}
+  /@hiogawa/unocss-typescript-dsl/2.0.0-pre.2:
+    resolution: {integrity: sha512-IPpO4ZyowAU/aMTfIPPdwg9EgGn9SMLUQxw4VLgWQF57ESvfBzPbXlvbm6iNzvYBAu0gFt/RatiNvVbUuk9VAA==}
     hasBin: true
     peerDependencies:
       '@iconify/utils': '*'

@@ -4,7 +4,6 @@ import type { Preset } from "unocss";
 import { theme } from "./theme";
 import { tw } from "./tw";
 
-// TODO: when "prefix" is overwritten by a user, it will become inconsistent with the generated tw-api. (i.e. all shortcuts will be broken)
 export function antdPreset(): Preset<Theme> {
   return {
     name: "antd-preset",

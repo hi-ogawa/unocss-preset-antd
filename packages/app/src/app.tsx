@@ -58,7 +58,7 @@ function Root() {
                     // https://github.com/ant-design/ant-design/blob/8bcd3c16a4760bf45d3d5c995f50a74a97e43de2/components/menu/style/index.tsx
                     className={({ isActive }) =>
                       cls(
-                        tw.flex_1.p_2._("antd-btn antd-btn-text").$,
+                        tw.flex_1.p_2.antd_btn.antd_btn_text.$,
                         isActive &&
                           tw.important(
                             tw.text_colorPrimary
