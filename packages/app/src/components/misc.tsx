@@ -23,7 +23,7 @@ export function ThemeSelectButton() {
           <span className="!w-6 !h-6 light:i-ri-sun-line dark:i-ri-moon-line"></span>
         </button>
       )}
-      floating={({ props, open }) => (
+      floating={({ props, open, arrowProps }) => (
         <Transition
           show={open}
           className="transition duration-150 w-[230px]"
@@ -33,7 +33,6 @@ export function ThemeSelectButton() {
           leaveTo="scale-80 opacity-0"
           {...props}
         >
-          {/* TODO: add arrow. improve shadow */}
           {/* https://github.com/ant-design/ant-design/blob/66e2b146dd3137c7b0b63bf859a90401c908783c/components/popover/style/index.tsx#L69 */}
           <div
             className={
@@ -41,6 +40,15 @@ export function ThemeSelectButton() {
                 .$
             }
           >
+            <div {...arrowProps}>
+              <div
+                className={
+                  tw.bg_colorBgElevated
+                    ._("shadow-[var(--antd-boxShadowPopoverArrow)]")
+                    ._("relative -top-2 w-4 h-4 rotate-[225deg]").$
+                }
+              ></div>
+            </div>
             <ul className="flex flex-col gap-2 p-2">
               {THEME_OPTIONS.map(([t, label]) => (
                 <li
