@@ -42,6 +42,10 @@ export function ThemeSelectButton() {
           >
             <div {...arrowProps}>
               <div
+                style={{
+                  // clip only lower half
+                  clipPath: "polygon(100% 0%, 200% 100%, 100% 200%, 0% 100%)",
+                }}
                 className={
                   tw.bg_colorBgElevated
                     ._("shadow-[var(--antd-boxShadowPopoverArrow)]")
