@@ -34,7 +34,13 @@ export function ThemeSelectButton() {
           {...props}
         >
           {/* TODO: add arrow. improve shadow */}
-          <div className={tw.bg_colorBgElevated.shadow_lg.$}>
+          {/* https://github.com/ant-design/ant-design/blob/66e2b146dd3137c7b0b63bf859a90401c908783c/components/popover/style/index.tsx#L69 */}
+          <div
+            className={
+              tw.bg_colorBgElevated._("shadow-[var(--antd-boxShadowSecondary)]")
+                .$
+            }
+          >
             <ul className="flex flex-col gap-2 p-2">
               {THEME_OPTIONS.map(([t, label]) => (
                 <li
