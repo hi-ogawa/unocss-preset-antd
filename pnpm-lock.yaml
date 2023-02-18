@@ -4,7 +4,7 @@ importers:
 
   .:
     specifiers:
-      '@hiogawa/unocss-typescript-dsl': 1.1.0
+      '@hiogawa/unocss-typescript-dsl': 2.0.0-pre.2
       '@tsconfig/strictest': ^1.0.2
       '@typescript-eslint/eslint-plugin': ^5.50.0
       '@typescript-eslint/parser': ^5.50.0
@@ -15,7 +15,7 @@ importers:
       tsup: ^6.5.0
       typescript: ^4.9.5
     devDependencies:
-      '@hiogawa/unocss-typescript-dsl': 1.1.0
+      '@hiogawa/unocss-typescript-dsl': 2.0.0-pre.2
       '@tsconfig/strictest': 1.0.2
       '@typescript-eslint/eslint-plugin': 5.50.0_go4drrxstycfikanvu45pi4vgq
       '@typescript-eslint/parser': 5.50.0_4vsywjlpuriuw3tl5oq6zy5a64
@@ -932,16 +932,18 @@ packages:
       react-dom: 18.2.0_react@18.2.0
     dev: false
 
-  /@hiogawa/unocss-typescript-dsl/1.1.0:
-    resolution: {integrity: sha512-/rV5Nae3zAd/DJfKNdyusNFV1EkGtKNMeK4K3UGsYZ019oaTbK0iGtoGIvcM5PXgbZTbUlILzcpEACwhL6jGig==}
+  /@hiogawa/unocss-typescript-dsl/2.0.0-pre.2:
+    resolution: {integrity: sha512-IPpO4ZyowAU/aMTfIPPdwg9EgGn9SMLUQxw4VLgWQF57ESvfBzPbXlvbm6iNzvYBAu0gFt/RatiNvVbUuk9VAA==}
     hasBin: true
     peerDependencies:
+      '@iconify/utils': '*'
       '@unocss/config': '*'
       '@unocss/core': '*'
+      local-pkg: '*'
       magic-string: '*'
     dependencies:
       cac: 6.7.14
-      minimatch: 6.1.6
+      minimatch: 6.2.0
     dev: true
 
   /@hiogawa/utils/1.0.0-pre.1:
@@ -3314,8 +3316,8 @@ packages:
       brace-expansion: 1.1.11
     dev: true
 
-  /minimatch/6.1.6:
-    resolution: {integrity: sha512-6bR3UIeh/DF8+p6A9Spyuy67ShOq42rOkHWi7eUe3Ua99Zo5lZfGC6lJJWkeoK4k9jQFT3Pl7czhTXimG2XheA==}
+  /minimatch/6.2.0:
+    resolution: {integrity: sha512-sauLxniAmvnhhRjFwPNnJKaPFYyddAgbYdeUpHULtCT/GhzdCx/MDNy+Y40lBxTQUrMzDE8e0S43Z5uqfO0REg==}
     engines: {node: '>=10'}
     dependencies:
       brace-expansion: 2.0.1

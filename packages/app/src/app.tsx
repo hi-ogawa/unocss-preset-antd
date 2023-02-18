@@ -9,6 +9,8 @@ import {
 import { Drawer } from "./components/drawer";
 import { ThemeSelectButton } from "./components/misc";
 import * as stories from "./components/stories";
+import { tw } from "./styles/tw";
+import { cls } from "./utils/misc";
 
 export function App() {
   return <RouterProvider router={router} />;
@@ -54,7 +56,17 @@ function Root() {
                 <li key={route.path} className="flex">
                   <NavLink
                     // https://github.com/ant-design/ant-design/blob/8bcd3c16a4760bf45d3d5c995f50a74a97e43de2/components/menu/style/index.tsx
-                    className="flex-1 antd-btn antd-btn-text p-2 aria-current-page:(text-[var(--antd-colorPrimary)] bg-[var(--antd-controlItemBgActive)]) aria-current-page:dark:(text-white bg-[var(--antd-colorPrimary)])"
+                    className={({ isActive }) =>
+                      cls(
+                        tw.flex_1.p_2.antd_btn.antd_btn_text.$,
+                        isActive &&
+                          tw.important(
+                            tw.text_colorPrimary
+                              ._("bg-[var(--antd-controlItemBgActive)]")
+                              .dark(tw.text_white.bg_colorPrimary)
+                          ).$
+                      )
+                    }
                     to={"/" + route.path}
                   >
                     {route.path}

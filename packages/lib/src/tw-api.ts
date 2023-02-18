@@ -1702,17 +1702,19 @@ export type Variant =
 ;
 
 export type Shortcut =
-  | `variables_default`
-  | `variables_dark`
-  | `variables_compact`
-  | `body`
-  | `reset`
-  | `spin`
-  | `link`
-  | `btn`
-  | `btn_text`
-  | `btn_ghost`
-  | `btn_default`
-  | `btn_primary`
-  | `input`
+  | `antd_tab`
+  | `antd_tablist`
+  | `antd_input`
+  | `antd_btn_primary`
+  | `antd_btn_default`
+  | `antd_btn_ghost`
+  | `antd_btn_text`
+  | `antd_btn`
+  | `antd_link`
+  | `antd_spin`
+  | `antd_reset`
+  | `antd_body`
+  | `antd_variables_compact`
+  | `antd_variables_dark`
+  | `antd_variables_default`
 ;
