@@ -1,10 +1,10 @@
 import React from "react";
 import {
-  createHashRouter,
   NavLink,
   Outlet,
   RouteObject,
   RouterProvider,
+  createHashRouter,
 } from "react-router-dom";
 import { Drawer } from "./components/drawer";
 import { ThemeSelectButton } from "./components/misc";
