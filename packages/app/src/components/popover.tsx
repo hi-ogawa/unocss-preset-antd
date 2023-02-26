@@ -1,10 +1,10 @@
 import {
-  FloatingPortal,
-  Placement,
   arrow,
   autoUpdate,
   flip,
+  FloatingPortal,
   offset,
+  Placement,
   shift,
   useClick,
   useDismiss,
