@@ -26,11 +26,9 @@
         if (theme === "system") {
           theme = __prefersDark.matches ? "dark" : "light";
         }
-        if (theme === "dark") {
-          classList.add("dark");
-        } else {
-          classList.add("light");
-        }
+        __disableTransitions(() => {
+          classList.add(theme === "dark" ? "dark" : "light");
+        });
       }
 
       function __initializeTheme() {
@@ -38,6 +36,29 @@
         __prefersDark.addEventListener("change", () => {
           __applyTheme(__getTheme());
         });
+      }
+
+      // https://paco.me/writing/disable-theme-transitions
+      function __disableTransitions(f) {
+        const el = document.createElement("style");
+        el.type = "text/css";
+        el.appendChild(
+          document.createTextNode(`
+            * {
+              -webkit-transition: none !important;
+              -moz-transition: none !important;
+              -o-transition: none !important;
+              -ms-transition: none !important;
+              transition: none !important;
+            }
+          `)
+        );
+        document.head.appendChild(el);
+        f();
+        if (!window.getComputedStyle(document.firstElementChild).transition) {
+          console.debug("__disableTransitions:unreachable");
+        }
+        document.head.removeChild(el);
       }
 
       __initializeTheme();
