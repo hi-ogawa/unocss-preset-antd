@@ -1,6 +1,6 @@
 import type { Theme } from "@unocss/preset-uno";
-import { pickBy } from "lodash";
 import type { Preset } from "unocss";
+import { pickBy } from "./misc";
 import { theme } from "./theme";
 import { tw } from "./tw";
 
