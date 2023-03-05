@@ -2,7 +2,7 @@
 
 ```sh
 pnpm build-theme
-pnpm generate-tw-api
+pnpm generate-tw
 pnpm build
 pnpm release
 ```

@@ -6,7 +6,7 @@
     "build": "run-s build:*",
     "build:vite": "vite build",
     "build:vercel": "bash misc/vercel/build.sh",
-    "generate-tw-api": "unocss-typescript-dsl --out-file src/styles/tw-api.ts --filter-colors 'xxx'",
+    "generate-tw": "unocss-typescript-dsl --outDir src/styles/tw",
     "release": "vercel deploy --prebuilt .",
     "release-production": "vercel deploy --prebuilt . --prod"
   },
