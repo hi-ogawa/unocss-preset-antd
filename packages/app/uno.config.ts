@@ -20,8 +20,8 @@ export default defineConfig({
     },
   },
   presets: [
-    filterColorPallete(antdPreset()),
-    presetUno(),
+    antdPreset(),
+    filterColorPallete(presetUno()),
     presetIcons({
       extraProperties: {
         display: "inline-block",
