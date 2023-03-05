@@ -1,6 +1,7 @@
 import { antdPreset } from "@hiogawa/unocss-preset-antd";
 import {
   dummyPresetIconsRules,
+  filterColorPallete,
   transformerTypescriptDsl,
 } from "@hiogawa/unocss-typescript-dsl";
 import { dummyPreset } from "@hiogawa/unocss-typescript-dsl";
@@ -19,7 +20,7 @@ export default defineConfig({
     },
   },
   presets: [
-    antdPreset(),
+    filterColorPallete(antdPreset()),
     presetUno(),
     presetIcons({
       extraProperties: {

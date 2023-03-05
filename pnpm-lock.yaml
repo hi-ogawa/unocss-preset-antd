@@ -5,7 +5,7 @@ importers:
   .:
     specifiers:
       '@hiogawa/isort-ts': 1.0.0-pre.9
-      '@hiogawa/unocss-typescript-dsl': 2.0.0-pre.3
+      '@hiogawa/unocss-typescript-dsl': 2.0.0-pre.4
       '@tsconfig/strictest': ^1.0.2
       npm-run-all: ^4.1.5
       prettier: ^2.8.3
@@ -13,7 +13,7 @@ importers:
       typescript: ^4.9.5
     devDependencies:
       '@hiogawa/isort-ts': 1.0.0-pre.9_ioxdq35luteszuxmt2jhnqjeca
-      '@hiogawa/unocss-typescript-dsl': 2.0.0-pre.3
+      '@hiogawa/unocss-typescript-dsl': 2.0.0-pre.4
       '@tsconfig/strictest': 1.0.2
       npm-run-all: 4.1.5
       prettier: 2.8.3
@@ -923,8 +923,8 @@ packages:
       typescript: 4.9.5
     dev: true
 
-  /@hiogawa/unocss-typescript-dsl/2.0.0-pre.3:
-    resolution: {integrity: sha512-loMdowsAqlfKV95ausz2wKGPkS1zx6DhubLzr6mdJHjPkPdgliFJCX28Z/1nbDWWLAbN9B3JMLPtHUdvT/hNoQ==}
+  /@hiogawa/unocss-typescript-dsl/2.0.0-pre.4:
+    resolution: {integrity: sha512-jechxsSyO3BTHjGGxP8/ieCrb2OghsSY/y44mj2E1kpQiTjK3EY0y/6Bq9t3zPGHyS9WCthtE6T1XC5HCPWFeg==}
     hasBin: true
     peerDependencies:
       '@iconify/utils': '*'
