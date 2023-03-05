@@ -1,12 +1,13 @@
 {
   "name": "@hiogawa/unocss-preset-antd-app",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "private": true,
   "scripts": {
     "dev": "vite --no-clearScreen",
     "build": "run-s build:*",
     "build:vite": "vite build",
     "build:vercel": "bash misc/vercel/build.sh",
+    "preview": "vite preview",
     "generate-tw": "unocss-typescript-dsl --outDir src/styles/tw",
     "release": "vercel deploy --prebuilt .",
     "release-production": "vercel deploy --prebuilt . --prod"

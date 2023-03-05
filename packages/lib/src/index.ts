@@ -1,15 +1,10 @@
-import fs from "node:fs";
-import { booleanGuard, tinyassert } from "@hiogawa/utils";
 import type { Theme } from "@unocss/preset-uno";
-import { resolveModule } from "local-pkg";
 import { pickBy } from "lodash";
 import type { Preset } from "unocss";
 import { theme } from "./theme";
 import { tw } from "./tw";
 
-export function antdPreset(
-  options: { noPreflight?: boolean } = {}
-): Preset<Theme> {
+export function antdPreset(): Preset<Theme> {
   return {
     name: "antd-preset",
     prefix: "antd-",
@@ -112,14 +107,6 @@ export function antdPreset(
         .hover(tw.text_colorPrimaryHover.border_colorPrimaryHover)
         .aria_selected(tw.text_colorPrimary.border_colorPrimary).$,
     },
-    preflights: [
-      !options.noPreflight && {
-        getCSS: async () => {
-          const reset = await readUnocssReset(); // borrow default preset of unocss
-          return reset + "\n\n\n" + PREFLIGHT;
-        },
-      },
-    ].filter(booleanGuard),
   };
 }
 
@@ -135,32 +122,3 @@ function toCssVariables(
     Object.entries(tokens).map(([k, v]) => ["--antd-" + k, String(v)])
   );
 }
-
-async function readUnocssReset() {
-  const cssPath = resolveModule("@unocss/reset/tailwind.css");
-  tinyassert(cssPath);
-  const content = await fs.promises.readFile(cssPath, "utf-8");
-  return content;
-}
-
-const PREFLIGHT = `\
-:root {
-  color-scheme: light;
-  --at-apply: "antd-variables-default";
-}
-
-.dark {
-  color-scheme: dark;
-  --at-apply: "antd-variables-dark";
-}
-
-body {
-  --at-apply: "antd-body";
-}
-
-*,
-::before,
-::after {
-  --at-apply: "antd-reset";
-}
-`;
