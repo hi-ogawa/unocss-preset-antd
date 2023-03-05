@@ -1,5 +1,7 @@
-import { booleanGuard } from "@hiogawa/utils";
+import fs from "node:fs";
+import { booleanGuard, tinyassert } from "@hiogawa/utils";
 import type { Theme } from "@unocss/preset-uno";
+import { resolveModule } from "local-pkg";
 import { pickBy } from "lodash";
 import type { Preset } from "unocss";
 import { theme } from "./theme";
@@ -112,8 +114,10 @@ export function antdPreset(
     },
     preflights: [
       !options.noPreflight && {
-        layer: "utilities",
-        getCSS: () => DEFAULT_PREFLIGHT,
+        getCSS: async () => {
+          const reset = await readUnocssReset(); // borrow default preset of unocss
+          return reset + "\n\n\n" + PREFLIGHT;
+        },
       },
     ].filter(booleanGuard),
   };
@@ -132,7 +136,14 @@ function toCssVariables(
   );
 }
 
-const DEFAULT_PREFLIGHT = `\
+async function readUnocssReset() {
+  const cssPath = resolveModule("@unocss/reset/tailwind.css");
+  tinyassert(cssPath);
+  const content = await fs.promises.readFile(cssPath, "utf-8");
+  return content;
+}
+
+const PREFLIGHT = `\
 :root {
   color-scheme: light;
   --at-apply: "antd-variables-default";

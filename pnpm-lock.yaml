@@ -33,7 +33,6 @@ importers:
       '@types/node': ^16.18.12
       '@types/react': ^18.0.27
       '@types/react-dom': ^18.0.10
-      '@unocss/reset': ^0.48.5
       '@vitejs/plugin-react': ^3.1.0
       antd: ^5.1.7
       lodash: ^4.17.21
@@ -63,7 +62,6 @@ importers:
       '@types/node': 16.18.12
       '@types/react': 18.0.27
       '@types/react-dom': 18.0.10
-      '@unocss/reset': 0.48.5
       '@vitejs/plugin-react': 3.1.0_vite@4.1.1
       antd: 5.1.7_biqbaboplfbrettd7655fr4n2y
       unocss: 0.48.5_vite@4.1.1
@@ -72,14 +70,21 @@ importers:
   packages/lib:
     specifiers:
       '@types/lodash': ^4.14.191
+      '@types/node': ^16.18.12
       '@unocss/preset-uno': ^0.48.5
+      '@unocss/reset': ^0.48.5
       antd: ^5.1.7
       esbuild: ^0.17.5
       esbuild-register: ^3.4.2
+      local-pkg: ^0.4.3
       lodash: ^4.17.21
       unocss: ^0.48.5
+    dependencies:
+      '@unocss/reset': 0.48.5
+      local-pkg: 0.4.3
     devDependencies:
       '@types/lodash': 4.14.191
+      '@types/node': 16.18.12
       '@unocss/preset-uno': 0.48.5
       antd: 5.1.7
       esbuild: 0.17.5
@@ -1315,7 +1320,6 @@ packages:
 
   /@unocss/reset/0.48.5:
     resolution: {integrity: sha512-+JJT3Btj1oNX4XwKBDPRUYre3NYBNmi0PsC3tqkHN2VphJG0iZl91XNfsveLz8pVpDJPUDdLH4xsqh52WmxU1g==}
-    dev: true
 
   /@unocss/scope/0.48.5:
     resolution: {integrity: sha512-2xPJWUyDUnJkn37n6+a0t4vKb8l07UeGTHM4jxOvKdML4Gi5tsxulyj+lBPP+wLWu9fNiFe7HlEejbh/J13QVw==}
@@ -2613,7 +2617,6 @@ packages:
   /local-pkg/0.4.3:
     resolution: {integrity: sha512-SFppqq5p42fe2qcZQqqEOiVRXl+WCP1MdT6k7BDEW1j++sp5fIY+/fdRQitvKgB5BrBcmrs5m/L0v2FrU5MY1g==}
     engines: {node: '>=14'}
-    dev: true
 
   /locate-path/6.0.0:
     resolution: {integrity: sha512-iPZK6eYjbxRu3uB4/WZ3EsEIMJFMqAoopl3R+zuq0UjcAm/MO6KCweDgPfP3elTztoKP3KtnVHxTn2NHBSDVUw==}

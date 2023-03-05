@@ -95,7 +95,7 @@ function Header() {
         className="pl-1 pr-3 py-1 antd-btn antd-btn-ghost flex items-center"
         onClick={() => setMenuOpen(true)}
       >
-        <span className="i-ri-menu-line w-5 h-5"></span>
+        <span className={tw.i_ri_menu_line.w_5.h_5.$}></span>
       </button>
       <h1 className="text-xl">UnoCSS Ant Design</h1>
       <div className="flex-1"></div>
