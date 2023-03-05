@@ -29,7 +29,6 @@
     "@types/node": "^16.18.12",
     "@types/react": "^18.0.27",
     "@types/react-dom": "^18.0.10",
-    "@unocss/reset": "^0.48.5",
     "@vitejs/plugin-react": "^3.1.0",
     "antd": "^5.1.7",
     "unocss": "^0.48.5",
