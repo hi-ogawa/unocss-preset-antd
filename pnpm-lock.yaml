@@ -6,6 +6,7 @@ importers:
     specifiers:
       '@hiogawa/isort-ts': 1.0.0-pre.9
       '@hiogawa/unocss-typescript-dsl': 2.0.0-pre.4
+      '@hiogawa/utils': 1.0.0-pre.1
       '@tsconfig/strictest': ^1.0.2
       npm-run-all: ^4.1.5
       prettier: ^2.8.3
@@ -14,6 +15,7 @@ importers:
     devDependencies:
       '@hiogawa/isort-ts': 1.0.0-pre.9_ioxdq35luteszuxmt2jhnqjeca
       '@hiogawa/unocss-typescript-dsl': 2.0.0-pre.4
+      '@hiogawa/utils': 1.0.0-pre.1
       '@tsconfig/strictest': 1.0.2
       npm-run-all: 4.1.5
       prettier: 2.8.3
@@ -940,7 +942,6 @@ packages:
 
   /@hiogawa/utils/1.0.0-pre.1:
     resolution: {integrity: sha512-WF8/oTtRcmnpxIYC7/Ptxh9EslElCFzFlKFPsunvH1ECRky+rM/iTcnm66QV6qbuRSfIi/0Z0A89ch3lMSv5vQ==}
-    dev: false
 
   /@iconify-json/ri/1.1.4:
     resolution: {integrity: sha512-gAk2gQBVghgbMLOmbUCc3l4COMMH5sR3HhBqpjaPUFBbC4WsNNRyOD4RZgjlanU7DTgFrj4NarY5K2EkXaVxuw==}

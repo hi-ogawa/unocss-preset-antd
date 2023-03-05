@@ -1,10 +1,13 @@
+import { booleanGuard } from "@hiogawa/utils";
 import type { Theme } from "@unocss/preset-uno";
 import { pickBy } from "lodash";
 import type { Preset } from "unocss";
 import { theme } from "./theme";
 import { tw } from "./tw";
 
-export function antdPreset(): Preset<Theme> {
+export function antdPreset(
+  options: { noPreflight?: boolean } = {}
+): Preset<Theme> {
   return {
     name: "antd-preset",
     prefix: "antd-",
@@ -107,6 +110,12 @@ export function antdPreset(): Preset<Theme> {
         .hover(tw.text_colorPrimaryHover.border_colorPrimaryHover)
         .aria_selected(tw.text_colorPrimary.border_colorPrimary).$,
     },
+    preflights: [
+      !options.noPreflight && {
+        layer: "utilities",
+        getCSS: () => DEFAULT_PREFLIGHT,
+      },
+    ].filter(booleanGuard),
   };
 }
 
@@ -122,3 +131,25 @@ function toCssVariables(
     Object.entries(tokens).map(([k, v]) => ["--antd-" + k, String(v)])
   );
 }
+
+const DEFAULT_PREFLIGHT = `\
+:root {
+  color-scheme: light;
+  --at-apply: "antd-variables-default";
+}
+
+.dark {
+  color-scheme: dark;
+  --at-apply: "antd-variables-dark";
+}
+
+body {
+  --at-apply: "antd-body";
+}
+
+*,
+::before,
+::after {
+  --at-apply: "antd-reset";
+}
+`;

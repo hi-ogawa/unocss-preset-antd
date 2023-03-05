@@ -4,23 +4,3 @@ body,
 #root {
   --at-apply: "h-full";
 }
-
-/* light/dark theme */
-:root {
-  color-scheme: light;
-  --at-apply: "antd-variables-default";
-}
-.dark {
-  color-scheme: dark;
-  --at-apply: "antd-variables-dark";
-}
-
-body {
-  --at-apply: "antd-body";
-}
-
-*,
-::before,
-::after {
-  --at-apply: "antd-reset";
-}
