@@ -10,6 +10,11 @@
       "import": "./dist/index.js",
       "require": "./dist/index.cjs",
       "types": "./dist/index.d.ts"
+    },
+    "./dist/reset": {
+      "import": "./dist/reset.js",
+      "require": "./dist/reset.cjs",
+      "types": "./dist/reset.d.ts"
     }
   },
   "files": [
