@@ -7,7 +7,7 @@ importers:
       '@changesets/cli': ^2.26.0
       '@hiogawa/isort-ts': 1.0.0-pre.9
       '@hiogawa/unocss-typescript-dsl': 2.0.0-pre.4
-      '@hiogawa/utils': 1.0.0-pre.1
+      '@hiogawa/utils': ^1.3.0
       '@tsconfig/strictest': ^1.0.2
       npm-run-all: ^4.1.5
       prettier: ^2.8.3
@@ -17,7 +17,7 @@ importers:
       '@changesets/cli': 2.26.0
       '@hiogawa/isort-ts': 1.0.0-pre.9_ioxdq35luteszuxmt2jhnqjeca
       '@hiogawa/unocss-typescript-dsl': 2.0.0-pre.4
-      '@hiogawa/utils': 1.0.0-pre.1
+      '@hiogawa/utils': 1.3.0
       '@tsconfig/strictest': 1.0.2
       npm-run-all: 4.1.5
       prettier: 2.8.3
@@ -73,7 +73,6 @@ importers:
 
   packages/lib:
     specifiers:
-      '@types/lodash': ^4.14.191
       '@types/node': ^16.18.12
       '@unocss/preset-uno': ^0.48.5
       '@unocss/reset': ^0.48.5
@@ -81,19 +80,16 @@ importers:
       esbuild: ^0.17.5
       esbuild-register: ^3.4.2
       local-pkg: ^0.4.3
-      lodash: ^4.17.21
       unocss: ^0.48.5
     dependencies:
       '@unocss/reset': 0.48.5
       local-pkg: 0.4.3
     devDependencies:
-      '@types/lodash': 4.14.191
       '@types/node': 16.18.12
       '@unocss/preset-uno': 0.48.5
       antd: 5.1.7
       esbuild: 0.17.5
       esbuild-register: 3.4.2_esbuild@0.17.5
-      lodash: 4.17.21
       unocss: 0.48.5
 
 packages:
@@ -1141,13 +1137,8 @@ packages:
       react: 18.2.0
     dev: false
 
-  /@hiogawa/utils/1.0.0-pre.1:
-    resolution: {integrity: sha512-WF8/oTtRcmnpxIYC7/Ptxh9EslElCFzFlKFPsunvH1ECRky+rM/iTcnm66QV6qbuRSfIi/0Z0A89ch3lMSv5vQ==}
-    dev: true
-
   /@hiogawa/utils/1.3.0:
     resolution: {integrity: sha512-zOqiodMaYWibaPUhtJAKUO9XZZNhLmZNTHkzjWXxZ47CyUoCdpDVRv5jSg5CrsrOhCa+AmlHYZymU4vSWO9B+Q==}
-    dev: false
 
   /@iconify-json/ri/1.1.4:
     resolution: {integrity: sha512-gAk2gQBVghgbMLOmbUCc3l4COMMH5sR3HhBqpjaPUFBbC4WsNNRyOD4RZgjlanU7DTgFrj4NarY5K2EkXaVxuw==}

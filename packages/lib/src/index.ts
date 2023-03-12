@@ -1,5 +1,5 @@
+import { objectPickBy } from "@hiogawa/utils";
 import type { Theme } from "@unocss/preset-uno";
-import { pickBy } from "lodash";
 import type { Preset } from "unocss";
 import { theme } from "./theme";
 import { tw } from "./tw";
@@ -12,7 +12,7 @@ export function antdPreset(): Preset<Theme> {
       aria: {
         invalid: 'invalid="true"',
       },
-      colors: pickBy(VARS, (_, k) => k.startsWith("color")),
+      colors: objectPickBy(VARS, (_, k) => k.startsWith("color")),
     },
     shortcuts: {
       /**
@@ -113,7 +113,7 @@ export function antdPreset(): Preset<Theme> {
 // VARS.colorText => "var(--antd-colorText)"
 const VARS = Object.fromEntries(
   Object.keys(theme.default).map((k) => [k, `var(--antd-${k})`])
-) as { [K in keyof typeof theme.default]: string }; // IDE cannot follow the definition if Record<keyof typeof theme.default, string>
+) as Record<keyof typeof theme.default, string>;
 
 function toCssVariables(
   tokens: Record<string, unknown>
