@@ -1,4 +1,7 @@
+import { Debug, toDelayedSetState } from "@hiogawa/utils-react";
 import React from "react";
+import { tw } from "../styles/tw";
+import { TopProgressBar, useProgress } from "./top-progress-bar";
 
 export function StoryButton() {
   return (
@@ -95,6 +98,41 @@ export function StoryTab() {
             {currentTab === "export" && <div>export tab content</div>}
           </div>
         </div>
+      </section>
+    </div>
+  );
+}
+
+export function StoryTopProgressBar() {
+  const [loading, setLoading] = React.useState(false);
+  const [setLoadingDelayed, setLogingReset] = toDelayedSetState(setLoading);
+  const progress = useProgress(loading);
+
+  function setLoadingDuration(ms: number) {
+    setLogingReset();
+    setLoading(true);
+    setLoadingDelayed(false, ms);
+  }
+
+  return (
+    <div className="flex flex-col items-center gap-3 m-2">
+      <section className="flex flex-col gap-3 w-full max-w-lg border p-3">
+        <h2 className="text-xl">TopProgressBar</h2>
+        <div className={tw.flex.gap_3.$}>
+          {[200, 500, 1000, 5000].map((ms) => (
+            <button
+              key={ms}
+              className="antd-btn antd-btn-default px-2"
+              onClick={() => {
+                setLoadingDuration(ms);
+              }}
+            >
+              {ms}ms
+            </button>
+          ))}
+        </div>
+        <TopProgressBar loading={loading} />
+        <Debug debug={{ loading, progress }} />
       </section>
     </div>
   );

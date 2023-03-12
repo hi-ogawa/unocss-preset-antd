@@ -3711,6 +3711,8 @@ export type RuleDynamic =
   | `i_ri_4k_fill`
   | `i_ri_24_hours_line`
   | `i_ri_24_hours_fill`
+  | `fixed`
+  | `absolute`
   | `${"top" | "left" | "right" | "bottom"}_${Autocomplete_num}`
   | `${"max_" | "min_" | ""}${"w" | "h"}_${Autocomplete_num}`
   | `${"max_" | "min_" | ""}${"w" | "h"}_full`
