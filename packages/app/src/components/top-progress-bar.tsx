@@ -1,3 +1,4 @@
+import { FloatingPortal } from "@floating-ui/react-dom-interactions";
 import { Transition } from "@headlessui/react";
 import { useStableRef } from "@hiogawa/utils-react";
 import React from "react";
@@ -10,31 +11,32 @@ export function TopProgressBar({ loading }: { loading: boolean }) {
   const progress = useProgress(loading);
 
   return (
-    <Transition
-      show={typeof progress.value === "number"}
-      // TODO: portal
-      className={cls(tw.fixed.left_0.top_0.w_full.$)}
-      leave="transition-opacity duration-250"
-      leaveFrom="opacity-100"
-      leaveTo="opacity-0"
-    >
-      <div
-        className={
-          tw.absolute.top_0._("h-[3px] opacity-60").bg_colorPrimary.w_full.$
-        }
-      />
-      <div
-        className={tw.absolute.top_0._("h-[3px]").bg_colorPrimary.w_full.$}
-        style={{
-          transformOrigin: "0 0",
-          // TODO: can compute in css?
-          transform: `scaleX(${progress.value ?? 0})`,
-          // TODO: can compute in js?
-          transitionProperty: progress.finishing ? "transform" : "none",
-          transitionDuration: progress.finishing ? "500" : "0",
-        }}
-      />
-    </Transition>
+    <FloatingPortal>
+      <Transition
+        show={typeof progress.value === "number"}
+        className={cls(tw.fixed.left_0.top_0.w_full.$)}
+        leave="transition-opacity duration-250"
+        leaveFrom="opacity-100"
+        leaveTo="opacity-0"
+      >
+        <div
+          className={
+            tw.absolute.top_0._("h-[3px] opacity-60").bg_colorPrimary.w_full.$
+          }
+        />
+        <div
+          className={tw.absolute.top_0._("h-[3px]").bg_colorPrimary.w_full.$}
+          style={{
+            transformOrigin: "0 0",
+            // TODO: can compute in css?
+            transform: `scaleX(${progress.value ?? 0})`,
+            // TODO: can compute in js?
+            transitionProperty: progress.finishing ? "transform" : "none",
+            transitionDuration: progress.finishing ? "500" : "0",
+          }}
+        />
+      </Transition>
+    </FloatingPortal>
   );
 }
 
