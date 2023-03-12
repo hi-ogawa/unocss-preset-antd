@@ -30,7 +30,7 @@ importers:
       '@headlessui/react': ^1.7.9
       '@hiogawa/unocss-preset-antd': workspace:*
       '@hiogawa/utils': ^1.3.0
-      '@hiogawa/utils-react': ^1.0.0
+      '@hiogawa/utils-react': ^1.1.0
       '@iconify-json/ri': ^1.1.4
       '@types/lodash': ^4.14.191
       '@types/node': ^16.18.12
@@ -52,7 +52,7 @@ importers:
       '@headlessui/react': 1.7.9_biqbaboplfbrettd7655fr4n2y
       '@hiogawa/unocss-preset-antd': link:../lib
       '@hiogawa/utils': 1.3.0
-      '@hiogawa/utils-react': 1.0.0_react@18.2.0
+      '@hiogawa/utils-react': 1.1.0_react@18.2.0
       lodash: 4.17.21
       react: 18.2.0
       react-dom: 18.2.0_react@18.2.0
@@ -1133,8 +1133,8 @@ packages:
       zod: 3.21.0
     dev: true
 
-  /@hiogawa/utils-react/1.0.0_react@18.2.0:
-    resolution: {integrity: sha512-Iq2yCPw+qIvfeLnH4JB//EwxzP5OBqLA7d/cniiExsH3r4LLClRBV19dC0sgxd+f9ziwc7HbuscrMrvCIm2dLA==}
+  /@hiogawa/utils-react/1.1.0_react@18.2.0:
+    resolution: {integrity: sha512-VpX1X7VYWSdV7uUFbay37eGMxUC1XUtaWwnNtv/t7MS2D+/pgVulpYK650gaOflqkizgxacZ8iaM3JVFNYhaiA==}
     peerDependencies:
       react: '*'
     dependencies:

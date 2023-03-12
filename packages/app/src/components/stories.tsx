@@ -1,11 +1,7 @@
-import { Debug } from "@hiogawa/utils-react";
+import { Debug, toDelayedSetState } from "@hiogawa/utils-react";
 import React from "react";
 import { tw } from "../styles/tw";
-import {
-  TopProgressBar,
-  toDelayedSetState,
-  useProgress,
-} from "./top-progress-bar";
+import { TopProgressBar, useProgress } from "./top-progress-bar";
 
 export function StoryButton() {
   return (
@@ -136,8 +132,7 @@ export function StoryTopProgressBar() {
           ))}
         </div>
         <TopProgressBar loading={loading} />
-        <Debug debug={loading} />
-        <Debug debug={progress} />
+        <Debug debug={{ loading, progress }} />
       </section>
     </div>
   );
