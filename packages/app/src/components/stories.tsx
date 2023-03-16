@@ -152,10 +152,14 @@ export function StoryModal() {
         >
           Open
         </button>
-        <Modal open={open} onClose={() => setOpen(false)}>
-          <div className="flex flex-col h-full p-3">
-            <h3>Modal Content Title</h3>
-            <div className="flex-1"></div>
+        <Modal
+          className="!max-w-[400px] !max-h-[300px]"
+          open={open}
+          onClose={() => setOpen(false)}
+        >
+          <div className="flex flex-col h-full p-3 gap-2">
+            <h3 className="text-lg">Modal Content Title</h3>
+            <div className="flex-1">Hello</div>
             <div className="flex justify-end">
               <button
                 className="antd-btn antd-btn-default px-2"

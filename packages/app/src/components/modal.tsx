@@ -9,6 +9,7 @@ import { Transition } from "@headlessui/react";
 import { tinyassert } from "@hiogawa/utils";
 import type React from "react";
 import { RemoveScroll } from "react-remove-scroll";
+import { cls } from "../utils/misc";
 
 // copied from https://github.com/hi-ogawa/web-ext-tab-manager/blame/81710dead04859525b9c8be3a73a71926cae6da4/src/components/modal.tsx
 
@@ -16,6 +17,7 @@ export function Modal(props: {
   open: boolean;
   onClose: () => void;
   children: React.ReactNode;
+  className?: string; // override modal content container style e.g. max width/height
 }) {
   const { floating, context } = useFloating({
     open: props.open,
@@ -41,8 +43,10 @@ export function Modal(props: {
         {/* content */}
         <RemoveScroll className="fixed inset-0 overflow-hidden flex justify-center items-center">
           <Transition.Child
-            // TODO: override-able width/height
-            className="transition duration-300 transform w-[90%] max-w-[700px] h-[90%] max-h-[500px] bg-colorBgContainer shadow-lg"
+            className={cls(
+              props.className,
+              "transition duration-300 transform w-[90%] max-w-[700px] h-[90%] max-h-[500px] bg-colorBgContainer shadow-lg"
+            )}
             enterFrom="opacity-0 scale-95"
             enterTo="opacity-100 scale-100"
             leaveFrom="opacity-100 scale-100"
