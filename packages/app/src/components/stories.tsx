@@ -1,6 +1,7 @@
 import { Debug, toDelayedSetState } from "@hiogawa/utils-react";
 import React from "react";
 import { tw } from "../styles/tw";
+import { Modal } from "./modal";
 import { TopProgressBar, useProgress } from "./top-progress-bar";
 
 export function StoryButton() {
@@ -133,6 +134,38 @@ export function StoryTopProgressBar() {
         </div>
         <TopProgressBar loading={loading} />
         <Debug debug={{ loading, progress }} />
+      </section>
+    </div>
+  );
+}
+
+export function StoryModal() {
+  const [open, setOpen] = React.useState(false);
+
+  return (
+    <div className="flex flex-col items-center gap-3 m-2">
+      <section className="flex flex-col gap-3 w-full max-w-lg border p-3">
+        <h2 className="text-xl">Modal</h2>
+        <button
+          className="antd-btn antd-btn-primary px-2"
+          onClick={() => setOpen(true)}
+        >
+          Open
+        </button>
+        <Modal open={open} onClose={() => setOpen(false)}>
+          <div className="flex flex-col h-full p-3">
+            <h3>Modal Content Title</h3>
+            <div className="flex-1"></div>
+            <div className="flex justify-end">
+              <button
+                className="antd-btn antd-btn-default px-2"
+                onClick={() => setOpen(false)}
+              >
+                Close
+              </button>
+            </div>
+          </div>
+        </Modal>
       </section>
     </div>
   );
