@@ -1,7 +1,7 @@
 import { Debug, toDelayedSetState } from "@hiogawa/utils-react";
 import React from "react";
 import { tw } from "../styles/tw";
-import { Modal } from "./modal";
+import { useModal } from "./modal";
 import { TopProgressBar, useProgress } from "./top-progress-bar";
 
 export function StoryButton() {
@@ -140,7 +140,7 @@ export function StoryTopProgressBar() {
 }
 
 export function StoryModal() {
-  const [open, setOpen] = React.useState(false);
+  const modal = useModal();
 
   return (
     <div className="flex flex-col items-center gap-3 m-2">
@@ -148,28 +148,24 @@ export function StoryModal() {
         <h2 className="text-xl">Modal</h2>
         <button
           className="antd-btn antd-btn-primary px-2"
-          onClick={() => setOpen(true)}
+          onClick={() => modal.setOpen(true)}
         >
           Open
         </button>
-        <Modal
-          className="!max-w-[400px] !max-h-[300px]"
-          open={open}
-          onClose={() => setOpen(false)}
-        >
+        <modal.Wrapper className="!max-w-[400px] !max-h-[300px]">
           <div className="flex flex-col h-full p-3 gap-2">
             <h3 className="text-lg">Modal Content Title</h3>
             <div className="flex-1">Hello</div>
             <div className="flex justify-end">
               <button
                 className="antd-btn antd-btn-default px-2"
-                onClick={() => setOpen(false)}
+                onClick={() => modal.setOpen(false)}
               >
                 Close
               </button>
             </div>
           </div>
-        </Modal>
+        </modal.Wrapper>
       </section>
     </div>
   );

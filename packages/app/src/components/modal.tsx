@@ -7,9 +7,10 @@ import {
 } from "@floating-ui/react-dom-interactions";
 import { Transition } from "@headlessui/react";
 import { tinyassert } from "@hiogawa/utils";
-import type React from "react";
+import { useStableRef } from "@hiogawa/utils-react";
+import React from "react";
 import { RemoveScroll } from "react-remove-scroll";
-import { cls } from "../utils/misc";
+import { FunctionProps, cls } from "../utils/misc";
 
 // copied from https://github.com/hi-ogawa/web-ext-tab-manager/blame/81710dead04859525b9c8be3a73a71926cae6da4/src/components/modal.tsx
 
@@ -65,4 +66,31 @@ export function Modal(props: {
       </Transition>
     </FloatingPortal>
   );
+}
+
+// wrapper component hook
+export function useModal() {
+  const [open, setOpen] = React.useState(false);
+  const openRef = useStableRef(open); // pass stable ref to Wrapper
+
+  const [Wrapper] = React.useState(
+    () =>
+      function Wrapper(
+        props: Omit<FunctionProps<typeof Modal>, "open" | "onClose">
+      ) {
+        return (
+          <Modal
+            open={openRef.current}
+            onClose={() => setOpen(false)}
+            {...props}
+          />
+        );
+      }
+  );
+
+  return {
+    open,
+    setOpen,
+    Wrapper,
+  };
 }
