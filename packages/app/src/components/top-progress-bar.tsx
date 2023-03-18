@@ -25,11 +25,14 @@ export function TopProgressBar({ loading }: { loading: boolean }) {
       >
         <div
           className={
-            tw.absolute.top_0._("h-[3px] opacity-60").bg_colorPrimary.w_full.$
+            tw.absolute.top_0._("h-[3px] light:opacity-20 dark:opacity-50")
+              .bg_colorPrimary.w_full.$
           }
         />
         <div
-          className={tw.absolute.top_0._("h-[3px]").bg_colorPrimary.w_full.$}
+          className={
+            tw.absolute.top_0._("h-[3px]").bg_colorPrimaryHover.w_full.$
+          }
           style={{
             transformOrigin: "0 0",
             // TODO: can compute in css?
