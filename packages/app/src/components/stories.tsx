@@ -191,8 +191,8 @@ export function StorySlide() {
           {show ? "Hide" : "Show"}
         </button>
         <div className="border h-[100px] overflow-hidden relative">
-          {/* TODO: appear on mount? */}
           <Transition
+            appear
             show={show}
             className="absolute top-2 right-2 inline-block duration-500 transform"
             enterFrom="translate-y-[-200%]"
@@ -203,6 +203,7 @@ export function StorySlide() {
             <span className="border px-2 py-1">hello from top/right</span>
           </Transition>
           <Transition
+            appear
             show={show}
             className="absolute bottom-2 left-2 inline-block duration-500 transform"
             enterFrom="translate-x-[-200%]"
