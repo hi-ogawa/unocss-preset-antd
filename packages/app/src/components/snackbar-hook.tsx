@@ -37,7 +37,6 @@ function createUseSnackbar() {
       itemId: string,
       newItem?: Partial<SnackbarItemState>
     ): void {
-      console.log("==== update", itemId, newItem);
       const index = items.findIndex((item) => item.id === itemId);
       if (index >= 0) {
         const item = items[index];
@@ -50,12 +49,10 @@ function createUseSnackbar() {
     }
 
     function dismiss(itemId: string): void {
-      console.log("==== dismiss", itemId);
       __update(itemId, { state: "dismiss-slide" });
     }
 
     function remove(itemId: string): void {
-      console.log("==== remove", itemId);
       __update(itemId);
     }
 
