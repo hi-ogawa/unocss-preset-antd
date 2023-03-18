@@ -1,7 +1,11 @@
+import { Transition } from "@headlessui/react";
 import { Debug, toDelayedSetState } from "@hiogawa/utils-react";
 import React from "react";
 import { tw } from "../styles/tw";
+import { useCollapseProps } from "./collapse";
 import { Modal } from "./modal";
+import { SnackbarConainer } from "./snackbar";
+import { useSnackbar } from "./snackbar-hook";
 import { TopProgressBar, useProgress } from "./top-progress-bar";
 
 export function StoryButton() {
@@ -170,6 +174,123 @@ export function StoryModal() {
             </div>
           </div>
         </Modal>
+      </section>
+    </div>
+  );
+}
+
+export function StorySlide() {
+  const [show, setShow] = React.useState(true);
+
+  return (
+    <div className="flex flex-col items-center gap-3 m-2">
+      <section className="flex flex-col gap-3 w-full max-w-lg border p-3">
+        <h2 className="text-xl">Slide</h2>
+        <button
+          className="antd-btn antd-btn-default px-2"
+          onClick={() => setShow(!show)}
+        >
+          {show ? "Hide" : "Show"}
+        </button>
+        <div className="border h-[100px] overflow-hidden relative">
+          <Transition
+            appear
+            show={show}
+            className="absolute top-2 right-2 inline-block duration-500 transform"
+            enterFrom="translate-y-[-200%]"
+            enterTo="translate-y-0"
+            leaveFrom="translate-y-0"
+            leaveTo="translate-y-[-200%]"
+          >
+            <span className="border px-2 py-1">hello from top/right</span>
+          </Transition>
+          <Transition
+            appear
+            show={show}
+            className="absolute bottom-2 left-2 inline-block duration-500 transform"
+            enterFrom="translate-x-[-200%]"
+            enterTo="translate-x-0"
+            leaveFrom="translate-x-0"
+            leaveTo="translate-x-[-200%]"
+          >
+            <span className="border px-2 py-1">hello from bottom/left</span>
+          </Transition>
+        </div>
+      </section>
+    </div>
+  );
+}
+
+export function StoryCollapse() {
+  const [show, setShow] = React.useState(true);
+  const collapseProps = useCollapseProps();
+
+  return (
+    <div className="flex flex-col items-center gap-3 m-2">
+      <section className="flex flex-col gap-3 w-full max-w-lg border p-3">
+        <h2 className="text-xl">Collapse</h2>
+        <button
+          className="antd-btn antd-btn-default px-2"
+          onClick={() => setShow(!show)}
+        >
+          {show ? "Uncollapse" : "Collapse"}
+        </button>
+        <div className="flex flex-col p-3 border">
+          <div>Fixed Div</div>
+          <Transition
+            appear
+            show={show}
+            className="h-0 duration-500 overflow-hidden"
+            {...collapseProps}
+          >
+            <div className="pt-3">Collapsable Div</div>
+          </Transition>
+        </div>
+      </section>
+    </div>
+  );
+}
+//
+// snackbar/notification
+//
+
+export function StorySnackbar() {
+  const snackbar = useSnackbar();
+
+  return (
+    <div className="flex flex-col items-center gap-3 m-2">
+      <section className="flex flex-col gap-3 w-full max-w-2xl border p-3">
+        <h2 className="text-xl">Snackbar</h2>
+        <div className="flex gap-2">
+          <button
+            className="flex-1 antd-btn antd-btn-default px-2"
+            onClick={() => {
+              snackbar.create("Successfuly toasted!", { type: "success" });
+            }}
+          >
+            Success
+          </button>
+          <button
+            className="flex-1 antd-btn antd-btn-default px-2"
+            onClick={() => {
+              snackbar.create("This didn't work.", { type: "error" });
+            }}
+          >
+            Error
+          </button>
+          <button
+            className="flex-1 antd-btn antd-btn-default px-2"
+            onClick={() => {
+              snackbar.create("Some neutral message");
+            }}
+          >
+            Default
+          </button>
+        </div>
+        <div className="border h-[200px] p-3 flex flex-col relative overflow-hidden">
+          <SnackbarConainer />
+        </div>
+        <Debug debug={snackbar.items} />
       </section>
     </div>
   );
