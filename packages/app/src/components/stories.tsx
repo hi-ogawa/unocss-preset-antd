@@ -1,3 +1,4 @@
+import { Transition } from "@headlessui/react";
 import { Debug, toDelayedSetState } from "@hiogawa/utils-react";
 import React from "react";
 import { tw } from "../styles/tw";
@@ -170,6 +171,46 @@ export function StoryModal() {
             </div>
           </div>
         </Modal>
+      </section>
+    </div>
+  );
+}
+
+export function StorySlide() {
+  const [show, setShow] = React.useState(true);
+
+  return (
+    <div className="flex flex-col items-center gap-3 m-2">
+      <section className="flex flex-col gap-3 w-full max-w-lg border p-3 z-10 bg-inherit">
+        <h2 className="text-xl">Slide</h2>
+        <button
+          className="antd-btn antd-btn-default px-2"
+          onClick={() => setShow(!show)}
+        >
+          {show ? "Hide" : "Show"}
+        </button>
+        <section className="border h-[100px] overflow-hidden relative">
+          <Transition
+            show={show}
+            className="absolute top-2 right-2 inline-block duration-500 transform"
+            enterFrom="translate-y-[-200%]"
+            enterTo="translate-y-0"
+            leaveFrom="translate-y-0"
+            leaveTo="translate-y-[-200%]"
+          >
+            <span className="border px-2 py-1">hello from top/right</span>
+          </Transition>
+          <Transition
+            show={show}
+            className="absolute bottom-2 left-2 inline-block duration-500 transform"
+            enterFrom="translate-x-[-200%]"
+            enterTo="translate-x-0"
+            leaveFrom="translate-x-0"
+            leaveTo="translate-x-[-200%]"
+          >
+            <span className="border px-2 py-1">hello from bottom/left</span>
+          </Transition>
+        </section>
       </section>
     </div>
   );
