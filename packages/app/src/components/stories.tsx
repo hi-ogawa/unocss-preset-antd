@@ -3,6 +3,7 @@ import { tinyassert } from "@hiogawa/utils";
 import { Debug, toDelayedSetState } from "@hiogawa/utils-react";
 import React from "react";
 import { tw } from "../styles/tw";
+import { cls } from "../utils/misc";
 import { Modal } from "./modal";
 import { TopProgressBar, useProgress } from "./top-progress-bar";
 
@@ -267,4 +268,63 @@ function useCollapseProps(): Partial<Parameters<typeof Transition>[0]> {
   }
 
   return { ref, beforeEnter, beforeLeave };
+}
+
+export function StorySnackbar() {
+  return (
+    <div className="flex flex-col items-center gap-3 m-2">
+      <section className="flex flex-col gap-3 w-full max-w-2xl border p-3">
+        <h2 className="text-xl">Snackbar</h2>
+        <div className="flex gap-2">
+          <button
+            className="flex-1 antd-btn antd-btn-default px-2"
+            onClick={() => {}}
+          >
+            Success
+          </button>
+          <button
+            className="flex-1 antd-btn antd-btn-default px-2"
+            onClick={() => {}}
+          >
+            Error
+          </button>
+        </div>
+        <div className="border h-md p-3 flex flex-col gap-3">
+          <SnackbarItem type="success" onClose={() => {}}>
+            Successfully toasted!
+          </SnackbarItem>
+          <SnackbarItem type="error">This didn't work.</SnackbarItem>
+          <SnackbarItem>Hello</SnackbarItem>
+        </div>
+      </section>
+    </div>
+  );
+}
+
+function SnackbarItem(props: {
+  type?: "success" | "error";
+  onClose?: () => void;
+  children: React.ReactNode;
+}) {
+  return (
+    <div className="bg-colorBgElevated shadow-[var(--antd-boxShadowSecondary)] w-[350px]">
+      <div className="flex items-center gap-3 p-3">
+        <span
+          className={cls(
+            props.type === "success" &&
+              tw.i_ri_checkbox_circle_fill.text_colorSuccess.text_2xl.$,
+            props.type === "error" &&
+              tw.i_ri_error_warning_fill.text_colorError.text_2xl.$
+          )}
+        />
+        <div className="flex-1">{props.children}</div>
+        {props.onClose && (
+          <button
+            className={tw.i_ri_close_line.text_colorTextSecondary.$}
+            onClick={props.onClose}
+          />
+        )}
+      </div>
+    </div>
+  );
 }
