@@ -5,6 +5,7 @@ import {
   RouteObject,
   RouterProvider,
   createHashRouter,
+  redirect,
 } from "react-router-dom";
 import { Drawer } from "./components/drawer";
 import { ThemeSelectButton } from "./components/misc";
@@ -34,7 +35,7 @@ const router = createHashRouter([
       ...storiesRoutes,
       {
         path: "*",
-        element: <NotFound />,
+        loader: () => redirect("/Button"),
       },
     ],
   },
@@ -128,8 +129,4 @@ function Header() {
       </Drawer>
     </header>
   );
-}
-
-function NotFound() {
-  return <div className="uppercase">select a story from menu</div>;
 }
