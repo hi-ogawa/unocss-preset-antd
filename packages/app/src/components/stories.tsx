@@ -5,6 +5,7 @@ import React from "react";
 import { tw } from "../styles/tw";
 import { cls } from "../utils/misc";
 import { Modal } from "./modal";
+import { SnackbarItemOptions, useSnackbar } from "./snackbar-hook";
 import { TopProgressBar, useProgress } from "./top-progress-bar";
 
 export function StoryButton() {
@@ -250,27 +251,53 @@ export function StoryCollapse() {
   );
 }
 
+function CollapseTransition(props: Parameters<typeof Transition>[0] & object) {
+  const collpaseProps = useCollapseProps();
+  return <Transition {...props} {...collpaseProps} />;
+}
+
 function useCollapseProps(): Partial<Parameters<typeof Transition>[0]> {
-  const ref = React.useRef<HTMLDivElement>(null);
+  const refEl = React.useRef<HTMLDivElement>();
+
+  const refCallback: React.RefCallback<HTMLDivElement> = (el) => {
+    if (el) {
+      uncollapse(el);
+    }
+    refEl.current = el ?? undefined;
+  };
+
+  function uncollapse(el: HTMLDivElement) {
+    const child = el.firstElementChild;
+    tinyassert(child);
+    el.style.height = child.clientHeight + "px";
+  }
+
+  function collapse(el: HTMLDivElement) {
+    el.style.height = "0px";
+  }
 
   function beforeEnter() {
-    const outer = ref.current;
-    const inner = ref.current?.firstElementChild;
-    tinyassert(outer);
-    tinyassert(inner);
-    outer.style.height = inner.clientHeight + "px";
+    const el = refEl.current;
+    tinyassert(el);
+    uncollapse(el);
   }
 
   function beforeLeave() {
-    const outer = ref.current;
-    tinyassert(outer);
-    outer.style.height = "";
+    const el = refEl.current;
+    tinyassert(el);
+    collapse(el);
   }
 
-  return { ref, beforeEnter, beforeLeave };
+  return { ref: refCallback, beforeEnter, beforeLeave };
 }
 
+//
+// snackbar/notification
+//
+
 export function StorySnackbar() {
+  const snackbar = useSnackbar();
+
   return (
     <div className="flex flex-col items-center gap-3 m-2">
       <section className="flex flex-col gap-3 w-full max-w-2xl border p-3">
@@ -278,34 +305,96 @@ export function StorySnackbar() {
         <div className="flex gap-2">
           <button
             className="flex-1 antd-btn antd-btn-default px-2"
-            onClick={() => {}}
+            onClick={() => {
+              snackbar.create("Successfuly toasted!", { type: "success" });
+            }}
           >
             Success
           </button>
           <button
             className="flex-1 antd-btn antd-btn-default px-2"
-            onClick={() => {}}
+            onClick={() => {
+              snackbar.create("This didn't work.", { type: "error" });
+            }}
           >
             Error
           </button>
+          <button
+            className="flex-1 antd-btn antd-btn-default px-2"
+            onClick={() => {
+              snackbar.create("Some neutral message");
+            }}
+          >
+            Default
+          </button>
         </div>
-        <div className="border h-md p-3 flex flex-col gap-3">
-          <SnackbarItem type="success" onClose={() => {}}>
-            Successfully toasted!
-          </SnackbarItem>
-          <SnackbarItem type="error">This didn't work.</SnackbarItem>
-          <SnackbarItem>Hello</SnackbarItem>
+        <div className="border h-[200px] p-3 flex flex-col relative overflow-hidden">
+          <SnackbarConainer />
         </div>
+        <Debug debug={snackbar.items} />
       </section>
     </div>
   );
 }
 
-function SnackbarItem(props: {
-  type?: "success" | "error";
-  onClose?: () => void;
-  children: React.ReactNode;
-}) {
+function SnackbarConainer() {
+  const { items, dismiss, __update, remove } = useSnackbar();
+
+  return (
+    <div className="flex flex-col absolute bottom-1 left-2">
+      {[...items].reverse().map((item) => (
+        //
+        // collpase transition
+        //
+        <CollapseTransition
+          key={item.id}
+          show={item.state === "show" || item.state === "dismiss-slide"}
+          className="duration-300"
+          afterLeave={() => remove(item.id)}
+        >
+          {/*  */}
+          {/* slide transtion */}
+          {/*  */}
+          <Transition
+            appear
+            show={item.state === "show"}
+            className="inline-block duration-500 transform py-1"
+            enterFrom="translate-x-[-120%]"
+            enterTo="translate-x-0"
+            leaveFrom="translate-x-0"
+            leaveTo="translate-x-[-120%]"
+            afterLeave={() => __update(item.id, { state: "dismiss-collapse" })}
+          >
+            <SnackbarItem
+              type={item.options?.type}
+              onClose={() => dismiss(item.id)}
+            >
+              {item.node}
+            </SnackbarItem>
+          </Transition>
+          {/*  */}
+          {/* dummy transition to auto trigger slide-out after timeout */}
+          {/*  */}
+          <Transition
+            appear
+            show={item.state === "show"}
+            className="duration-2000"
+            enterFrom="opacity-0"
+            enterTo="opacity-100"
+            afterEnter={() => dismiss(item.id)}
+          />
+        </CollapseTransition>
+      ))}
+    </div>
+  );
+}
+
+function SnackbarItem(
+  props: SnackbarItemOptions & {
+    onClose: () => void;
+    children: React.ReactNode;
+  }
+) {
   return (
     <div className="bg-colorBgElevated shadow-[var(--antd-boxShadowSecondary)] w-[350px]">
       <div className="flex items-center gap-3 p-3">
@@ -318,12 +407,13 @@ function SnackbarItem(props: {
           )}
         />
         <div className="flex-1">{props.children}</div>
-        {props.onClose && (
-          <button
-            className={tw.i_ri_close_line.text_colorTextSecondary.$}
-            onClick={props.onClose}
-          />
-        )}
+        <button
+          className={
+            tw.antd_btn.antd_btn_ghost.i_ri_close_line.text_colorTextSecondary
+              .text_lg.$
+          }
+          onClick={props.onClose}
+        />
       </div>
     </div>
   );
