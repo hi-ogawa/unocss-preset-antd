@@ -1,4 +1,5 @@
 import { Transition } from "@headlessui/react";
+import { tinyassert } from "@hiogawa/utils";
 import { Debug, toDelayedSetState } from "@hiogawa/utils-react";
 import React from "react";
 import { tw } from "../styles/tw";
@@ -181,7 +182,7 @@ export function StorySlide() {
 
   return (
     <div className="flex flex-col items-center gap-3 m-2">
-      <section className="flex flex-col gap-3 w-full max-w-lg border p-3 z-10 bg-inherit">
+      <section className="flex flex-col gap-3 w-full max-w-lg border p-3">
         <h2 className="text-xl">Slide</h2>
         <button
           className="antd-btn antd-btn-default px-2"
@@ -189,7 +190,8 @@ export function StorySlide() {
         >
           {show ? "Hide" : "Show"}
         </button>
-        <section className="border h-[100px] overflow-hidden relative">
+        <div className="border h-[100px] overflow-hidden relative">
+          {/* TODO: appear on mount? */}
           <Transition
             show={show}
             className="absolute top-2 right-2 inline-block duration-500 transform"
@@ -210,8 +212,58 @@ export function StorySlide() {
           >
             <span className="border px-2 py-1">hello from bottom/left</span>
           </Transition>
-        </section>
+        </div>
       </section>
     </div>
   );
+}
+
+export function StoryCollapse() {
+  const [show, setShow] = React.useState(true);
+  const collapseProps = useCollapseProps();
+
+  return (
+    <div className="flex flex-col items-center gap-3 m-2">
+      <section className="flex flex-col gap-3 w-full max-w-lg border p-3">
+        <h2 className="text-xl">Collapse</h2>
+        <button
+          className="antd-btn antd-btn-default px-2"
+          onClick={() => setShow(!show)}
+        >
+          {show ? "Uncollapse" : "Collapse"}
+        </button>
+        <div className="flex flex-col p-3 border">
+          <div>Fixed Div</div>
+          <Transition
+            appear
+            show={show}
+            className="h-0 duration-500 overflow-hidden"
+            {...collapseProps}
+          >
+            <div className="pt-3">Collapsable Div</div>
+          </Transition>
+        </div>
+      </section>
+    </div>
+  );
+}
+
+function useCollapseProps(): Partial<Parameters<typeof Transition>[0]> {
+  const ref = React.useRef<HTMLDivElement>(null);
+
+  function beforeEnter() {
+    const outer = ref.current;
+    const inner = ref.current?.firstElementChild;
+    tinyassert(outer);
+    tinyassert(inner);
+    outer.style.height = inner.clientHeight + "px";
+  }
+
+  function beforeLeave() {
+    const outer = ref.current;
+    tinyassert(outer);
+    outer.style.height = "";
+  }
+
+  return { ref, beforeEnter, beforeLeave };
 }
