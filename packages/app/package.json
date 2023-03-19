@@ -1,6 +1,6 @@
 {
   "name": "@hiogawa/unocss-preset-antd-app",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "private": true,
   "scripts": {
     "dev": "vite --no-clearScreen",
