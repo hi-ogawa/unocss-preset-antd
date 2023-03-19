@@ -8,8 +8,8 @@ import {
   redirect,
 } from "react-router-dom";
 import { Drawer } from "./components/drawer";
-import { ThemeSelectButton } from "./components/misc";
 import * as stories from "./components/stories";
+import { ThemeSelectButton } from "./components/theme-select-button";
 import { tw } from "./styles/tw";
 import { cls } from "./utils/misc";
 
