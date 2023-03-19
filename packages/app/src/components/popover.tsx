@@ -117,14 +117,14 @@ export function PopoverSimple({
           {...props}
         >
           <div className="bg-colorBgElevated shadow-[var(--antd-boxShadowSecondary)]">
-            {/* TODO: support left/right placement */}
             {/* TODO: use FloatingArray from floating-ui? (currently not used since shadow didn't look right) */}
             <div
               {...arrowProps}
               className={cls(
+                placement.startsWith("bottom") && "top-0",
                 placement.startsWith("top") && "bottom-0",
-                placement.startsWith("left") && "hidden",
-                placement.startsWith("right") && "hidden"
+                placement.startsWith("left") && "right-0",
+                placement.startsWith("right") && "left-0"
               )}
             >
               <div
@@ -132,7 +132,9 @@ export function PopoverSimple({
                 className={cls(
                   "bg-colorBgElevated shadow-[var(--antd-boxShadowPopoverArrow)] relative w-4 h-4",
                   placement.startsWith("bottom") && "-top-2 rotate-[225deg]",
-                  placement.startsWith("top") && "-bottom-2 rotate-[45deg]"
+                  placement.startsWith("top") && "-bottom-2 rotate-[45deg]",
+                  placement.startsWith("left") && "-right-2 rotate-[315deg]",
+                  placement.startsWith("right") && "-left-2 rotate-[135deg]"
                 )}
                 // clip half
                 style={{
