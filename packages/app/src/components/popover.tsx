@@ -1,4 +1,5 @@
 import {
+  FloatingContext,
   FloatingPortal,
   Placement,
   arrow,
@@ -21,7 +22,7 @@ interface PopoverRenderProps {
   setOpen: (open: boolean) => void;
   props: {};
   arrowProps?: {};
-  placement: Placement; // actual placement e.g. after `flip` middleware is applied
+  context: FloatingContext; // context.placement is an actual placement e.g. after `flip` middleware is applied
 }
 
 export function Popover(props: {
@@ -61,7 +62,7 @@ export function Popover(props: {
         props: getReferenceProps({
           ref: reference,
         }),
-        placement: context.placement,
+        context,
       })}
       <FloatingPortal id={id}>
         {props.floating({
@@ -83,7 +84,7 @@ export function Popover(props: {
               position: "absolute",
             },
           },
-          placement: context.placement,
+          context,
         })}
       </FloatingPortal>
     </>
@@ -103,13 +104,8 @@ export function PopoverSimple({
   return (
     <Popover
       placement={placement}
-      reference={({ props, open, setOpen }) =>
-        React.cloneElement(reference, {
-          onClick: () => setOpen(!open),
-          ...props,
-        })
-      }
-      floating={({ props, open, arrowProps, placement }) => (
+      reference={({ props }) => React.cloneElement(reference, props)}
+      floating={({ props, open, arrowProps, context: { placement } }) => (
         <Transition
           show={open}
           className="transition duration-150"
