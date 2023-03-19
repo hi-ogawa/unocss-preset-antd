@@ -106,7 +106,7 @@ function Header() {
         </a>
       </div>
       <Drawer open={menuOpen} onClose={() => setMenuOpen(false)}>
-        <div className="h-full flex flex-col py-2 gap-4">
+        <div className="h-full flex flex-col py-2 gap-4 w-[300px]">
           <div className="flex-none pl-5 py-1">
             <button
               className="antd-btn antd-btn-ghost flex items-center"
