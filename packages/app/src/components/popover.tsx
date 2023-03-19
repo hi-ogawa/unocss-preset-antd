@@ -1,5 +1,4 @@
 import {
-  FloatingArrow,
   FloatingPortal,
   Placement,
   arrow,
@@ -15,6 +14,7 @@ import {
 } from "@floating-ui/react";
 import { Transition } from "@headlessui/react";
 import React from "react";
+import { cls } from "../utils/misc";
 
 interface PopoverRenderProps {
   open: boolean;
@@ -31,18 +31,19 @@ export function Popover(props: {
   const [open, setOpen] = React.useState(false);
   const arrowRef = React.useRef<Element>(null);
 
-  const { reference, floating, context, x, y, strategy } = useFloating({
-    open,
-    onOpenChange: setOpen,
-    placement: props.placement,
-    middleware: [
-      offset(17),
-      flip(),
-      shift(),
-      arrow({ element: arrowRef, padding: 10 }),
-    ],
-    whileElementsMounted: autoUpdate,
-  });
+  const { reference, floating, context, x, y, strategy, middlewareData } =
+    useFloating({
+      open,
+      onOpenChange: setOpen,
+      placement: props.placement,
+      middleware: [
+        offset(17),
+        flip(),
+        shift(),
+        arrow({ element: arrowRef, padding: 10 }),
+      ],
+      whileElementsMounted: autoUpdate,
+    });
 
   const { getReferenceProps, getFloatingProps } = useInteractions([
     useClick(context),
@@ -74,7 +75,11 @@ export function Popover(props: {
           }),
           arrowProps: {
             ref: arrowRef,
-            context,
+            style: {
+              top: middlewareData.arrow?.y ?? "",
+              left: middlewareData.arrow?.x ?? "",
+              position: "absolute",
+            },
           },
         })}
       </FloatingPortal>
@@ -112,12 +117,25 @@ export function PopoverSimple({
           {...props}
         >
           <div className="bg-colorBgElevated shadow-[var(--antd-boxShadowSecondary)]">
-            <FloatingArrow
-              {...(arrowProps as any)}
-              width={20}
-              height={10}
-              className="fill-colorBgElevated"
-            />
+            {/* TODO: support left/right placement */}
+            {/* TODO: use FloatingArray from floating-ui? */}
+            <div
+              {...arrowProps}
+              className={cls(placement.startsWith("top") && "bottom-0")}
+            >
+              <div
+                // rotate 4x4 square with shadow
+                className={cls(
+                  "bg-colorBgElevated shadow-[var(--antd-boxShadowPopoverArrow)] relative w-4 h-4",
+                  placement.startsWith("bottom") && "-top-2 rotate-[225deg]",
+                  placement.startsWith("top") && "-bottom-2 rotate-[45deg]"
+                )}
+                // clip half
+                style={{
+                  clipPath: "polygon(100% 0%, 200% 100%, 100% 200%, 0% 100%)",
+                }}
+              />
+            </div>
             {floating}
           </div>
         </Transition>
