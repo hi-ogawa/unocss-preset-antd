@@ -106,6 +106,16 @@ export function antdPreset(): Preset<Theme> {
       tab: tw.transition.border_b_2.border_transparent.cursor_pointer
         .hover(tw.text_colorPrimaryHover.border_colorPrimaryHover)
         .aria_selected(tw.text_colorPrimary.border_colorPrimary).$,
+
+      /**
+       * menu
+       */
+      "menu-item": "antd-btn antd-btn-text",
+      "menu-item-active": tw.important(
+        tw.text_colorPrimary
+          ._(`bg-[${VARS.controlItemBgActive}]`)
+          .dark(tw.text_white.bg_colorPrimary)
+      ).$,
     },
   };
 }
