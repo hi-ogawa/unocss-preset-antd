@@ -4,6 +4,7 @@ import React from "react";
 import { tw } from "../styles/tw";
 import { useCollapseProps } from "./collapse";
 import { useModal } from "./modal";
+import { PopoverSimple } from "./popover";
 import { SnackbarConainer } from "./snackbar";
 import { useSnackbar } from "./snackbar-hook";
 import { TopProgressBar, useProgress } from "./top-progress-bar";
@@ -246,9 +247,6 @@ export function StoryCollapse() {
     </div>
   );
 }
-//
-// snackbar/notification
-//
 
 export function StorySnackbar() {
   const snackbar = useSnackbar();
@@ -287,6 +285,37 @@ export function StorySnackbar() {
           <SnackbarConainer />
         </div>
         <Debug debug={snackbar.items} />
+      </section>
+    </div>
+  );
+}
+
+export function StoryPopover() {
+  const placements = ["bottom-start", "bottom", "bottom-end"] as const;
+
+  return (
+    <div className="flex flex-col items-center gap-3 m-2">
+      <section className="flex flex-col gap-3 w-full max-w-2xl border p-3">
+        <h2 className="text-xl">Popover</h2>
+        <div className="flex justify-center gap-2">
+          {placements.map((placement) => (
+            <PopoverSimple
+              key={placement}
+              placement={placement}
+              reference={
+                <button className="antd-btn antd-btn-default px-2">
+                  {placement}
+                </button>
+              }
+              floating={
+                <div className="flex flex-col gap-1 px-3 py-2 w-[150px]">
+                  <h4 className="text-lg">Title</h4>
+                  <div>Content</div>
+                </div>
+              }
+            />
+          ))}
+        </div>
       </section>
     </div>
   );

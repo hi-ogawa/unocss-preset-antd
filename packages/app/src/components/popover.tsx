@@ -12,10 +12,8 @@ import {
   useId,
   useInteractions,
 } from "@floating-ui/react";
+import { Transition } from "@headlessui/react";
 import React from "react";
-
-// copied from
-// https://github.com/hi-ogawa/youtube-dl-web-v2/blob/97a9e095350b28bd6daf5d0f8ecf6c00a364b94d/packages/app/src/components/popover.tsx
 
 interface PopoverRenderProps {
   open: boolean;
@@ -85,5 +83,54 @@ export function Popover(props: {
         })}
       </FloatingPortal>
     </>
+  );
+}
+
+// https://ant.design/components/popover
+export function PopoverSimple({
+  placement,
+  reference,
+  floating,
+}: {
+  placement: Placement;
+  reference: React.ReactElement;
+  floating: React.ReactElement;
+}) {
+  return (
+    <Popover
+      placement={placement}
+      reference={({ props, open, setOpen }) =>
+        React.cloneElement(reference, {
+          onClick: () => setOpen(!open),
+          ...props,
+        })
+      }
+      floating={({ props, open, arrowProps }) => (
+        <Transition
+          show={open}
+          className="transition duration-150"
+          enterFrom="scale-80 opacity-0"
+          enterTo="scale-100 opacity-100"
+          leaveFrom="scale-100 opacity-100"
+          leaveTo="scale-80 opacity-0"
+          {...props}
+        >
+          <div className="bg-colorBgElevated shadow-[var(--antd-boxShadowSecondary)]">
+            {/* TODO: support placement other than "bottom"? */}
+            <div {...arrowProps}>
+              <div
+                // rotate rectangle with shadow
+                className="bg-colorBgElevated shadow-[var(--antd-boxShadowPopoverArrow)] relative -top-2 w-4 h-4 rotate-[225deg]"
+                style={{
+                  // clip only lower half
+                  clipPath: "polygon(100% 0%, 200% 100%, 100% 200%, 0% 100%)",
+                }}
+              ></div>
+            </div>
+            {floating}
+          </div>
+        </Transition>
+      )}
+    />
   );
 }
