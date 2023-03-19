@@ -2,7 +2,12 @@
 
 import { dummyRule, filterColorPallete } from "@hiogawa/unocss-typescript-dsl";
 import { dummyPreset } from "@hiogawa/unocss-typescript-dsl";
-import { defineConfig, presetUno } from "unocss";
+import {
+  defineConfig,
+  presetUno,
+  transformerDirectives,
+  transformerVariantGroup,
+} from "unocss";
 import { antdPreset } from "./src";
 
 export default defineConfig({
@@ -12,4 +17,5 @@ export default defineConfig({
     dummyRule("opacity-<percent>"),
     dummyRule("rounded-full"),
   ],
+  transformers: [transformerDirectives(), transformerVariantGroup()],
 });

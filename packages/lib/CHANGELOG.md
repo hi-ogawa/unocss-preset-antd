@@ -1,5 +1,11 @@
 # @hiogawa/unocss-preset-antd
 
+## 2.1.0
+
+### Minor Changes
+
+- 2d4b283: feat: bundle reset.css
+
 ## 2.0.2
 
 ### Patch Changes

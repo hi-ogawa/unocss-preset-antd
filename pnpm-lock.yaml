@@ -9,20 +9,26 @@ importers:
       '@hiogawa/unocss-typescript-dsl': 2.0.0-pre.4
       '@hiogawa/utils': ^1.3.0
       '@tsconfig/strictest': ^1.0.2
+      '@vitejs/plugin-react': ^3.1.0
       npm-run-all: ^4.1.5
       prettier: ^2.8.3
       tsup: ^6.5.0
       typescript: ^4.9.5
+      unocss: ^0.48.5
+      vite: ^4.1.1
     devDependencies:
       '@changesets/cli': 2.26.0
       '@hiogawa/isort-ts': 1.0.0-pre.9_ioxdq35luteszuxmt2jhnqjeca
       '@hiogawa/unocss-typescript-dsl': 2.0.0-pre.4
       '@hiogawa/utils': 1.3.0
       '@tsconfig/strictest': 1.0.2
+      '@vitejs/plugin-react': 3.1.0_vite@4.1.1
       npm-run-all: 4.1.5
       prettier: 2.8.3
       tsup: 6.5.0_typescript@4.9.5
       typescript: 4.9.5
+      unocss: 0.48.5_vite@4.1.1
+      vite: 4.1.1
 
   packages/app:
     specifiers:
@@ -35,14 +41,11 @@ importers:
       '@types/node': ^16.18.12
       '@types/react': ^18.0.27
       '@types/react-dom': ^18.0.10
-      '@vitejs/plugin-react': ^3.1.0
       jotai: ^2.0.3
       react: ^18.2.0
       react-dom: ^18.2.0
       react-remove-scroll: ^2.5.5
       react-router-dom: ^6.8.0
-      unocss: ^0.48.5
-      vite: ^4.1.1
     dependencies:
       '@floating-ui/react': 0.21.1_5ndqzdd6t4rivxsukjv3i3ak2q
       '@headlessui/react': 1.7.9_biqbaboplfbrettd7655fr4n2y
@@ -59,9 +62,6 @@ importers:
       '@types/node': 16.18.12
       '@types/react': 18.0.27
       '@types/react-dom': 18.0.10
-      '@vitejs/plugin-react': 3.1.0_vite@4.1.1
-      unocss: 0.48.5_vite@4.1.1
-      vite: 4.1.1_@types+node@16.18.12
 
   packages/lib:
     specifiers:
@@ -72,7 +72,6 @@ importers:
       esbuild: ^0.17.5
       esbuild-register: ^3.4.2
       local-pkg: ^0.4.3
-      unocss: ^0.48.5
     dependencies:
       '@unocss/reset': 0.48.5
       local-pkg: 0.4.3
@@ -82,7 +81,6 @@ importers:
       antd: 5.1.7
       esbuild: 0.17.5
       esbuild-register: 3.4.2_esbuild@0.17.5
-      unocss: 0.48.5
 
 packages:
 
@@ -1318,17 +1316,6 @@ packages:
     resolution: {integrity: sha512-KQf+QAMWKMrtBMsB8/24w53tEsxllMj6TuA80TT/5igJalLI/zm0L3oXRbIAl4Ohfc85gyHX/jhMwsVkmhLU4A==}
     dev: true
 
-  /@unocss/astro/0.48.5:
-    resolution: {integrity: sha512-3OkMAceJwfa+mUfPEAATRNCXwpI4aLl+upXVsoHDN013pM7st4oC7ZgYHvb8EajuSinng9ffMcPfgrIJK9N5bQ==}
-    dependencies:
-      '@unocss/core': 0.48.5
-      '@unocss/reset': 0.48.5
-      '@unocss/vite': 0.48.5
-    transitivePeerDependencies:
-      - rollup
-      - vite
-    dev: true
-
   /@unocss/astro/0.48.5_vite@4.1.1:
     resolution: {integrity: sha512-3OkMAceJwfa+mUfPEAATRNCXwpI4aLl+upXVsoHDN013pM7st4oC7ZgYHvb8EajuSinng9ffMcPfgrIJK9N5bQ==}
     dependencies:
@@ -1469,25 +1456,6 @@ packages:
       '@unocss/core': 0.48.5
     dev: true
 
-  /@unocss/vite/0.48.5:
-    resolution: {integrity: sha512-eUZSM9vxTdUe70/aDpxGODjLJtrAa80pmipqgFaZ0B++LsglZMiSZD38/Bw7w5FTLv78ViRgTJ+rGh/SOe+rdw==}
-    peerDependencies:
-      vite: ^2.9.0 || ^3.0.0-0 || ^4.0.0
-    dependencies:
-      '@ampproject/remapping': 2.2.0
-      '@rollup/pluginutils': 5.0.2
-      '@unocss/config': 0.48.5
-      '@unocss/core': 0.48.5
-      '@unocss/inspector': 0.48.5
-      '@unocss/scope': 0.48.5
-      '@unocss/transformer-directives': 0.48.5
-      chokidar: 3.5.3
-      fast-glob: 3.2.12
-      magic-string: 0.27.0
-    transitivePeerDependencies:
-      - rollup
-    dev: true
-
   /@unocss/vite/0.48.5_vite@4.1.1:
     resolution: {integrity: sha512-eUZSM9vxTdUe70/aDpxGODjLJtrAa80pmipqgFaZ0B++LsglZMiSZD38/Bw7w5FTLv78ViRgTJ+rGh/SOe+rdw==}
     peerDependencies:
@@ -1503,7 +1471,7 @@ packages:
       chokidar: 3.5.3
       fast-glob: 3.2.12
       magic-string: 0.27.0
-      vite: 4.1.1_@types+node@16.18.12
+      vite: 4.1.1
     transitivePeerDependencies:
       - rollup
     dev: true
@@ -1519,7 +1487,7 @@ packages:
       '@babel/plugin-transform-react-jsx-source': 7.19.6_@babel+core@7.20.12
       magic-string: 0.27.0
       react-refresh: 0.14.0
-      vite: 4.1.1_@types+node@16.18.12
+      vite: 4.1.1
     transitivePeerDependencies:
       - supports-color
     dev: true
@@ -4626,38 +4594,6 @@ packages:
     engines: {node: '>= 4.0.0'}
     dev: true
 
-  /unocss/0.48.5:
-    resolution: {integrity: sha512-OK24OS2IO4oJa/jtfoxUIciY6M05Nx16M6pzfCqzcglvaIIM/rpsA2D3dYmC3f3IeBuC31FpB59cM05CF7E0bQ==}
-    engines: {node: '>=14'}
-    peerDependencies:
-      '@unocss/webpack': 0.48.5
-    peerDependenciesMeta:
-      '@unocss/webpack':
-        optional: true
-    dependencies:
-      '@unocss/astro': 0.48.5
-      '@unocss/cli': 0.48.5
-      '@unocss/core': 0.48.5
-      '@unocss/preset-attributify': 0.48.5
-      '@unocss/preset-icons': 0.48.5
-      '@unocss/preset-mini': 0.48.5
-      '@unocss/preset-tagify': 0.48.5
-      '@unocss/preset-typography': 0.48.5
-      '@unocss/preset-uno': 0.48.5
-      '@unocss/preset-web-fonts': 0.48.5
-      '@unocss/preset-wind': 0.48.5
-      '@unocss/reset': 0.48.5
-      '@unocss/transformer-attributify-jsx': 0.48.5
-      '@unocss/transformer-compile-class': 0.48.5
-      '@unocss/transformer-directives': 0.48.5
-      '@unocss/transformer-variant-group': 0.48.5
-      '@unocss/vite': 0.48.5
-    transitivePeerDependencies:
-      - rollup
-      - supports-color
-      - vite
-    dev: true
-
   /unocss/0.48.5_vite@4.1.1:
     resolution: {integrity: sha512-OK24OS2IO4oJa/jtfoxUIciY6M05Nx16M6pzfCqzcglvaIIM/rpsA2D3dYmC3f3IeBuC31FpB59cM05CF7E0bQ==}
     engines: {node: '>=14'}
@@ -4739,7 +4675,7 @@ packages:
       spdx-expression-parse: 3.0.1
     dev: true
 
-  /vite/4.1.1_@types+node@16.18.12:
+  /vite/4.1.1:
     resolution: {integrity: sha512-LM9WWea8vsxhr782r9ntg+bhSFS06FJgCvvB0+8hf8UWtvaiDagKYWXndjfX6kGl74keHJUcpzrQliDXZlF5yg==}
     engines: {node: ^14.18.0 || >=16.0.0}
     hasBin: true
@@ -4764,7 +4700,6 @@ packages:
       terser:
         optional: true
     dependencies:
-      '@types/node': 16.18.12
       esbuild: 0.16.17
       postcss: 8.4.21
       resolve: 1.22.1
