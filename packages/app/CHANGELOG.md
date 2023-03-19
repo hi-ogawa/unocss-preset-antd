@@ -1,5 +1,12 @@
 # @hiogawa/unocss-preset-antd-app
 
+## 0.0.3
+
+### Patch Changes
+
+- Updated dependencies [fabe4ff]
+  - @hiogawa/unocss-preset-antd@2.0.2
+
 ## 0.0.2
 
 ### Patch Changes

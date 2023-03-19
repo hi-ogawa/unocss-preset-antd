@@ -1,5 +1,11 @@
 # @hiogawa/unocss-preset-antd
 
+## 2.0.2
+
+### Patch Changes
+
+- fabe4ff: chore: remove lodash dep
+
 ## 2.0.1
 
 ### Patch Changes
