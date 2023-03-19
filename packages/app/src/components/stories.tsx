@@ -38,7 +38,7 @@ export function StoryButton() {
         <div className="flex flex-col gap-3">
           <button className="antd-btn antd-btn-primary relative flex justify-center items-center" disabled>
             btn-primary + spin
-            <span className="antd-spin w-4 h-4 absolute right-2"></span>
+            <span className="antd-spin w-4 absolute right-2"></span>
           </button>
         </div>
       </section>

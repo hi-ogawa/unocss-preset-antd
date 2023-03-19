@@ -51,7 +51,7 @@ export function antdPreset(): Preset<Theme> {
        * misc
        */
       spin: tw.animate_spin.rounded_full.border_1.border_transparent
-        .border_t_current.$,
+        .border_t_current.aspect_square.$,
 
       link: tw.cursor_pointer.transition.text_colorPrimary.hover(
         tw.text_colorPrimaryHover
