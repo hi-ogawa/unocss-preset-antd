@@ -3,6 +3,7 @@ import { range } from "@hiogawa/utils";
 import { Debug, toDelayedSetState } from "@hiogawa/utils-react";
 import React from "react";
 import { tw } from "../styles/tw";
+import { cls } from "../utils/misc";
 import { useCollapseProps } from "./collapse";
 import { useModal } from "./modal";
 import { PopoverSimple } from "./popover";
@@ -320,17 +321,29 @@ export function StoryPopover() {
                   <PopoverSimple
                     key={i}
                     placement={placement}
-                    reference={
-                      <button className="antd-btn antd-btn-default py-1 px-2">
+                    reference={(context) => (
+                      <button
+                        className={cls(
+                          "antd-btn antd-btn-default py-1 px-2",
+                          context.open &&
+                            tw.text_colorPrimaryActive.border_colorPrimaryActive
+                              .$
+                        )}
+                      >
                         {placement.replace("-", "\n")}
                       </button>
-                    }
-                    floating={
-                      <div className="flex flex-col gap-1 px-3 py-2 w-[150px]">
-                        <h4 className="text-lg">Title</h4>
+                    )}
+                    floating={(context) => (
+                      <div className="flex flex-col gap-2 px-3 py-2 w-[150px] text-sm">
                         <div>Content</div>
+                        <button
+                          className={tw.antd_btn.antd_btn_default.$}
+                          onClick={() => context.onOpenChange(false)}
+                        >
+                          Close
+                        </button>
                       </div>
-                    }
+                    )}
                   />
                 );
               }
