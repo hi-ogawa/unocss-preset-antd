@@ -1,9 +1,11 @@
 import { Transition } from "@headlessui/react";
+import { range } from "@hiogawa/utils";
 import { Debug, toDelayedSetState } from "@hiogawa/utils-react";
 import React from "react";
 import { tw } from "../styles/tw";
 import { useCollapseProps } from "./collapse";
 import { useModal } from "./modal";
+import { PopoverSimple } from "./popover";
 import { SnackbarConainer } from "./snackbar";
 import { useSnackbar } from "./snackbar-hook";
 import { TopProgressBar, useProgress } from "./top-progress-bar";
@@ -246,9 +248,6 @@ export function StoryCollapse() {
     </div>
   );
 }
-//
-// snackbar/notification
-//
 
 export function StorySnackbar() {
   const snackbar = useSnackbar();
@@ -287,6 +286,58 @@ export function StorySnackbar() {
           <SnackbarConainer />
         </div>
         <Debug debug={snackbar.items} />
+      </section>
+    </div>
+  );
+}
+
+export function StoryPopover() {
+  const placements = {
+    1: "top-start",
+    2: "top",
+    3: "top-end",
+    5: "left-start",
+    10: "left",
+    15: "left-end",
+    9: "right-start",
+    14: "right",
+    19: "right-end",
+    21: "bottom-start",
+    22: "bottom",
+    23: "bottom-end",
+  } as const;
+
+  return (
+    <div className="flex flex-col items-center gap-3 m-2">
+      <section className="flex flex-col gap-3 w-full max-w-2xl border p-3">
+        <h2 className="text-xl">Popover</h2>
+        <div className="flex justify-center gap-2">
+          <div className="grid grid-cols-5 p-2 gap-2 w-sm">
+            {range(25).map((i) => {
+              const placement = placements[i as 1];
+              if (placement) {
+                return (
+                  <PopoverSimple
+                    key={i}
+                    placement={placement}
+                    reference={
+                      <button className="antd-btn antd-btn-default py-1 px-2">
+                        {placement.replace("-", "\n")}
+                      </button>
+                    }
+                    floating={
+                      <div className="flex flex-col gap-1 px-3 py-2 w-[150px]">
+                        <h4 className="text-lg">Title</h4>
+                        <div>Content</div>
+                      </div>
+                    }
+                  />
+                );
+              }
+              return <span key={i} />;
+            })}
+          </div>
+        </div>
       </section>
     </div>
   );
