@@ -118,7 +118,7 @@ export function PopoverSimple({
         >
           <div className="bg-colorBgElevated shadow-[var(--antd-boxShadowSecondary)]">
             {/* TODO: support left/right placement */}
-            {/* TODO: use FloatingArray from floating-ui? */}
+            {/* TODO: use FloatingArray from floating-ui? (currently not used since shadow didn't look right) */}
             <div
               {...arrowProps}
               className={cls(placement.startsWith("top") && "bottom-0")}
