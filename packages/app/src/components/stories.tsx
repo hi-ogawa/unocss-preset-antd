@@ -297,6 +297,26 @@ export function StoryPopover() {
     <div className="flex flex-col items-center gap-3 m-2">
       <section className="flex flex-col gap-3 w-full max-w-2xl border p-3">
         <h2 className="text-xl">Popover</h2>
+        {/* TODO: use grid? */}
+        <div className="flex justify-center gap-2">
+          {(["top-start", "top", "top-end"] as const).map((placement) => (
+            <PopoverSimple
+              key={placement}
+              placement={placement}
+              reference={
+                <button className="antd-btn antd-btn-default px-2">
+                  {placement}
+                </button>
+              }
+              floating={
+                <div className="flex flex-col gap-1 px-3 py-2 w-[150px]">
+                  <h4 className="text-lg">Title</h4>
+                  <div>Content</div>
+                </div>
+              }
+            />
+          ))}
+        </div>
         <div className="flex justify-center gap-2">
           {placements.map((placement) => (
             <PopoverSimple

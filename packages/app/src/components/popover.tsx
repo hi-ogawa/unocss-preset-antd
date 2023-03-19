@@ -14,6 +14,7 @@ import {
 } from "@floating-ui/react";
 import { Transition } from "@headlessui/react";
 import React from "react";
+import { cls } from "../utils/misc";
 
 interface PopoverRenderProps {
   open: boolean;
@@ -40,7 +41,7 @@ export function Popover(props: {
         flip(),
         shift(),
         arrow({ element: arrowRef, padding: 10 }),
-      ].filter(Boolean),
+      ],
       whileElementsMounted: autoUpdate,
     });
 
@@ -116,16 +117,24 @@ export function PopoverSimple({
           {...props}
         >
           <div className="bg-colorBgElevated shadow-[var(--antd-boxShadowSecondary)]">
-            {/* TODO: support placement other than "bottom"? */}
-            <div {...arrowProps}>
+            {/* TODO: support left/right placement */}
+            {/* TODO: use FloatingArray from floating-ui? */}
+            <div
+              {...arrowProps}
+              className={cls(placement.startsWith("top") && "bottom-0")}
+            >
               <div
-                // rotate rectangle with shadow
-                className="bg-colorBgElevated shadow-[var(--antd-boxShadowPopoverArrow)] relative -top-2 w-4 h-4 rotate-[225deg]"
+                // rotate 4x4 square with shadow
+                className={cls(
+                  "bg-colorBgElevated shadow-[var(--antd-boxShadowPopoverArrow)] relative w-4 h-4",
+                  placement.startsWith("bottom") && "-top-2 rotate-[225deg]",
+                  placement.startsWith("top") && "-bottom-2 rotate-[45deg]"
+                )}
+                // clip half
                 style={{
-                  // clip only lower half
                   clipPath: "polygon(100% 0%, 200% 100%, 100% 200%, 0% 100%)",
                 }}
-              ></div>
+              />
             </div>
             {floating}
           </div>
