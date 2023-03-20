@@ -58,7 +58,8 @@ export function antdPreset(options?: { reset?: boolean }): Preset<Theme> {
         .border_t_current.aspect_square.$,
 
       // modal, popover, snackbar, etc...
-      floating: tw.bg_colorBgElevated._(`shadow-${VARS.boxShadowSecondary}`).$,
+      floating: tw.bg_colorBgElevated._(`shadow-[${VARS.boxShadowSecondary}]`)
+        .$,
 
       // a href
       link: tw.cursor_pointer.transition.text_colorLink.hover(

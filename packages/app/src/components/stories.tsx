@@ -3,7 +3,8 @@ import { ANTD_VERS } from "@hiogawa/unocss-preset-antd";
 import { objectPickBy, range } from "@hiogawa/utils";
 import { Debug, toDelayedSetState } from "@hiogawa/utils-react";
 import React from "react";
-import { useForm } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
+import ReactSelect from "react-select";
 import { tw } from "../styles/tw";
 import { cls } from "../utils/misc";
 import { useCollapseProps } from "./collapse";
@@ -65,13 +66,16 @@ export function StoryInput() {
 }
 
 const ANTD_COLORS = objectPickBy(ANTD_VERS, (_, k) => k.startsWith("color"));
+const ANTD_COLORS_OPTIONS = Object.entries(ANTD_COLORS).map(
+  ([label, value]) => ({ label, value })
+);
 
 export function StoryColor() {
   const form = useForm({
     defaultValues: {
-      color: ANTD_VERS.colorText,
-      backgroundColor: ANTD_VERS.colorBgContainer,
-      borderColor: ANTD_VERS.colorBorderSecondary,
+      color: ANTD_VERS.colorPrimaryText,
+      backgroundColor: ANTD_VERS.colorPrimaryBg,
+      borderColor: ANTD_VERS.colorPrimaryBorder,
     },
   });
 
@@ -80,9 +84,9 @@ export function StoryColor() {
       <section className="flex flex-col gap-3 w-full max-w-lg border p-3">
         <h2 className="text-xl">Color</h2>
         <div className="flex flex-col gap-3">
-          {renderField("color", "text")}
-          {renderField("backgroundColor", "background")}
-          {renderField("borderColor", "border")}
+          {renderField("color", "Text")}
+          {renderField("backgroundColor", "Background")}
+          {renderField("borderColor", "Border")}
           <div className="border-t my-1"></div>
           <div className="flex flex-col gap-1">
             <span className="text-colorTextLabel">Preview</span>
@@ -103,19 +107,37 @@ export function StoryColor() {
   //
 
   function renderField(
-    field: Parameters<typeof form.register>[0],
+    name: Parameters<typeof form.register>[0],
     label: string
   ) {
     return (
       <label className="flex flex-col gap-1">
         <span className="text-colorTextLabel">{label}</span>
-        <select className="antd-input p-1" {...form.register(field)}>
-          {Object.entries(ANTD_COLORS).map(([key, value]) => (
-            <option key={key} value={value}>
-              {key}
-            </option>
-          ))}
-        </select>
+        <Controller
+          control={form.control}
+          name={name}
+          render={({ field }) => (
+            <ReactSelect
+              unstyled
+              options={ANTD_COLORS_OPTIONS}
+              value={ANTD_COLORS_OPTIONS.find(
+                (option) => option.value === field.value
+              )}
+              onChange={(option) => field.onChange(option?.value)}
+              classNames={{
+                control: () => "antd-input px-2",
+                placeholder: () => "text-colorTextSecondary",
+                menu: () => "border antd-floating mt-2",
+                menuList: () => "flex flex-col gap-1 py-1",
+                option: (state) =>
+                  cls(
+                    "antd-menu-item cursor-pointer p-1 px-2 text-sm",
+                    state.isSelected && "antd-menu-item-active"
+                  ),
+              }}
+            />
+          )}
+        />
       </label>
     );
   }
