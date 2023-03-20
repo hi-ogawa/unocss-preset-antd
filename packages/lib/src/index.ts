@@ -57,7 +57,7 @@ export function antdPreset(options?: { reset?: boolean }): Preset<Theme> {
       spin: tw.animate_spin.rounded_full.border_1.border_transparent
         .border_t_current.aspect_square.$,
 
-      // modal, popover, etc...
+      // modal, popover, snackbar, etc...
       floating: tw.bg_colorBgElevated._(`shadow-${VARS.boxShadowSecondary}`).$,
 
       /**
