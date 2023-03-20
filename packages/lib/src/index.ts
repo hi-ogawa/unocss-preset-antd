@@ -140,6 +140,9 @@ const VARS = Object.fromEntries(
   Object.keys(theme.default).map((k) => [k, `var(--antd-${k})`])
 ) as Record<keyof typeof theme.default, string>;
 
+// export for `StoryColor` in packages/app/src/components/stories.tsx
+export { VARS as ANTD_VERS };
+
 function toCssVariables(
   tokens: Record<string, unknown>
 ): Record<string, string> {

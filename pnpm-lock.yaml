@@ -44,6 +44,7 @@ importers:
       jotai: ^2.0.3
       react: ^18.2.0
       react-dom: ^18.2.0
+      react-hook-form: ^7.43.7
       react-remove-scroll: ^2.5.5
       react-router-dom: ^6.8.0
     dependencies:
@@ -55,6 +56,7 @@ importers:
       jotai: 2.0.3_react@18.2.0
       react: 18.2.0
       react-dom: 18.2.0_react@18.2.0
+      react-hook-form: 7.43.7_react@18.2.0
       react-remove-scroll: 2.5.5_3stiutgnnbnfnf3uowm5cip22i
       react-router-dom: 6.8.0_biqbaboplfbrettd7655fr4n2y
     devDependencies:
@@ -3935,6 +3937,15 @@ packages:
       loose-envify: 1.4.0
       react: 18.2.0
       scheduler: 0.23.0
+    dev: false
+
+  /react-hook-form/7.43.7_react@18.2.0:
+    resolution: {integrity: sha512-38yehQkQQ5uufaPKFScs7jhLE8n3+LG9H/BZfFAiBL2+7piDmw/BrdNJV4irzMaPnWZGhmGLHVICHXNVGIuXZg==}
+    engines: {node: '>=12.22.0'}
+    peerDependencies:
+      react: ^16.8.0 || ^17 || ^18
+    dependencies:
+      react: 18.2.0
     dev: false
 
   /react-is/16.13.1:

@@ -1,7 +1,9 @@
 import { Transition } from "@headlessui/react";
-import { range } from "@hiogawa/utils";
+import { ANTD_VERS } from "@hiogawa/unocss-preset-antd";
+import { objectPickBy, range } from "@hiogawa/utils";
 import { Debug, toDelayedSetState } from "@hiogawa/utils-react";
 import React from "react";
+import { useForm } from "react-hook-form";
 import { tw } from "../styles/tw";
 import { cls } from "../utils/misc";
 import { useCollapseProps } from "./collapse";
@@ -62,16 +64,61 @@ export function StoryInput() {
   );
 }
 
-// TODO: enumerate all `--antd-colorXXX` variables with selectable text/bg/border etc...
+const ANTD_COLORS = objectPickBy(ANTD_VERS, (_, k) => k.startsWith("color"));
+
 export function StoryColor() {
+  const form = useForm({
+    defaultValues: {
+      color: ANTD_VERS.colorText,
+      backgroundColor: ANTD_VERS.colorBgContainer,
+      borderColor: ANTD_VERS.colorBorderSecondary,
+    },
+  });
+
   return (
     <div className="flex flex-col items-center gap-3 m-2">
       <section className="flex flex-col gap-3 w-full max-w-lg border p-3">
         <h2 className="text-xl">Color</h2>
-        <div className="flex flex-col gap-3">TODO</div>
+        <div className="flex flex-col gap-3">
+          {renderField("color", "text")}
+          {renderField("backgroundColor", "background")}
+          {renderField("borderColor", "border")}
+          <div className="border-t my-1"></div>
+          <div className="flex flex-col gap-1">
+            <span className="text-colorTextLabel">Preview</span>
+            <div
+              className="border h-[50px] flex justify-center items-center"
+              style={form.watch()}
+            >
+              Hello World
+            </div>
+          </div>
+        </div>
       </section>
     </div>
   );
+
+  //
+  // helper
+  //
+
+  function renderField(
+    field: Parameters<typeof form.register>[0],
+    label: string
+  ) {
+    return (
+      <label className="flex flex-col gap-1">
+        <span className="text-colorTextLabel">{label}</span>
+        <select className="antd-input p-1" {...form.register(field)}>
+          {Object.entries(ANTD_COLORS).map(([key, value]) => (
+            <option key={key} value={value}>
+              {key}
+            </option>
+          ))}
+        </select>
+      </label>
+    );
+  }
 }
 
 export function StoryTypography() {
