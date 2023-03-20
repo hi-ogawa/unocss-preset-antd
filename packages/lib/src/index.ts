@@ -60,14 +60,9 @@ export function antdPreset(options?: { reset?: boolean }): Preset<Theme> {
       // modal, popover, snackbar, etc...
       floating: tw.bg_colorBgElevated._(`shadow-${VARS.boxShadowSecondary}`).$,
 
-      /**
-       * text
-       */
-      "text-primary": tw.text_colorPrimary.$,
-      "text-secondary": tw.text_colorTextSecondary.$,
-      "text-danger": tw.text_colorErrorText.$,
-      "text-link": tw.cursor_pointer.transition.text_colorPrimary.hover(
-        tw.text_colorPrimaryHover
+      // a href
+      link: tw.cursor_pointer.transition.text_colorLink.hover(
+        tw.text_colorLinkHover
       ).$,
 
       /**

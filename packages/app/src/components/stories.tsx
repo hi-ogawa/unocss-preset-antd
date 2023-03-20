@@ -62,17 +62,30 @@ export function StoryInput() {
   );
 }
 
+// TODO: enumerate all `--antd-colorXXX` variables with selectable text/bg/border etc...
+export function StoryColor() {
+  return (
+    <div className="flex flex-col items-center gap-3 m-2">
+      <section className="flex flex-col gap-3 w-full max-w-lg border p-3">
+        <h2 className="text-xl">Color</h2>
+        <div className="flex flex-col gap-3">TODO</div>
+      </section>
+    </div>
+  );
+}
+
 export function StoryTypography() {
   return (
     <div className="flex flex-col items-center gap-3 m-2">
       <section className="flex flex-col gap-3 w-full max-w-lg border p-3">
         <h2 className="text-xl">Typography</h2>
+        {/* prettier-ignore */}
         <div className="flex flex-col gap-3">
           <span>default</span>
-          <span className="antd-text-primary">antd-text-primary</span>
-          <span className="antd-text-secondary">antd-text-secondary</span>
-          <span className="antd-text-danger">antd-text-error</span>
-          <a className="antd-text-link">antd-text-link</a>
+          <span className="text-colorTextSecondary">text-colorTextSecondary</span>
+          <span className="text-colorPrimary">text-colorPrimary</span>
+          <span className="text-colorErrorText">text-colorErrorText</span>
+          <a className="antd-link">antd-link</a>
         </div>
       </section>
     </div>
