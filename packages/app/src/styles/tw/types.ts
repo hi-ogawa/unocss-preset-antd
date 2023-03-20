@@ -3983,10 +3983,7 @@ export type Shortcut =
   | `antd_btn_ghost`
   | `antd_btn_text`
   | `antd_btn`
-  | `antd_text_link`
-  | `antd_text_danger`
-  | `antd_text_secondary`
-  | `antd_text_primary`
+  | `antd_link`
   | `antd_floating`
   | `antd_spin`
   | `antd_reset`
