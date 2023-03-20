@@ -11,7 +11,11 @@ import {
 import { antdPreset } from "./src";
 
 export default defineConfig({
-  presets: [filterColorPallete(presetUno()), antdPreset(), dummyPreset()],
+  presets: [
+    filterColorPallete(presetUno()),
+    antdPreset({ reset: false }),
+    dummyPreset(),
+  ],
   rules: [
     dummyRule("ring-<num>"),
     dummyRule("opacity-<percent>"),
