@@ -1,7 +1,7 @@
 import { Transition } from "@headlessui/react";
 import { ANTD_VERS } from "@hiogawa/unocss-preset-antd";
 import { objectPickBy, range } from "@hiogawa/utils";
-import { Debug, toDelayedSetState } from "@hiogawa/utils-react";
+import { Debug, toDelayedSetState, toSetSetState } from "@hiogawa/utils-react";
 import React from "react";
 import { Controller, useForm } from "react-hook-form";
 import ReactSelect from "react-select";
@@ -15,6 +15,9 @@ import { useSnackbar } from "./snackbar-hook";
 import { TopProgressBar, useProgress } from "./top-progress-bar";
 
 export function StoryButton() {
+  const [show, setShowInner] = React.useState(new Set([0, 1]));
+  const setShow = toSetSetState(setShowInner);
+
   return (
     <main className="flex flex-col items-center gap-3 m-2">
       <section className="flex flex-col gap-3 w-full max-w-lg border p-3">
@@ -43,6 +46,46 @@ export function StoryButton() {
             btn-primary + spin
             <span className="antd-spin w-4 absolute right-2"></span>
           </button>
+        </div>
+        <div className="border-t mx-2"></div>
+        <h2 className="text-lg flex items-baseline gap-1.5">
+          Fab
+          <span className="text-sm text-colorTextSecondary">
+            (Floating action button)
+          </span>
+        </h2>
+        <div className="flex w-28">
+          <Transition
+            show={show.has(0)}
+            className="transition duration-200"
+            enterFrom="scale-30 opacity-0"
+            enterTo="scale-100 opacity-100"
+            leaveFrom="scale-100 opacity-100"
+            leaveTo="scale-30 opacity-0"
+          >
+            <button
+              className="antd-btn !antd-btn-primary antd-floating w-12 h-12 rounded-full flex justify-center items-center"
+              onClick={() => (show.has(1) ? setShow.delete(1) : setShow.add(1))}
+            >
+              <span className="i-ri-check-line w-6 h-6" />
+            </button>
+          </Transition>
+          <div className="flex-1"></div>
+          <Transition
+            show={show.has(1)}
+            className="transition duration-200"
+            enterFrom="scale-30 opacity-0"
+            enterTo="scale-100 opacity-100"
+            leaveFrom="scale-100 opacity-100"
+            leaveTo="scale-30 opacity-0"
+          >
+            <button
+              className="antd-btn antd-btn-text antd-floating w-12 h-12 rounded-full flex justify-center items-center"
+              onClick={() => (show.has(0) ? setShow.delete(0) : setShow.add(0))}
+            >
+              <span className="i-ri-close-line w-6 h-6" />
+            </button>
+          </Transition>
         </div>
       </section>
     </main>

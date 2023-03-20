@@ -122,7 +122,6 @@ export function PopoverSimple({
           {...props}
         >
           <div className="antd-floating">
-            {/* TODO: use FloatingArray from floating-ui? (currently not used since shadow didn't look right) */}
             {arrowProps && (
               <Arrow placement={context.placement} arrowProps={arrowProps} />
             )}
@@ -134,7 +133,7 @@ export function PopoverSimple({
   );
 }
 
-// TODO: use FloatingArray from floating-ui? (currently not used since shadow didn't look right)
+// `FloatingArrow` from @floating-ui/react is not used since the shadow didn't look right.
 function Arrow({
   arrowProps,
   placement,
