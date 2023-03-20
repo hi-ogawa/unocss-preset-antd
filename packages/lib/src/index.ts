@@ -59,6 +59,9 @@ export function antdPreset(options?: { reset?: boolean }): Preset<Theme> {
         tw.text_colorPrimaryHover
       ).$,
 
+      // for modal, popover, etc...
+      floating: tw.bg_colorBgElevated._(`shadow-${VARS.boxShadowSecondary}`).$,
+
       /**
        * button https://github.com/ant-design/ant-design/blob/db5913696b5286b02701b7451bb34eebbe34b464/components/button/style/index.ts
        */
