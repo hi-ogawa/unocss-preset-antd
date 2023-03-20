@@ -52,15 +52,22 @@ export function antdPreset(options?: { reset?: boolean }): Preset<Theme> {
       /**
        * misc
        */
+
+      // loading spinner
       spin: tw.animate_spin.rounded_full.border_1.border_transparent
         .border_t_current.aspect_square.$,
 
-      link: tw.cursor_pointer.transition.text_colorPrimary.hover(
+      // modal, popover, etc...
+      floating: tw.bg_colorBgElevated._(`shadow-${VARS.boxShadowSecondary}`).$,
+
+      /**
+       * text
+       */
+      "text-secondary": tw.text_colorTextSecondary.$,
+      "text-danger": tw.text_colorErrorText.$,
+      "text-link": tw.cursor_pointer.transition.text_colorPrimary.hover(
         tw.text_colorPrimaryHover
       ).$,
-
-      // for modal, popover, etc...
-      floating: tw.bg_colorBgElevated._(`shadow-${VARS.boxShadowSecondary}`).$,
 
       /**
        * button https://github.com/ant-design/ant-design/blob/db5913696b5286b02701b7451bb34eebbe34b464/components/button/style/index.ts
