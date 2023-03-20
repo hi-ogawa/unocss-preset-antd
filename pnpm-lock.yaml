@@ -7,7 +7,7 @@ importers:
       '@changesets/cli': ^2.26.0
       '@hiogawa/isort-ts': 1.0.0-pre.9
       '@hiogawa/unocss-typescript-dsl': 2.0.0-pre.4
-      '@hiogawa/utils': ^1.3.0
+      '@hiogawa/utils': ^1.4.1
       '@tsconfig/strictest': ^1.0.2
       '@vitejs/plugin-react': ^3.1.0
       npm-run-all: ^4.1.5
@@ -20,7 +20,7 @@ importers:
       '@changesets/cli': 2.26.0
       '@hiogawa/isort-ts': 1.0.0-pre.9_ioxdq35luteszuxmt2jhnqjeca
       '@hiogawa/unocss-typescript-dsl': 2.0.0-pre.4
-      '@hiogawa/utils': 1.3.0
+      '@hiogawa/utils': 1.4.1
       '@tsconfig/strictest': 1.0.2
       '@vitejs/plugin-react': 3.1.0_vite@4.1.1
       npm-run-all: 4.1.5
@@ -36,7 +36,7 @@ importers:
       '@headlessui/react': ^1.7.9
       '@hiogawa/unocss-preset-antd': workspace:*
       '@hiogawa/utils': ^1.3.0
-      '@hiogawa/utils-react': ^1.1.0
+      '@hiogawa/utils-react': ^1.2.0
       '@iconify-json/ri': ^1.1.4
       '@types/node': ^16.18.12
       '@types/react': ^18.0.27
@@ -53,7 +53,7 @@ importers:
       '@headlessui/react': 1.7.9_biqbaboplfbrettd7655fr4n2y
       '@hiogawa/unocss-preset-antd': link:../lib
       '@hiogawa/utils': 1.3.0
-      '@hiogawa/utils-react': 1.1.0_react@18.2.0
+      '@hiogawa/utils-react': 1.2.0_react@18.2.0
       jotai: 2.0.3_react@18.2.0
       react: 18.2.0
       react-dom: 18.2.0_react@18.2.0
@@ -1158,8 +1158,8 @@ packages:
       zod: 3.21.0
     dev: true
 
-  /@hiogawa/utils-react/1.1.0_react@18.2.0:
-    resolution: {integrity: sha512-VpX1X7VYWSdV7uUFbay37eGMxUC1XUtaWwnNtv/t7MS2D+/pgVulpYK650gaOflqkizgxacZ8iaM3JVFNYhaiA==}
+  /@hiogawa/utils-react/1.2.0_react@18.2.0:
+    resolution: {integrity: sha512-hQZhYgJDs6Lw3wMoriKNk1eZnnR+WK+Ef2LUo7XXJFug7w+Mu7RRr0YL8WtCoXymH3izVGJ15udHYkCLmKdfjg==}
     peerDependencies:
       react: '*'
     dependencies:
@@ -1168,6 +1168,11 @@ packages:
 
   /@hiogawa/utils/1.3.0:
     resolution: {integrity: sha512-zOqiodMaYWibaPUhtJAKUO9XZZNhLmZNTHkzjWXxZ47CyUoCdpDVRv5jSg5CrsrOhCa+AmlHYZymU4vSWO9B+Q==}
+    dev: false
+
+  /@hiogawa/utils/1.4.1:
+    resolution: {integrity: sha512-0mflyjPywc2i31Imz8+VpIdAsuX0CbiBZaB3ediqp9wE8Wn70ztv0hZHjet6AaTY4zs+9T7rzqaxzTdQMoLlCQ==}
+    dev: true
 
   /@iconify-json/ri/1.1.4:
     resolution: {integrity: sha512-gAk2gQBVghgbMLOmbUCc3l4COMMH5sR3HhBqpjaPUFBbC4WsNNRyOD4RZgjlanU7DTgFrj4NarY5K2EkXaVxuw==}

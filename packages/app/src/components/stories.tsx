@@ -15,8 +15,8 @@ import { useSnackbar } from "./snackbar-hook";
 import { TopProgressBar, useProgress } from "./top-progress-bar";
 
 export function StoryButton() {
-  const [show, setShowInner] = React.useState(new Set([0, 1]));
-  const setShow = toSetSetState(setShowInner);
+  const [fab, setFabInner] = React.useState(new Set([0, 1]));
+  const setFab = toSetSetState(setFabInner);
 
   return (
     <main className="flex flex-col items-center gap-3 m-2">
@@ -56,7 +56,7 @@ export function StoryButton() {
         </h2>
         <div className="flex w-28">
           <Transition
-            show={show.has(0)}
+            show={fab.has(0)}
             className="transition duration-200"
             enterFrom="scale-30 opacity-0"
             enterTo="scale-100 opacity-100"
@@ -65,14 +65,14 @@ export function StoryButton() {
           >
             <button
               className="antd-btn !antd-btn-primary antd-floating w-12 h-12 rounded-full flex justify-center items-center"
-              onClick={() => (show.has(1) ? setShow.delete(1) : setShow.add(1))}
+              onClick={() => setFab.toggle(1)}
             >
               <span className="i-ri-check-line w-6 h-6" />
             </button>
           </Transition>
           <div className="flex-1"></div>
           <Transition
-            show={show.has(1)}
+            show={fab.has(1)}
             className="transition duration-200"
             enterFrom="scale-30 opacity-0"
             enterTo="scale-100 opacity-100"
@@ -81,7 +81,7 @@ export function StoryButton() {
           >
             <button
               className="antd-btn antd-btn-text antd-floating w-12 h-12 rounded-full flex justify-center items-center"
-              onClick={() => (show.has(0) ? setShow.delete(0) : setShow.add(0))}
+              onClick={() => setFab.toggle(0)}
             >
               <span className="i-ri-close-line w-6 h-6" />
             </button>
