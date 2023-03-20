@@ -6,7 +6,7 @@ import type { Preset } from "unocss";
 import { theme } from "./theme";
 import { tw } from "./tw";
 
-export function antdPreset(options?: { noReset?: boolean }): Preset<Theme> {
+export function antdPreset(options?: { reset?: boolean }): Preset<Theme> {
   return {
     name: "antd-preset",
     prefix: "antd-",
@@ -110,7 +110,7 @@ export function antdPreset(options?: { noReset?: boolean }): Preset<Theme> {
         .aria_selected(tw.text_colorPrimary.border_colorPrimary).$,
     },
     preflights: [
-      !options?.noReset && {
+      (options?.reset ?? true) && {
         getCSS: () =>
           // TODO: esm?
           fs.promises.readFile(path.join(__dirname, "reset.css"), "utf-8"),
