@@ -52,11 +52,18 @@ export function antdPreset(options?: { reset?: boolean }): Preset<Theme> {
       /**
        * misc
        */
-      spin: tw.animate_spin.rounded_full.border_1.border_transparent
-        .border_t_current.$,
 
-      link: tw.cursor_pointer.transition.text_colorPrimary.hover(
-        tw.text_colorPrimaryHover
+      // loading spinner
+      spin: tw.animate_spin.rounded_full.border_1.border_transparent
+        .border_t_current.aspect_square.$,
+
+      // modal, popover, snackbar, etc...
+      floating: tw.bg_colorBgElevated._(`shadow-[${VARS.boxShadowSecondary}]`)
+        .$,
+
+      // a href
+      link: tw.cursor_pointer.transition.text_colorLink.hover(
+        tw.text_colorLinkHover
       ).$,
 
       /**
@@ -108,6 +115,16 @@ export function antdPreset(options?: { reset?: boolean }): Preset<Theme> {
       tab: tw.transition.border_b_2.border_transparent.cursor_pointer
         .hover(tw.text_colorPrimaryHover.border_colorPrimaryHover)
         .aria_selected(tw.text_colorPrimary.border_colorPrimary).$,
+
+      /**
+       * menu
+       */
+      "menu-item": "antd-btn antd-btn-text",
+      "menu-item-active": tw.important(
+        tw.text_colorPrimary
+          ._(`bg-[${VARS.controlItemBgActive}]`)
+          .dark(tw.text_white.bg_colorPrimary)
+      ).$,
     },
     preflights: [
       (options?.reset ?? true) && {
@@ -123,6 +140,9 @@ export function antdPreset(options?: { reset?: boolean }): Preset<Theme> {
 const VARS = Object.fromEntries(
   Object.keys(theme.default).map((k) => [k, `var(--antd-${k})`])
 ) as Record<keyof typeof theme.default, string>;
+
+// export for `StoryColor` in packages/app/src/components/stories.tsx
+export { VARS as ANTD_VERS };
 
 function toCssVariables(
   tokens: Record<string, unknown>

@@ -59,13 +59,8 @@ function Root() {
                     // https://github.com/ant-design/ant-design/blob/8bcd3c16a4760bf45d3d5c995f50a74a97e43de2/components/menu/style/index.tsx
                     className={({ isActive }) =>
                       cls(
-                        tw.flex_1.p_2.antd_btn.antd_btn_text.$,
-                        isActive &&
-                          tw.important(
-                            tw.text_colorPrimary
-                              ._("bg-[var(--antd-controlItemBgActive)]")
-                              .dark(tw.text_white.bg_colorPrimary)
-                          ).$
+                        "antd-menu-item flex-1 p-2",
+                        isActive && "antd-menu-item-active"
                       )
                     }
                     to={"/" + route.path}
@@ -111,7 +106,7 @@ function Header() {
         </a>
       </div>
       <Drawer open={menuOpen} onClose={() => setMenuOpen(false)}>
-        <div className="h-full flex flex-col py-2 gap-4">
+        <div className="h-full flex flex-col py-2 gap-4 w-[300px]">
           <div className="flex-none pl-5 py-1">
             <button
               className="antd-btn antd-btn-ghost flex items-center"
