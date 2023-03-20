@@ -1,4 +1,3 @@
-import path from "node:path";
 import unocss from "unocss/vite";
 import { defineConfig } from "vite";
 

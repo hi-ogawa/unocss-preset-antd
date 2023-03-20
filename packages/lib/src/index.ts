@@ -1,10 +1,12 @@
-import { objectPickBy } from "@hiogawa/utils";
+import fs from "node:fs";
+import path from "node:path";
+import { objectPickBy, typedBoolean } from "@hiogawa/utils";
 import type { Theme } from "@unocss/preset-uno";
 import type { Preset } from "unocss";
 import { theme } from "./theme";
 import { tw } from "./tw";
 
-export function antdPreset(): Preset<Theme> {
+export function antdPreset(options?: { reset?: boolean }): Preset<Theme> {
   return {
     name: "antd-preset",
     prefix: "antd-",
@@ -117,6 +119,13 @@ export function antdPreset(): Preset<Theme> {
           .dark(tw.text_white.bg_colorPrimary)
       ).$,
     },
+    preflights: [
+      (options?.reset ?? true) && {
+        getCSS: () =>
+          // TODO: esm?
+          fs.promises.readFile(path.join(__dirname, "reset.css"), "utf-8"),
+      },
+    ].filter(typedBoolean),
   };
 }
 
