@@ -9,6 +9,7 @@
     "build:vercel": "bash misc/vercel/build.sh",
     "preview": "vite preview",
     "generate-tw": "unocss-typescript-dsl --outDir src/styles/tw",
+    "generate-tw-test": "unocss-typescript-dsl --stdout | diff src/styles/tw/types.ts -",
     "release": "vercel deploy --prebuilt .",
     "release-production": "vercel deploy --prebuilt . --prod"
   },

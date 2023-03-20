@@ -39,6 +39,7 @@
     "build:tsup": "tsup",
     "build-theme": "pnpm -s ts ./src/build-theme.ts > ./src/theme.ts",
     "generate-tw": "unocss-typescript-dsl --outDir src/tw",
+    "generate-tw-test": "unocss-typescript-dsl --stdout | diff src/tw/types.ts -",
     "ts": "node -r esbuild-register",
     "release": "pnpm publish --no-git-checks --access public"
   },
