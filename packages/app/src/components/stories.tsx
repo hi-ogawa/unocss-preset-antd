@@ -116,9 +116,9 @@ const ANTD_COLORS_OPTIONS = Object.entries(ANTD_COLORS).map(
 export function StoryColor() {
   const form = useForm({
     defaultValues: {
-      color: ANTD_VERS.colorPrimaryText,
-      backgroundColor: ANTD_VERS.colorPrimaryBg,
-      borderColor: ANTD_VERS.colorPrimaryBorder,
+      color: ANTD_VERS.colorText,
+      backgroundColor: ANTD_VERS.colorBgContainer,
+      borderColor: ANTD_VERS.colorBorderSecondary,
     },
   });
 
@@ -127,10 +127,6 @@ export function StoryColor() {
       <section className="flex flex-col gap-3 w-full max-w-lg border p-3">
         <h2 className="text-xl">Color</h2>
         <div className="flex flex-col gap-3">
-          {renderField("color", "Text")}
-          {renderField("backgroundColor", "Background")}
-          {renderField("borderColor", "Border")}
-          <div className="border-t my-1"></div>
           <div className="flex flex-col gap-1">
             <span className="text-colorTextLabel">Preview</span>
             <div
@@ -140,6 +136,10 @@ export function StoryColor() {
               Hello World
             </div>
           </div>
+          <div className="border-t my-1"></div>
+          {renderField("color", "Text")}
+          {renderField("backgroundColor", "Background")}
+          {renderField("borderColor", "Border")}
         </div>
       </section>
     </div>
@@ -160,6 +160,7 @@ export function StoryColor() {
           control={form.control}
           name={name}
           render={({ field }) => (
+            // TODO: preview by hover?
             <ReactSelect
               unstyled
               options={ANTD_COLORS_OPTIONS}
