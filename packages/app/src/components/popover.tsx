@@ -111,7 +111,7 @@ export function PopoverSimple({
       reference={({ props, context }) =>
         React.cloneElement(maybeCall(reference, [context]), props)
       }
-      floating={({ props, open, arrowProps, context: c }) => (
+      floating={({ props, open, arrowProps, context }) => (
         <Transition
           show={open}
           className="transition duration-150"
@@ -121,37 +121,52 @@ export function PopoverSimple({
           leaveTo="scale-80 opacity-0"
           {...props}
         >
-          <div className="bg-colorBgElevated shadow-[var(--antd-boxShadowSecondary)]">
+          <div className="antd-floating">
             {/* TODO: use FloatingArray from floating-ui? (currently not used since shadow didn't look right) */}
-            <div
-              {...arrowProps}
-              className={cls(
-                c.placement.startsWith("bottom") && "top-0",
-                c.placement.startsWith("top") && "bottom-0",
-                c.placement.startsWith("left") && "right-0",
-                c.placement.startsWith("right") && "left-0"
-              )}
-            >
-              <div
-                // rotate 4x4 square with shadow
-                className={cls(
-                  "bg-colorBgElevated shadow-[var(--antd-boxShadowPopoverArrow)] relative w-4 h-4",
-                  c.placement.startsWith("bottom") && "-top-2 rotate-[225deg]",
-                  c.placement.startsWith("top") && "-bottom-2 rotate-[45deg]",
-                  c.placement.startsWith("left") && "-right-2 rotate-[315deg]",
-                  c.placement.startsWith("right") && "-left-2 rotate-[135deg]"
-                )}
-                // clip half
-                style={{
-                  clipPath: "polygon(100% 0%, 200% 100%, 100% 200%, 0% 100%)",
-                }}
-              />
-            </div>
-            {maybeCall(floating, [c])}
+            {arrowProps && (
+              <Arrow placement={context.placement} arrowProps={arrowProps} />
+            )}
+            {maybeCall(floating, [context])}
           </div>
         </Transition>
       )}
     />
+  );
+}
+
+// TODO: use FloatingArray from floating-ui? (currently not used since shadow didn't look right)
+function Arrow({
+  arrowProps,
+  placement,
+}: {
+  arrowProps: {}; // cheat forwarded ref
+  placement: Placement;
+}) {
+  return (
+    <div
+      {...arrowProps}
+      className={cls(
+        placement.startsWith("bottom") && "top-0",
+        placement.startsWith("top") && "bottom-0",
+        placement.startsWith("left") && "right-0",
+        placement.startsWith("right") && "left-0"
+      )}
+    >
+      <div
+        // rotate 4x4 square with shadow
+        className={cls(
+          "antd-floating !shadow-[var(--antd-boxShadowPopoverArrow)] relative w-4 h-4",
+          placement.startsWith("bottom") && "-top-2 rotate-[225deg]",
+          placement.startsWith("top") && "-bottom-2 rotate-[45deg]",
+          placement.startsWith("left") && "-right-2 rotate-[315deg]",
+          placement.startsWith("right") && "-left-2 rotate-[135deg]"
+        )}
+        // clip half
+        style={{
+          clipPath: "polygon(100% 0%, 200% 100%, 100% 200%, 0% 100%)",
+        }}
+      />
+    </div>
   );
 }
 

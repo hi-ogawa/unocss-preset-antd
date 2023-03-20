@@ -63,7 +63,7 @@ function SnackbarItem(
   }
 ) {
   return (
-    <div className="bg-colorBgElevated shadow-[var(--antd-boxShadowSecondary)] w-[350px]">
+    <div className="antd-floating w-[350px]">
       <div className="flex items-center gap-3 p-3">
         <span
           className={cls(
