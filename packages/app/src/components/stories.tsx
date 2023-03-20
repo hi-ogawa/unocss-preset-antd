@@ -68,7 +68,10 @@ export function StoryTypography() {
       <section className="flex flex-col gap-3 w-full max-w-lg border p-3">
         <h2 className="text-xl">Typography</h2>
         <div className="flex flex-col gap-3">
-          <a className="antd-link">Link Text</a>
+          <span>default</span>
+          <span className="antd-text-secondary">antd-text-secondary</span>
+          <span className="antd-text-danger">antd-text-error</span>
+          <a className="antd-text-link">antd-text-link</a>
         </div>
       </section>
     </div>
