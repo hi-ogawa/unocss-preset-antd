@@ -21,7 +21,7 @@ export default defineConfig({
     },
   },
   presets: [
-    antdPreset(),
+    antdPreset({ noReset: true }), // no auto reset for dev reloading (see packages/app/src/styles/index.ts)
     filterColorPallete(presetUno()),
     presetIcons({
       extraProperties: {
