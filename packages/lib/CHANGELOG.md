@@ -1,5 +1,13 @@
 # @hiogawa/unocss-preset-antd
 
+## 2.2.0
+
+### Minor Changes
+
+- f3ab0ed: feat: add antd-menu-item and antd-floating
+- f3ab0ed: feat: add aspect-square to antd-spin
+- 92e157b: feat: auto reset
+
 ## 2.1.0
 
 ### Minor Changes

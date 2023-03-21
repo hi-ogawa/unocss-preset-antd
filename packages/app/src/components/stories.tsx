@@ -1,7 +1,10 @@
 import { Transition } from "@headlessui/react";
-import { range } from "@hiogawa/utils";
-import { Debug, toDelayedSetState } from "@hiogawa/utils-react";
+import { ANTD_VERS } from "@hiogawa/unocss-preset-antd";
+import { objectPickBy, range } from "@hiogawa/utils";
+import { Debug, toDelayedSetState, toSetSetState } from "@hiogawa/utils-react";
 import React from "react";
+import { Controller, useForm } from "react-hook-form";
+import ReactSelect from "react-select";
 import { tw } from "../styles/tw";
 import { cls } from "../utils/misc";
 import { useCollapseProps } from "./collapse";
@@ -12,6 +15,9 @@ import { useSnackbar } from "./snackbar-hook";
 import { TopProgressBar, useProgress } from "./top-progress-bar";
 
 export function StoryButton() {
+  const [fab, setFabInner] = React.useState(new Set([0, 1]));
+  const setFab = toSetSetState(setFabInner);
+
   return (
     <main className="flex flex-col items-center gap-3 m-2">
       <section className="flex flex-col gap-3 w-full max-w-lg border p-3">
@@ -38,8 +44,48 @@ export function StoryButton() {
         <div className="flex flex-col gap-3">
           <button className="antd-btn antd-btn-primary relative flex justify-center items-center" disabled>
             btn-primary + spin
-            <span className="antd-spin w-4 h-4 absolute right-2"></span>
+            <span className="antd-spin w-4 absolute right-2"></span>
           </button>
+        </div>
+        <div className="border-t mx-2"></div>
+        <h2 className="text-lg flex items-baseline gap-1.5">
+          Fab
+          <span className="text-sm text-colorTextSecondary">
+            (Floating action button)
+          </span>
+        </h2>
+        <div className="flex w-28">
+          <Transition
+            show={fab.has(0)}
+            className="transition duration-200"
+            enterFrom="scale-30 opacity-0"
+            enterTo="scale-100 opacity-100"
+            leaveFrom="scale-100 opacity-100"
+            leaveTo="scale-30 opacity-0"
+          >
+            <button
+              className="antd-btn !antd-btn-primary antd-floating w-12 h-12 rounded-full flex justify-center items-center"
+              onClick={() => setFab.toggle(1)}
+            >
+              <span className="i-ri-check-line w-6 h-6" />
+            </button>
+          </Transition>
+          <div className="flex-1"></div>
+          <Transition
+            show={fab.has(1)}
+            className="transition duration-200"
+            enterFrom="scale-30 opacity-0"
+            enterTo="scale-100 opacity-100"
+            leaveFrom="scale-100 opacity-100"
+            leaveTo="scale-30 opacity-0"
+          >
+            <button
+              className="antd-btn antd-btn-text antd-floating w-12 h-12 rounded-full flex justify-center items-center"
+              onClick={() => setFab.toggle(0)}
+            >
+              <span className="i-ri-close-line w-6 h-6" />
+            </button>
+          </Transition>
         </div>
       </section>
     </main>
@@ -62,13 +108,97 @@ export function StoryInput() {
   );
 }
 
+const ANTD_COLORS = objectPickBy(ANTD_VERS, (_, k) => k.startsWith("color"));
+const ANTD_COLORS_OPTIONS = Object.entries(ANTD_COLORS).map(
+  ([label, value]) => ({ label, value })
+);
+
+export function StoryColor() {
+  const form = useForm({
+    defaultValues: {
+      color: ANTD_VERS.colorText,
+      backgroundColor: ANTD_VERS.colorBgContainer,
+      borderColor: ANTD_VERS.colorBorderSecondary,
+    },
+  });
+
+  return (
+    <div className="flex flex-col items-center gap-3 m-2">
+      <section className="flex flex-col gap-3 w-full max-w-lg border p-3">
+        <h2 className="text-xl">Color</h2>
+        <div className="flex flex-col gap-3">
+          <div className="flex flex-col gap-1">
+            <span className="text-colorTextLabel">Preview</span>
+            <div
+              className="border h-[50px] flex justify-center items-center"
+              style={form.watch()}
+            >
+              Hello World
+            </div>
+          </div>
+          <div className="border-t my-1"></div>
+          {renderField("color", "Text")}
+          {renderField("backgroundColor", "Background")}
+          {renderField("borderColor", "Border")}
+        </div>
+      </section>
+    </div>
+  );
+
+  //
+  // helper
+  //
+
+  function renderField(
+    name: Parameters<typeof form.register>[0],
+    label: string
+  ) {
+    return (
+      <label className="flex flex-col gap-1">
+        <span className="text-colorTextLabel">{label}</span>
+        <Controller
+          control={form.control}
+          name={name}
+          render={({ field }) => (
+            // TODO: preview by hover?
+            <ReactSelect
+              unstyled
+              options={ANTD_COLORS_OPTIONS}
+              value={ANTD_COLORS_OPTIONS.find(
+                (option) => option.value === field.value
+              )}
+              onChange={(option) => field.onChange(option?.value)}
+              classNames={{
+                control: () => "antd-input px-2",
+                placeholder: () => "text-colorTextSecondary",
+                menu: () => "border antd-floating mt-2",
+                menuList: () => "flex flex-col gap-1 py-1",
+                option: (state) =>
+                  cls(
+                    "antd-menu-item cursor-pointer p-1 px-2 text-sm",
+                    state.isSelected && "antd-menu-item-active"
+                  ),
+              }}
+            />
+          )}
+        />
+      </label>
+    );
+  }
+}
+
 export function StoryTypography() {
   return (
     <div className="flex flex-col items-center gap-3 m-2">
       <section className="flex flex-col gap-3 w-full max-w-lg border p-3">
         <h2 className="text-xl">Typography</h2>
+        {/* prettier-ignore */}
         <div className="flex flex-col gap-3">
-          <a className="antd-link">Link Text</a>
+          <span>default</span>
+          <span className="text-colorTextSecondary">text-colorTextSecondary</span>
+          <span className="text-colorPrimary">text-colorPrimary</span>
+          <span className="text-colorErrorText">text-colorErrorText</span>
+          <a className="antd-link">antd-link</a>
         </div>
       </section>
     </div>

@@ -1699,9 +1699,12 @@ export type Variant =
   | `hover`
   | `important`
   | `aria_${Theme_aria}`
+  | `media_${Theme_media}`
 ;
 
 export type Shortcut =
+  | `antd_menu_item_active`
+  | `antd_menu_item`
   | `antd_tab`
   | `antd_tablist`
   | `antd_input`
@@ -1711,6 +1714,7 @@ export type Shortcut =
   | `antd_btn_text`
   | `antd_btn`
   | `antd_link`
+  | `antd_floating`
   | `antd_spin`
   | `antd_reset`
   | `antd_body`
