@@ -50,27 +50,8 @@ function Root() {
     <div className="h-full w-full flex flex-col relative">
       <Header />
       <div className="flex-1 flex">
-        <div className="flex-none w-[250px] border-r">
-          <div className="sticky top-0 p-1.5">
-            <ul className="flex flex-col gap-1.5">
-              {storiesRoutes.map((route) => (
-                <li key={route.path} className="flex">
-                  <NavLink
-                    // https://github.com/ant-design/ant-design/blob/8bcd3c16a4760bf45d3d5c995f50a74a97e43de2/components/menu/style/index.tsx
-                    className={({ isActive }) =>
-                      cls(
-                        "antd-menu-item flex-1 p-2",
-                        isActive && "antd-menu-item-active"
-                      )
-                    }
-                    to={"/" + route.path}
-                  >
-                    {route.path}
-                  </NavLink>
-                </li>
-              ))}
-            </ul>
-          </div>
+        <div className="w-[250px] hidden md:block border-r p-1.5">
+          <NavMenu />
         </div>
         <div className="flex-1">
           <div className="m-4">
@@ -82,13 +63,37 @@ function Root() {
   );
 }
 
+function NavMenu({ onClick }: { onClick?: () => void }) {
+  return (
+    <ul className="flex flex-col gap-1.5">
+      {storiesRoutes.map((route) => (
+        <li key={route.path} className="flex">
+          <NavLink
+            // https://github.com/ant-design/ant-design/blob/8bcd3c16a4760bf45d3d5c995f50a74a97e43de2/components/menu/style/index.tsx
+            className={({ isActive }) =>
+              cls(
+                "antd-menu-item flex-1 p-2",
+                isActive && "antd-menu-item-active"
+              )
+            }
+            to={"/" + route.path}
+            onClick={onClick}
+          >
+            {route.path}
+          </NavLink>
+        </li>
+      ))}
+    </ul>
+  );
+}
+
 function Header() {
   const [menuOpen, setMenuOpen] = React.useState(false);
 
   return (
     <header className="w-full flex justify-end items-center p-2 px-4 shadow-md shadow-black/[0.05] dark:shadow-black/[0.7]">
       <button
-        className="pl-1 pr-3 py-1 antd-btn antd-btn-ghost flex items-center"
+        className="md:hidden pl-1 pr-3 py-1 antd-btn antd-btn-ghost flex items-center"
         onClick={() => setMenuOpen(true)}
       >
         <span className={tw.i_ri_menu_line.w_5.h_5.$}></span>
@@ -106,8 +111,8 @@ function Header() {
         </a>
       </div>
       <Drawer open={menuOpen} onClose={() => setMenuOpen(false)}>
-        <div className="h-full flex flex-col py-2 gap-4 w-[300px]">
-          <div className="flex-none pl-5 py-1">
+        <div className="h-full flex flex-col gap-3 w-[250px]">
+          <div className="flex-none pl-5 pt-3">
             <button
               className="antd-btn antd-btn-ghost flex items-center"
               onClick={() => setMenuOpen(false)}
@@ -115,10 +120,8 @@ function Header() {
               <span className="i-ri-menu-line w-5 h-5"></span>
             </button>
           </div>
-          <div className="flex-1 flex flex-col py-2 gap-4 overflow-x-auto">
-            <div className="flex flex-col items-center gap-2 px-4">
-              Drawer Example
-            </div>
+          <div className="p-1.5">
+            <NavMenu onClick={() => setMenuOpen(false)} />
           </div>
         </div>
       </Drawer>
