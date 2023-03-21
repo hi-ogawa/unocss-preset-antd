@@ -36,7 +36,7 @@
         // https://paco.me/writing/disable-theme-transitions
         function disableTransitions(callback) {
           const el = document.createElement("style");
-          el.innerHTML = `* { transition: none !important; }`;
+          el.innerHTML = "* { transition: none !important; }";
           document.head.appendChild(el);
           callback();
           window.getComputedStyle(document.documentElement).transition; // force repaint
