@@ -1,6 +1,10 @@
 // used to generate tw-api.ts
 
-import { dummyRule, filterColorPallete } from "@hiogawa/unocss-typescript-dsl";
+import {
+  dummyRule,
+  dummyVariant,
+  filterColorPallete,
+} from "@hiogawa/unocss-typescript-dsl";
 import { dummyPreset } from "@hiogawa/unocss-typescript-dsl";
 import {
   defineConfig,
@@ -21,5 +25,6 @@ export default defineConfig({
     dummyRule("opacity-<percent>"),
     dummyRule("rounded-full"),
   ],
+  variants: [dummyVariant("media-$media")],
   transformers: [transformerDirectives(), transformerVariantGroup()],
 });

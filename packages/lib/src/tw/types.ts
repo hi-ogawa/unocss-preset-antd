@@ -1699,6 +1699,7 @@ export type Variant =
   | `hover`
   | `important`
   | `aria_${Theme_aria}`
+  | `media_${Theme_media}`
 ;
 
 export type Shortcut =

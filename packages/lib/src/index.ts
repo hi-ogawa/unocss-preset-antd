@@ -74,21 +74,35 @@ export function antdPreset(options?: { reset?: boolean }): Preset<Theme> {
       ).$,
 
       "btn-text": tw.not_disabled(
-        tw.hover(tw.bg_colorBgTextHover).active(tw.bg_colorBgTextActive)
+        // "hover" state on touch device can be confusing as it sticks even after the touch release.
+        // This is critical, for example, when `antd-btn` is used as toggle.
+        // Thus, such style is enabled only on "mouse" device (i.e. `(hover) and (pointer: fine)`).
+        // Also, to get around with selector "specificity" issue, we need `:hover:not(:active)`.
+        tw
+          .hover(tw.not_active(tw.media_mouse(tw.bg_colorBgTextHover)))
+          .active(tw.bg_colorBgTextActive)
       ).$,
 
       "btn-ghost": tw.not_disabled(
-        tw.hover(tw.text_colorPrimaryHover).active(tw.text_colorPrimaryActive)
+        tw
+          .hover(tw.not_active(tw.media_mouse(tw.text_colorPrimaryHover)))
+          .active(tw.text_colorPrimaryActive)
       ).$,
 
       "btn-default": tw.border.border_colorBorder.not_disabled(
         tw
-          .hover(tw.text_colorPrimaryHover.border_colorPrimaryHover)
+          .hover(
+            tw.not_active(
+              tw.media_mouse(tw.text_colorPrimaryHover.border_colorPrimaryHover)
+            )
+          )
           .active(tw.text_colorPrimaryActive.border_colorPrimaryActive)
       ).$,
 
       "btn-primary": tw.text_white.bg_colorPrimary.not_disabled(
-        tw.hover(tw.bg_colorPrimaryHover).active(tw.bg_colorPrimaryActive)
+        tw
+          .hover(tw.not_active(tw.media_mouse(tw.bg_colorPrimaryHover)))
+          .active(tw.bg_colorPrimaryActive)
       ).$,
 
       /**
