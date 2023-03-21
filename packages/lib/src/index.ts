@@ -73,6 +73,7 @@ export function antdPreset(options?: { reset?: boolean }): Preset<Theme> {
         tw.cursor_not_allowed.opacity_50
       ).$,
 
+      // TODO: `hover` on touch device can be confusing. consider restricting the variant by "media-mouse:hover:xxx".
       "btn-text": tw.not_disabled(
         tw.hover(tw.bg_colorBgTextHover).active(tw.bg_colorBgTextActive)
       ).$,
