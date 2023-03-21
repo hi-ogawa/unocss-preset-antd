@@ -7,61 +7,50 @@
       name="viewport"
       content="width=device-width, height=device-height, initial-scale=1.0"
     />
-    <!-- initialize light/dark theme as early as possible (cf. src/utils/use-theme-state.ts) -->
     <script>
-      function __getTheme() {
-        return window.localStorage.getItem("theme") || "system";
-      }
+      // apply theme as early as possible and expose `setTheme/getTheme` to appplication
+      // prettier-ignore
+      (() => {
+        const STORAGE_KEY = "unocss-preset-antd-app:theme";
+        const DEFAULT_THEME = "system";
+        const prefersDark = window.matchMedia("(prefers-color-scheme: dark)");
 
-      function __setTheme(theme) {
-        window.localStorage.setItem("theme", theme);
-        __applyTheme(theme);
-      }
-
-      const __prefersDark = window.matchMedia("(prefers-color-scheme: dark)");
-
-      function __applyTheme(theme) {
-        const classList = document.documentElement.classList;
-        classList.remove("dark", "light");
-        if (theme === "system") {
-          theme = __prefersDark.matches ? "dark" : "light";
+        function getTheme() {
+          return window.localStorage.getItem(STORAGE_KEY) || DEFAULT_THEME;
         }
-        __disableTransitions(() => {
-          classList.add(theme === "dark" ? "dark" : "light");
-        });
-      }
 
-      function __initializeTheme() {
-        __applyTheme(__getTheme());
-        __prefersDark.addEventListener("change", () => {
-          __applyTheme(__getTheme());
-        });
-      }
-
-      // https://paco.me/writing/disable-theme-transitions
-      function __disableTransitions(f) {
-        const el = document.createElement("style");
-        el.type = "text/css";
-        el.appendChild(
-          document.createTextNode(`
-            * {
-              -webkit-transition: none !important;
-              -moz-transition: none !important;
-              -o-transition: none !important;
-              -ms-transition: none !important;
-              transition: none !important;
-            }
-          `)
-        );
-        document.head.appendChild(el);
-        f();
-        if (!window.getComputedStyle(document.firstElementChild).transition) {
-          console.debug("__disableTransitions:unreachable");
+        function setTheme(config) {
+          window.localStorage.setItem(STORAGE_KEY, config);
+          applyTheme();
         }
-        document.head.removeChild(el);
-      }
 
-      __initializeTheme();
+        function applyTheme() {
+          const theme = getTheme();
+          const derived = theme === "system" ? (prefersDark.matches ? "dark" : "light") : theme;
+          disableTransitions(() => {
+            document.documentElement.classList.remove("dark", "light");
+            document.documentElement.classList.add(derived);
+          });
+        }
+
+        // https://paco.me/writing/disable-theme-transitions
+        function disableTransitions(callback) {
+          const el = document.createElement("style");
+          el.innerHTML = `* { transition: none !important; }`;
+          document.head.appendChild(el);
+          callback();
+          window.getComputedStyle(document.documentElement).transition; // force repaint
+          document.head.removeChild(el);
+        }
+
+        function initTheme() {
+          applyTheme();
+          prefersDark.addEventListener("change", applyTheme);
+          Object.assign(globalThis, { __theme: { setTheme, getTheme } });
+        }
+
+        initTheme();
+      })();
     </script>
   </head>
   <body>

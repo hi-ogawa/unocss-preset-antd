@@ -10,7 +10,7 @@ import { tinyassert } from "@hiogawa/utils";
 import { useStableRef } from "@hiogawa/utils-react";
 import React from "react";
 import { RemoveScroll } from "react-remove-scroll";
-import { FunctionProps, cls } from "../utils/misc";
+import { cls } from "../utils/misc";
 
 // copied from https://github.com/hi-ogawa/web-ext-tab-manager/blame/81710dead04859525b9c8be3a73a71926cae6da4/src/components/modal.tsx
 
@@ -76,7 +76,7 @@ export function useModal() {
   const [Wrapper] = React.useState(
     () =>
       function Wrapper(
-        props: Omit<FunctionProps<typeof Modal>, "open" | "onClose">
+        props: Omit<React.ComponentProps<typeof Modal>, "open" | "onClose">
       ) {
         return (
           <Modal

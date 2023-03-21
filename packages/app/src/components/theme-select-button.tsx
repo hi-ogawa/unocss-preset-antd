@@ -1,5 +1,6 @@
+import React from "react";
 import { tw } from "../styles/tw";
-import { cls, useThemeState } from "../utils/misc";
+import { cls } from "../utils/misc";
 import { PopoverSimple } from "./popover";
 
 const THEME_OPTIONS = [
@@ -9,7 +10,8 @@ const THEME_OPTIONS = [
 ] as const;
 
 export function ThemeSelectButton() {
-  const [theme, setTheme] = useThemeState();
+  const [theme, setTheme] = useTheme();
+
   return (
     <PopoverSimple
       placement="bottom-end"
@@ -43,4 +45,24 @@ export function ThemeSelectButton() {
       }
     />
   );
+}
+
+//
+// see <head><script>
+//
+
+declare let __theme: {
+  setTheme: (theme: string) => void;
+  getTheme: () => string;
+};
+
+function useTheme() {
+  const [theme, setTheme] = React.useState(() => __theme.getTheme());
+
+  function setThemeWrapper(config: string) {
+    __theme.setTheme(config);
+    setTheme(config);
+  }
+
+  return [theme, setThemeWrapper] as const;
 }
