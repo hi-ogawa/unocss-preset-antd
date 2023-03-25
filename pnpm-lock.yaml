@@ -6,7 +6,7 @@ importers:
     specifiers:
       '@changesets/cli': ^2.26.0
       '@hiogawa/isort-ts': 1.0.0-pre.9
-      '@hiogawa/unocss-typescript-dsl': 2.0.0-pre.4
+      '@hiogawa/unocss-typescript-dsl': 2.0.0-pre.5
       '@hiogawa/utils': ^1.4.1
       '@tsconfig/strictest': ^1.0.2
       '@vitejs/plugin-react': ^3.1.0
@@ -19,7 +19,7 @@ importers:
     devDependencies:
       '@changesets/cli': 2.26.0
       '@hiogawa/isort-ts': 1.0.0-pre.9_ioxdq35luteszuxmt2jhnqjeca
-      '@hiogawa/unocss-typescript-dsl': 2.0.0-pre.4
+      '@hiogawa/unocss-typescript-dsl': 2.0.0-pre.5
       '@hiogawa/utils': 1.4.1
       '@tsconfig/strictest': 1.0.2
       '@vitejs/plugin-react': 3.1.0_vite@4.1.1
@@ -1143,8 +1143,8 @@ packages:
       typescript: 4.9.5
     dev: true
 
-  /@hiogawa/unocss-typescript-dsl/2.0.0-pre.4:
-    resolution: {integrity: sha512-jechxsSyO3BTHjGGxP8/ieCrb2OghsSY/y44mj2E1kpQiTjK3EY0y/6Bq9t3zPGHyS9WCthtE6T1XC5HCPWFeg==}
+  /@hiogawa/unocss-typescript-dsl/2.0.0-pre.5:
+    resolution: {integrity: sha512-WrXry/3tDW2Y8d7U1GzTVyDxNvz1NFFji6ifZyQWI1m42CzKFm/rpiRhWYvI96apF1q+FN1L56DtLtJ1s//gtQ==}
     hasBin: true
     peerDependencies:
       '@iconify/utils': '*'

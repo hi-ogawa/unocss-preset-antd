@@ -3715,6 +3715,12 @@ export type RuleDynamic =
   | `i_ri_24_hours_fill`
   | `fixed`
   | `absolute`
+  | `fixed`
+  | `relative`
+  | `absolute`
+  | `rounded_full`
+  | `opacity_${Autocomplete_percent}`
+  | `ring_${Autocomplete_num}`
   | `${"top" | "left" | "right" | "bottom"}_${Autocomplete_num}`
   | `${"max_" | "min_" | ""}${"w" | "h"}_${Autocomplete_num}`
   | `${"max_" | "min_" | ""}${"w" | "h"}_full`
@@ -3972,6 +3978,7 @@ export type Variant =
   | `hover`
   | `important`
   | `aria_${Theme_aria}`
+  | `media_${Theme_media}`
 ;
 
 export type Shortcut =

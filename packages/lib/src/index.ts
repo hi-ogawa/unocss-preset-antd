@@ -117,13 +117,11 @@ export function antdPreset(options?: { reset?: boolean }): Preset<Theme> {
           .active(tw.bg_colorPrimaryActive)
       ).$,
 
-      "btn-loading": tw
-        ._("relative")
-        .after(
-          tw._(
-            "absolute top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%]"
-          ).content_none.antd_spin.h_4
-        ).$,
+      "btn-loading": tw.relative.after(
+        tw.absolute.content_none.antd_spin.h_4._(
+          "top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%]"
+        )
+      ).$,
 
       /**
        * input
