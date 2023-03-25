@@ -46,6 +46,9 @@ export function StoryButton() {
             btn-primary + spin
             <span className="antd-spin w-4 absolute right-2"></span>
           </button>
+          <button className="antd-btn antd-btn-primary antd-btn-loading" disabled>
+            btn-primary + btn-loading
+          </button>
         </div>
         <div className="border-t mx-2"></div>
         <h2 className="text-lg flex items-baseline gap-1.5">

@@ -15,6 +15,18 @@ export function antdPreset(options?: { reset?: boolean }): Preset<Theme> {
         invalid: 'invalid="true"',
       },
       colors: objectPickBy(VARS, (_, k) => k.startsWith("color")),
+      animation: {
+        // builtin spin is not "composable" and cannot be used with `translate-xxx` etc... (https://github.com/unocss/unocss/blob/339f2b2c9be41a5505e7f4509eea1cf00a87a8d1/packages/preset-wind/src/theme.ts#L19)
+        keyframes: {
+          "spin-composable": `{
+            from { transform: translateX(var(--un-translate-x)) translateY(var(--un-translate-y)) rotate(0deg); }
+            to   { transform: translateX(var(--un-translate-x)) translateY(var(--un-translate-y)) rotate(360deg); }
+          }`,
+        },
+        counts: {
+          "spin-composable": "infinite",
+        },
+      },
     },
     shortcuts: {
       /**
@@ -54,7 +66,7 @@ export function antdPreset(options?: { reset?: boolean }): Preset<Theme> {
        */
 
       // loading spinner
-      spin: tw.animate_spin.rounded_full.border_1.border_transparent
+      spin: tw.animate_spin_composable.rounded_full.border_1.border_transparent
         .border_t_current.aspect_square.$,
 
       // modal, popover, snackbar, etc...
@@ -103,6 +115,12 @@ export function antdPreset(options?: { reset?: boolean }): Preset<Theme> {
         tw
           .hover(tw.not_active(tw.media_mouse(tw.bg_colorPrimaryHover)))
           .active(tw.bg_colorPrimaryActive)
+      ).$,
+
+      "btn-loading": tw.relative.after(
+        tw.absolute.content_none.antd_spin.h_4._(
+          "top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%]"
+        )
       ).$,
 
       /**

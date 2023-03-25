@@ -702,6 +702,7 @@ export type Theme_animation_keyframes =
   | `back_out_down`
   | `back_out_right`
   | `back_out_left`
+  | `spin_composable`
 ;
 
 export type Theme_animation_durations =
@@ -759,6 +760,7 @@ export type Theme_animation_counts =
   | `pulse_alt`
   | `bounce`
   | `bounce_alt`
+  | `spin_composable`
 ;
 
 export type Theme_media =
@@ -1442,6 +1444,12 @@ export type RuleDynamic =
   | `rounded_full`
   | `opacity_${Autocomplete_percent}`
   | `ring_${Autocomplete_num}`
+  | `fixed`
+  | `relative`
+  | `absolute`
+  | `rounded_full`
+  | `opacity_${Autocomplete_percent}`
+  | `ring_${Autocomplete_num}`
   | `${"top" | "left" | "right" | "bottom"}_${Autocomplete_num}`
   | `${"max_" | "min_" | ""}${"w" | "h"}_${Autocomplete_num}`
   | `${"max_" | "min_" | ""}${"w" | "h"}_full`
@@ -1700,6 +1708,7 @@ export type Variant =
   | `important`
   | `aria_${Theme_aria}`
   | `media_${Theme_media}`
+  | `media_${Theme_media}`
 ;
 
 export type Shortcut =
@@ -1708,6 +1717,7 @@ export type Shortcut =
   | `antd_tab`
   | `antd_tablist`
   | `antd_input`
+  | `antd_btn_loading`
   | `antd_btn_primary`
   | `antd_btn_default`
   | `antd_btn_ghost`

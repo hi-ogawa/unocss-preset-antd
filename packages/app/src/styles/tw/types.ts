@@ -144,6 +144,169 @@ export type Theme_colors =
   | `white`
 ;
 
+export type Theme_animation_keyframes =
+  | `spin_composable`
+  | `pulse`
+  | `bounce`
+  | `spin`
+  | `ping`
+  | `bounce_alt`
+  | `flash`
+  | `pulse_alt`
+  | `rubber_band`
+  | `shake_x`
+  | `shake_y`
+  | `head_shake`
+  | `swing`
+  | `tada`
+  | `wobble`
+  | `jello`
+  | `heart_beat`
+  | `hinge`
+  | `jack_in_the_box`
+  | `light_speed_in_left`
+  | `light_speed_in_right`
+  | `light_speed_out_left`
+  | `light_speed_out_right`
+  | `flip`
+  | `flip_in_x`
+  | `flip_in_y`
+  | `flip_out_x`
+  | `flip_out_y`
+  | `rotate_in`
+  | `rotate_in_down_left`
+  | `rotate_in_down_right`
+  | `rotate_in_up_left`
+  | `rotate_in_up_right`
+  | `rotate_out`
+  | `rotate_out_down_left`
+  | `rotate_out_down_right`
+  | `rotate_out_up_left`
+  | `rotate_out_up_right`
+  | `roll_in`
+  | `roll_out`
+  | `zoom_in`
+  | `zoom_in_down`
+  | `zoom_in_left`
+  | `zoom_in_right`
+  | `zoom_in_up`
+  | `zoom_out`
+  | `zoom_out_down`
+  | `zoom_out_left`
+  | `zoom_out_right`
+  | `zoom_out_up`
+  | `bounce_in`
+  | `bounce_in_down`
+  | `bounce_in_left`
+  | `bounce_in_right`
+  | `bounce_in_up`
+  | `bounce_out`
+  | `bounce_out_down`
+  | `bounce_out_left`
+  | `bounce_out_right`
+  | `bounce_out_up`
+  | `slide_in_down`
+  | `slide_in_left`
+  | `slide_in_right`
+  | `slide_in_up`
+  | `slide_out_down`
+  | `slide_out_left`
+  | `slide_out_right`
+  | `slide_out_up`
+  | `fade_in`
+  | `fade_in_down`
+  | `fade_in_down_big`
+  | `fade_in_left`
+  | `fade_in_left_big`
+  | `fade_in_right`
+  | `fade_in_right_big`
+  | `fade_in_up`
+  | `fade_in_up_big`
+  | `fade_in_top_left`
+  | `fade_in_top_right`
+  | `fade_in_bottom_left`
+  | `fade_in_bottom_right`
+  | `fade_out`
+  | `fade_out_down`
+  | `fade_out_down_big`
+  | `fade_out_left`
+  | `fade_out_left_big`
+  | `fade_out_right`
+  | `fade_out_right_big`
+  | `fade_out_up`
+  | `fade_out_up_big`
+  | `fade_out_top_left`
+  | `fade_out_top_right`
+  | `fade_out_bottom_left`
+  | `fade_out_bottom_right`
+  | `back_in_up`
+  | `back_in_down`
+  | `back_in_right`
+  | `back_in_left`
+  | `back_out_up`
+  | `back_out_down`
+  | `back_out_right`
+  | `back_out_left`
+;
+
+export type Theme_animation_counts =
+  | `spin_composable`
+  | `spin`
+  | `ping`
+  | `pulse`
+  | `pulse_alt`
+  | `bounce`
+  | `bounce_alt`
+;
+
+export type Theme_animation_durations =
+  | `pulse`
+  | `heart_beat`
+  | `bounce_in`
+  | `bounce_out`
+  | `flip_out_x`
+  | `flip_out_y`
+  | `hinge`
+;
+
+export type Theme_animation_timingFns =
+  | `pulse`
+  | `ping`
+  | `head_shake`
+  | `heart_beat`
+  | `pulse_alt`
+  | `light_speed_in_left`
+  | `light_speed_in_right`
+  | `light_speed_out_left`
+  | `light_speed_out_right`
+;
+
+export type Theme_animation_properties =
+  | `bounce_alt`
+  | `jello`
+  | `swing`
+  | `flip`
+  | `flip_in_x`
+  | `flip_in_y`
+  | `flip_out_x`
+  | `flip_out_y`
+  | `rotate_in`
+  | `rotate_in_down_left`
+  | `rotate_in_down_right`
+  | `rotate_in_up_left`
+  | `rotate_in_up_right`
+  | `rotate_out`
+  | `rotate_out_down_left`
+  | `rotate_out_down_right`
+  | `rotate_out_up_left`
+  | `rotate_out_up_right`
+  | `hinge`
+  | `zoom_out_down`
+  | `zoom_out_left`
+  | `zoom_out_right`
+  | `zoom_out_up`
+;
+
 export type Theme_width =
   | `auto`
   | `xs`
@@ -599,167 +762,6 @@ export type Theme_containers =
   | `6xl`
   | `7xl`
   | `prose`
-;
-
-export type Theme_animation_keyframes =
-  | `pulse`
-  | `bounce`
-  | `spin`
-  | `ping`
-  | `bounce_alt`
-  | `flash`
-  | `pulse_alt`
-  | `rubber_band`
-  | `shake_x`
-  | `shake_y`
-  | `head_shake`
-  | `swing`
-  | `tada`
-  | `wobble`
-  | `jello`
-  | `heart_beat`
-  | `hinge`
-  | `jack_in_the_box`
-  | `light_speed_in_left`
-  | `light_speed_in_right`
-  | `light_speed_out_left`
-  | `light_speed_out_right`
-  | `flip`
-  | `flip_in_x`
-  | `flip_in_y`
-  | `flip_out_x`
-  | `flip_out_y`
-  | `rotate_in`
-  | `rotate_in_down_left`
-  | `rotate_in_down_right`
-  | `rotate_in_up_left`
-  | `rotate_in_up_right`
-  | `rotate_out`
-  | `rotate_out_down_left`
-  | `rotate_out_down_right`
-  | `rotate_out_up_left`
-  | `rotate_out_up_right`
-  | `roll_in`
-  | `roll_out`
-  | `zoom_in`
-  | `zoom_in_down`
-  | `zoom_in_left`
-  | `zoom_in_right`
-  | `zoom_in_up`
-  | `zoom_out`
-  | `zoom_out_down`
-  | `zoom_out_left`
-  | `zoom_out_right`
-  | `zoom_out_up`
-  | `bounce_in`
-  | `bounce_in_down`
-  | `bounce_in_left`
-  | `bounce_in_right`
-  | `bounce_in_up`
-  | `bounce_out`
-  | `bounce_out_down`
-  | `bounce_out_left`
-  | `bounce_out_right`
-  | `bounce_out_up`
-  | `slide_in_down`
-  | `slide_in_left`
-  | `slide_in_right`
-  | `slide_in_up`
-  | `slide_out_down`
-  | `slide_out_left`
-  | `slide_out_right`
-  | `slide_out_up`
-  | `fade_in`
-  | `fade_in_down`
-  | `fade_in_down_big`
-  | `fade_in_left`
-  | `fade_in_left_big`
-  | `fade_in_right`
-  | `fade_in_right_big`
-  | `fade_in_up`
-  | `fade_in_up_big`
-  | `fade_in_top_left`
-  | `fade_in_top_right`
-  | `fade_in_bottom_left`
-  | `fade_in_bottom_right`
-  | `fade_out`
-  | `fade_out_down`
-  | `fade_out_down_big`
-  | `fade_out_left`
-  | `fade_out_left_big`
-  | `fade_out_right`
-  | `fade_out_right_big`
-  | `fade_out_up`
-  | `fade_out_up_big`
-  | `fade_out_top_left`
-  | `fade_out_top_right`
-  | `fade_out_bottom_left`
-  | `fade_out_bottom_right`
-  | `back_in_up`
-  | `back_in_down`
-  | `back_in_right`
-  | `back_in_left`
-  | `back_out_up`
-  | `back_out_down`
-  | `back_out_right`
-  | `back_out_left`
-;
-
-export type Theme_animation_durations =
-  | `pulse`
-  | `heart_beat`
-  | `bounce_in`
-  | `bounce_out`
-  | `flip_out_x`
-  | `flip_out_y`
-  | `hinge`
-;
-
-export type Theme_animation_timingFns =
-  | `pulse`
-  | `ping`
-  | `head_shake`
-  | `heart_beat`
-  | `pulse_alt`
-  | `light_speed_in_left`
-  | `light_speed_in_right`
-  | `light_speed_out_left`
-  | `light_speed_out_right`
-;
-
-export type Theme_animation_properties =
-  | `bounce_alt`
-  | `jello`
-  | `swing`
-  | `flip`
-  | `flip_in_x`
-  | `flip_in_y`
-  | `flip_out_x`
-  | `flip_out_y`
-  | `rotate_in`
-  | `rotate_in_down_left`
-  | `rotate_in_down_right`
-  | `rotate_in_up_left`
-  | `rotate_in_up_right`
-  | `rotate_out`
-  | `rotate_out_down_left`
-  | `rotate_out_down_right`
-  | `rotate_out_up_left`
-  | `rotate_out_up_right`
-  | `hinge`
-  | `zoom_out_down`
-  | `zoom_out_left`
-  | `zoom_out_right`
-  | `zoom_out_up`
-;
-
-export type Theme_animation_counts =
-  | `spin`
-  | `ping`
-  | `pulse`
-  | `pulse_alt`
-  | `bounce`
-  | `bounce_alt`
 ;
 
 export type Theme_media =
@@ -3713,6 +3715,12 @@ export type RuleDynamic =
   | `i_ri_24_hours_fill`
   | `fixed`
   | `absolute`
+  | `fixed`
+  | `relative`
+  | `absolute`
+  | `rounded_full`
+  | `opacity_${Autocomplete_percent}`
+  | `ring_${Autocomplete_num}`
   | `${"top" | "left" | "right" | "bottom"}_${Autocomplete_num}`
   | `${"max_" | "min_" | ""}${"w" | "h"}_${Autocomplete_num}`
   | `${"max_" | "min_" | ""}${"w" | "h"}_full`
@@ -3970,6 +3978,7 @@ export type Variant =
   | `hover`
   | `important`
   | `aria_${Theme_aria}`
+  | `media_${Theme_media}`
 ;
 
 export type Shortcut =
@@ -3978,6 +3987,7 @@ export type Shortcut =
   | `antd_tab`
   | `antd_tablist`
   | `antd_input`
+  | `antd_btn_loading`
   | `antd_btn_primary`
   | `antd_btn_default`
   | `antd_btn_ghost`
