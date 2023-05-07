@@ -9,8 +9,11 @@ const THEME_OPTIONS = [
   ["light", "Light theme"],
 ] as const;
 
+declare let __themeSet: (theme: string) => void;
+declare let __themeGet: () => string;
+
 export function ThemeSelectButton() {
-  const [theme, setTheme] = useTheme();
+  const [, rerender] = React.useReducer((prev) => !prev, true);
 
   return (
     <PopoverSimple
@@ -29,13 +32,14 @@ export function ThemeSelectButton() {
                 tw.antd_btn.antd_btn_text.p_1.px_2.flex.items_center.gap_2.$
               }
               onClick={() => {
-                setTheme(t);
+                __themeSet(t);
+                rerender();
               }}
             >
               <span
                 className={cls(
                   tw.i_ri_check_line.w_5.h_5.$,
-                  t !== theme && "invisible"
+                  t !== __themeGet() && "invisible"
                 )}
               ></span>
               {label}
@@ -45,24 +49,4 @@ export function ThemeSelectButton() {
       }
     />
   );
-}
-
-//
-// see <head><script>
-//
-
-declare let __theme: {
-  setTheme: (theme: string) => void;
-  getTheme: () => string;
-};
-
-function useTheme() {
-  const [theme, setTheme] = React.useState(() => __theme.getTheme());
-
-  function setThemeWrapper(config: string) {
-    __theme.setTheme(config);
-    setTheme(config);
-  }
-
-  return [theme, setThemeWrapper] as const;
 }

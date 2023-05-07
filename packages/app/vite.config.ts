@@ -1,4 +1,5 @@
 import { execSync } from "node:child_process";
+import fs from "node:fs";
 import react from "@vitejs/plugin-react";
 import unocss from "unocss/vite";
 import { defineConfig } from "vite";
@@ -12,6 +13,7 @@ export default defineConfig({
     unocss(),
     react(),
     unocssDepHmrPlugin([require.resolve("@hiogawa/unocss-preset-antd")]),
+    injectHtmlPlugin(),
   ],
 });
 
@@ -34,6 +36,29 @@ function unocssDepHmrPlugin(deps: string[]): Plugin {
           execSync("touch uno.config.ts");
         }
       });
+    },
+  };
+}
+
+//
+// inject theme initialization script
+//
+function injectHtmlPlugin() {
+  const script = fs.readFileSync(
+    require.resolve("@hiogawa/utils-experimental/dist/theme-script.global.js"),
+    "utf-8"
+  );
+  return {
+    name: "local:" + injectHtmlPlugin.name,
+    transformIndexHtml(html: string) {
+      return html.replace(
+        /<!--@@INJECT_THEME_SCRIPT@@-->/,
+        `\
+<script>
+  globalThis.__themeStorageKey = "unocss-preset-antd-app:theme";
+  ${script}
+</script>`
+      );
     },
   };
 }

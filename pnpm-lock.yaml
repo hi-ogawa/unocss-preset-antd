@@ -55,6 +55,9 @@ importers:
       '@hiogawa/utils':
         specifier: ^1.3.0
         version: 1.3.0
+      '@hiogawa/utils-experimental':
+        specifier: ^0.0.0
+        version: 0.0.0
       '@hiogawa/utils-react':
         specifier: ^1.2.0
         version: 1.2.0(react@18.2.0)
@@ -1176,6 +1179,10 @@ packages:
       magic-string: 0.27.0
       zod: 3.21.0
     dev: true
+
+  /@hiogawa/utils-experimental@0.0.0:
+    resolution: {integrity: sha512-KIntm8b5EbVVATzq3f/+ttIpNfstoN7Mx04BxRZG5t7sMdLmbj0S5yKzKL0sR7wv4qD+rStO3YELWOqN4LZPhA==}
+    dev: false
 
   /@hiogawa/utils-react@1.2.0(react@18.2.0):
     resolution: {integrity: sha512-hQZhYgJDs6Lw3wMoriKNk1eZnnR+WK+Ef2LUo7XXJFug7w+Mu7RRr0YL8WtCoXymH3izVGJ15udHYkCLmKdfjg==}
