@@ -1,10 +1,6 @@
 import { FloatingPortal } from "@floating-ui/react";
 import { Transition } from "@headlessui/react";
-import {
-  toDelayedSetState,
-  usePrevious,
-  useRafTime,
-} from "@hiogawa/utils-react";
+import { useDelay, usePrevious, useRafTime } from "@hiogawa/utils-react";
 import React from "react";
 import { tw } from "../styles/tw";
 import { cls } from "../utils/misc";
@@ -56,18 +52,17 @@ interface UseProgressResult {
 export function useProgress(loading: boolean): UseProgressResult {
   const time = useRafTime(loading);
   const [finishing, setFinishing] = React.useState(false);
-  const [setFinishingDelayed, setFinishingReset] =
-    toDelayedSetState(setFinishing);
+  const resetFinishingDelayed = useDelay(() => setFinishing(false), 500);
   const prevLoading = usePrevious(loading);
 
   React.useEffect(() => {
     if (loading) {
       setFinishing(false);
-      setFinishingReset();
+      resetFinishingDelayed.cancel();
     }
     if (!loading && prevLoading) {
       setFinishing(true);
-      setFinishingDelayed(false, 500);
+      resetFinishingDelayed();
     }
   }, [loading]);
 

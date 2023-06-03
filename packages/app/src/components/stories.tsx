@@ -1,7 +1,7 @@
 import { Transition } from "@headlessui/react";
 import { ANTD_VERS } from "@hiogawa/unocss-preset-antd";
 import { objectPickBy, range } from "@hiogawa/utils";
-import { Debug, toDelayedSetState, toSetSetState } from "@hiogawa/utils-react";
+import { Debug, toSetSetState, useDelay } from "@hiogawa/utils-react";
 import React from "react";
 import { Controller, useForm } from "react-hook-form";
 import ReactSelect from "react-select";
@@ -246,26 +246,25 @@ export function StoryTab() {
 
 export function StoryTopProgressBar() {
   const [loading, setLoading] = React.useState(false);
-  const [setLoadingDelayed, setLogingReset] = toDelayedSetState(setLoading);
   const progress = useProgress(loading);
 
-  function setLoadingDuration(ms: number) {
-    setLogingReset();
-    setLoading(true);
-    setLoadingDelayed(false, ms);
-  }
+  const options = [200, 500, 1000, 5000];
+  const delayed = new Map(
+    options.map((ms) => [ms, useDelay(() => setLoading(false), ms)] as const)
+  );
 
   return (
     <div className="flex flex-col items-center gap-3 m-2">
       <section className="flex flex-col gap-3 w-full max-w-lg border p-3">
         <h2 className="text-xl">TopProgressBar</h2>
         <div className={tw.flex.gap_3.$}>
-          {[200, 500, 1000, 5000].map((ms) => (
+          {options.map((ms) => (
             <button
               key={ms}
               className="antd-btn antd-btn-default px-2"
               onClick={() => {
-                setLoadingDuration(ms);
+                setLoading(true);
+                delayed.get(ms)!();
               }}
             >
               {ms}ms
