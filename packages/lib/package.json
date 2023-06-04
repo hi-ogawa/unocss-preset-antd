@@ -1,6 +1,6 @@
 {
   "name": "@hiogawa/unocss-preset-antd",
-  "version": "2.2.1-pre.2",
+  "version": "2.2.1-pre.3",
   "type": "module",
   "main": "./dist/index.js",
   "module": "./dist/index.js",
