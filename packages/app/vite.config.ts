@@ -20,7 +20,7 @@ export default defineConfig({
 //
 // poor man's unocss dep HMR (cf. https://github.com/unocss/unocss/blob/bb321caea95dd0a6e0cc44c22d897a9dc96cb6c9/packages/vite/src/config-hmr.ts)
 //
-function unocssDepHmrPlugin(deps: string[]): Plugin {
+export function unocssDepHmrPlugin(deps: string[]): Plugin {
   const name = "local:" + unocssDepHmrPlugin.name;
   return {
     name,
@@ -43,7 +43,7 @@ function unocssDepHmrPlugin(deps: string[]): Plugin {
 //
 // inject theme initialization script
 //
-function injectHtmlPlugin() {
+export function injectHtmlPlugin() {
   const script = fs.readFileSync(
     require.resolve("@hiogawa/utils-experimental/dist/theme-script.global.js"),
     "utf-8"
