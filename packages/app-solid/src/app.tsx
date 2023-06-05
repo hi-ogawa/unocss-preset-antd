@@ -1,4 +1,4 @@
-import { Index, JSX, splitProps } from "solid-js";
+import { ThemeSelect } from "./components/theme";
 
 export function App() {
   return (
@@ -25,6 +25,7 @@ function AppHeader() {
       >
         <span class="i-ri-github-line w-6 h-6"></span>
       </a>
+      <div class="border-l self-stretch"></div>
       <ThemeSelect />
     </header>
   );
@@ -40,54 +41,5 @@ function TestForm() {
       </label>
       <button class="antd-btn antd-btn-primary p-1">Submit</button>
     </div>
-  );
-}
-
-function ThemeSelect() {
-  return (
-    <label class="flex items-center gap-2">
-      <span>Theme</span>
-      <SelectWrapper
-        class="antd-input p-1 py-0.5 capitalize"
-        options={["system", "dark", "light"]}
-        // very subtle nuance but it's not necessary to make `value` reactive by createSignal/createEffect
-        // since `select.value` can be left "uncontrolled" after the first rendering.
-        value={__themeGet()}
-        onChange={(v) => __themeSet(v)}
-      />
-    </label>
-  );
-}
-
-declare let __themeSet: (theme: string) => void;
-declare let __themeGet: () => string;
-
-export function SelectWrapper<T>(
-  allProps: {
-    options: readonly T[];
-    value: T;
-    onChange: (value: T) => void;
-    labelFn?: (value: T) => JSX.Element;
-  } & Omit<JSX.HTMLElementTags["select"], "value" | "onChange">
-) {
-  const [props, selectProps] = splitProps(allProps, [
-    "value",
-    "options",
-    "onChange",
-    "labelFn",
-  ]);
-
-  return (
-    <select
-      value={props.options.indexOf(props.value)}
-      onChange={(e) => props.onChange(props.options[Number(e.target.value)])}
-      {...selectProps}
-    >
-      <Index each={props.options}>
-        {(option, i) => (
-          <option value={i}>{(props.labelFn ?? String)(option())}</option>
-        )}
-      </Index>
-    </select>
   );
 }
