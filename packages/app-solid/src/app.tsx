@@ -1,12 +1,23 @@
 export function App() {
   return (
-    <div class="flex justify-center">
-      <div class="flex flex-col gap-4 p-4">
-        <TestForm />
-        <div class="border-t"></div>
-        <ThemeSelect />
+    <div class="flex flex-col">
+      <AppHeader />
+      <div class="flex justify-center">
+        <div class="flex flex-col gap-4 p-4">
+          <TestForm />
+        </div>
       </div>
     </div>
+  );
+}
+
+function AppHeader() {
+  return (
+    <header class="flex p-2 px-4 shadow-md shadow-black/[0.05] dark:shadow-black/[0.7]">
+      <h1 class="text-lg">Examples</h1>
+      <span class="flex-1"></span>
+      <ThemeSelect />
+    </header>
   );
 }
 
@@ -28,7 +39,7 @@ function ThemeSelect() {
     <label class="flex items-center gap-2">
       <span>Theme</span>
       <select
-        class="antd-input p-1"
+        class="antd-input p-1 py-0.5"
         value={__themeGet()}
         onChange={(e) => {
           __themeSet(e.target.value);
