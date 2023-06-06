@@ -21,6 +21,7 @@ export function App() {
         <div class="flex flex-col gap-4 p-4">
           <TestForm />
           <TestTransition />
+          <TestModal />
         </div>
       </div>
     </div>
@@ -125,6 +126,67 @@ function TestTransition() {
   );
 }
 
+function TestModal() {
+  const [show, setShow] = createSignal(false);
+
+  return (
+    <div class="flex flex-col gap-3 p-2 border w-sm">
+      <h1 class="text-xl">Modal</h1>
+      <button
+        class="antd-btn antd-btn-primary p-1"
+        onClick={() => setShow(!show())}
+      >
+        Toggle ({show() ? "on" : "off"})
+      </button>
+      <Modal open={show()} onOpenChange={setShow}>
+        <div class="flex flex-col h-full p-3 gap-2">
+          <h3 class="text-lg">Modal Content Title</h3>
+          <div class="flex-1">Hello</div>
+          <div class="flex justify-end">
+            <button
+              class="antd-btn antd-btn-default px-2"
+              onClick={() => setShow(false)}
+            >
+              Close
+            </button>
+          </div>
+        </div>
+      </Modal>
+    </div>
+  );
+}
+
+function Modal(
+  props: ParentProps & { open: boolean; onOpenChange: (open: boolean) => void }
+) {
+  return (
+    <TransitionV3 show={props.open} class="duration-1000 fixed">
+      {/* backdrop */}
+      <TransitionV3
+        show={props.open}
+        class="duration-1000 fixed inset-0 bg-black"
+        enterFrom="opacity-0"
+        enterTo="opacity-40"
+        leaveFrom="opacity-40"
+        leaveTo="opacity-0"
+      />
+      {/* content */}
+      <div class="fixed inset-0 overflow-hidden flex justify-center items-center">
+        <TransitionV3
+          show={props.open}
+          class="duration-1000 transform antd-floating"
+          enterFrom="opacity-0 scale-90"
+          enterTo="opacity-100 scale-100"
+          leaveFrom="opacity-100 scale-100"
+          leaveTo="opacity-0 scale-90"
+        >
+          {props.children}
+        </TransitionV3>
+      </div>
+    </TransitionV3>
+  );
+}
+
 // cf.
 // https://github.com/solidjs-community/solid-primitives/blob/876b583ed95e0c3f0a552882f3508a07fc64fca4/packages/transition-group/dev/switch-page.tsx#L19
 // https://github.com/solidjs-community/solid-primitives/blob/876b583ed95e0c3f0a552882f3508a07fc64fca4/packages/transition-group/src/index.ts#L74
@@ -223,7 +285,7 @@ function TransitionV3Inner(
     TransitionClassProps & {
       class?: string;
       state: TransitionV3State;
-      setState?: (v: TransitionV3State) => void;
+      setState: (v: TransitionV3State) => void;
     }
 ) {
   let ref!: HTMLElement;
@@ -241,11 +303,11 @@ function TransitionV3Inner(
     ref = el;
     ref.classList.remove(...Object.values(classes()).flat());
     ref.classList.add(...classes().class, ...classes().enterFrom);
-    forceStyle(ref);
   }
 
   // "enterTo" on mount
   onMount(() => {
+    forceStyle(ref);
     ref.classList.remove(...classes().enterFrom);
     ref.classList.add(...classes().enterTo);
   });
@@ -258,10 +320,8 @@ function TransitionV3Inner(
       ref.classList.add(...classes().class, ...classes().leaveFrom);
       forceStyle(ref);
 
-      // setup transition state callback
-      addEventListenerOnce(ref, "transitionend", () =>
-        props.setState?.("left")
-      );
+      // setup transition state cleanup
+      onTransitionEnd(ref, () => props.setState("left"));
 
       // leaveTo
       ref.classList.remove(...classes().leaveFrom);
@@ -270,6 +330,39 @@ function TransitionV3Inner(
   });
 
   return <div ref={onRef}>{props.children}</div>;
+}
+
+function onTransitionEnd(el: HTMLElement, callback: () => void) {
+  // watch transitionend
+  const wrapper = (e: HTMLElementEventMap["transitionend"]) => {
+    if (e.target === e.currentTarget) {
+      cleanup();
+      callback();
+    }
+  };
+  el.addEventListener("transitionend", wrapper);
+
+  // fallback to transitionDuration timeout
+  const duration = getComputedStyle(el).transitionDuration;
+  const subscription = window.setTimeout(() => {
+    cleanup();
+    callback();
+  }, parseDuration(duration));
+
+  function cleanup() {
+    el.removeEventListener("transitionend", wrapper);
+    window.clearTimeout(subscription);
+  }
+}
+
+function parseDuration(s: string): number {
+  if (s.endsWith("ms")) {
+    return Number(s.slice(0, -2));
+  }
+  if (s.endsWith("s")) {
+    return Number(s.slice(0, -1)) * 1000;
+  }
+  return 0;
 }
 
 function TransitionChild(props: ParentProps & TransitionClassProps) {
@@ -354,7 +447,7 @@ function addEventListenerOnce<K extends keyof HTMLElementEventMap>(
   k: K,
   callback: (e: HTMLElementEventMap[K]) => void
 ) {
-  const wrapper: typeof callback = (e) => {
+  const wrapper = (e: HTMLElementEventMap[K]) => {
     el.removeEventListener(k, wrapper);
     callback(e);
   };
