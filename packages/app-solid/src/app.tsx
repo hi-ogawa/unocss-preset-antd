@@ -1,12 +1,11 @@
 import { tinyassert, typedBoolean } from "@hiogawa/utils";
-import { resolveFirst } from "@solid-primitives/refs";
+import { Ref, resolveFirst } from "@solid-primitives/refs";
 import { createSwitchTransition } from "@solid-primitives/transition-group";
 import {
   ParentProps,
   Show,
-  children,
   createContext,
-  createMemo,
+  createEffect,
   createSignal,
   useContext,
 } from "solid-js";
@@ -94,6 +93,32 @@ function TestTransition() {
           </Show>
         </Transition>
       </div>
+      <div class="h-[80px] flex items-center justify-center relative">
+        <div class="text-2xl">Hello</div>
+        <TransitionV2
+          show={show()}
+          class="absolute inset-0 antd-body flex items-center justify-center duration-1000"
+          enterFrom="opacity-0"
+          enterTo="opacity-80"
+          leaveFrom="opacity-80"
+          leaveTo="opacity-0"
+        >
+          <div class="antd-spin w-8 h-8"></div>
+        </TransitionV2>
+      </div>
+      <div class="h-[80px] flex items-center justify-center relative">
+        <div class="text-2xl">Hello</div>
+        <TransitionV2
+          show={show()}
+          class="absolute inset-0 antd-body flex items-center justify-center duration-1000"
+          enterFrom="opacity-0"
+          enterTo="opacity-80"
+          leaveFrom="opacity-80"
+          leaveTo="opacity-0"
+        >
+          <div class="antd-spin w-8 h-8"></div>
+        </TransitionV2>
+      </div>
     </div>
   );
 }
@@ -112,9 +137,7 @@ function Transition(props: ParentProps & TransitionClassProps) {
     appear: true,
 
     onEnter: (el, done) => {
-      queueMicrotask(() => {
-        handleTransition(el, props, "enterFrom", "enterTo", done);
-      });
+      handleTransition(el, props, "enterFrom", "enterTo", done);
     },
 
     onExit: (el, done) => {
@@ -126,6 +149,45 @@ function Transition(props: ParentProps & TransitionClassProps) {
     <transitionContext.Provider value={el}>
       <>{resultEl}</>
     </transitionContext.Provider>
+  );
+}
+
+function TransitionV2(
+  props: ParentProps & TransitionClassProps & { show: boolean; class?: string }
+) {
+  const [ref, setRef] = createSignal<HTMLElement | undefined>();
+  const [actualShow, setActualShow] = createSignal(false);
+
+  createSwitchTransition(ref, {
+    appear: true,
+
+    onEnter: (el, done) => {
+      handleTransition(el, props, "enterFrom", "enterTo", done);
+    },
+
+    onExit: (el, done) => {
+      handleTransition(el, props, "leaveFrom", "leaveTo", () => {
+        setActualShow(false);
+        done();
+      });
+    },
+  });
+
+  createEffect(() => {
+    if (props.show && !ref()) {
+      setActualShow(true);
+    }
+    if (!props.show && ref()) {
+      setRef(undefined);
+    }
+  });
+
+  return (
+    <Show when={actualShow()}>
+      <Ref ref={setRef}>
+        <div class={props.class}>{props.children}</div>
+      </Ref>
+    </Show>
   );
 }
 
@@ -150,9 +212,7 @@ function TransitionChild(props: ParentProps & TransitionClassProps) {
           done();
           return;
         }
-        queueMicrotask(() => {
-          handleTransition(el, props, "enterFrom", "enterTo", done);
-        });
+        handleTransition(el, props, "enterFrom", "enterTo", done);
       });
     },
 
@@ -196,9 +256,12 @@ function handleTransition(
   el.classList.add(...classes[from]);
   forceStyle(el);
 
-  addEventListenerOnce(el, "transitionend", () => done()); // TODO: fallback to setTimeout just in case?
-  el.classList.remove(...classes[from]);
-  el.classList.add(...classes[to]);
+  // TODO: wait mount?
+  setTimeout(() => {
+    addEventListenerOnce(el, "transitionend", () => done()); // TODO: fallback to setTimeout just in case?
+    el.classList.remove(...classes[from]);
+    el.classList.add(...classes[to]);
+  });
 }
 
 function splitClass(c: string): string[] {
