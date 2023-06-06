@@ -1,15 +1,11 @@
 import { tinyassert, typedBoolean } from "@hiogawa/utils";
-import { Ref, resolveFirst } from "@solid-primitives/refs";
-import { createSwitchTransition } from "@solid-primitives/transition-group";
 import {
   ParentProps,
   Show,
-  createContext,
   createEffect,
   createMemo,
   createSignal,
   onMount,
-  useContext,
 } from "solid-js";
 import { ThemeSelect } from "./components/theme";
 
@@ -72,55 +68,17 @@ function TestTransition() {
         Toggle ({show() ? "on" : "off"})
       </button>
       <div class="h-[80px] flex items-center justify-center relative">
-        <div class="text-2xl">TransitionV1</div>
+        <div class="text-lg">Hello</div>
         <Transition
+          show={show()}
+          class="absolute inset-0 antd-body flex items-center justify-center duration-1000"
           enterFrom="opacity-0"
           enterTo="opacity-80"
           leaveFrom="opacity-80"
           leaveTo="opacity-0"
         >
-          <Show when={show()}>
-            <div class="absolute inset-0 antd-body flex items-center justify-center duration-800">
-              <div class="antd-spin w-8 h-8"></div>
-            </div>
-            <TransitionChild
-              enterFrom="opacity-0"
-              enterTo="opacity-100"
-              leaveFrom="opacity-100"
-              leaveTo="opacity-0"
-            >
-              <div class="absolute inset-0 bg-colorPrimary flex items-center justify-center duration-1600">
-                <div class="antd-spin w-8 h-8"></div>
-              </div>
-            </TransitionChild>
-          </Show>
+          <div class="antd-spin w-8 h-8"></div>
         </Transition>
-      </div>
-      <div class="h-[80px] flex items-center justify-center relative">
-        <div class="text-2xl">TransitionV2</div>
-        <TransitionV2
-          show={show()}
-          class="absolute inset-0 antd-body flex items-center justify-center duration-1000"
-          enterFrom="opacity-0"
-          enterTo="opacity-80"
-          leaveFrom="opacity-80"
-          leaveTo="opacity-0"
-        >
-          <div class="antd-spin w-8 h-8"></div>
-        </TransitionV2>
-      </div>
-      <div class="h-[80px] flex items-center justify-center relative">
-        <div class="text-2xl">TransitionV3</div>
-        <TransitionV3
-          show={show()}
-          class="absolute inset-0 antd-body flex items-center justify-center duration-1000"
-          enterFrom="opacity-0"
-          enterTo="opacity-80"
-          leaveFrom="opacity-80"
-          leaveTo="opacity-0"
-        >
-          <div class="antd-spin w-8 h-8"></div>
-        </TransitionV3>
       </div>
     </div>
   );
@@ -159,12 +117,15 @@ function TestModal() {
 function Modal(
   props: ParentProps & { open: boolean; onOpenChange: (open: boolean) => void }
 ) {
+  // TODO: portal
+  // TODO: dismiss on click away
+
   return (
-    <TransitionV3 show={props.open} class="duration-1000 fixed">
+    <Transition show={props.open} class="duration-300 fixed">
       {/* backdrop */}
-      <TransitionV3
+      <Transition
         show={props.open}
-        class="duration-1000 fixed inset-0 bg-black"
+        class="duration-300 fixed inset-0 bg-black"
         enterFrom="opacity-0"
         enterTo="opacity-40"
         leaveFrom="opacity-40"
@@ -172,95 +133,63 @@ function Modal(
       />
       {/* content */}
       <div class="fixed inset-0 overflow-hidden flex justify-center items-center">
-        <TransitionV3
+        <Transition
           show={props.open}
-          class="duration-1000 transform antd-floating"
+          class="duration-300 transform antd-floating"
           enterFrom="opacity-0 scale-90"
           enterTo="opacity-100 scale-100"
           leaveFrom="opacity-100 scale-100"
           leaveTo="opacity-0 scale-90"
         >
           {props.children}
-        </TransitionV3>
+        </Transition>
       </div>
-    </TransitionV3>
+    </Transition>
   );
 }
 
+//
+// very limited port of headlessui Transition component.
+//
+// difference from headlessui
+// - always appear = true
+// - always remount
+// - no callback (beforeEnter, afterEnter, beforeLeave, afterLeave)
+//
+// solid-primitive's createSwitchTransition was a tricky so the usage is completely replaced by my own.
+//
 // cf.
-// https://github.com/solidjs-community/solid-primitives/blob/876b583ed95e0c3f0a552882f3508a07fc64fca4/packages/transition-group/dev/switch-page.tsx#L19
-// https://github.com/solidjs-community/solid-primitives/blob/876b583ed95e0c3f0a552882f3508a07fc64fca4/packages/transition-group/src/index.ts#L74
 // https://github.com/tailwindlabs/headlessui/blob/14b8c5622661b985903371532dd0d116d6517aba/packages/%40headlessui-react/src/components/transitions/utils/transition.ts
-function Transition(props: ParentProps & TransitionClassProps) {
-  const el = resolveFirst(
-    () => props.children,
-    (item): item is HTMLElement => item instanceof HTMLElement
-  );
+// https://github.com/solidjs-community/solid-primitives/blob/876b583ed95e0c3f0a552882f3508a07fc64fca4/packages/transition-group/src/index.ts#L74
+// https://github.com/solidjs-community/solid-primitives/blob/876b583ed95e0c3f0a552882f3508a07fc64fca4/packages/transition-group/dev/switch-page.tsx#L19
+//
 
-  const resultEl = createSwitchTransition(el, {
-    appear: true,
+type TransitionState = "enter" | "leaving" | "left";
 
-    onEnter: (el, done) => {
-      handleTransition(el, props, "enterFrom", "enterTo", done);
-    },
-
-    onExit: (el, done) => {
-      handleTransition(el, props, "leaveFrom", "leaveTo", done);
-    },
-  });
-
-  return (
-    <transitionContext.Provider value={el}>
-      <>{resultEl}</>
-    </transitionContext.Provider>
-  );
+interface TransitionClassProps {
+  // enter?: string;
+  enterFrom?: string;
+  enterTo?: string;
+  // entered?: string;
+  // leave?: string;
+  leaveFrom?: string;
+  leaveTo?: string;
 }
 
-function TransitionV2(
-  props: ParentProps & TransitionClassProps & { show: boolean; class?: string }
-) {
-  const [ref, setRef] = createSignal<HTMLElement | undefined>();
-  const [actualShow, setActualShow] = createSignal(false);
-
-  createSwitchTransition(ref, {
-    appear: true,
-
-    onEnter: (el, done) => {
-      handleTransition(el, props, "enterFrom", "enterTo", done);
-    },
-
-    onExit: (el, done) => {
-      handleTransition(el, props, "leaveFrom", "leaveTo", () => {
-        setActualShow(false);
-        done();
-      });
-    },
-  });
-
-  createEffect(() => {
-    if (props.show && !ref()) {
-      setActualShow(true);
-    }
-    if (!props.show && ref()) {
-      setRef(undefined);
-    }
-  });
-
-  return (
-    <Show when={actualShow()}>
-      <Ref ref={setRef}>
-        <div class={props.class}>{props.children}</div>
-      </Ref>
-    </Show>
-  );
+// TODO
+interface TransitionEventProps {
+  beforeEnter?: () => void;
+  afterEnter?: () => void;
+  beforeLeave?: () => void;
+  afterLeave?: () => void;
 }
 
-type TransitionV3State = "enter" | "leaving" | "left";
-
-function TransitionV3(
-  props: ParentProps & TransitionClassProps & { class?: string; show?: boolean }
+function Transition(
+  props: ParentProps &
+    TransitionClassProps &
+    TransitionEventProps & { class?: string; show?: boolean }
 ) {
-  const [state, setState] = createSignal<TransitionV3State>("left");
+  const [state, setState] = createSignal<TransitionState>("left");
 
   createEffect(() => {
     if (props.show && state() !== "enter") {
@@ -273,19 +202,19 @@ function TransitionV3(
 
   return (
     <Show when={state() !== "left"}>
-      <TransitionV3Inner {...props} state={state()} setState={setState}>
+      <TransitionInner {...props} state={state()} setState={setState}>
         {props.children}
-      </TransitionV3Inner>
+      </TransitionInner>
     </Show>
   );
 }
 
-function TransitionV3Inner(
+function TransitionInner(
   props: ParentProps &
     TransitionClassProps & {
       class?: string;
-      state: TransitionV3State;
-      setState: (v: TransitionV3State) => void;
+      state: TransitionState;
+      setState: (v: TransitionState) => void;
     }
 ) {
   let ref!: HTMLElement;
@@ -365,93 +294,8 @@ function parseDuration(s: string): number {
   return 0;
 }
 
-function TransitionChild(props: ParentProps & TransitionClassProps) {
-  const contextEl = useContext(transitionContext); // Provider is not setup at the time of `resolveFirst` of `Transition`
-  if (!contextEl) {
-    return null;
-  }
-
-  const currentEl = resolveFirst(
-    () => props.children,
-    (item): item is HTMLElement => item instanceof HTMLElement
-  );
-
-  createSwitchTransition(contextEl, {
-    appear: true,
-
-    onEnter: (_el, done) => {
-      queueMicrotask(() => {
-        const el = currentEl();
-        if (!el) {
-          done();
-          return;
-        }
-        handleTransition(el, props, "enterFrom", "enterTo", done);
-      });
-    },
-
-    onExit: (_el, done) => {
-      const el = currentEl();
-      if (!el) {
-        done();
-        return;
-      }
-      handleTransition(el, props, "leaveFrom", "leaveTo", done);
-    },
-  });
-
-  return <>{props.children}</>;
-}
-
-const transitionContext = createContext(undefined! as () => HTMLElement | null);
-
-interface TransitionClassProps {
-  enterFrom?: string;
-  enterTo?: string;
-  leaveFrom?: string;
-  leaveTo?: string;
-}
-
-function handleTransition(
-  el: HTMLElement,
-  props: TransitionClassProps,
-  from: keyof TransitionClassProps,
-  to: keyof TransitionClassProps,
-  done: () => void
-) {
-  const classes = {
-    enterFrom: splitClass(props.enterFrom ?? ""),
-    enterTo: splitClass(props.enterTo ?? ""),
-    leaveFrom: splitClass(props.leaveFrom ?? ""),
-    leaveTo: splitClass(props.leaveTo ?? ""),
-  };
-
-  el.classList.remove(...Object.values(classes).flat());
-  el.classList.add(...classes[from]);
-  forceStyle(el);
-
-  // TODO: wait mount?
-  setTimeout(() => {
-    addEventListenerOnce(el, "transitionend", () => done()); // TODO: fallback to setTimeout just in case?
-    el.classList.remove(...classes[from]);
-    el.classList.add(...classes[to]);
-  });
-}
-
 function splitClass(c: string): string[] {
   return c.split(" ").filter(typedBoolean);
-}
-
-function addEventListenerOnce<K extends keyof HTMLElementEventMap>(
-  el: HTMLElement,
-  k: K,
-  callback: (e: HTMLElementEventMap[K]) => void
-) {
-  const wrapper = (e: HTMLElementEventMap[K]) => {
-    el.removeEventListener(k, wrapper);
-    callback(e);
-  };
-  el.addEventListener(k, wrapper);
 }
 
 function forceStyle(el: Element) {
