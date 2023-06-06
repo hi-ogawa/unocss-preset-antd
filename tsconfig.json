@@ -5,6 +5,9 @@
       "path": "packages/app"
     },
     {
+      "path": "packages/app-solid"
+    },
+    {
       "path": "packages/lib"
     }
   ]
