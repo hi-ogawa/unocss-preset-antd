@@ -1,4 +1,12 @@
-import { ParentProps, createSignal } from "solid-js";
+import { Ref } from "@solid-primitives/refs";
+import {
+  Accessor,
+  ParentProps,
+  createEffect,
+  createSignal,
+  onCleanup,
+  onMount,
+} from "solid-js";
 import { ThemeSelect } from "./components/theme";
 import { Transition } from "./components/transition";
 
@@ -112,6 +120,19 @@ function Modal(
 ) {
   // TODO: portal
   // TODO: dismiss on click away
+  const [contentRef, setContentRef] = createSignal<HTMLElement>();
+
+  createEffect(() => {
+    const el = contentRef();
+    if (el) {
+      document.addEventListener("pointerdown", (e) => {
+        if (e.target instanceof Node && el.contains(e.target)) {
+          // stableCallback(e);
+        }
+      });
+    } else {
+    }
+  });
 
   return (
     <Transition show={props.open} class="duration-300 fixed">
@@ -134,9 +155,28 @@ function Modal(
           leaveFrom="opacity-100 scale-100"
           leaveTo="opacity-0 scale-90"
         >
-          {props.children}
+          <Ref ref={setContentRef}>{props.children}</Ref>
         </Transition>
       </div>
     </Transition>
   );
+}
+
+function onClickOutside(args: { el: Accessor<Node>; callback: () => void }) {
+  function wrapper() {}
+
+  onMount(() => {});
+
+  onCleanup(() => {});
+
+  createEffect(() => {
+    const el = args.el();
+    if (el) {
+      document.addEventListener("pointerdown", (e) => {
+        if (e.target instanceof Node && el.contains(e.target)) {
+          args.callback();
+        }
+      });
+    }
+  });
 }
