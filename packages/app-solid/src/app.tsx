@@ -6,7 +6,9 @@ import {
   Show,
   createContext,
   createEffect,
+  createMemo,
   createSignal,
+  onMount,
   useContext,
 } from "solid-js";
 import { ThemeSelect } from "./components/theme";
@@ -69,7 +71,7 @@ function TestTransition() {
         Toggle ({show() ? "on" : "off"})
       </button>
       <div class="h-[80px] flex items-center justify-center relative">
-        <div class="text-2xl">Hello</div>
+        <div class="text-2xl">TransitionV1</div>
         <Transition
           enterFrom="opacity-0"
           enterTo="opacity-80"
@@ -94,7 +96,7 @@ function TestTransition() {
         </Transition>
       </div>
       <div class="h-[80px] flex items-center justify-center relative">
-        <div class="text-2xl">Hello</div>
+        <div class="text-2xl">TransitionV2</div>
         <TransitionV2
           show={show()}
           class="absolute inset-0 antd-body flex items-center justify-center duration-1000"
@@ -107,8 +109,8 @@ function TestTransition() {
         </TransitionV2>
       </div>
       <div class="h-[80px] flex items-center justify-center relative">
-        <div class="text-2xl">Hello</div>
-        <TransitionV2
+        <div class="text-2xl">TransitionV3</div>
+        <TransitionV3
           show={show()}
           class="absolute inset-0 antd-body flex items-center justify-center duration-1000"
           enterFrom="opacity-0"
@@ -117,7 +119,7 @@ function TestTransition() {
           leaveTo="opacity-0"
         >
           <div class="antd-spin w-8 h-8"></div>
-        </TransitionV2>
+        </TransitionV3>
       </div>
     </div>
   );
@@ -189,6 +191,85 @@ function TransitionV2(
       </Ref>
     </Show>
   );
+}
+
+type TransitionV3State = "enter" | "leaving" | "left";
+
+function TransitionV3(
+  props: ParentProps & TransitionClassProps & { class?: string; show?: boolean }
+) {
+  const [state, setState] = createSignal<TransitionV3State>("left");
+
+  createEffect(() => {
+    if (props.show && state() !== "enter") {
+      setState("enter");
+    }
+    if (!props.show && state() === "enter") {
+      setState("leaving");
+    }
+  });
+
+  return (
+    <Show when={state() !== "left"}>
+      <TransitionV3Inner {...props} state={state()} setState={setState}>
+        {props.children}
+      </TransitionV3Inner>
+    </Show>
+  );
+}
+
+function TransitionV3Inner(
+  props: ParentProps &
+    TransitionClassProps & {
+      class?: string;
+      state: TransitionV3State;
+      setState?: (v: TransitionV3State) => void;
+    }
+) {
+  let ref!: HTMLElement;
+
+  const classes = createMemo(() => ({
+    class: splitClass(props.class ?? ""),
+    enterFrom: splitClass(props.enterFrom ?? ""),
+    enterTo: splitClass(props.enterTo ?? ""),
+    leaveFrom: splitClass(props.leaveFrom ?? ""),
+    leaveTo: splitClass(props.leaveTo ?? ""),
+  }));
+
+  // "enterFrom" on dom creation (before attached to document)
+  function onRef(el: HTMLElement) {
+    ref = el;
+    ref.classList.remove(...Object.values(classes()).flat());
+    ref.classList.add(...classes().class, ...classes().enterFrom);
+    forceStyle(ref);
+  }
+
+  // "enterTo" on mount
+  onMount(() => {
+    ref.classList.remove(...classes().enterFrom);
+    ref.classList.add(...classes().enterTo);
+  });
+
+  // leaveFrom -> leaveTo
+  createEffect(() => {
+    if (props.state === "leaving") {
+      // leaveFrom
+      ref.classList.remove(...Object.values(classes()).flat());
+      ref.classList.add(...classes().class, ...classes().leaveFrom);
+      forceStyle(ref);
+
+      // setup transition state callback
+      addEventListenerOnce(ref, "transitionend", () =>
+        props.setState?.("left")
+      );
+
+      // leaveTo
+      ref.classList.remove(...classes().leaveFrom);
+      ref.classList.add(...classes().leaveTo);
+    }
+  });
+
+  return <div ref={onRef}>{props.children}</div>;
 }
 
 function TransitionChild(props: ParentProps & TransitionClassProps) {
