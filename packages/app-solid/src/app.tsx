@@ -1,7 +1,15 @@
 import { tinyassert, typedBoolean } from "@hiogawa/utils";
 import { resolveFirst } from "@solid-primitives/refs";
 import { createSwitchTransition } from "@solid-primitives/transition-group";
-import { ParentProps, Show, createMemo, createSignal } from "solid-js";
+import {
+  ParentProps,
+  Show,
+  children,
+  createContext,
+  createMemo,
+  createSignal,
+  useContext,
+} from "solid-js";
 import { ThemeSelect } from "./components/theme";
 
 export function App() {
@@ -73,6 +81,16 @@ function TestTransition() {
             <div class="absolute inset-0 antd-body flex items-center justify-center duration-800">
               <div class="antd-spin w-8 h-8"></div>
             </div>
+            <TransitionChild
+              enterFrom="opacity-0"
+              enterTo="opacity-100"
+              leaveFrom="opacity-100"
+              leaveTo="opacity-0"
+            >
+              <div class="absolute inset-0 bg-colorPrimary flex items-center justify-center duration-1600">
+                <div class="antd-spin w-8 h-8"></div>
+              </div>
+            </TransitionChild>
           </Show>
         </Transition>
       </div>
@@ -84,55 +102,103 @@ function TestTransition() {
 // https://github.com/solidjs-community/solid-primitives/blob/876b583ed95e0c3f0a552882f3508a07fc64fca4/packages/transition-group/dev/switch-page.tsx#L19
 // https://github.com/solidjs-community/solid-primitives/blob/876b583ed95e0c3f0a552882f3508a07fc64fca4/packages/transition-group/src/index.ts#L74
 // https://github.com/tailwindlabs/headlessui/blob/14b8c5622661b985903371532dd0d116d6517aba/packages/%40headlessui-react/src/components/transitions/utils/transition.ts
-function Transition(
-  props: ParentProps & {
-    enterFrom?: string;
-    enterTo?: string;
-    leaveFrom?: string;
-    leaveTo?: string;
-  }
-) {
-  const classes = createMemo(() => ({
-    enterFrom: splitClass(props.enterFrom ?? ""),
-    enterTo: splitClass(props.enterTo ?? ""),
-    leaveFrom: splitClass(props.leaveFrom ?? ""),
-    leaveTo: splitClass(props.leaveTo ?? ""),
-  }));
-  const allClasses = createMemo(() => Object.values(classes()).flat());
+function Transition(props: ParentProps & TransitionClassProps) {
+  const el = resolveFirst(
+    () => props.children,
+    (item): item is HTMLElement => item instanceof HTMLElement
+  );
 
-  const el = resolveFirst(() => props.children) as () => HTMLElement;
-  const outEl = createSwitchTransition(el, {
+  const resultEl = createSwitchTransition(el, {
     appear: true,
 
     onEnter: (el, done) => {
-      // waiting mount?
       queueMicrotask(() => {
-        // enterFrom
-        el.classList.remove(...allClasses());
-        el.classList.add(...classes().enterFrom);
-        forceStyle(el);
-
-        // enterFrom => enterTo
-        addEventListenerOnce(el, "transitionend", () => done()); // TODO: fallback to setTimeout just in case?
-        el.classList.remove(...classes().enterFrom);
-        el.classList.add(...classes().enterTo);
+        handleTransition(el, props, "enterFrom", "enterTo", done);
       });
     },
 
     onExit: (el, done) => {
-      // leaveFrom
-      el.classList.remove(...allClasses());
-      el.classList.add(...classes().leaveFrom);
-      forceStyle(el);
-
-      // leaveFrom => leaveTo
-      addEventListenerOnce(el, "transitionend", () => done());
-      el.classList.remove(...classes().leaveFrom);
-      el.classList.add(...classes().leaveTo);
+      handleTransition(el, props, "leaveFrom", "leaveTo", done);
     },
   });
 
-  return <>{outEl}</>;
+  return (
+    <transitionContext.Provider value={el}>
+      <>{resultEl}</>
+    </transitionContext.Provider>
+  );
+}
+
+function TransitionChild(props: ParentProps & TransitionClassProps) {
+  const contextEl = useContext(transitionContext); // Provider is not setup at the time of `resolveFirst` of `Transition`
+  if (!contextEl) {
+    return null;
+  }
+
+  const currentEl = resolveFirst(
+    () => props.children,
+    (item): item is HTMLElement => item instanceof HTMLElement
+  );
+
+  createSwitchTransition(contextEl, {
+    appear: true,
+
+    onEnter: (_el, done) => {
+      queueMicrotask(() => {
+        const el = currentEl();
+        if (!el) {
+          done();
+          return;
+        }
+        queueMicrotask(() => {
+          handleTransition(el, props, "enterFrom", "enterTo", done);
+        });
+      });
+    },
+
+    onExit: (_el, done) => {
+      const el = currentEl();
+      if (!el) {
+        done();
+        return;
+      }
+      handleTransition(el, props, "leaveFrom", "leaveTo", done);
+    },
+  });
+
+  return <>{props.children}</>;
+}
+
+const transitionContext = createContext(undefined! as () => HTMLElement | null);
+
+interface TransitionClassProps {
+  enterFrom?: string;
+  enterTo?: string;
+  leaveFrom?: string;
+  leaveTo?: string;
+}
+
+function handleTransition(
+  el: HTMLElement,
+  props: TransitionClassProps,
+  from: keyof TransitionClassProps,
+  to: keyof TransitionClassProps,
+  done: () => void
+) {
+  const classes = {
+    enterFrom: splitClass(props.enterFrom ?? ""),
+    enterTo: splitClass(props.enterTo ?? ""),
+    leaveFrom: splitClass(props.leaveFrom ?? ""),
+    leaveTo: splitClass(props.leaveTo ?? ""),
+  };
+
+  el.classList.remove(...Object.values(classes).flat());
+  el.classList.add(...classes[from]);
+  forceStyle(el);
+
+  addEventListenerOnce(el, "transitionend", () => done()); // TODO: fallback to setTimeout just in case?
+  el.classList.remove(...classes[from]);
+  el.classList.add(...classes[to]);
 }
 
 function splitClass(c: string): string[] {
