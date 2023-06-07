@@ -33,7 +33,8 @@ export function Popover(props: {
   const [open, setOpen] = React.useState(false);
   const arrowRef = React.useRef<Element>(null);
 
-  const { refs, floatingStyles, context, middlewareData } = useFloating({
+  // `floatingStyle` lags a moment and breaks animation?
+  const { refs, x, y, strategy, context, middlewareData } = useFloating({
     open,
     onOpenChange: setOpen,
     placement: props.placement,
@@ -69,7 +70,11 @@ export function Popover(props: {
           setOpen,
           props: getFloatingProps({
             ref: refs.setFloating,
-            style: floatingStyles,
+            style: {
+              top: y ?? "",
+              left: x ?? "",
+              position: strategy,
+            },
           }),
           arrowProps: {
             ref: arrowRef,

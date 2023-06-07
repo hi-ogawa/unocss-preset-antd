@@ -15,7 +15,7 @@
   },
   "dependencies": {
     "@floating-ui/react": "^0.24.2",
-    "@headlessui/react": "^1.7.9",
+    "@headlessui/react": "^1.7.15",
     "@hiogawa/unocss-preset-antd": "workspace:*",
     "@hiogawa/utils-experimental": "^0.0.0",
     "jotai": "^2.0.3",
