@@ -4,11 +4,13 @@ import { Ref } from "@solid-primitives/refs";
 import { Index, Show, createSignal } from "solid-js";
 import { Modal } from "./components/modal";
 import { FloatingArrow, Popover } from "./components/popover";
-import { ThemeSelect } from "./components/theme";
+import { ThemeSelect, changeLinkIconByTheme } from "./components/theme";
 import { Transition } from "./components/transition";
 import { cls } from "./components/utils";
 
 export function App() {
+  changeLinkIconByTheme();
+
   return (
     <div class="flex flex-col">
       <AppHeader />
