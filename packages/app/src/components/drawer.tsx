@@ -15,7 +15,7 @@ export function Drawer(props: {
   onClose: () => void;
   children: React.ReactNode;
 }) {
-  const { floating, context } = useFloating({
+  const { refs, context } = useFloating({
     open: props.open,
     onOpenChange: (open) => {
       tinyassert(!open); // should get only `open = false` via `useDismiss`
@@ -47,7 +47,7 @@ export function Drawer(props: {
           >
             <div
               {...getFloatingProps({
-                ref: floating,
+                ref: refs.setFloating,
                 className: "inline-block h-full",
               })}
             >

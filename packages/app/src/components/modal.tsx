@@ -7,7 +7,6 @@ import {
 } from "@floating-ui/react";
 import { Transition } from "@headlessui/react";
 import { tinyassert } from "@hiogawa/utils";
-import { useStableRef } from "@hiogawa/utils-react";
 import React from "react";
 import { RemoveScroll } from "react-remove-scroll";
 import { cls } from "../utils/misc";
@@ -20,7 +19,7 @@ export function Modal(props: {
   children: React.ReactNode;
   className?: string; // override modal content container style e.g. max width/height
 }) {
-  const { floating, context } = useFloating({
+  const { refs, context } = useFloating({
     open: props.open,
     onOpenChange: (open) => {
       tinyassert(!open); // should get only `open = false` via `useDismiss`
@@ -55,7 +54,7 @@ export function Modal(props: {
           >
             <div
               {...getFloatingProps({
-                ref: floating,
+                ref: refs.setFloating,
                 className: "w-full h-full",
               })}
             >
@@ -71,7 +70,10 @@ export function Modal(props: {
 // wrapper component hook
 export function useModal() {
   const [open, setOpen] = React.useState(false);
-  const openRef = useStableRef(open); // pass stable ref to Wrapper
+
+  // pass stable ref to Wrapper
+  const openRef = React.useRef(open);
+  openRef.current = open;
 
   const [Wrapper] = React.useState(
     () =>
