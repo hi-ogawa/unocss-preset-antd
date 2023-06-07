@@ -23,11 +23,11 @@ import { Portal } from "solid-js/web";
 import { onDocumentEvent } from "./utils";
 
 type FloatingContext = {
-  open: boolean;
-  onOpenChange: Setter<boolean>;
-  floatingStyle: JSX.CSSProperties;
-  reference: HTMLElement | undefined;
-  floating: HTMLElement | undefined;
+  open: Accessor<boolean>;
+  setOpen: Setter<boolean>;
+  reference: Accessor<HTMLElement | undefined>;
+  floating: Accessor<HTMLElement | undefined>;
+  floatingStyle: Accessor<JSX.CSSProperties>;
 };
 
 export function Popover(props: {
@@ -38,13 +38,13 @@ export function Popover(props: {
   // signals
   const [referenceRef, setReferenceRef] = createSignal<HTMLElement>();
   const [floatingRef, setFloatingRef] = createSignal<HTMLElement>();
-  const [open, onOpenChange] = createSignal(false);
+  const [open, setOpen] = createSignal(false);
 
   const ctx = createFloating({
     reference: referenceRef,
     floating: floatingRef,
     open,
-    onOpenChange,
+    setOpen,
     placement: () => props.placement,
     // TODO: arrow
     middleware: () => [offset(8), flip(), shift()],
@@ -65,12 +65,12 @@ export function Popover(props: {
 }
 
 function createFloating(props: {
-  reference: () => HTMLElement | undefined;
-  floating: () => HTMLElement | undefined;
+  reference: Accessor<HTMLElement | undefined>;
+  floating: Accessor<HTMLElement | undefined>;
   open: Accessor<boolean>;
-  onOpenChange: Setter<boolean>;
-  placement?: () => ComputePositionConfig["placement"];
-  middleware?: () => ComputePositionConfig["middleware"];
+  setOpen: Setter<boolean>;
+  placement: Accessor<ComputePositionConfig["placement"]>;
+  middleware: Accessor<ComputePositionConfig["middleware"]>;
 }): FloatingContext {
   const [result, setResult] = createSignal<ComputePositionReturn>();
 
@@ -104,26 +104,28 @@ function createFloating(props: {
     () => mapOption(result(), getFloatingStyle) ?? {}
   );
 
-  return accessorsToGetters({
+  return {
     open: props.open,
-    onOpenChange: () => props.onOpenChange,
-    floatingStyle,
+    setOpen: props.setOpen,
     reference: props.reference,
     floating: props.floating,
-  });
+    floatingStyle,
+  };
 }
 
 function createDismissInteraction(ctx: FloatingContext) {
   // dismiss on click outside
   createEffect(() => {
-    const { reference, floating } = ctx;
+    const reference = ctx.reference();
+    const floating = ctx.floating();
+
     onDocumentEvent("pointerdown", (e) => {
       if (
         e.target instanceof Node &&
         !reference?.contains(e.target) &&
         !floating?.contains(e.target)
       ) {
-        ctx.onOpenChange(false);
+        ctx.setOpen(false);
       }
     });
   });
@@ -131,17 +133,17 @@ function createDismissInteraction(ctx: FloatingContext) {
   // dismiss on escape
   onDocumentEvent("keyup", (e) => {
     if (e.key === "Escape") {
-      ctx.onOpenChange(false);
+      ctx.setOpen(false);
     }
   });
 }
 
 function createClickInteraction(ctx: FloatingContext) {
   createEffect(() => {
-    const { reference } = ctx;
+    const reference = ctx.reference();
     if (reference) {
       function callback() {
-        ctx.onOpenChange((prev) => !prev);
+        ctx.setOpen((prev) => !prev);
       }
       reference.addEventListener("click", callback);
       onCleanup(() => {
@@ -158,19 +160,3 @@ function getFloatingStyle(result: ComputePositionReturn): JSX.CSSProperties {
     position: result.strategy,
   };
 }
-
-// reverse of `destructure` https://github.com/solidjs-community/solid-primitives/blob/876b583ed95e0c3f0a552882f3508a07fc64fca4/packages/destructure/src/index.ts
-function accessorsToGetters<T extends Record<string, () => unknown>>(
-  accessors: T
-): AccessorsToGettersResult<T> {
-  return new Proxy(
-    {},
-    {
-      get: (_target, p, _receiver) => accessors[p as keyof T](),
-    }
-  ) as any;
-}
-
-type AccessorsToGettersResult<T extends Record<string, () => unknown>> = {
-  [K in keyof T]: ReturnType<T[K]>;
-};
