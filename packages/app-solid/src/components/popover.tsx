@@ -10,6 +10,7 @@ import { tinyassert } from "@hiogawa/utils";
 import { Ref } from "@solid-primitives/refs";
 import { JSX, createEffect, createSignal, onCleanup } from "solid-js";
 import { Portal } from "solid-js/web";
+import { onDocumentEvent } from "./utils";
 
 type FloatingContext = {
   open: boolean;
@@ -17,7 +18,7 @@ type FloatingContext = {
 };
 
 type FloatingRenderArg = {
-  context: () => FloatingContext;
+  ctx: () => FloatingContext;
 };
 
 export function Popover(props: {
@@ -28,11 +29,6 @@ export function Popover(props: {
   const [referenceRef, setReferenceRef] = createSignal<HTMLElement>();
   const [floatingRef, setFloatingRef] = createSignal<HTMLElement>();
   const [open, onOpenChange] = createSignal(false);
-
-  const context: () => FloatingContext = () => ({
-    open: open(),
-    onOpenChange,
-  });
 
   // TODO: useFloating-like abstraction
   //   - input: referenceRef, floatingRef, middleware, placement, ...
@@ -50,6 +46,7 @@ export function Popover(props: {
     const placement = props.placement;
 
     if (referenceEl && floatingEl) {
+      // port useFloating
       async function update() {
         tinyassert(referenceEl);
         tinyassert(floatingEl);
@@ -67,14 +64,30 @@ export function Popover(props: {
       }
       const cleanup = autoUpdate(referenceEl, floatingEl, update);
       onCleanup(() => cleanup());
+
+      // port useDismiss
+      onDocumentEvent("pointerdown", (e) => {
+        if (
+          e.target instanceof Node &&
+          !referenceEl.contains(e.target) &&
+          !floatingEl.contains(e.target)
+        ) {
+          onOpenChange(false);
+        }
+      });
     }
+  });
+
+  const ctx: () => FloatingContext = () => ({
+    open: open(),
+    onOpenChange,
   });
 
   return (
     <>
-      <Ref ref={setReferenceRef}>{props.reference({ context })}</Ref>
+      <Ref ref={setReferenceRef}>{props.reference({ ctx })}</Ref>
       <Portal>
-        <Ref ref={setFloatingRef}>{props.floating({ context })}</Ref>
+        <Ref ref={setFloatingRef}>{props.floating({ ctx })}</Ref>
       </Portal>
     </>
   );

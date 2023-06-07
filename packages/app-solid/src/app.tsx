@@ -3,6 +3,7 @@ import { Modal } from "./components/modal";
 import { Popover } from "./components/popover";
 import { ThemeSelect } from "./components/theme";
 import { Transition } from "./components/transition";
+import { cls } from "./components/utils";
 
 export function App() {
   return (
@@ -116,19 +117,22 @@ function TestPopover() {
       <h1 class="text-xl">Popover</h1>
       <Popover
         placement="bottom"
-        reference={({ context }) => (
+        reference={({ ctx }) => (
           <button
-            class="antd-btn antd-btn-default"
+            class={cls(
+              "antd-btn antd-btn-default",
+              ctx().open && "text-colorPrimaryActive border-colorPrimaryActive"
+            )}
             onClick={() => {
-              context().onOpenChange(!context().open);
+              ctx().onOpenChange(!ctx().open);
             }}
           >
             Pop!
           </button>
         )}
-        floating={({ context }) => (
+        floating={({ ctx }) => (
           <Transition
-            show={context().open}
+            show={ctx().open}
             class="transition duration-150"
             enterFrom="scale-80 opacity-0"
             enterTo="scale-100 opacity-100"
@@ -139,7 +143,7 @@ function TestPopover() {
               <div>Content</div>
               <button
                 class="antd-btn antd-btn-default"
-                onClick={() => context().onOpenChange(false)}
+                onClick={() => ctx().onOpenChange(false)}
               >
                 Close
               </button>
