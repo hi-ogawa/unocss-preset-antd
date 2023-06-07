@@ -23,6 +23,8 @@ type FloatingContext = {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   floatingStyle: JSX.CSSProperties;
+  reference: HTMLElement | undefined;
+  floating: HTMLElement | undefined;
 };
 
 export function Popover(props: {
@@ -37,11 +39,6 @@ export function Popover(props: {
   const [open, onOpenChange] = createSignal(false);
   const [computePositionReturn, setComputePositionReturn] =
     createSignal<ComputePositionReturn>();
-
-  // derive floating style
-  const floatingStyle = createMemo<JSX.CSSProperties>(
-    () => mapOption(computePositionReturn(), getFloatingStyle) ?? {}
-  );
 
   // TODO: useFloating-like abstraction
   //   - input: referenceRef, floatingRef, middleware, placement, ...
@@ -83,13 +80,23 @@ export function Popover(props: {
           onOpenChange(false);
         }
       });
+    } else {
+      // TODO: not supposed to set signal in effect?
+      setComputePositionReturn(undefined);
     }
   });
+
+  // derive floating style
+  const floatingStyle = createMemo<JSX.CSSProperties>(
+    () => mapOption(computePositionReturn(), getFloatingStyle) ?? {}
+  );
 
   const ctx: FloatingContext = combineAccessors({
     open,
     onOpenChange: () => onOpenChange,
     floatingStyle,
+    reference: referenceRef,
+    floating: floatingRef,
   });
 
   return (
