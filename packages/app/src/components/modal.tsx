@@ -7,7 +7,6 @@ import {
 } from "@floating-ui/react";
 import { Transition } from "@headlessui/react";
 import { tinyassert } from "@hiogawa/utils";
-import { useStableRef } from "@hiogawa/utils-react";
 import React from "react";
 import { RemoveScroll } from "react-remove-scroll";
 import { cls } from "../utils/misc";
@@ -71,7 +70,10 @@ export function Modal(props: {
 // wrapper component hook
 export function useModal() {
   const [open, setOpen] = React.useState(false);
-  const openRef = useStableRef(open); // pass stable ref to Wrapper
+
+  // pass stable ref to Wrapper
+  const openRef = React.useRef(open);
+  openRef.current = open;
 
   const [Wrapper] = React.useState(
     () =>
