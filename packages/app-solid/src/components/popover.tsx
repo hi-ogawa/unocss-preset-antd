@@ -11,7 +11,9 @@ import {
 import { mapOption, tinyassert } from "@hiogawa/utils";
 import { Ref } from "@solid-primitives/refs";
 import {
+  Accessor,
   JSX,
+  Setter,
   createEffect,
   createMemo,
   createSignal,
@@ -21,14 +23,13 @@ import { Portal } from "solid-js/web";
 import { onDocumentEvent } from "./utils";
 
 type FloatingContext = {
-  open: boolean;
-  onOpenChange: (open: boolean) => void;
+  open: Accessor<boolean>;
+  onOpenChange: Setter<boolean>;
   floatingStyle: JSX.CSSProperties;
   reference: HTMLElement | undefined;
   floating: HTMLElement | undefined;
 };
 
-// TODO: arrow
 export function Popover(props: {
   placement: Placement;
   reference: (ctx: FloatingContext) => JSX.Element;
@@ -47,6 +48,7 @@ export function Popover(props: {
     open,
     onOpenChange,
     placement: () => props.placement,
+    // TODO: arrow
     middleware: () => [offset(8), flip(), shift()],
   });
 
@@ -69,8 +71,8 @@ export function Popover(props: {
 function createFloating(props: {
   reference: () => HTMLElement | undefined;
   floating: () => HTMLElement | undefined;
-  open: () => boolean;
-  onOpenChange: (open: boolean) => void;
+  open: Accessor<boolean>;
+  onOpenChange: Setter<boolean>;
   placement?: () => ComputePositionConfig["placement"];
   middleware?: () => ComputePositionConfig["middleware"];
 }): FloatingContext {
@@ -107,7 +109,7 @@ function createFloating(props: {
   );
 
   return accessorsToGetters({
-    open: props.open,
+    open: () => props.open,
     onOpenChange: () => props.onOpenChange,
     floatingStyle,
     reference: props.reference,
@@ -118,8 +120,7 @@ function createFloating(props: {
 function createDismissInteraction(ctx: FloatingContext) {
   // dismiss on click outside
   createEffect(() => {
-    const reference = ctx.reference;
-    const floating = ctx.floating;
+    const { reference, floating } = ctx;
     onDocumentEvent("pointerdown", (e) => {
       if (
         e.target instanceof Node &&
@@ -140,8 +141,18 @@ function createDismissInteraction(ctx: FloatingContext) {
 }
 
 function createClickInteraction(ctx: FloatingContext) {
-  // TODO
-  ctx;
+  createEffect(() => {
+    const { reference } = ctx;
+    if (reference) {
+      function callback() {
+        ctx.onOpenChange((prev) => !prev);
+      }
+      reference.addEventListener("click", callback);
+      onCleanup(() => {
+        document.removeEventListener("click", callback);
+      });
+    }
+  });
 }
 
 function getFloatingStyle(result: ComputePositionReturn): JSX.CSSProperties {
