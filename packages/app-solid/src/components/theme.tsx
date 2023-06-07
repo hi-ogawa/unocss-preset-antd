@@ -29,11 +29,15 @@ export function changeLinkIconByTheme() {
     const el = document.querySelector("link[rel=icon]");
     tinyassert(el);
 
+    // change icon color by patching svg data url directly
+    let href = el.getAttribute("href");
+    tinyassert(href);
     if (matches()) {
-      el.setAttribute("href", el.getAttribute("data-href-dark")!);
+      href = href.replace("black", "white");
     } else {
-      el.setAttribute("href", el.getAttribute("data-href-light")!);
+      href = href.replace("white", "black");
     }
+    el.setAttribute("href", href);
   });
 }
 
