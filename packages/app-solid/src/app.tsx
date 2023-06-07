@@ -1,5 +1,6 @@
 import { createSignal } from "solid-js";
 import { Modal } from "./components/modal";
+import { Popover } from "./components/popover";
 import { ThemeSelect } from "./components/theme";
 import { Transition } from "./components/transition";
 
@@ -12,6 +13,7 @@ export function App() {
           <TestForm />
           <TestTransition />
           <TestModal />
+          <TestPopover />
         </div>
       </div>
     </div>
@@ -104,6 +106,47 @@ function TestModal() {
           </div>
         </div>
       </Modal>
+    </div>
+  );
+}
+
+function TestPopover() {
+  return (
+    <div class="flex flex-col gap-3 p-2 border w-sm">
+      <h1 class="text-xl">Popover</h1>
+      <Popover
+        placement="bottom"
+        reference={({ context }) => (
+          <button
+            class="antd-btn antd-btn-default"
+            onClick={() => {
+              context().onOpenChange(!context().open);
+            }}
+          >
+            Pop!
+          </button>
+        )}
+        floating={({ context }) => (
+          <Transition
+            show={context().open}
+            class="transition duration-150"
+            enterFrom="scale-80 opacity-0"
+            enterTo="scale-100 opacity-100"
+            leaveFrom="scale-100 opacity-100"
+            leaveTo="scale-80 opacity-0"
+          >
+            <div class="flex flex-col gap-2 px-3 py-2 w-[150px] text-sm antd-floating">
+              <div>Content</div>
+              <button
+                class="antd-btn antd-btn-default"
+                onClick={() => context().onOpenChange(false)}
+              >
+                Close
+              </button>
+            </div>
+          </Transition>
+        )}
+      />
     </div>
   );
 }
