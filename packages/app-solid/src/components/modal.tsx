@@ -5,7 +5,7 @@ import { Transition } from "./transition";
 import { onClickTarget, onDocumentEvent } from "./utils";
 
 export function Modal(
-  props: ParentProps & { open: boolean; onOpenChange: (open: boolean) => void }
+  props: ParentProps & { open: boolean; setOpen: (open: boolean) => void }
 ) {
   // dismiss on click outside
   const [contentRef, setContentRef] = createSignal<Node>();
@@ -14,7 +14,7 @@ export function Modal(
     if (el) {
       onClickTarget(el, (hit) => {
         if (!hit) {
-          props.onOpenChange(false);
+          props.setOpen(false);
         }
       });
     }
@@ -23,7 +23,7 @@ export function Modal(
   // dismiss on escape
   onDocumentEvent("keyup", (e) => {
     if (e.key === "Escape") {
-      props.onOpenChange(false);
+      props.setOpen(false);
     }
   });
 

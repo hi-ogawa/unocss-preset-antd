@@ -90,7 +90,7 @@ function TestModal() {
       >
         Toggle ({show() ? "on" : "off"})
       </button>
-      <Modal open={show()} onOpenChange={setShow}>
+      <Modal open={show()} setOpen={setShow}>
         <div class="flex flex-col h-full p-3 gap-2">
           <h3 class="text-lg">Modal Content Title</h3>
           <div class="flex-1">Hello</div>
