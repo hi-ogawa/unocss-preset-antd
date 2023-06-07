@@ -33,7 +33,7 @@ export function Popover(props: {
   const [open, setOpen] = React.useState(false);
   const arrowRef = React.useRef<Element>(null);
 
-  const { reference, floating, context, x, y, strategy, middlewareData } =
+  const { refs, floatingStyles, context, middlewareData } =
     useFloating({
       open,
       onOpenChange: setOpen,
@@ -60,7 +60,7 @@ export function Popover(props: {
         open,
         setOpen,
         props: getReferenceProps({
-          ref: reference,
+          ref: refs.setReference,
         }),
         context,
       })}
@@ -69,12 +69,8 @@ export function Popover(props: {
           open,
           setOpen,
           props: getFloatingProps({
-            ref: floating,
-            style: {
-              top: y ?? "",
-              left: x ?? "",
-              position: strategy,
-            },
+            ref: refs.setFloating,
+            style: floatingStyles,
           }),
           arrowProps: {
             ref: arrowRef,

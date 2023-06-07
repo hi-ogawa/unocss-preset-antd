@@ -20,7 +20,7 @@ export function Modal(props: {
   children: React.ReactNode;
   className?: string; // override modal content container style e.g. max width/height
 }) {
-  const { floating, context } = useFloating({
+  const { refs, context } = useFloating({
     open: props.open,
     onOpenChange: (open) => {
       tinyassert(!open); // should get only `open = false` via `useDismiss`
@@ -55,7 +55,7 @@ export function Modal(props: {
           >
             <div
               {...getFloatingProps({
-                ref: floating,
+                ref: refs.setFloating,
                 className: "w-full h-full",
               })}
             >
