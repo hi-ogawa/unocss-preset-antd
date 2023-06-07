@@ -35,13 +35,11 @@ export function Popover(props: {
   reference: (ctx: FloatingContext) => JSX.Element;
   floating: (ctx: FloatingContext) => JSX.Element;
 }) {
+  // signals
   const [referenceRef, setReferenceRef] = createSignal<HTMLElement>();
   const [floatingRef, setFloatingRef] = createSignal<HTMLElement>();
-
-  // signals
   const [open, onOpenChange] = createSignal(false);
 
-  // useFloating
   const ctx = createFloating({
     reference: referenceRef,
     floating: floatingRef,
@@ -52,10 +50,8 @@ export function Popover(props: {
     middleware: () => [offset(8), flip(), shift()],
   });
 
-  // useDismiss
   createDismissInteraction(ctx);
 
-  // useClick
   createClickInteraction(ctx);
 
   return (
