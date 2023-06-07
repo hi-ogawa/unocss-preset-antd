@@ -36,17 +36,18 @@ type FloatingContext = {
   middlewareData: Accessor<MiddlewareData | undefined>;
 };
 
+type ArrowContext = {
+  ref: Setter<HTMLElement | undefined>;
+  style: Accessor<JSX.CSSProperties>;
+};
+
 export function Popover(props: {
   placement: Placement;
-  reference: (ctx: FloatingContext) => JSX.Element;
-  floating: (
-    ctx: FloatingContext & {
-      arrowCtx: {
-        set: Setter<HTMLElement | undefined>;
-        style: Accessor<JSX.CSSProperties>;
-      };
-    }
-  ) => JSX.Element;
+  reference: (arg: { ctx: FloatingContext }) => JSX.Element;
+  floating: (arg: {
+    ctx: FloatingContext;
+    arrowCtx: ArrowContext;
+  }) => JSX.Element;
 }) {
   const [referenceRef, setReferenceRef] = createSignal<HTMLElement>();
   const [floatingRef, setFloatingRef] = createSignal<HTMLElement>();
@@ -77,16 +78,16 @@ export function Popover(props: {
     left: mapOption(ctx.middlewareData()?.arrow?.x, (v) => `${v}px`),
   }));
 
-  const arrowCtx = {
-    set: setArrowRef,
+  const arrowCtx: ArrowContext = {
+    ref: setArrowRef,
     style: arrowStyle,
   };
 
   return (
     <>
-      <Ref ref={setReferenceRef}>{props.reference(ctx)}</Ref>
+      <Ref ref={setReferenceRef}>{props.reference({ ctx })}</Ref>
       <Portal>
-        <Ref ref={setFloatingRef}>{props.floating({ ...ctx, arrowCtx })}</Ref>
+        <Ref ref={setFloatingRef}>{props.floating({ ctx, arrowCtx })}</Ref>
       </Portal>
     </>
   );

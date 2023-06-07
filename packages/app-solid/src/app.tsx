@@ -1,7 +1,7 @@
 import type { Placement } from "@floating-ui/dom";
 import { range } from "@hiogawa/utils";
 import { Ref } from "@solid-primitives/refs";
-import { Index, createSignal } from "solid-js";
+import { Index, Show, createSignal } from "solid-js";
 import { Modal } from "./components/modal";
 import { FloatingArrow, Popover } from "./components/popover";
 import { ThemeSelect } from "./components/theme";
@@ -151,7 +151,7 @@ function TestPopover() {
     return (
       <Popover
         placement={placement}
-        reference={(ctx) => (
+        reference={({ ctx }) => (
           <button
             class={cls(
               "antd-btn antd-btn-default py-1 px-2 text-sm",
@@ -161,7 +161,7 @@ function TestPopover() {
             {placement.replace("-", "\n")}
           </button>
         )}
-        floating={(ctx) => (
+        floating={({ ctx, arrowCtx }) => (
           <Transition
             show={ctx.open()}
             style={ctx.floatingStyle()}
@@ -172,12 +172,16 @@ function TestPopover() {
             leaveTo="scale-80 opacity-0"
           >
             <div class="antd-floating">
-              <Ref ref={ctx.arrowCtx.set}>
-                <FloatingArrow
-                  style={ctx.arrowCtx.style()}
-                  placement={ctx.placement()!}
-                />
-              </Ref>
+              <Show when={ctx.placement()}>
+                {(placement) => (
+                  <Ref ref={arrowCtx.ref}>
+                    <FloatingArrow
+                      style={arrowCtx.style()}
+                      placement={placement()}
+                    />
+                  </Ref>
+                )}
+              </Show>
               <div class="flex flex-col gap-2 px-3 py-2 w-[150px] text-sm">
                 <div>Content</div>
                 <button
