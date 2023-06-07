@@ -1,12 +1,5 @@
 import { Ref } from "@solid-primitives/refs";
-import {
-  Accessor,
-  ParentProps,
-  createEffect,
-  createSignal,
-  onCleanup,
-  untrack,
-} from "solid-js";
+import { ParentProps, createEffect, createSignal, onCleanup } from "solid-js";
 import { Portal } from "solid-js/web";
 import { ThemeSelect } from "./components/theme";
 import { Transition } from "./components/transition";
@@ -121,9 +114,14 @@ function Modal(
 ) {
   // dismiss on click outside
   const [contentRef, setContentRef] = createSignal<Node>();
-  onClickTarget(contentRef, (hitInside) => {
-    if (!hitInside) {
-      props.onOpenChange(false);
+  createEffect(() => {
+    const el = contentRef();
+    if (el) {
+      onClickTarget(el, (hit) => {
+        if (!hit) {
+          props.onOpenChange(false);
+        }
+      });
     }
   });
 
@@ -164,28 +162,10 @@ function Modal(
   );
 }
 
-function onClickTarget(
-  targetFn: Accessor<Node | undefined>,
-  callback: (hitInside: boolean) => void
-) {
-  // TODO: need to track latest accessor like this?
-  // TODO: check out https://github.com/solidjs-community/solid-primitives/blob/876b583ed95e0c3f0a552882f3508a07fc64fca4/packages/event-listener/src/eventListener.ts
-  let target: Node | undefined;
-  createEffect(() => {
-    target = targetFn();
-  });
-
-  function wrapper(e: DocumentEventMap["pointerdown"]) {
-    untrack(() => {
-      const hitInside = e.target instanceof Node && target?.contains(e.target);
-      callback(Boolean(hitInside));
-    });
-  }
-
-  document.addEventListener("pointerdown", wrapper);
-
-  onCleanup(() => {
-    document.removeEventListener("pointerdown", wrapper);
+function onClickTarget(target: Node, callback: (hit: boolean) => void) {
+  onDocumentEvent("pointerdown", (e) => {
+    const hit = e.target instanceof Node && target.contains(e.target);
+    callback(Boolean(hit));
   });
 }
 
@@ -193,9 +173,6 @@ function onDocumentEvent<K extends keyof DocumentEventMap>(
   type: K,
   callback: (e: DocumentEventMap[K]) => void
 ) {
-  // TODO: callback is assumed to be stable?
-  // TODO: should wrap with `untrack`?
-
   document.addEventListener(type, callback);
 
   onCleanup(() => {
