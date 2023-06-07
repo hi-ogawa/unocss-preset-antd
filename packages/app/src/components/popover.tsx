@@ -33,19 +33,18 @@ export function Popover(props: {
   const [open, setOpen] = React.useState(false);
   const arrowRef = React.useRef<Element>(null);
 
-  const { refs, floatingStyles, context, middlewareData } =
-    useFloating({
-      open,
-      onOpenChange: setOpen,
-      placement: props.placement,
-      middleware: [
-        offset(17),
-        flip(),
-        shift(),
-        arrow({ element: arrowRef, padding: 10 }),
-      ],
-      whileElementsMounted: autoUpdate,
-    });
+  const { refs, floatingStyles, context, middlewareData } = useFloating({
+    open,
+    onOpenChange: setOpen,
+    placement: props.placement,
+    middleware: [
+      offset(17),
+      flip(),
+      shift(),
+      arrow({ element: arrowRef, padding: 10 }),
+    ],
+    whileElementsMounted: autoUpdate,
+  });
 
   const { getReferenceProps, getFloatingProps } = useInteractions([
     useClick(context),
