@@ -5,7 +5,7 @@ import {
   createEffect,
   createSignal,
   onCleanup,
-  onMount,
+  untrack,
 } from "solid-js";
 import { ThemeSelect } from "./components/theme";
 import { Transition } from "./components/transition";
@@ -119,18 +119,19 @@ function Modal(
   props: ParentProps & { open: boolean; onOpenChange: (open: boolean) => void }
 ) {
   // TODO: portal
-  // TODO: dismiss on click away
-  const [contentRef, setContentRef] = createSignal<HTMLElement>();
 
-  createEffect(() => {
-    const el = contentRef();
-    if (el) {
-      document.addEventListener("pointerdown", (e) => {
-        if (e.target instanceof Node && el.contains(e.target)) {
-          // stableCallback(e);
-        }
-      });
-    } else {
+  // dismiss on click outside
+  const [contentRef, setContentRef] = createSignal<Node>();
+  onClickTarget(contentRef, (hitInside) => {
+    if (!hitInside) {
+      props.onOpenChange(false);
+    }
+  });
+
+  // dismiss on escape
+  onDocumentEvent("keyup", (e) => {
+    if (e.key === "Escape") {
+      props.onOpenChange(false);
     }
   });
 
@@ -162,21 +163,41 @@ function Modal(
   );
 }
 
-function onClickOutside(args: { el: Accessor<Node>; callback: () => void }) {
-  function wrapper() {}
-
-  onMount(() => {});
-
-  onCleanup(() => {});
-
+function onClickTarget(
+  targetFn: Accessor<Node | undefined>,
+  callback: (hitInside: boolean) => void
+) {
+  // TODO: need to track latest accessor like this?
+  // TODO: check out https://github.com/solidjs-community/solid-primitives/blob/876b583ed95e0c3f0a552882f3508a07fc64fca4/packages/event-listener/src/eventListener.ts
+  let target: Node | undefined;
   createEffect(() => {
-    const el = args.el();
-    if (el) {
-      document.addEventListener("pointerdown", (e) => {
-        if (e.target instanceof Node && el.contains(e.target)) {
-          args.callback();
-        }
-      });
-    }
+    target = targetFn();
+  });
+
+  function wrapper(e: DocumentEventMap["pointerdown"]) {
+    untrack(() => {
+      const hitInside = e.target instanceof Node && target?.contains(e.target);
+      callback(Boolean(hitInside));
+    });
+  }
+
+  document.addEventListener("pointerdown", wrapper);
+
+  onCleanup(() => {
+    document.removeEventListener("pointerdown", wrapper);
+  });
+}
+
+function onDocumentEvent<K extends keyof DocumentEventMap>(
+  type: K,
+  callback: (e: DocumentEventMap[K]) => void
+) {
+  // TODO: callback is assumed to be stable?
+  // TODO: should wrap with `untrack`?
+
+  document.addEventListener(type, callback);
+
+  onCleanup(() => {
+    document.removeEventListener(type, callback);
   });
 }
