@@ -1,8 +1,9 @@
 import type { Placement } from "@floating-ui/dom";
 import { range } from "@hiogawa/utils";
+import { Ref } from "@solid-primitives/refs";
 import { Index, createSignal } from "solid-js";
 import { Modal } from "./components/modal";
-import { Popover } from "./components/popover";
+import { FloatingArrow, Popover } from "./components/popover";
 import { ThemeSelect } from "./components/theme";
 import { Transition } from "./components/transition";
 import { cls } from "./components/utils";
@@ -170,14 +171,22 @@ function TestPopover() {
             leaveFrom="scale-100 opacity-100"
             leaveTo="scale-80 opacity-0"
           >
-            <div class="flex flex-col gap-2 px-3 py-2 w-[150px] antd-floating text-sm">
-              <div>Content</div>
-              <button
-                class="antd-btn antd-btn-default"
-                onClick={() => ctx.setOpen(false)}
-              >
-                Close
-              </button>
+            <div class="antd-floating">
+              <Ref ref={ctx.arrowCtx.set}>
+                <FloatingArrow
+                  style={ctx.arrowCtx.style()}
+                  placement={ctx.placement()!}
+                />
+              </Ref>
+              <div class="flex flex-col gap-2 px-3 py-2 w-[150px] text-sm">
+                <div>Content</div>
+                <button
+                  class="antd-btn antd-btn-default"
+                  onClick={() => ctx.setOpen(false)}
+                >
+                  Close
+                </button>
+              </div>
             </div>
           </Transition>
         )}
