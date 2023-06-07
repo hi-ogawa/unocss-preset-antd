@@ -1,4 +1,6 @@
-import { createSignal } from "solid-js";
+import type { Placement } from "@floating-ui/dom";
+import { range } from "@hiogawa/utils";
+import { Index, createSignal } from "solid-js";
 import { Modal } from "./components/modal";
 import { Popover } from "./components/popover";
 import { ThemeSelect } from "./components/theme";
@@ -112,19 +114,50 @@ function TestModal() {
 }
 
 function TestPopover() {
+  const placements = new Map<number, Placement>([
+    [1, "top-start"],
+    [2, "top"],
+    [3, "top-end"],
+    [5, "left-start"],
+    [10, "left"],
+    [15, "left-end"],
+    [9, "right-start"],
+    [14, "right"],
+    [19, "right-end"],
+    [21, "bottom-start"],
+    [22, "bottom"],
+    [23, "bottom-end"],
+  ]);
+
   return (
     <div class="flex flex-col gap-3 p-2 border w-sm">
       <h1 class="text-xl">Popover</h1>
+      <div class="flex justify-center gap-2">
+        <div class="grid grid-cols-5 p-2 gap-2 w-sm">
+          <Index each={range(25).map((i) => placements.get(i))}>
+            {(item) => renderItem(item())}
+          </Index>
+        </div>
+      </div>
+    </div>
+  );
+
+  function renderItem(placement?: Placement) {
+    if (!placement) {
+      return <span />;
+    }
+
+    return (
       <Popover
-        placement="bottom"
+        placement={placement}
         reference={(ctx) => (
           <button
             class={cls(
-              "antd-btn antd-btn-default",
+              "antd-btn antd-btn-default py-1 px-2 text-sm",
               ctx.open() && "text-colorPrimaryActive border-colorPrimaryActive"
             )}
           >
-            Pop!
+            {placement.replace("-", "\n")}
           </button>
         )}
         floating={(ctx) => (
@@ -137,7 +170,7 @@ function TestPopover() {
             leaveFrom="scale-100 opacity-100"
             leaveTo="scale-80 opacity-0"
           >
-            <div class="flex flex-col gap-2 px-3 py-2 w-[150px] antd-floating">
+            <div class="flex flex-col gap-2 px-3 py-2 w-[150px] antd-floating text-sm">
               <div>Content</div>
               <button
                 class="antd-btn antd-btn-default"
@@ -149,6 +182,6 @@ function TestPopover() {
           </Transition>
         )}
       />
-    </div>
-  );
+    );
+  }
 }
