@@ -1,4 +1,5 @@
 import {
+  ComputePositionConfig,
   ComputePositionReturn,
   Placement,
   autoUpdate,
@@ -27,6 +28,7 @@ type FloatingContext = {
   floating: HTMLElement | undefined;
 };
 
+// TODO: arrow
 export function Popover(props: {
   placement: Placement;
   reference: (ctx: FloatingContext) => JSX.Element;
@@ -37,67 +39,22 @@ export function Popover(props: {
 
   // signals
   const [open, onOpenChange] = createSignal(false);
-  const [computePositionReturn, setComputePositionReturn] =
-    createSignal<ComputePositionReturn>();
 
-  // TODO: useFloating-like abstraction
-  //   - input: referenceRef, floatingRef, middleware, placement, ...
-  //   - output signals: floatingStyle, context, ...
-
-  // TODO: arrow
-
-  // TODO: useInteractions-like abstraction
-  //   - useClick
-  //   - useDismiss
-
-  createEffect(() => {
-    const referenceEl = referenceRef();
-    const floatingEl = floatingRef();
-    const placement = props.placement;
-
-    if (referenceEl && floatingEl) {
-      // port useFloating
-      async function update() {
-        tinyassert(referenceEl);
-        tinyassert(floatingEl);
-        // TODO: define as async resource?
-        const result = await computePosition(referenceEl, floatingEl, {
-          placement,
-          middleware: [offset(8), flip(), shift()],
-        });
-        setComputePositionReturn(result);
-      }
-      const cleanup = autoUpdate(referenceEl, floatingEl, update);
-      onCleanup(() => cleanup());
-
-      // port useDismiss
-      onDocumentEvent("pointerdown", (e) => {
-        if (
-          e.target instanceof Node &&
-          !referenceEl.contains(e.target) &&
-          !floatingEl.contains(e.target)
-        ) {
-          onOpenChange(false);
-        }
-      });
-    } else {
-      // TODO: not supposed to set signal in effect?
-      setComputePositionReturn(undefined);
-    }
-  });
-
-  // derive floating style
-  const floatingStyle = createMemo<JSX.CSSProperties>(
-    () => mapOption(computePositionReturn(), getFloatingStyle) ?? {}
-  );
-
-  const ctx: FloatingContext = accessorsToGetters({
-    open,
-    onOpenChange: () => onOpenChange,
-    floatingStyle,
+  // useFloating
+  const ctx = createFloating({
     reference: referenceRef,
     floating: floatingRef,
+    open,
+    onOpenChange,
+    placement: () => props.placement,
+    middleware: () => [offset(8), flip(), shift()],
   });
+
+  // useDismiss
+  createDismissInteraction(ctx);
+
+  // useClick
+  createClickInteraction(ctx);
 
   return (
     <>
@@ -107,6 +64,76 @@ export function Popover(props: {
       </Portal>
     </>
   );
+}
+
+function createFloating(props: {
+  reference: () => HTMLElement | undefined;
+  floating: () => HTMLElement | undefined;
+  open: () => boolean;
+  onOpenChange: (open: boolean) => void;
+  placement?: () => ComputePositionConfig["placement"];
+  middleware?: () => ComputePositionConfig["middleware"];
+}): FloatingContext {
+  const [result, setResult] = createSignal<ComputePositionReturn>();
+
+  createEffect(() => {
+    const reference = props.reference();
+    const floating = props.floating();
+    const placement = props.placement?.();
+    const middleware = props.middleware?.();
+
+    if (!reference || !floating) {
+      setResult(undefined);
+      return;
+    }
+
+    // setup auto update
+    async function update() {
+      tinyassert(reference);
+      tinyassert(floating);
+      const result = await computePosition(reference, floating, {
+        placement,
+        middleware,
+      });
+      setResult(result);
+    }
+    const cleanup = autoUpdate(reference, floating, update);
+    onCleanup(() => cleanup());
+  });
+
+  // derive floating style
+  const floatingStyle = createMemo<JSX.CSSProperties>(
+    () => mapOption(result(), getFloatingStyle) ?? {}
+  );
+
+  return accessorsToGetters({
+    open: props.open,
+    onOpenChange: () => props.onOpenChange,
+    floatingStyle,
+    reference: props.reference,
+    floating: props.floating,
+  });
+}
+
+function createDismissInteraction(ctx: FloatingContext) {
+  createEffect(() => {
+    const reference = ctx.reference;
+    const floating = ctx.floating;
+    onDocumentEvent("pointerdown", (e) => {
+      if (
+        e.target instanceof Node &&
+        !reference?.contains(e.target) &&
+        !floating?.contains(e.target)
+      ) {
+        ctx.onOpenChange(false);
+      }
+    });
+  });
+}
+
+function createClickInteraction(ctx: FloatingContext) {
+  // TODO
+  ctx;
 }
 
 function getFloatingStyle(result: ComputePositionReturn): JSX.CSSProperties {
