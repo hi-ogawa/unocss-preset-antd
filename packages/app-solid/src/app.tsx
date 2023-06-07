@@ -133,6 +133,7 @@ function TestPopover() {
         floating={({ ctx }) => (
           <Transition
             show={ctx().open}
+            style={ctx().floatingStyle}
             class="transition duration-150"
             enterFrom="scale-80 opacity-0"
             enterTo="scale-100 opacity-100"

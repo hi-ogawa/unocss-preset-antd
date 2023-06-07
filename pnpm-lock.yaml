@@ -101,9 +101,6 @@ importers:
       '@hiogawa/unocss-preset-antd':
         specifier: workspace:*
         version: link:../lib
-      '@hiogawa/utils':
-        specifier: ^1.3.0
-        version: 1.3.0
       '@hiogawa/utils-experimental':
         specifier: ^0.0.0
         version: 0.0.0
@@ -1486,10 +1483,6 @@ packages:
     peerDependencies:
       react: '*'
     dev: true
-
-  /@hiogawa/utils@1.3.0:
-    resolution: {integrity: sha512-zOqiodMaYWibaPUhtJAKUO9XZZNhLmZNTHkzjWXxZ47CyUoCdpDVRv5jSg5CrsrOhCa+AmlHYZymU4vSWO9B+Q==}
-    dev: false
 
   /@hiogawa/utils@1.4.2-pre.12:
     resolution: {integrity: sha512-YkNSrK+h1/iFeshHC+9YAhux1kUO0JJ+hjZdlcT5gJR8hW9GJpOK8xwOpAE1fVjRE+QWupKwPx33tJUXCGPoPA==}

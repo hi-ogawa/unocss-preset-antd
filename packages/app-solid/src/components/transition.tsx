@@ -1,6 +1,6 @@
 import { tinyassert, typedBoolean } from "@hiogawa/utils";
 import {
-  ParentProps,
+  JSX,
   Show,
   createEffect,
   createMemo,
@@ -12,6 +12,7 @@ import {
 // simplified port of headlessui Transition
 //
 // difference from headlessui
+// - always wrapped by div
 // - always appear = true
 // - always remount
 // - no callback (beforeEnter, afterEnter, beforeLeave, afterLeave)
@@ -46,9 +47,9 @@ interface TransitionEventProps {
 }
 
 export function Transition(
-  props: ParentProps &
-    TransitionClassProps &
-    TransitionEventProps & { class?: string; show?: boolean }
+  props: TransitionClassProps &
+    TransitionEventProps &
+    JSX.HTMLElementTags["div"] & { show?: boolean }
 ) {
   const [state, setState] = createSignal<TransitionState>("left");
 
@@ -71,9 +72,9 @@ export function Transition(
 }
 
 function TransitionInner(
-  props: ParentProps &
-    TransitionClassProps & {
-      class?: string;
+  props: TransitionClassProps &
+    TransitionEventProps &
+    JSX.HTMLElementTags["div"] & {
       state: TransitionState;
       setState: (v: TransitionState) => void;
     }
@@ -119,7 +120,11 @@ function TransitionInner(
     }
   });
 
-  return <div ref={onRef}>{props.children}</div>;
+  return (
+    <div ref={onRef} style={props.style}>
+      {props.children}
+    </div>
+  );
 }
 
 function onTransitionEnd(el: HTMLElement, callback: () => void) {

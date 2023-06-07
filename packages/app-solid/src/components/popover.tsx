@@ -1,4 +1,5 @@
 import {
+  ComputePositionReturn,
   Placement,
   autoUpdate,
   computePosition,
@@ -6,15 +7,22 @@ import {
   offset,
   shift,
 } from "@floating-ui/dom";
-import { tinyassert } from "@hiogawa/utils";
+import { mapOption, tinyassert } from "@hiogawa/utils";
 import { Ref } from "@solid-primitives/refs";
-import { JSX, createEffect, createSignal, onCleanup } from "solid-js";
+import {
+  JSX,
+  createEffect,
+  createMemo,
+  createSignal,
+  onCleanup,
+} from "solid-js";
 import { Portal } from "solid-js/web";
 import { onDocumentEvent } from "./utils";
 
 type FloatingContext = {
   open: boolean;
   onOpenChange: (open: boolean) => void;
+  floatingStyle: JSX.CSSProperties;
 };
 
 type FloatingRenderArg = {
@@ -28,7 +36,16 @@ export function Popover(props: {
 }) {
   const [referenceRef, setReferenceRef] = createSignal<HTMLElement>();
   const [floatingRef, setFloatingRef] = createSignal<HTMLElement>();
+
+  // signals
   const [open, onOpenChange] = createSignal(false);
+  const [computePositionReturn, setComputePositionReturn] =
+    createSignal<ComputePositionReturn>();
+
+  // derive floating style
+  const floatingStyle = createMemo<JSX.CSSProperties>(
+    () => mapOption(computePositionReturn(), getFloatingStyle) ?? {}
+  );
 
   // TODO: useFloating-like abstraction
   //   - input: referenceRef, floatingRef, middleware, placement, ...
@@ -50,17 +67,12 @@ export function Popover(props: {
       async function update() {
         tinyassert(referenceEl);
         tinyassert(floatingEl);
+        // TODO: define as async resource?
         const result = await computePosition(referenceEl, floatingEl, {
           placement,
           middleware: [offset(8), flip(), shift()],
         });
-        // TODO: can we pass as signal?
-        const floatingStyle: JSX.CSSProperties = {
-          left: `${result.x}px`,
-          top: `${result.y}px`,
-          position: result.strategy,
-        };
-        Object.assign(floatingEl.style, floatingStyle);
+        setComputePositionReturn(result);
       }
       const cleanup = autoUpdate(referenceEl, floatingEl, update);
       onCleanup(() => cleanup());
@@ -78,9 +90,11 @@ export function Popover(props: {
     }
   });
 
+  // TODO: getter factory helper?
   const ctx: () => FloatingContext = () => ({
     open: open(),
     onOpenChange,
+    floatingStyle: floatingStyle(),
   });
 
   return (
@@ -91,4 +105,12 @@ export function Popover(props: {
       </Portal>
     </>
   );
+}
+
+function getFloatingStyle(result: ComputePositionReturn): JSX.CSSProperties {
+  return {
+    left: `${result.x}px`,
+    top: `${result.y}px`,
+    position: result.strategy,
+  };
 }
