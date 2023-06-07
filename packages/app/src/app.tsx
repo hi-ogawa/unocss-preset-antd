@@ -9,11 +9,16 @@ import {
 } from "react-router-dom";
 import { Drawer } from "./components/drawer";
 import * as stories from "./components/stories";
-import { ThemeSelectButton } from "./components/theme-select-button";
+import {
+  ThemeSelectButton,
+  useThemeLinkIcon,
+} from "./components/theme-select-button";
 import { tw } from "./styles/tw";
 import { cls } from "./utils/misc";
 
 export function App() {
+  useThemeLinkIcon();
+
   return <RouterProvider router={router} />;
 }
 

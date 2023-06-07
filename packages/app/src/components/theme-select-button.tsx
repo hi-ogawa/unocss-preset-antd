@@ -1,3 +1,4 @@
+import { tinyassert } from "@hiogawa/utils";
 import React from "react";
 import { tw } from "../styles/tw";
 import { cls } from "../utils/misc";
@@ -49,4 +50,38 @@ export function ThemeSelectButton() {
       }
     />
   );
+}
+
+export function useThemeLinkIcon() {
+  const matches = useMatchMedia("(prefers-color-scheme: dark)");
+
+  React.useEffect(() => {
+    // we can change icon color by patching svg data url (cf. packages/app/index.html)
+
+    const el = document.querySelector("link[rel=icon]");
+    tinyassert(el);
+
+    let href = el.getAttribute("href");
+    tinyassert(href);
+    if (matches) {
+      href = href.replace("black", "white");
+    } else {
+      href = href.replace("white", "black");
+    }
+    el.setAttribute("href", href);
+  }, [matches]);
+}
+
+function useMatchMedia(query: string): boolean | undefined {
+  const [value, setValue] = React.useState<boolean>();
+
+  React.useEffect(() => {
+    const media = window.matchMedia(query);
+    const handler = () => setValue(media.matches);
+    handler();
+    media.addEventListener("change", handler);
+    return () => media.removeEventListener("change", handler);
+  }, [query]);
+
+  return value;
 }

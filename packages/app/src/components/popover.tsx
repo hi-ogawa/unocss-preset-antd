@@ -33,19 +33,19 @@ export function Popover(props: {
   const [open, setOpen] = React.useState(false);
   const arrowRef = React.useRef<Element>(null);
 
-  const { reference, floating, context, x, y, strategy, middlewareData } =
-    useFloating({
-      open,
-      onOpenChange: setOpen,
-      placement: props.placement,
-      middleware: [
-        offset(17),
-        flip(),
-        shift(),
-        arrow({ element: arrowRef, padding: 10 }),
-      ],
-      whileElementsMounted: autoUpdate,
-    });
+  // `floatingStyle` lags a moment and breaks animation?
+  const { refs, x, y, strategy, context, middlewareData } = useFloating({
+    open,
+    onOpenChange: setOpen,
+    placement: props.placement,
+    middleware: [
+      offset(17),
+      flip(),
+      shift(),
+      arrow({ element: arrowRef, padding: 10 }),
+    ],
+    whileElementsMounted: autoUpdate,
+  });
 
   const { getReferenceProps, getFloatingProps } = useInteractions([
     useClick(context),
@@ -60,7 +60,7 @@ export function Popover(props: {
         open,
         setOpen,
         props: getReferenceProps({
-          ref: reference,
+          ref: refs.setReference,
         }),
         context,
       })}
@@ -69,7 +69,7 @@ export function Popover(props: {
           open,
           setOpen,
           props: getFloatingProps({
-            ref: floating,
+            ref: refs.setFloating,
             style: {
               top: y ?? "",
               left: x ?? "",
