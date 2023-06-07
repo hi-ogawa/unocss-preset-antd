@@ -77,8 +77,6 @@ function createFloating(props: {
   createEffect(() => {
     const reference = props.reference();
     const floating = props.floating();
-    const placement = props.placement?.();
-    const middleware = props.middleware?.();
 
     if (!reference || !floating) {
       setResult(undefined);
@@ -86,6 +84,8 @@ function createFloating(props: {
     }
 
     // setup auto update
+    const placement = props.placement?.();
+    const middleware = props.middleware?.();
     async function update() {
       tinyassert(reference);
       tinyassert(floating);
