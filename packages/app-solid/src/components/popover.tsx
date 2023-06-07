@@ -23,7 +23,7 @@ import { Portal } from "solid-js/web";
 import { onDocumentEvent } from "./utils";
 
 type FloatingContext = {
-  open: Accessor<boolean>;
+  open: boolean;
   onOpenChange: Setter<boolean>;
   floatingStyle: JSX.CSSProperties;
   reference: HTMLElement | undefined;
@@ -105,7 +105,7 @@ function createFloating(props: {
   );
 
   return accessorsToGetters({
-    open: () => props.open,
+    open: props.open,
     onOpenChange: () => props.onOpenChange,
     floatingStyle,
     reference: props.reference,
