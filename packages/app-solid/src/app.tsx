@@ -117,23 +117,23 @@ function TestPopover() {
       <h1 class="text-xl">Popover</h1>
       <Popover
         placement="bottom"
-        reference={({ ctx }) => (
+        reference={(ctx) => (
           <button
             class={cls(
               "antd-btn antd-btn-default",
-              ctx().open && "text-colorPrimaryActive border-colorPrimaryActive"
+              ctx.open && "text-colorPrimaryActive border-colorPrimaryActive"
             )}
             onClick={() => {
-              ctx().onOpenChange(!ctx().open);
+              ctx.onOpenChange(!ctx.open);
             }}
           >
             Pop!
           </button>
         )}
-        floating={({ ctx }) => (
+        floating={(ctx) => (
           <Transition
-            show={ctx().open}
-            style={ctx().floatingStyle}
+            show={ctx.open}
+            style={ctx.floatingStyle}
             class="transition duration-150"
             enterFrom="scale-80 opacity-0"
             enterTo="scale-100 opacity-100"
@@ -144,7 +144,7 @@ function TestPopover() {
               <div>Content</div>
               <button
                 class="antd-btn antd-btn-default"
-                onClick={() => ctx().onOpenChange(false)}
+                onClick={() => ctx.onOpenChange(false)}
               >
                 Close
               </button>

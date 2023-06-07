@@ -25,14 +25,10 @@ type FloatingContext = {
   floatingStyle: JSX.CSSProperties;
 };
 
-type FloatingRenderArg = {
-  ctx: () => FloatingContext;
-};
-
 export function Popover(props: {
   placement: Placement;
-  reference: (arg: FloatingRenderArg) => JSX.Element;
-  floating: (arg: FloatingRenderArg) => JSX.Element;
+  reference: (ctx: FloatingContext) => JSX.Element;
+  floating: (ctx: FloatingContext) => JSX.Element;
 }) {
   const [referenceRef, setReferenceRef] = createSignal<HTMLElement>();
   const [floatingRef, setFloatingRef] = createSignal<HTMLElement>();
@@ -90,18 +86,17 @@ export function Popover(props: {
     }
   });
 
-  // TODO: getter factory helper?
-  const ctx: () => FloatingContext = () => ({
-    open: open(),
-    onOpenChange,
-    floatingStyle: floatingStyle(),
+  const ctx: FloatingContext = combineAccessors({
+    open,
+    onOpenChange: () => onOpenChange,
+    floatingStyle,
   });
 
   return (
     <>
-      <Ref ref={setReferenceRef}>{props.reference({ ctx })}</Ref>
+      <Ref ref={setReferenceRef}>{props.reference(ctx)}</Ref>
       <Portal>
-        <Ref ref={setFloatingRef}>{props.floating({ ctx })}</Ref>
+        <Ref ref={setFloatingRef}>{props.floating(ctx)}</Ref>
       </Portal>
     </>
   );
@@ -114,3 +109,19 @@ function getFloatingStyle(result: ComputePositionReturn): JSX.CSSProperties {
     position: result.strategy,
   };
 }
+
+// reverse of `destructure` https://github.com/solidjs-community/solid-primitives/blob/876b583ed95e0c3f0a552882f3508a07fc64fca4/packages/destructure/src/index.ts
+function combineAccessors<T extends Record<string, () => unknown>>(
+  accessors: T
+): CombineAccessorsResult<T> {
+  return new Proxy(
+    {},
+    {
+      get: (_target, p, _receiver) => accessors[p as keyof T](),
+    }
+  ) as any;
+}
+
+type CombineAccessorsResult<T extends Record<string, () => unknown>> = {
+  [K in keyof T]: ReturnType<T[K]>;
+};
