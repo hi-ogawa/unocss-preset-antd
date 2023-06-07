@@ -15,7 +15,6 @@ import {
   JSX,
   Setter,
   createEffect,
-  createMemo,
   createSignal,
   onCleanup,
 } from "solid-js";
@@ -27,7 +26,8 @@ type FloatingContext = {
   setOpen: Setter<boolean>;
   reference: Accessor<HTMLElement | undefined>;
   floating: Accessor<HTMLElement | undefined>;
-  floatingStyle: Accessor<JSX.CSSProperties>;
+  floatingStyle: Accessor<JSX.CSSProperties | undefined>;
+  placement: Accessor<Placement | undefined>; // actual placement e.g. after layout by flip middleware
 };
 
 export function Popover(props: {
@@ -99,17 +99,13 @@ function createFloating(props: {
     onCleanup(() => cleanup());
   });
 
-  // derive floating style
-  const floatingStyle = createMemo<JSX.CSSProperties>(
-    () => mapOption(result(), getFloatingStyle) ?? {}
-  );
-
   return {
     open: props.open,
     setOpen: props.setOpen,
     reference: props.reference,
     floating: props.floating,
-    floatingStyle,
+    floatingStyle: () => mapOption(result(), getFloatingStyle),
+    placement: () => result()?.placement,
   };
 }
 
