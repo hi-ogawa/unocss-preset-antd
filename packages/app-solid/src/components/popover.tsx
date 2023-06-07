@@ -91,7 +91,7 @@ export function Popover(props: {
     () => mapOption(computePositionReturn(), getFloatingStyle) ?? {}
   );
 
-  const ctx: FloatingContext = combineAccessors({
+  const ctx: FloatingContext = accessorsToGetters({
     open,
     onOpenChange: () => onOpenChange,
     floatingStyle,
@@ -118,9 +118,9 @@ function getFloatingStyle(result: ComputePositionReturn): JSX.CSSProperties {
 }
 
 // reverse of `destructure` https://github.com/solidjs-community/solid-primitives/blob/876b583ed95e0c3f0a552882f3508a07fc64fca4/packages/destructure/src/index.ts
-function combineAccessors<T extends Record<string, () => unknown>>(
+function accessorsToGetters<T extends Record<string, () => unknown>>(
   accessors: T
-): CombineAccessorsResult<T> {
+): AccessorsToGettersResult<T> {
   return new Proxy(
     {},
     {
@@ -129,6 +129,6 @@ function combineAccessors<T extends Record<string, () => unknown>>(
   ) as any;
 }
 
-type CombineAccessorsResult<T extends Record<string, () => unknown>> = {
+type AccessorsToGettersResult<T extends Record<string, () => unknown>> = {
   [K in keyof T]: ReturnType<T[K]>;
 };
