@@ -116,6 +116,7 @@ function createFloating(props: {
 }
 
 function createDismissInteraction(ctx: FloatingContext) {
+  // dismiss on click outside
   createEffect(() => {
     const reference = ctx.reference;
     const floating = ctx.floating;
@@ -128,6 +129,13 @@ function createDismissInteraction(ctx: FloatingContext) {
         ctx.onOpenChange(false);
       }
     });
+  });
+
+  // dismiss on escape
+  onDocumentEvent("keyup", (e) => {
+    if (e.key === "Escape") {
+      ctx.onOpenChange(false);
+    }
   });
 }
 
