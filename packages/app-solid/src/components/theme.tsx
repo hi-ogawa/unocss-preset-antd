@@ -1,4 +1,4 @@
-import { SelectWrapper } from "./utils";
+import { SelectWrapper } from "./select";
 
 // injected by global theme-script
 declare let __themeSet: (theme: string) => void;

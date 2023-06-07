@@ -1,36 +1,23 @@
-import { Index, splitProps } from "solid-js";
-import type { JSX } from "solid-js/jsx-runtime";
-
-export function SelectWrapper<T>(
-  allProps: {
-    options: readonly T[];
-    value: T;
-    onChange: (value: T) => void;
-    labelFn?: (value: T) => JSX.Element;
-  } & Omit<JSX.HTMLElementTags["select"], "value" | "onChange">
-) {
-  const [props, selectProps] = splitProps(allProps, [
-    "value",
-    "options",
-    "onChange",
-    "labelFn",
-  ]);
-
-  return (
-    <select
-      value={props.options.indexOf(props.value)}
-      onChange={(e) => props.onChange(props.options[Number(e.target.value)])}
-      {...selectProps}
-    >
-      <Index each={props.options}>
-        {(option, i) => (
-          <option value={i}>{(props.labelFn ?? String)(option())}</option>
-        )}
-      </Index>
-    </select>
-  );
-}
+import { onCleanup } from "solid-js";
 
 export function cls(...args: unknown[]): string {
   return args.filter(Boolean).join(" ");
+}
+
+export function onClickTarget(target: Node, callback: (hit: boolean) => void) {
+  onDocumentEvent("pointerdown", (e) => {
+    const hit = e.target instanceof Node && target.contains(e.target);
+    callback(Boolean(hit));
+  });
+}
+
+export function onDocumentEvent<K extends keyof DocumentEventMap>(
+  type: K,
+  callback: (e: DocumentEventMap[K]) => void
+) {
+  document.addEventListener(type, callback);
+
+  onCleanup(() => {
+    document.removeEventListener(type, callback);
+  });
 }
