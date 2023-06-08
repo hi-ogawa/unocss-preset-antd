@@ -103,7 +103,7 @@ function Header() {
       >
         <span className={tw.i_ri_menu_line.w_5.h_5.$}></span>
       </button>
-      <h1 className="text-xl">UnoCSS Ant Design</h1>
+      <h1 className="text-xl">UnoCSS Ant Design React</h1>
       <div className="flex-1"></div>
       <div className="flex gap-3 flex items-center">
         <ThemeSelectButton />
