@@ -1,8 +1,8 @@
 # app-solid
 
-- https://unocss-preset-antd-solid-hiro18181.vercel.app
+porting `packages/app` to [solidjs](https://github.com/solidjs/solid) as an experiment
 
-rewriting `packages/app` in [solidjs](https://github.com/solidjs/solid) as an experiment
+- https://unocss-preset-antd-solidjs-hiro18181.vercel.app
 
 ```sh
 # dev
