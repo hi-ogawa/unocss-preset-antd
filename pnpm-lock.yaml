@@ -20,6 +20,9 @@ importers:
       '@hiogawa/utils':
         specifier: 1.4.2-pre.12
         version: 1.4.2-pre.12
+      '@hiogawa/utils-experimental':
+        specifier: ^0.0.0
+        version: 0.0.0
       '@hiogawa/utils-react':
         specifier: 1.2.1-pre.6
         version: 1.2.1-pre.6(react@18.2.0)
@@ -59,9 +62,6 @@ importers:
       '@hiogawa/unocss-preset-antd':
         specifier: workspace:*
         version: link:../lib
-      '@hiogawa/utils-experimental':
-        specifier: ^0.0.0
-        version: 0.0.0
       jotai:
         specifier: ^2.0.3
         version: 2.0.3(react@18.2.0)
@@ -105,9 +105,6 @@ importers:
       '@hiogawa/unocss-preset-antd':
         specifier: workspace:*
         version: link:../lib
-      '@hiogawa/utils-experimental':
-        specifier: ^0.0.0
-        version: 0.0.0
       '@solid-primitives/refs':
         specifier: ^1.0.4
         version: 1.0.4(solid-js@1.7.6)
@@ -1471,7 +1468,7 @@ packages:
 
   /@hiogawa/utils-experimental@0.0.0:
     resolution: {integrity: sha512-KIntm8b5EbVVATzq3f/+ttIpNfstoN7Mx04BxRZG5t7sMdLmbj0S5yKzKL0sR7wv4qD+rStO3YELWOqN4LZPhA==}
-    dev: false
+    dev: true
 
   /@hiogawa/utils-react@1.2.1-pre.6(react@18.2.0):
     resolution: {integrity: sha512-//iRCbPzuSNZzr07Gots61g4bU2uFPhcqu7x4FUlKZx/VwMC1L1SwX2pE2e1N6eICVnkrwwEhUq8OEP95RFfXg==}
