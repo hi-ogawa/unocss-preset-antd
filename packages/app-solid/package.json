@@ -4,7 +4,10 @@
     "dev": "vite --no-clearScreen",
     "build": "run-s build:*",
     "build:vite": "vite build",
-    "preview": "vite preview"
+    "build:vercel": "bash misc/vercel/build.sh",
+    "preview": "vite preview",
+    "release": "vercel deploy --prebuilt .",
+    "release-production": "vercel deploy --prebuilt . --prod"
   },
   "dependencies": {
     "@floating-ui/dom": "^1.2.9",
