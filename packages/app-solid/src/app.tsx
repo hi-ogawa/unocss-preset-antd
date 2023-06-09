@@ -4,22 +4,42 @@ import { Ref } from "@solid-primitives/refs";
 import { Index, Show, createSignal } from "solid-js";
 import { Modal } from "./components/modal";
 import { FloatingArrow, Popover } from "./components/popover";
+import { HistoryProvider, useHistory } from "./components/router-utils";
 import { ThemeSelect, changeLinkIconByTheme } from "./components/theme";
 import { Transition } from "./components/transition";
 import { cls } from "./components/utils";
 
 export function App() {
+  // TODO: provider chain utility?
+  return (
+    <HistoryProvider>
+      <AppInner />
+    </HistoryProvider>
+  );
+}
+
+function AppInner() {
   changeLinkIconByTheme();
+
+  const history = useHistory();
 
   return (
     <div class="flex flex-col">
       <AppHeader />
       <div class="flex justify-center">
         <div class="flex flex-col gap-4 p-4">
+          {/* prettier-ignore */}
+          <div class="flex gap-2">
+            <button class="antd-btn antd-btn-default px-2" onClick={() => history().push({ pathname: "/" })}>/</button>
+            <button class="antd-btn antd-btn-default px-2" onClick={() => history().push({ pathname: "/x" })}>/x</button>
+            <button class="antd-btn antd-btn-default px-2" onClick={() => history().push({ pathname: "/popover" })}>/popover</button>
+          </div>
           <TestForm />
           <TestTransition />
           <TestModal />
-          <TestPopover />
+          <Show when={history().location.pathname === "/popover"}>
+            <TestPopover />
+          </Show>
         </div>
       </div>
     </div>
