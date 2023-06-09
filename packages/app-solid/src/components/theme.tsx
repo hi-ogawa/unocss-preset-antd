@@ -1,5 +1,3 @@
-import { tinyassert } from "@hiogawa/utils";
-import { createEffect, createSignal, onCleanup } from "solid-js";
 import { SelectWrapper } from "./select";
 
 // injected by global theme-script
@@ -20,37 +18,4 @@ export function ThemeSelect() {
       />
     </label>
   );
-}
-
-export function changeLinkIconByTheme() {
-  const matches = createMatchMedia("(prefers-color-scheme: dark)");
-
-  createEffect(() => {
-    const el = document.querySelector("link[rel=icon]");
-    tinyassert(el);
-
-    // change icon color by patching svg data url directly
-    let href = el.getAttribute("href");
-    tinyassert(href);
-    if (matches()) {
-      href = href.replace("black", "white");
-    } else {
-      href = href.replace("white", "black");
-    }
-    el.setAttribute("href", href);
-  });
-}
-
-function createMatchMedia(query: string) {
-  const [matches, setMatches] = createSignal<boolean>();
-
-  const media = window.matchMedia(query);
-
-  const handler = () => setMatches(media.matches);
-  media.addEventListener("change", handler);
-  onCleanup(() => media.removeEventListener("change", handler));
-
-  createEffect(() => handler());
-
-  return matches;
 }

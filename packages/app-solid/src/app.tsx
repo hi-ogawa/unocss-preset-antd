@@ -7,7 +7,7 @@ import {
   untrack,
 } from "solid-js";
 import { HistoryProvider, Link, useHistory } from "./components/router-utils";
-import { ThemeSelect, changeLinkIconByTheme } from "./components/theme";
+import { ThemeSelect } from "./components/theme";
 import * as stories from "./stories";
 
 export function App() {
@@ -42,8 +42,6 @@ function NotFound() {
 //
 
 function AppInner() {
-  changeLinkIconByTheme();
-
   const history = useHistory();
 
   const outlet = createMemo(() => {
