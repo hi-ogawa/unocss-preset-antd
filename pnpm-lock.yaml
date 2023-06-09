@@ -105,12 +105,18 @@ importers:
       '@hiogawa/unocss-preset-antd':
         specifier: workspace:*
         version: link:../lib
+      '@solid-primitives/context':
+        specifier: ^0.2.1
+        version: 0.2.1(solid-js@1.7.6)
       '@solid-primitives/refs':
         specifier: ^1.0.4
         version: 1.0.4(solid-js@1.7.6)
       '@solid-primitives/transition-group':
         specifier: ^1.0.2
         version: 1.0.2(solid-js@1.7.6)
+      history:
+        specifier: ^5.3.0
+        version: 5.3.0
     devDependencies:
       '@iconify-json/ri':
         specifier: ^1.1.4
@@ -1675,6 +1681,14 @@ packages:
       estree-walker: 2.0.2
       picomatch: 2.3.1
 
+  /@solid-primitives/context@0.2.1(solid-js@1.7.6):
+    resolution: {integrity: sha512-XIIwCOWpRKDersgkR9LNFXaJHIV8QlCFo/tq5bV0cAOZklcwOFcqi2bN+uWgEIQSWGjWXU2kc1H1/TzgYzVDlg==}
+    peerDependencies:
+      solid-js: ^1.6.12
+    dependencies:
+      solid-js: 1.7.6
+    dev: false
+
   /@solid-primitives/refs@1.0.4(solid-js@1.7.6):
     resolution: {integrity: sha512-BxZKkct0OIyADWIoA9UITm+3G5Xb3IkOa0nZd40SgOK5DtMqpXFIEPUkJ/woPB90WqlM9UvvuiJHUyAjMeAmCw==}
     peerDependencies:
@@ -3184,6 +3198,12 @@ packages:
     engines: {node: '>= 0.4.0'}
     dependencies:
       function-bind: 1.1.1
+
+  /history@5.3.0:
+    resolution: {integrity: sha512-ZqaKwjjrAYUYfLG+htGaIIZ4nioX2L70ZUMIFysS3xvBsSG4x/n1V6TXV3N8ZYNuFGlDirFg32T7B6WOUPDYcQ==}
+    dependencies:
+      '@babel/runtime': 7.20.13
+    dev: false
 
   /hoist-non-react-statics@3.3.2:
     resolution: {integrity: sha512-/gGivxi8JPKWNm/W0jSmzcMPpfpPLc3dY/6GxhX2hQ9iGj3aDfklV4ET7NjKpSinLpJ5vafa9iiGIEZg10SfBw==}
