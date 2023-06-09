@@ -27,13 +27,13 @@ export function App() {
 stories satisfies Record<string, Component>;
 
 const appRoutes = Object.entries(stories).map(([name, Component]) => ({
-  path: name.slice(4),
+  to: "/" + name.slice(5),
   Component,
 }));
 
 function NotFound() {
   const history = useHistory();
-  onMount(() => untrack(history).push("/Popover"));
+  onMount(() => untrack(history).push(appRoutes[0].to));
   return null;
 }
 
@@ -48,7 +48,7 @@ function AppInner() {
 
   const outlet = createMemo(() => {
     const pathname = history().location.pathname;
-    const found = appRoutes.find((route) => "/" + route.path === pathname);
+    const found = appRoutes.find((route) => route.to === pathname);
     return found?.Component ?? NotFound;
   });
 
@@ -97,9 +97,9 @@ function AppNavMenu() {
           <li class="flex">
             <Link
               class="flex-1 antd-menu-item p-2 data-[active=true]:antd-menu-item-active"
-              to={"/" + item.path}
+              to={item.to}
             >
-              {item.path}
+              {item.to.slice(1)}
             </Link>
           </li>
         )}

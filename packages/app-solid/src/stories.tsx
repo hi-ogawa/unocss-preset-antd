@@ -7,7 +7,7 @@ import { FloatingArrow, Popover } from "./components/popover";
 import { Transition } from "./components/transition";
 import { cls } from "./components/utils";
 
-export function TestForm() {
+export function StoryForm() {
   return (
     <div class="flex flex-col gap-3 p-2 border w-sm">
       <h1 class="text-xl">Form</h1>
@@ -20,7 +20,7 @@ export function TestForm() {
   );
 }
 
-export function TestTransition() {
+export function StoryTransition() {
   const [show, setShow] = createSignal(false);
 
   return (
@@ -49,7 +49,7 @@ export function TestTransition() {
   );
 }
 
-export function TestModal() {
+export function StoryModal() {
   const [show, setShow] = createSignal(false);
 
   return (
@@ -79,7 +79,7 @@ export function TestModal() {
   );
 }
 
-export function TestPopover() {
+export function StoryPopover() {
   const placements = new Map<number, Placement>([
     [1, "top-start"],
     [2, "top"],
