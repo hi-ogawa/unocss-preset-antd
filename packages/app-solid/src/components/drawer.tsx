@@ -4,7 +4,7 @@ import { Portal } from "solid-js/web";
 import { createDismissInteraction } from "./popover";
 import { Transition } from "./transition";
 
-export function Modal(
+export function Drawer(
   props: ParentProps & { open: boolean; setOpen: Setter<boolean> }
 ) {
   const [contentRef, setContentRef] = createSignal<HTMLElement>();
@@ -27,14 +27,14 @@ export function Modal(
           leaveTo="opacity-0"
         />
         {/* content */}
-        <div class="fixed inset-0 overflow-hidden flex justify-center items-center">
+        <div class="fixed inset-0 overflow-hidden">
           <Transition
             show={props.open}
-            class="duration-300 transform antd-floating"
-            enterFrom="opacity-0 scale-90"
-            enterTo="opacity-100 scale-100"
-            leaveFrom="opacity-100 scale-100"
-            leaveTo="opacity-0 scale-90"
+            class="duration-300 antd-floating inline-block h-full"
+            enterFrom="translate-x-[-100%]"
+            enterTo="translate-x-0"
+            leaveFrom="translate-x-0"
+            leaveTo="translate-x-[-100%]"
           >
             <Ref ref={setContentRef}>{props.children}</Ref>
           </Transition>

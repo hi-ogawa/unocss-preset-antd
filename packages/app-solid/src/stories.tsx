@@ -2,6 +2,7 @@ import type { Placement } from "@floating-ui/dom";
 import { range } from "@hiogawa/utils";
 import { Ref } from "@solid-primitives/refs";
 import { Index, Show, createSignal } from "solid-js";
+import { Drawer } from "./components/drawer";
 import { Modal } from "./components/modal";
 import { FloatingArrow, Popover } from "./components/popover";
 import { Transition } from "./components/transition";
@@ -75,6 +76,35 @@ export function StoryModal() {
           </div>
         </div>
       </Modal>
+    </div>
+  );
+}
+
+export function StoryDrawer() {
+  const [show, setShow] = createSignal(false);
+
+  return (
+    <div class="flex flex-col gap-3 p-2 border w-sm">
+      <h1 class="text-xl">Drawer</h1>
+      <button
+        class="antd-btn antd-btn-primary p-1"
+        onClick={() => setShow(!show())}
+      >
+        Open drawer
+      </button>
+      <Drawer open={show()} setOpen={setShow}>
+        <div class="w-[200px] flex flex-col h-full p-3 gap-2">
+          <h3 class="text-lg">Drawer</h3>
+          <div class="flex justify-center">
+            <button
+              class="antd-btn antd-btn-default px-2"
+              onClick={() => setShow(false)}
+            >
+              Close
+            </button>
+          </div>
+        </div>
+      </Drawer>
     </div>
   );
 }
