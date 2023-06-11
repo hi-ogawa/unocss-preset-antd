@@ -1,30 +1,17 @@
 import { Ref } from "@solid-primitives/refs";
-import { ParentProps, createEffect, createSignal } from "solid-js";
+import { ParentProps, Setter, createSignal } from "solid-js";
 import { Portal } from "solid-js/web";
+import { createDismissInteraction } from "./popover";
 import { Transition } from "./transition";
-import { onClickTarget, onDocumentEvent } from "./utils";
 
 export function Modal(
-  props: ParentProps & { open: boolean; setOpen: (open: boolean) => void }
+  props: ParentProps & { open: boolean; setOpen: Setter<boolean> }
 ) {
-  // dismiss on click outside
-  const [contentRef, setContentRef] = createSignal<Node>();
-  createEffect(() => {
-    const el = contentRef();
-    if (el) {
-      onClickTarget(el, (hit) => {
-        if (!hit) {
-          props.setOpen(false);
-        }
-      });
-    }
-  });
-
-  // dismiss on escape
-  onDocumentEvent("keyup", (e) => {
-    if (e.key === "Escape") {
-      props.setOpen(false);
-    }
+  const [contentRef, setContentRef] = createSignal<HTMLElement>();
+  createDismissInteraction({
+    reference: () => undefined,
+    floating: contentRef,
+    setOpen: props.setOpen,
   });
 
   return (

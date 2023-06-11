@@ -188,7 +188,9 @@ function arrowLazy(options: {
   };
 }
 
-function createDismissInteraction(ctx: FloatingContext) {
+export function createDismissInteraction(
+  ctx: Pick<FloatingContext, "reference" | "floating" | "setOpen">
+) {
   // dismiss on click outside
   createEffect(() => {
     const reference = ctx.reference();
@@ -213,7 +215,9 @@ function createDismissInteraction(ctx: FloatingContext) {
   });
 }
 
-function createClickInteraction(ctx: FloatingContext) {
+function createClickInteraction(
+  ctx: Pick<FloatingContext, "reference" | "setOpen">
+) {
   createEffect(() => {
     const reference = ctx.reference();
     if (reference) {
