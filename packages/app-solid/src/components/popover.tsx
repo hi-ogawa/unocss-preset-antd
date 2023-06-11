@@ -21,6 +21,7 @@ import {
   createMemo,
   createSignal,
   onCleanup,
+  splitProps,
   untrack,
 } from "solid-js";
 import { Portal } from "solid-js/web";
@@ -98,13 +99,13 @@ export function FloatingArrow(
 ) {
   return (
     <div
-      style={props.style}
       class={cls(
         props.placement.startsWith("bottom") && "top-0",
         props.placement.startsWith("top") && "bottom-0",
         props.placement.startsWith("left") && "right-0",
         props.placement.startsWith("right") && "left-0"
       )}
+      {...splitProps(props, ["placement"])[1]}
     >
       <div
         // rotate 4x4 square with shadow
