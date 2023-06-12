@@ -371,7 +371,7 @@ export function StoryCollapse() {
           <Transition
             appear
             show={show}
-            className="h-0 duration-500 overflow-hidden"
+            className="duration-500 overflow-hidden"
             {...collapseProps}
           >
             <div className="pt-3">Collapsable Div</div>
