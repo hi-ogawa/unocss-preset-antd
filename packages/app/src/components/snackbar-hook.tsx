@@ -5,7 +5,7 @@ export interface SnackbarItemOptions {
   type?: "success" | "error";
 }
 
-interface SnackbarItemState {
+export interface SnackbarItemState {
   id: string;
   node: React.ReactNode;
   options?: SnackbarItemOptions;
