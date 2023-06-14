@@ -11,6 +11,9 @@ import {
 export function SnackbarConainer() {
   const { items, dismiss, __update, remove } = useSnackbar();
 
+  const SnackbarAnimation = SnackbarAnimation2;
+  SnackbarAnimation1;
+
   return (
     <div className="flex flex-col absolute bottom-1 left-2">
       {[...items].reverse().map((item) => (
@@ -33,7 +36,7 @@ export function SnackbarConainer() {
   );
 }
 
-function SnackbarAnimation(
+function SnackbarAnimation1(
   props: React.PropsWithChildren<{
     item: SnackbarItemState;
     onDismiss: () => void;
@@ -75,6 +78,58 @@ function SnackbarAnimation(
           appear
           show={item.state === "show"}
           className="duration-2000"
+          enterFrom="opacity-0"
+          enterTo="opacity-100"
+          afterEnter={() => props.onDismiss()}
+        />
+      </CollapseTransition>
+    </>
+  );
+}
+
+function SnackbarAnimation2(
+  props: React.PropsWithChildren<{
+    item: SnackbarItemState;
+    onDismiss: () => void;
+    onDismiss2: () => void;
+    onDismiss3: () => void;
+  }>
+) {
+  const item = props.item;
+  const show = item.state === "show";
+
+  return (
+    <>
+      {/*  */}
+      {/* collpase transition */}
+      {/*  */}
+      <CollapseTransition
+        key={item.id}
+        show={show}
+        className="duration-300"
+        afterLeave={() => props.onDismiss3()}
+      >
+        {/*  */}
+        {/* slide/scale transtion */}
+        {/*  */}
+        <Transition
+          appear
+          show={show}
+          className="inline-block duration-300 transform py-1"
+          enterFrom="translate-y-[120%] scale-0 opacity-10"
+          enterTo="translate-y-0 scale-100 opacity-100"
+          leaveFrom="translate-y-0 scale-100 opacity-100"
+          leaveTo="translate-y-[120%] scale-0 opacity-10"
+        >
+          {props.children}
+        </Transition>
+        {/*  */}
+        {/* dummy transition to auto dismiss on timeout */}
+        {/*  */}
+        <Transition
+          appear
+          show={show}
+          className="duration-5000"
           enterFrom="opacity-0"
           enterTo="opacity-100"
           afterEnter={() => props.onDismiss()}

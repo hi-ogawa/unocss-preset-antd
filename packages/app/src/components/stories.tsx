@@ -415,7 +415,7 @@ export function StorySnackbar() {
             Default
           </button>
         </div>
-        <div className="border h-[200px] p-3 flex flex-col relative overflow-hidden">
+        <div className="border h-[500px] p-3 flex flex-col relative overflow-hidden">
           <SnackbarConainer />
         </div>
         <Debug debug={snackbar.items} />
