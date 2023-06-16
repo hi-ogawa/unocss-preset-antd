@@ -8,11 +8,14 @@ import {
   useSnackbar,
 } from "./snackbar-hook";
 
-export function SnackbarConainer() {
+export function SnackbarConainer(props: {
+  animationType: string;
+  durationClassName: string;
+}) {
   const { items, dismiss, __update, remove } = useSnackbar();
 
-  const SnackbarAnimation = SnackbarAnimation2;
-  SnackbarAnimation1;
+  const SnackbarAnimation =
+    props.animationType === "1" ? SnackbarAnimation1 : SnackbarAnimation2;
 
   return (
     <div className="flex flex-col absolute bottom-1 left-2">
@@ -23,6 +26,7 @@ export function SnackbarConainer() {
           onDismiss={() => dismiss(item.id)}
           onDismiss2={() => __update(item.id, { state: "dismiss-collapse" })}
           onDismiss3={() => remove(item.id)}
+          durationClassName={props.durationClassName}
         >
           <SnackbarItem
             type={item.options?.type}
@@ -42,6 +46,7 @@ function SnackbarAnimation1(
     onDismiss: () => void;
     onDismiss2: () => void;
     onDismiss3: () => void;
+    durationClassName: string;
   }>
 ) {
   const item = props.item;
@@ -77,7 +82,7 @@ function SnackbarAnimation1(
         <Transition
           appear
           show={item.state === "show"}
-          className="duration-2000"
+          className={props.durationClassName}
           enterFrom="opacity-0"
           enterTo="opacity-100"
           afterEnter={() => props.onDismiss()}
@@ -93,6 +98,7 @@ function SnackbarAnimation2(
     onDismiss: () => void;
     onDismiss2: () => void;
     onDismiss3: () => void;
+    durationClassName: string;
   }>
 ) {
   const item = props.item;
@@ -129,7 +135,7 @@ function SnackbarAnimation2(
         <Transition
           appear
           show={show}
-          className="duration-5000"
+          className={props.durationClassName}
           enterFrom="opacity-0"
           enterTo="opacity-100"
           afterEnter={() => props.onDismiss()}
