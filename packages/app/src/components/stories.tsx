@@ -385,38 +385,77 @@ export function StoryCollapse() {
 export function StorySnackbar() {
   const snackbar = useSnackbar();
 
+  const form = useForm({
+    defaultValues: {
+      animationType: "2",
+      durationClassName: "duration-4000",
+    },
+  });
+
   return (
     <div className="flex flex-col items-center gap-3 m-2">
-      <section className="flex flex-col gap-3 w-full max-w-2xl border p-3">
+      <section className="flex flex-col gap-4 w-full max-w-2xl border p-3">
         <h2 className="text-xl">Snackbar</h2>
-        <div className="flex gap-2">
-          <button
-            className="flex-1 antd-btn antd-btn-default px-2"
-            onClick={() => {
-              snackbar.create("Successfuly toasted!", { type: "success" });
-            }}
+        <div className="flex flex-col gap-1">
+          Animation Type
+          <select
+            className="antd-input p-1"
+            {...form.register("animationType")}
           >
-            Success
-          </button>
-          <button
-            className="flex-1 antd-btn antd-btn-default px-2"
-            onClick={() => {
-              snackbar.create("This didn't work.", { type: "error" });
-            }}
-          >
-            Error
-          </button>
-          <button
-            className="flex-1 antd-btn antd-btn-default px-2"
-            onClick={() => {
-              snackbar.create("Some neutral message");
-            }}
-          >
-            Default
-          </button>
+            {[1, 2].map((v) => (
+              <option key={v} value={v}>
+                {v}
+              </option>
+            ))}
+          </select>
         </div>
-        <div className="border h-[200px] p-3 flex flex-col relative overflow-hidden">
-          <SnackbarConainer />
+        <div className="flex flex-col gap-1">
+          Duration
+          <select
+            className="antd-input p-1"
+            {...form.register("durationClassName")}
+          >
+            {["duration-2000", "duration-4000", "duration-8000"].map((v) => (
+              <option key={v} value={v}>
+                {Number(v.split("-")[1]) / 1000}s
+              </option>
+            ))}
+          </select>
+        </div>
+        <div className="flex flex-col gap-1">
+          Toast Type
+          <div className="flex gap-2">
+            <button
+              className="flex-1 antd-btn antd-btn-default px-2"
+              onClick={() => {
+                snackbar.create("Successfuly toasted!", { type: "success" });
+              }}
+            >
+              Success
+            </button>
+            <button
+              className="flex-1 antd-btn antd-btn-default px-2"
+              onClick={() => {
+                snackbar.create("This didn't work.", { type: "error" });
+              }}
+            >
+              Error
+            </button>
+            <button
+              className="flex-1 antd-btn antd-btn-default px-2"
+              onClick={() => {
+                snackbar.create("Some neutral message");
+              }}
+            >
+              Default
+            </button>
+          </div>
+        </div>
+        <div className="border h-[500px] p-3 flex flex-col relative overflow-hidden">
+          <SnackbarConainer
+            animationType={form.watch("animationType")}
+            durationClassName={form.watch("durationClassName")}
+          />
         </div>
         <Debug debug={snackbar.items} />
       </section>

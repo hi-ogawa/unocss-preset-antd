@@ -2,57 +2,146 @@ import { Transition } from "@headlessui/react";
 import { tw } from "../styles/tw";
 import { cls } from "../utils/misc";
 import { CollapseTransition } from "./collapse";
-import { SnackbarItemOptions, useSnackbar } from "./snackbar-hook";
+import {
+  SnackbarItemOptions,
+  SnackbarItemState,
+  useSnackbar,
+} from "./snackbar-hook";
 
-export function SnackbarConainer() {
+export function SnackbarConainer(props: {
+  animationType: string;
+  durationClassName: string;
+}) {
   const { items, dismiss, __update, remove } = useSnackbar();
+
+  const SnackbarAnimation =
+    props.animationType === "1" ? SnackbarAnimation1 : SnackbarAnimation2;
 
   return (
     <div className="flex flex-col absolute bottom-1 left-2">
       {[...items].reverse().map((item) => (
-        //
-        // collpase transition
-        //
-        <CollapseTransition
+        <SnackbarAnimation
           key={item.id}
-          show={item.state === "show" || item.state === "dismiss-slide"}
-          className="duration-300"
-          afterLeave={() => remove(item.id)}
+          item={item}
+          onDismiss={() => dismiss(item.id)}
+          onDismiss2={() => __update(item.id, { state: "dismiss-collapse" })}
+          onDismiss3={() => remove(item.id)}
+          durationClassName={props.durationClassName}
         >
-          {/*  */}
-          {/* slide transtion */}
-          {/*  */}
-          <Transition
-            appear
-            show={item.state === "show"}
-            className="inline-block duration-500 transform py-1"
-            enterFrom="translate-x-[-120%]"
-            enterTo="translate-x-0"
-            leaveFrom="translate-x-0"
-            leaveTo="translate-x-[-120%]"
-            afterLeave={() => __update(item.id, { state: "dismiss-collapse" })}
+          <SnackbarItem
+            type={item.options?.type}
+            onClose={() => dismiss(item.id)}
           >
-            <SnackbarItem
-              type={item.options?.type}
-              onClose={() => dismiss(item.id)}
-            >
-              {item.node}
-            </SnackbarItem>
-          </Transition>
-          {/*  */}
-          {/* dummy transition to auto trigger slide-out after timeout */}
-          {/*  */}
-          <Transition
-            appear
-            show={item.state === "show"}
-            className="duration-2000"
-            enterFrom="opacity-0"
-            enterTo="opacity-100"
-            afterEnter={() => dismiss(item.id)}
-          />
-        </CollapseTransition>
+            {item.node}
+          </SnackbarItem>
+        </SnackbarAnimation>
       ))}
     </div>
+  );
+}
+
+function SnackbarAnimation1(
+  props: React.PropsWithChildren<{
+    item: SnackbarItemState;
+    onDismiss: () => void;
+    onDismiss2: () => void;
+    onDismiss3: () => void;
+    durationClassName: string;
+  }>
+) {
+  const item = props.item;
+  return (
+    <>
+      {/*  */}
+      {/* collpase transition */}
+      {/*  */}
+      <CollapseTransition
+        key={item.id}
+        show={item.state === "show" || item.state === "dismiss-slide"}
+        className="duration-300"
+        afterLeave={() => props.onDismiss3()}
+      >
+        {/*  */}
+        {/* slide transtion */}
+        {/*  */}
+        <Transition
+          appear
+          show={item.state === "show"}
+          className="inline-block duration-500 transform py-1"
+          enterFrom="translate-x-[-120%]"
+          enterTo="translate-x-0"
+          leaveFrom="translate-x-0"
+          leaveTo="translate-x-[-120%]"
+          afterLeave={() => props.onDismiss2()}
+        >
+          {props.children}
+        </Transition>
+        {/*  */}
+        {/* dummy transition to auto trigger slide-out after timeout */}
+        {/*  */}
+        <Transition
+          appear
+          show={item.state === "show"}
+          className={props.durationClassName}
+          enterFrom="opacity-0"
+          enterTo="opacity-100"
+          afterEnter={() => props.onDismiss()}
+        />
+      </CollapseTransition>
+    </>
+  );
+}
+
+function SnackbarAnimation2(
+  props: React.PropsWithChildren<{
+    item: SnackbarItemState;
+    onDismiss: () => void;
+    onDismiss2: () => void;
+    onDismiss3: () => void;
+    durationClassName: string;
+  }>
+) {
+  const item = props.item;
+  const show = item.state === "show";
+
+  return (
+    <>
+      {/*  */}
+      {/* collpase transition */}
+      {/*  */}
+      <CollapseTransition
+        key={item.id}
+        show={show}
+        className="duration-300"
+        afterLeave={() => props.onDismiss3()}
+      >
+        {/*  */}
+        {/* slide/scale transtion */}
+        {/*  */}
+        <Transition
+          appear
+          show={show}
+          className="inline-block duration-300 transform py-1"
+          enterFrom="translate-y-[120%] scale-0 opacity-10"
+          enterTo="translate-y-0 scale-100 opacity-100"
+          leaveFrom="translate-y-0 scale-100 opacity-100"
+          leaveTo="translate-y-[120%] scale-0 opacity-10"
+        >
+          {props.children}
+        </Transition>
+        {/*  */}
+        {/* dummy transition to auto dismiss on timeout */}
+        {/*  */}
+        <Transition
+          appear
+          show={show}
+          className={props.durationClassName}
+          enterFrom="opacity-0"
+          enterTo="opacity-100"
+          afterEnter={() => props.onDismiss()}
+        />
+      </CollapseTransition>
+    </>
   );
 }
 
