@@ -16,7 +16,7 @@ importers:
         version: 1.0.0-pre.9(prettier@2.8.3)(typescript@4.9.5)
       '@hiogawa/theme-script':
         specifier: ^0.0.3
-        version: 0.0.3(vite@4.1.1)
+        version: 0.0.3(vite@4.4.6)
       '@hiogawa/unocss-typescript-dsl':
         specifier: 2.0.0-pre.5
         version: 2.0.0-pre.5(@iconify/utils@2.1.6)(@unocss/config@0.53.1)(@unocss/core@0.53.1)(local-pkg@0.4.3)(magic-string@0.30.0)
@@ -1458,7 +1458,7 @@ packages:
       typescript: 4.9.5
     dev: true
 
-  /@hiogawa/theme-script@0.0.3(vite@4.1.1):
+  /@hiogawa/theme-script@0.0.3(vite@4.4.6):
     resolution: {integrity: sha512-DUdloidQhKFo/o7uVrhw7U75SkKMnDN51vrRHz6+DIiSqRdhrbS0dbDkRDt9j9MVvp3H+xJYXg0WdO3oW+XGCg==}
     peerDependencies:
       vite: '*'
@@ -1466,7 +1466,7 @@ packages:
       vite:
         optional: true
     dependencies:
-      vite: 4.1.1
+      vite: 4.4.6(@types/node@16.18.12)
     dev: true
 
   /@hiogawa/unocss-typescript-dsl@2.0.0-pre.5(@iconify/utils@2.1.6)(@unocss/config@0.53.1)(@unocss/core@0.53.1)(local-pkg@0.4.3)(magic-string@0.30.0):
