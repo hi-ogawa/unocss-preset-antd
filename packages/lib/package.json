@@ -45,10 +45,11 @@
   },
   "devDependencies": {
     "@types/node": "^16.18.12",
-    "@unocss/preset-uno": "^0.48.5",
+    "@unocss/preset-uno": "^0.53.6",
     "antd": "^5.1.7",
     "esbuild": "^0.17.5",
     "esbuild-register": "^3.4.2",
+    "unocss": "^0.53.6",
     "vite": "^4.4.6"
   },
   "peerDependencies": {
