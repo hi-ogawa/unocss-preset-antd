@@ -14,15 +14,15 @@ importers:
       '@hiogawa/isort-ts':
         specifier: 1.0.0-pre.9
         version: 1.0.0-pre.9(prettier@2.8.3)(typescript@4.9.5)
+      '@hiogawa/theme-script':
+        specifier: ^0.0.3
+        version: 0.0.3(vite@4.1.1)
       '@hiogawa/unocss-typescript-dsl':
         specifier: 2.0.0-pre.5
         version: 2.0.0-pre.5(@iconify/utils@2.1.6)(@unocss/config@0.53.1)(@unocss/core@0.53.1)(local-pkg@0.4.3)(magic-string@0.30.0)
       '@hiogawa/utils':
         specifier: 1.4.2-pre.12
         version: 1.4.2-pre.12
-      '@hiogawa/utils-experimental':
-        specifier: ^0.0.0
-        version: 0.0.0
       '@hiogawa/utils-react':
         specifier: 1.2.1-pre.6
         version: 1.2.1-pre.6(react@18.2.0)
@@ -1458,6 +1458,17 @@ packages:
       typescript: 4.9.5
     dev: true
 
+  /@hiogawa/theme-script@0.0.3(vite@4.1.1):
+    resolution: {integrity: sha512-DUdloidQhKFo/o7uVrhw7U75SkKMnDN51vrRHz6+DIiSqRdhrbS0dbDkRDt9j9MVvp3H+xJYXg0WdO3oW+XGCg==}
+    peerDependencies:
+      vite: '*'
+    peerDependenciesMeta:
+      vite:
+        optional: true
+    dependencies:
+      vite: 4.1.1
+    dev: true
+
   /@hiogawa/unocss-typescript-dsl@2.0.0-pre.5(@iconify/utils@2.1.6)(@unocss/config@0.53.1)(@unocss/core@0.53.1)(local-pkg@0.4.3)(magic-string@0.30.0):
     resolution: {integrity: sha512-WrXry/3tDW2Y8d7U1GzTVyDxNvz1NFFji6ifZyQWI1m42CzKFm/rpiRhWYvI96apF1q+FN1L56DtLtJ1s//gtQ==}
     hasBin: true
@@ -1476,10 +1487,6 @@ packages:
       local-pkg: 0.4.3
       magic-string: 0.30.0
       zod: 3.21.0
-    dev: true
-
-  /@hiogawa/utils-experimental@0.0.0:
-    resolution: {integrity: sha512-KIntm8b5EbVVATzq3f/+ttIpNfstoN7Mx04BxRZG5t7sMdLmbj0S5yKzKL0sR7wv4qD+rStO3YELWOqN4LZPhA==}
     dev: true
 
   /@hiogawa/utils-react@1.2.1-pre.6(react@18.2.0):
