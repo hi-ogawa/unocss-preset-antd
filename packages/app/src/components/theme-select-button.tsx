@@ -1,3 +1,4 @@
+import { getTheme, setTheme } from "@hiogawa/theme-script";
 import React from "react";
 import { tw } from "../styles/tw";
 import { cls } from "../utils/misc";
@@ -8,9 +9,6 @@ const THEME_OPTIONS = [
   ["dark", "Dark theme"],
   ["light", "Light theme"],
 ] as const;
-
-declare let __themeSet: (theme: string) => void;
-declare let __themeGet: () => string;
 
 export function ThemeSelectButton() {
   const [, rerender] = React.useReducer((prev) => !prev, true);
@@ -32,14 +30,14 @@ export function ThemeSelectButton() {
                 tw.antd_btn.antd_btn_text.p_1.px_2.flex.items_center.gap_2.$
               }
               onClick={() => {
-                __themeSet(t);
+                setTheme(t);
                 rerender();
               }}
             >
               <span
                 className={cls(
                   tw.i_ri_check_line.w_5.h_5.$,
-                  t !== __themeGet() && "invisible"
+                  t !== getTheme() && "invisible"
                 )}
               ></span>
               {label}

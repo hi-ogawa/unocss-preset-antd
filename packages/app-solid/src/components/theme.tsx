@@ -1,8 +1,5 @@
+import { getTheme, setTheme } from "@hiogawa/theme-script";
 import { SelectWrapper } from "./select";
-
-// injected by global theme-script
-declare let __themeSet: (theme: string) => void;
-declare let __themeGet: () => string;
 
 export function ThemeSelect() {
   return (
@@ -13,8 +10,8 @@ export function ThemeSelect() {
         options={["system", "dark", "light"]}
         // very subtle nuance but it's not necessary to make `value` reactive by createSignal/createEffect
         // since `select.value` can be left "uncontrolled" after the first rendering.
-        value={__themeGet()}
-        onChange={(v) => __themeSet(v)}
+        value={getTheme()}
+        onChange={(v) => setTheme(v)}
       />
     </label>
   );
