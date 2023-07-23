@@ -1,7 +1,8 @@
+import { themeScriptPlugin } from "@hiogawa/theme-script/dist/vite";
 import unocss from "unocss/vite";
 import { defineConfig } from "vite";
 import solid from "vite-plugin-solid";
-import { injectHtmlPlugin, unocssDepHmrPlugin } from "../app/vite.config";
+import { unocssDepHmrPlugin } from "../app/vite.config";
 
 export default defineConfig({
   build: {
@@ -11,6 +12,8 @@ export default defineConfig({
     unocss(),
     solid(),
     unocssDepHmrPlugin([require.resolve("@hiogawa/unocss-preset-antd")]),
-    injectHtmlPlugin(),
+    themeScriptPlugin({
+      storageKey: "unocss-preset-antd-app-solid:theme",
+    }),
   ],
 });
