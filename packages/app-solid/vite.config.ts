@@ -10,6 +10,7 @@ export default defineConfig({
   },
   plugins: [
     unocss(),
+    // @ts-ignore confused vite peerDep?
     solid(),
     unocssDepHmrPlugin([require.resolve("@hiogawa/unocss-preset-antd")]),
     themeScriptPlugin({
