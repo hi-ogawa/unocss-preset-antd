@@ -17,6 +17,8 @@ import React from "react";
 //   - can workaround by setting same `duraion-xxx` for all components
 // - no forward ref
 
+// TODO: test StrictMode (i.e. double effect callback)
+
 // TODO: rename "enter" => "entering"?
 type TransitionState = "enter" | "leaving" | "left";
 
@@ -41,38 +43,11 @@ interface TransitionEventProps {
 }
 
 export function Transition2(
-  props: React.PropsWithChildren<
-    { show?: boolean } & TransitionClassProps & TransitionEventProps
-  >
-) {
-  const [state, setState] = React.useState<TransitionState>("left");
-
-  React.useEffect(() => {
-    if (props.show && state !== "enter") {
-      setState("enter");
-    }
-    if (!props.show && state === "enter") {
-      setState("leaving");
-    }
-  }, [props.show, state]);
-
-  return (
-    <>
-      {state !== "left" && (
-        <TransitionInner state={state} setState={setState} {...props} />
-      )}
-    </>
-  );
-}
-
-function TransitionInner(
-  props: React.PropsWithChildren<
-    {
-      state: TransitionState;
-      setState: (v: TransitionState) => void;
-    } & TransitionClassProps &
-      TransitionEventProps
-  >
+  props: {
+    show?: boolean;
+    children?: React.ReactNode;
+  } & TransitionClassProps &
+    TransitionEventProps
 ) {
   const [manager] = React.useState(
     () =>
@@ -84,40 +59,37 @@ function TransitionInner(
           leaveFrom: splitClass(props.leaveFrom ?? ""),
           leaveTo: splitClass(props.leaveTo ?? ""),
         },
-        afterLeave: () => {
-          props.setState("left");
-        },
       })
   );
 
   React.useSyncExternalStore(
     React.useCallback((onStorechange) => manager.subscribe(onStorechange), []),
-    () => manager.state
+    () => JSON.stringify([manager.render, manager.state])
   );
 
-  // element
-  const onRef = React.useCallback((el: HTMLElement | null) => {
-    if (el) {
-      manager.init(el);
-    } else {
-      manager.deinit();
-    }
-  }, []);
-
-  // mount
   React.useEffect(() => {
-    manager.startEnter();
-  }, []);
+    manager.show(props.show ?? false);
+  }, [props.show]);
 
-  // hide
+  return (
+    <>
+      {manager.render && (
+        <EffectWrapper onMount={() => manager.startEnter()}>
+          <div ref={manager.setElement}>{props.children}</div>
+        </EffectWrapper>
+      )}
+    </>
+  );
+}
+
+function EffectWrapper(props: {
+  onMount: () => void;
+  children?: React.ReactNode;
+}) {
   React.useEffect(() => {
-    if (props.state === "leaving") {
-      manager.startLeave();
-    }
-  }, [props.state]);
-
-  // TODO: delegate other props
-  return <div ref={onRef}>{props.children}</div>;
+    props.onMount();
+  }, []);
+  return <>{props.children}</>;
 }
 
 //
@@ -127,8 +99,10 @@ function TransitionInner(
 class TransitionManager {
   private listeners = new Set<() => void>();
   private disposables = new Set<() => void>();
+  // TODO: merge two states into one
+  render: boolean = false;
   state: TransitionState = "left";
-  el?: HTMLElement;
+  el: HTMLElement | null = null;
 
   constructor(
     private options: {
@@ -141,24 +115,30 @@ class TransitionManager {
         leaveFrom: string[];
         leaveTo: string[];
       };
+      beforeEnterFrom?: () => void;
+      beforeEnterTo?: () => void;
       afterEnter?: () => void;
+      beforeLeaveFrom?: () => void;
+      beforeLeaveTo?: () => void;
       afterLeave?: () => void;
     }
   ) {}
 
-  init(el: HTMLElement) {
-    this.el = el;
-    const classes = this.options.classes;
-
-    // early setup enterFrom
-    el.classList.remove(...Object.values(classes).flat());
-    el.classList.add(...classes.className, ...classes.enterFrom);
+  show(show: boolean) {
+    if (show && !this.render) {
+      this.render = true;
+      this.notify();
+    }
+    if (!show && this.render) {
+      this.startLeave();
+    }
   }
 
-  deinit() {
+  // api for ref callback
+  setElement = (el: HTMLElement | null) => {
     this.dispose();
-    this.el = undefined;
-  }
+    this.el = el;
+  };
 
   // effect
   startEnter() {
@@ -177,7 +157,11 @@ class TransitionManager {
     el.classList.add(...classes.enterTo);
 
     // notify after transition
-    this.disposables.add(onTransitionEnd(el, () => this.notify("afterEnter")));
+    this.disposables.add(
+      onTransitionEnd(el, () => {
+        this.notify("afterEnter");
+      })
+    );
   }
 
   startLeave() {
@@ -196,7 +180,12 @@ class TransitionManager {
     el.classList.add(...classes.leaveTo);
 
     // notify after transition
-    this.disposables.add(onTransitionEnd(el, () => this.notify("afterLeave")));
+    this.disposables.add(
+      onTransitionEnd(el, () => {
+        this.render = false;
+        this.notify("afterLeave");
+      })
+    );
   }
 
   private dispose() {
@@ -204,7 +193,7 @@ class TransitionManager {
     this.disposables.clear();
   }
 
-  // standard api for React.useSyncExternalStore
+  // api for React.useSyncExternalStore
   subscribe(listener: () => void) {
     this.listeners.add(listener);
     return () => {
@@ -213,9 +202,11 @@ class TransitionManager {
     };
   }
 
-  private notify(type: "afterLeave" | "afterEnter") {
+  private notify(type?: "afterLeave" | "afterEnter") {
     if (this.listeners.size === 0) return;
-    this.options[type]?.();
+    if (type) {
+      this.options[type]?.();
+    }
     this.listeners.forEach((f) => f());
   }
 }
