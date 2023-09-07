@@ -13,6 +13,7 @@ import { PopoverSimple } from "./popover";
 import { SnackbarConainer } from "./snackbar";
 import { useSnackbar } from "./snackbar-hook";
 import { TopProgressBar, useProgress } from "./top-progress-bar";
+import { Transition2 } from "./transition";
 
 export function StoryButton() {
   const [fab, setFabInner] = React.useState(new Set([0, 1]));
@@ -58,7 +59,7 @@ export function StoryButton() {
           </span>
         </h2>
         <div className="flex w-28">
-          <Transition
+          <Transition2
             show={fab.has(0)}
             className="transition duration-200"
             enterFrom="scale-30 opacity-0"
@@ -72,7 +73,7 @@ export function StoryButton() {
             >
               <span className="i-ri-check-line w-6 h-6" />
             </button>
-          </Transition>
+          </Transition2>
           <div className="flex-1"></div>
           <Transition
             show={fab.has(1)}
