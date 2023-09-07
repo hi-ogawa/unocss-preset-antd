@@ -98,9 +98,9 @@ function TransitionInner(
   // element
   const onRef = React.useCallback((el: HTMLElement | null) => {
     if (el) {
-      manager.onCreate(el);
+      manager.init(el);
     } else {
-      manager.onDestroy();
+      manager.deinit();
     }
   }, []);
 
@@ -119,6 +119,10 @@ function TransitionInner(
   // TODO: delegate other props
   return <div ref={onRef}>{props.children}</div>;
 }
+
+//
+// framework-agnostic animation utility
+//
 
 class TransitionManager {
   private listeners = new Set<() => void>();
@@ -142,7 +146,7 @@ class TransitionManager {
     }
   ) {}
 
-  onCreate(el: HTMLElement) {
+  init(el: HTMLElement) {
     this.el = el;
     const classes = this.options.classes;
 
@@ -151,11 +155,12 @@ class TransitionManager {
     el.classList.add(...classes.className, ...classes.enterFrom);
   }
 
-  onDestroy() {
+  deinit() {
     this.dispose();
     this.el = undefined;
   }
 
+  // effect
   startEnter() {
     if (!this.el) return;
     this.dispose();
@@ -199,10 +204,13 @@ class TransitionManager {
     this.disposables.clear();
   }
 
-  // api for React.useSyncExternalStore
+  // standard api for React.useSyncExternalStore
   subscribe(listener: () => void) {
     this.listeners.add(listener);
-    return () => this.listeners.delete(listener);
+    return () => {
+      this.dispose();
+      this.listeners.delete(listener);
+    };
   }
 
   private notify(type: "afterLeave" | "afterEnter") {
@@ -212,12 +220,8 @@ class TransitionManager {
   }
 }
 
-//
-// utils
-//
-
 function onTransitionEnd(el: HTMLElement, callback: () => void) {
-  // watch `transitionend`
+  // listen "transitionend"
   const handler = (e: HTMLElementEventMap["transitionend"]) => {
     if (e.target === e.currentTarget) {
       dispose();
@@ -226,12 +230,13 @@ function onTransitionEnd(el: HTMLElement, callback: () => void) {
   };
   el.addEventListener("transitionend", handler);
 
-  // also setup `transitionDuration` timeout as a fallback
+  // additionally setup `transitionDuration` timeout as a fallback
   const duration = getComputedStyle(el).transitionDuration;
+  const durationMs = parseDuration(duration);
   const subscription = window.setTimeout(() => {
     dispose();
     callback();
-  }, parseDuration(duration));
+  }, durationMs);
 
   function dispose() {
     el.removeEventListener("transitionend", handler);
