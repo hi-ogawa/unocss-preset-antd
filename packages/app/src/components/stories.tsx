@@ -62,7 +62,7 @@ export function StoryButton() {
           <Transition2
             appear
             show={fab.has(0)}
-            className="transition duration-200"
+            className="transition duration-500"
             enterFrom="scale-30 opacity-0"
             enterTo="scale-100 opacity-100"
             leaveFrom="scale-100 opacity-100"
@@ -79,7 +79,7 @@ export function StoryButton() {
           <Transition2
             // appear
             show={fab.has(1)}
-            className="transition duration-200"
+            className="transition duration-500"
             enterFrom="scale-30 opacity-0"
             enterTo="scale-100 opacity-100"
             leaveFrom="scale-100 opacity-100"

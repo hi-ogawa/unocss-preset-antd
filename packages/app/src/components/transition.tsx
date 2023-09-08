@@ -19,6 +19,8 @@ import React from "react";
 
 // TODO: test StrictMode (i.e. double effect callback)
 
+// TODO: eventual consistency when "show" flips faster than animation?
+
 interface TransitionClassProps {
   className?: string;
   enterFrom?: string;
@@ -76,7 +78,7 @@ export function Transition2(
       {manager.shouldRender() && (
         <EffectWrapper
           onLayoutEffect={() => manager.onLayout()}
-          onEffect={() => manager.startEnter()}
+          onEffect={() => manager.onMount()}
         >
           <div ref={manager.setElement}>{props.children}</div>
         </EffectWrapper>
@@ -111,7 +113,7 @@ class TransitionManager {
     private options: {
       entered: boolean;
       // TODO: manager itself doesn't have to be aware of classes?
-      //       must support via beforeEnter/afterEnter/beforeLeave/afterLeave callbacks?
+      //       just support style manipulation via beforeEnter/afterEnter/beforeLeave/afterLeave callbacks?
       classes: {
         className: string[];
         enterFrom: string[];
@@ -162,7 +164,7 @@ class TransitionManager {
     }
   }
 
-  startEnter() {
+  onMount() {
     if (!this.el) return;
     if (this.state === "entered") return;
 
@@ -188,7 +190,7 @@ class TransitionManager {
     );
   }
 
-  startLeave() {
+  private startLeave() {
     if (!this.el) return;
     if (this.state === "left") return;
 
