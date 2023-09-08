@@ -19,8 +19,6 @@ import React from "react";
 
 // TODO: test StrictMode (i.e. double effect callback)
 
-// TODO: eventual consistency when "show" flips faster than animation?
-
 interface TransitionClassProps {
   className?: string;
   enterFrom?: string;
@@ -101,7 +99,7 @@ function EffectWrapper(props: {
 // framework-agnostic animation utility
 //
 
-type TransitionState = "left" | "entering" | "entered";
+type TransitionState = "left" | "entering" | "entered" | "leaving";
 
 class TransitionManager {
   private listeners = new Set<() => void>();
@@ -131,11 +129,14 @@ class TransitionManager {
   }
 
   show(show: boolean) {
-    if (show && !this.shouldRender()) {
+    if (show && this.state !== "entered") {
       this.state = "entering";
       this.notify();
+      this.startEnter();
     }
-    if (!show && this.shouldRender()) {
+    if (!show && this.state !== "left") {
+      this.state = "leaving";
+      this.notify();
       this.startLeave();
     }
   }
@@ -165,8 +166,12 @@ class TransitionManager {
   }
 
   onMount() {
-    if (!this.el) return;
     if (this.state === "entered") return;
+    this.startEnter();
+  }
+
+  private startEnter() {
+    if (!this.el) return;
 
     this.dispose();
     const el = this.el;
@@ -192,7 +197,6 @@ class TransitionManager {
 
   private startLeave() {
     if (!this.el) return;
-    if (this.state === "left") return;
 
     this.dispose();
     const el = this.el;

@@ -93,6 +93,7 @@ export function StoryButton() {
             </button>
           </Transition2>
         </div>
+        <pre>fab = {JSON.stringify([...fab])}</pre>
       </section>
     </main>
   );
