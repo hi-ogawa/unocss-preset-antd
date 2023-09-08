@@ -47,7 +47,7 @@ export function Transition2(
   const [manager] = React.useState(
     () =>
       new TransitionManager({
-        initiallyEntered: Boolean(props.show && !props.appear),
+        initialEntered: Boolean(props.show && !props.appear),
         ...classPropsToCallbacks(props),
       })
   );
@@ -152,10 +152,10 @@ class TransitionManager {
 
   constructor(
     private options: {
-      initiallyEntered: boolean;
+      initialEntered: boolean;
     } & TransitionCallbacks
   ) {
-    this.state = this.options.initiallyEntered ? "entered" : "left";
+    this.state = this.options.initialEntered ? "entered" : "leaving";
   }
 
   shouldRender(): boolean {
@@ -163,6 +163,7 @@ class TransitionManager {
   }
 
   show(show: boolean) {
+    this.dispose();
     if (show && this.state !== "entered") {
       this.state = "entering";
       this.notify();
@@ -183,31 +184,34 @@ class TransitionManager {
 
   onLayout() {
     if (!this.el) return;
+    this.dispose();
+    const el = this.el;
 
     // style before paint
     // TODO: in some cases, "appear" works without this. figure out what's the issue.
     if (this.state === "entered") {
-      this.options.onEntered?.(this.el);
+      this.options.onEntered?.(el);
     } else {
-      this.options.onEnterFrom?.(this.el);
+      this.options.onEnterFrom?.(el);
     }
   }
 
   onMount() {
     if (this.state === "entered") return;
+    this.dispose();
     this.startEnter();
   }
 
   private startEnter() {
     if (!this.el) return;
-
     const el = this.el;
-    this.options.onEnterFrom?.(this.el);
-    forceStyle(el);
-    this.options.onEnterTo?.(this.el);
 
-    // notify after transition
-    this.dispose();
+    // "enterFrom" -> "enterTo"
+    this.options.onEnterFrom?.(el);
+    forceStyle(el);
+    this.options.onEnterTo?.(el);
+
+    // notify "entered"
     this.disposables.add(
       onTransitionEnd(el, () => {
         this.state = "entered";
@@ -220,12 +224,12 @@ class TransitionManager {
     if (!this.el) return;
     const el = this.el;
 
+    // "leaveFrom" -> "leaveTo"
     this.options.onLeaveFrom?.(el);
     forceStyle(el);
     this.options.onLeaveTo?.(el);
 
-    // notify after transition
-    this.dispose();
+    // notify "left"
     this.disposables.add(
       onTransitionEnd(el, () => {
         this.state = "left";
