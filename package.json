@@ -24,7 +24,7 @@
     "@hiogawa/isort-ts": "1.0.0-pre.9",
     "@hiogawa/theme-script": "^0.0.3",
     "@hiogawa/unocss-typescript-dsl": "2.0.0-pre.5",
-    "@hiogawa/utils": "1.4.2-pre.12",
+    "@hiogawa/utils": "1.6.1-pre.6",
     "@hiogawa/utils-react": "1.2.1-pre.6",
     "@tsconfig/strictest": "^1.0.2",
     "@vitejs/plugin-react": "^3.1.0",

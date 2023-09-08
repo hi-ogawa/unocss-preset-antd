@@ -19,12 +19,11 @@ import React from "react";
 
 interface TransitionClassProps {
   className?: string;
+  enter?: string;
   enterFrom?: string;
   enterTo?: string;
-  // TODO
-  // enter?: string;
-  // entered?: string;
-  // leave?: string;
+  entered?: string;
+  leave?: string;
   leaveFrom?: string;
   leaveTo?: string;
 }
@@ -49,14 +48,7 @@ export function Transition2(
     () =>
       new TransitionManager({
         initiallyEntered: Boolean(props.show && !props.appear),
-        classes: {
-          // TODO: reactive props
-          className: splitClass(props.className ?? ""),
-          enterFrom: splitClass(props.enterFrom ?? ""),
-          enterTo: splitClass(props.enterTo ?? ""),
-          leaveFrom: splitClass(props.leaveFrom ?? ""),
-          leaveTo: splitClass(props.leaveTo ?? ""),
-        },
+        ...classPropsToCallbacks(props),
       })
   );
 
@@ -93,11 +85,64 @@ function EffectWrapper(props: {
   return <>{props.children}</>;
 }
 
+function classPropsToCallbacks(
+  props: TransitionClassProps
+): TransitionCallbacks {
+  const classes = {
+    className: splitClass(props.className ?? ""),
+    enter: splitClass(props.enter ?? ""),
+    enterFrom: splitClass(props.enterFrom ?? ""),
+    enterTo: splitClass(props.enterTo ?? ""),
+    entered: splitClass(props.entered ?? ""),
+    leave: splitClass(props.leave ?? ""),
+    leaveFrom: splitClass(props.leaveFrom ?? ""),
+    leaveTo: splitClass(props.leaveTo ?? ""),
+  };
+  const all = Object.values(classes).flat();
+
+  // prettier-ignore
+  return {
+    onEnterFrom: (el) => {
+      el.classList.remove(...all);
+      el.classList.add(...classes.className, ...classes.enterFrom, ...classes.enter);
+    },
+    onEnterTo: (el) => {
+      el.classList.remove(...all);
+      el.classList.add(...classes.className, ...classes.enterTo, ...classes.enter);
+    },
+    onEntered: (el) => {
+      el.classList.remove(...all);
+      el.classList.add(...classes.className, ...classes.entered);
+    },
+    onLeaveFrom: (el) => {
+      el.classList.remove(...all);
+      el.classList.add(...classes.className, ...classes.leaveFrom, ...classes.leave);
+    },
+    onLeaveTo: (el) => {
+      el.classList.remove(...all);
+      el.classList.add(...classes.className, ...classes.leaveTo, ...classes.leave);
+    },
+    onLeft: (el) => {
+      el.classList.remove(...all);
+      el.classList.add(...classes.className);
+    }
+  };
+}
+
 //
 // framework-agnostic animation utility
 //
 
 type TransitionState = "left" | "entering" | "entered" | "leaving";
+
+type TransitionCallbacks = {
+  onEnterFrom?: (el: HTMLElement) => void;
+  onEnterTo?: (el: HTMLElement) => void;
+  onEntered?: (el: HTMLElement) => void;
+  onLeaveFrom?: (el: HTMLElement) => void;
+  onLeaveTo?: (el: HTMLElement) => void;
+  onLeft?: (el: HTMLElement) => void;
+};
 
 class TransitionManager {
   private listeners = new Set<() => void>();
@@ -108,16 +153,7 @@ class TransitionManager {
   constructor(
     private options: {
       initiallyEntered: boolean;
-      // TODO: manager itself doesn't have to be aware of classes?
-      //       just support style manipulation via beforeEnter/afterEnter/beforeLeave/afterLeave callbacks?
-      classes: {
-        className: string[];
-        enterFrom: string[];
-        enterTo: string[];
-        leaveFrom: string[];
-        leaveTo: string[];
-      };
-    }
+    } & TransitionCallbacks
   ) {
     this.state = this.options.initiallyEntered ? "entered" : "left";
   }
@@ -131,8 +167,7 @@ class TransitionManager {
       this.state = "entering";
       this.notify();
       this.startEnter();
-    }
-    if (!show && this.state !== "left") {
+    } else if (!show && this.state !== "left") {
       this.state = "leaving";
       this.notify();
       this.startLeave();
@@ -149,17 +184,12 @@ class TransitionManager {
   onLayout() {
     if (!this.el) return;
 
-    const el = this.el;
-    const classes = this.options.classes;
-
     // style before paint
+    // TODO: in some cases, "appear" works without this. figure out what's the issue.
     if (this.state === "entered") {
-      el.classList.remove(...Object.values(classes).flat());
-      el.classList.add(...classes.className, ...classes.enterTo);
+      this.options.onEntered?.(this.el);
     } else {
-      // TODO: in some cases, "appear" works without this, so not entirely sure why.
-      el.classList.remove(...Object.values(classes).flat());
-      el.classList.add(...classes.className, ...classes.enterFrom);
+      this.options.onEnterFrom?.(this.el);
     }
   }
 
@@ -171,49 +201,35 @@ class TransitionManager {
   private startEnter() {
     if (!this.el) return;
 
-    this.dispose();
     const el = this.el;
-    const classes = this.options.classes;
-
-    // enterFrom
-    el.classList.remove(...Object.values(classes).flat());
-    el.classList.add(...classes.className, ...classes.enterFrom);
+    this.options.onEnterFrom?.(this.el);
     forceStyle(el);
-
-    // enterFrom => enterTo
-    el.classList.remove(...classes.enterFrom);
-    el.classList.add(...classes.enterTo);
+    this.options.onEnterTo?.(this.el);
 
     // notify after transition
+    this.dispose();
     this.disposables.add(
       onTransitionEnd(el, () => {
         this.state = "entered";
-        this.notify();
+        this.notify(() => this.options.onEnterTo?.(el));
       })
     );
   }
 
   private startLeave() {
     if (!this.el) return;
-
-    this.dispose();
     const el = this.el;
-    const classes = this.options.classes;
 
-    // leaveFrom
-    el.classList.remove(...Object.values(classes).flat());
-    el.classList.add(...classes.className, ...classes.leaveFrom);
+    this.options.onLeaveFrom?.(el);
     forceStyle(el);
-
-    // leaveFrom => leaveTo
-    el.classList.remove(...classes.leaveFrom);
-    el.classList.add(...classes.leaveTo);
+    this.options.onLeaveTo?.(el);
 
     // notify after transition
+    this.dispose();
     this.disposables.add(
       onTransitionEnd(el, () => {
         this.state = "left";
-        this.notify();
+        this.notify(() => this.options.onLeft?.(el));
       })
     );
   }
@@ -238,8 +254,9 @@ class TransitionManager {
     return this.state;
   }
 
-  private notify() {
+  private notify(callback?: () => void) {
     if (this.listeners.size === 0) return;
+    callback?.();
     this.listeners.forEach((f) => f());
   }
 }
