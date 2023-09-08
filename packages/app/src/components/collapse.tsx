@@ -1,6 +1,7 @@
 import { Transition } from "@headlessui/react";
 import { tinyassert } from "@hiogawa/utils";
 import React from "react";
+import type { Transition2 } from "./transition";
 
 export function CollapseTransition(
   props: Parameters<typeof Transition>[0] & object
@@ -42,4 +43,25 @@ export function useCollapseProps(): Partial<Parameters<typeof Transition>[0]> {
   }
 
   return { ref: refCallback, beforeEnter, beforeLeave };
+}
+
+export function getCollapseProps2(): Partial<
+  Parameters<typeof Transition2>[0]
+> {
+  function uncollapse(el: HTMLElement) {
+    const child = el.firstElementChild;
+    tinyassert(child);
+    el.style.height = child.clientHeight + "px";
+  }
+
+  function collapse(el: HTMLElement) {
+    el.style.height = "0px";
+  }
+
+  return {
+    onEnterFrom: collapse,
+    onEnterTo: uncollapse,
+    onLeaveFrom: uncollapse,
+    onLeaveTo: collapse,
+  };
 }

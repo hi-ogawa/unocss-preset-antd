@@ -9,8 +9,6 @@ import React from "react";
 // difference from headlessui
 // - always wrapped by div
 // - always remount
-// - no callback (beforeEnter, afterEnter, beforeLeave, afterLeave)
-//   - TODO: support
 // - no Transition.Child
 //   - can workaround by setting same `duraion-xxx` for all components
 // - no forward ref
@@ -28,27 +26,20 @@ interface TransitionClassProps {
   leaveTo?: string;
 }
 
-interface TransitionEventProps {
-  // TODO
-  // beforeEnter?: () => void;
-  // afterEnter?: () => void;
-  // beforeLeave?: () => void;
-  // afterLeave?: () => void;
-}
-
 export function Transition2(
   props: {
     show?: boolean;
     appear?: boolean;
     children?: React.ReactNode;
   } & TransitionClassProps &
-    TransitionEventProps
+    TransitionCallbacks
 ) {
   const [manager] = React.useState(
     () =>
       new TransitionManager({
         initialEntered: Boolean(props.show && !props.appear),
-        ...classPropsToCallbacks(props),
+        // TODO: update options
+        ...processClassProps(props),
       })
   );
 
@@ -85,8 +76,8 @@ function EffectWrapper(props: {
   return <>{props.children}</>;
 }
 
-function classPropsToCallbacks(
-  props: TransitionClassProps
+function processClassProps(
+  props: TransitionClassProps & TransitionCallbacks
 ): TransitionCallbacks {
   const classes = {
     className: splitClass(props.className ?? ""),
@@ -105,26 +96,32 @@ function classPropsToCallbacks(
     onEnterFrom: (el) => {
       el.classList.remove(...all);
       el.classList.add(...classes.className, ...classes.enterFrom, ...classes.enter);
+      props.onEnterFrom?.(el);
     },
     onEnterTo: (el) => {
       el.classList.remove(...all);
       el.classList.add(...classes.className, ...classes.enterTo, ...classes.enter);
+      props.onEnterTo?.(el);
     },
     onEntered: (el) => {
       el.classList.remove(...all);
       el.classList.add(...classes.className, ...classes.entered);
+      props.onEntered?.(el);
     },
     onLeaveFrom: (el) => {
       el.classList.remove(...all);
       el.classList.add(...classes.className, ...classes.leaveFrom, ...classes.leave);
+      props.onLeaveFrom?.(el);
     },
     onLeaveTo: (el) => {
       el.classList.remove(...all);
       el.classList.add(...classes.className, ...classes.leaveTo, ...classes.leave);
+      props.onLeaveTo?.(el);
     },
     onLeft: (el) => {
       el.classList.remove(...all);
       el.classList.add(...classes.className);
+      props.onLeft?.(el);
     }
   };
 }

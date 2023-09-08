@@ -7,7 +7,7 @@ import { Controller, useForm } from "react-hook-form";
 import ReactSelect from "react-select";
 import { tw } from "../styles/tw";
 import { cls } from "../utils/misc";
-import { useCollapseProps } from "./collapse";
+import { getCollapseProps2 } from "./collapse";
 import { useModal } from "./modal";
 import { PopoverSimple } from "./popover";
 import { SnackbarConainer } from "./snackbar";
@@ -358,7 +358,6 @@ export function StorySlide() {
 
 export function StoryCollapse() {
   const [show, setShow] = React.useState(true);
-  const collapseProps = useCollapseProps();
 
   return (
     <div className="flex flex-col items-center gap-3 m-2">
@@ -372,14 +371,14 @@ export function StoryCollapse() {
         </button>
         <div className="flex flex-col p-3 border">
           <div>Fixed Div</div>
-          <Transition
+          <Transition2
             appear
             show={show}
-            className="h-0 duration-500 overflow-hidden"
-            {...collapseProps}
+            className="duration-500 overflow-hidden"
+            {...getCollapseProps2()}
           >
             <div className="pt-3">Collapsable Div</div>
-          </Transition>
+          </Transition2>
         </div>
       </section>
     </div>
