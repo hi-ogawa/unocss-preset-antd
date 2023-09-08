@@ -19,9 +19,6 @@ import React from "react";
 
 // TODO: test StrictMode (i.e. double effect callback)
 
-// TODO: rename "enter" => "entering"?
-type TransitionState = "enter" | "leaving" | "left";
-
 interface TransitionClassProps {
   className?: string;
   enterFrom?: string;
@@ -64,7 +61,7 @@ export function Transition2(
 
   React.useSyncExternalStore(
     React.useCallback((onStorechange) => manager.subscribe(onStorechange), []),
-    () => JSON.stringify([manager.render, manager.state])
+    () => manager.rendered
   );
 
   React.useEffect(() => {
@@ -73,7 +70,7 @@ export function Transition2(
 
   return (
     <>
-      {manager.render && (
+      {manager.rendered && (
         <EffectWrapper onMount={() => manager.startEnter()}>
           <div ref={manager.setElement}>{props.children}</div>
         </EffectWrapper>
@@ -99,9 +96,7 @@ function EffectWrapper(props: {
 class TransitionManager {
   private listeners = new Set<() => void>();
   private disposables = new Set<() => void>();
-  // TODO: merge two states into one
-  render: boolean = false;
-  state: TransitionState = "left";
+  rendered: boolean = false;
   el: HTMLElement | null = null;
 
   constructor(
@@ -125,11 +120,11 @@ class TransitionManager {
   ) {}
 
   show(show: boolean) {
-    if (show && !this.render) {
-      this.render = true;
+    if (show && !this.rendered) {
+      this.rendered = true;
       this.notify();
     }
-    if (!show && this.render) {
+    if (!show && this.rendered) {
       this.startLeave();
     }
   }
@@ -182,7 +177,7 @@ class TransitionManager {
     // notify after transition
     this.disposables.add(
       onTransitionEnd(el, () => {
-        this.render = false;
+        this.rendered = false;
         this.notify("afterLeave");
       })
     );
