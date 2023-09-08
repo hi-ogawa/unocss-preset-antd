@@ -99,11 +99,12 @@ function EffectWrapper(props: {
 // framework-agnostic animation utility
 //
 
+type TransitionState = "left" | "entering" | "entered";
+
 class TransitionManager {
   private listeners = new Set<() => void>();
   private disposables = new Set<() => void>();
-  private rendered: boolean = true;
-  private entered: boolean = true;
+  private state: TransitionState = "left";
   private el: HTMLElement | null = null;
 
   constructor(
@@ -120,27 +121,28 @@ class TransitionManager {
       };
     }
   ) {
-    this.rendered = this.entered = this.options.entered;
+    this.state = this.options.entered ? "entered" : "left";
   }
 
   shouldRender(): boolean {
-    return this.rendered;
+    return this.state !== "left";
   }
 
   show(show: boolean) {
-    if (show && !this.rendered) {
-      this.rendered = true;
+    if (show && !this.shouldRender()) {
+      this.state = "entering";
       this.notify();
     }
-    if (!show && this.rendered) {
+    if (!show && this.shouldRender()) {
       this.startLeave();
     }
   }
 
-  // api for ref callback
+  // api compatible with ref callback
   setElement = (el: HTMLElement | null) => {
     this.dispose();
     this.el = el;
+    this.state;
   };
 
   onLayout() {
@@ -150,11 +152,11 @@ class TransitionManager {
     const classes = this.options.classes;
 
     // style before paint
-    // TODO: sometimes "appear" works without this, so not entirely sure why.
-    if (this.entered) {
+    if (this.state === "entered") {
       el.classList.remove(...Object.values(classes).flat());
       el.classList.add(...classes.className, ...classes.enterTo);
     } else {
+      // TODO: in some cases, "appear" works without this, so not entirely sure why.
       el.classList.remove(...Object.values(classes).flat());
       el.classList.add(...classes.className, ...classes.enterFrom);
     }
@@ -162,7 +164,7 @@ class TransitionManager {
 
   startEnter() {
     if (!this.el) return;
-    if (this.entered) return;
+    if (this.state === "entered") return;
 
     this.dispose();
     const el = this.el;
@@ -180,7 +182,7 @@ class TransitionManager {
     // notify after transition
     this.disposables.add(
       onTransitionEnd(el, () => {
-        this.entered = true;
+        this.state = "entered";
         this.notify();
       })
     );
@@ -188,7 +190,7 @@ class TransitionManager {
 
   startLeave() {
     if (!this.el) return;
-    if (!this.entered) return;
+    if (this.state === "left") return;
 
     this.dispose();
     const el = this.el;
@@ -206,8 +208,7 @@ class TransitionManager {
     // notify after transition
     this.disposables.add(
       onTransitionEnd(el, () => {
-        this.entered = false;
-        this.rendered = false;
+        this.state = "left";
         this.notify();
       })
     );
@@ -231,7 +232,7 @@ class TransitionManager {
   }
 
   getSnapshot() {
-    return JSON.stringify([this.rendered, this.entered]);
+    return this.state;
   }
 
   private notify() {
