@@ -1,5 +1,5 @@
+import { useStableCallback } from "@hiogawa/utils-react";
 import React from "react";
-import { useMergeRefs } from "./utils";
 
 // the use case of @headlessui/react is limited to a simple usage of `Transition` component
 // so here we implement minimal version on own own
@@ -76,6 +76,21 @@ function EffectWrapper(props: {
   React.useLayoutEffect(() => props.onLayoutEffect(), []);
   React.useEffect(() => props.onEffect(), []);
   return <>{props.children}</>;
+}
+
+function useMergeRefs<T>(...refs: React.Ref<T>[]): React.RefCallback<T> {
+  return useStableCallback((el) => {
+    for (const ref of refs) {
+      if (ref) {
+        if (typeof ref === "function") {
+          ref(el);
+        } else {
+          // @ts-expect-error workaround readonly
+          ref.current = el;
+        }
+      }
+    }
+  });
 }
 
 function processClassProps(
