@@ -5,11 +5,11 @@ import {
   useId,
   useInteractions,
 } from "@floating-ui/react";
-import { Transition } from "@headlessui/react";
 import { tinyassert } from "@hiogawa/utils";
 import React from "react";
 import { RemoveScroll } from "react-remove-scroll";
 import { cls } from "../utils/misc";
+import { Transition2 } from "./transition";
 
 // copied from https://github.com/hi-ogawa/web-ext-tab-manager/blame/81710dead04859525b9c8be3a73a71926cae6da4/src/components/modal.tsx
 
@@ -31,9 +31,15 @@ export function Modal(props: {
 
   return (
     <FloatingPortal id={id}>
-      <Transition appear show={props.open} className="z-100">
+      <Transition2
+        appear
+        show={props.open}
+        className="fixed inset-0 duration-300 z-100"
+      >
         {/* backdrop */}
-        <Transition.Child
+        <Transition2
+          appear
+          show={props.open}
           className="transition duration-300 fixed inset-0 bg-black"
           enterFrom="opacity-0"
           enterTo="opacity-40"
@@ -42,7 +48,9 @@ export function Modal(props: {
         />
         {/* content */}
         <RemoveScroll className="fixed inset-0 overflow-hidden flex justify-center items-center">
-          <Transition.Child
+          <Transition2
+            appear
+            show={props.open}
             className={cls(
               props.className,
               "transition duration-300 transform w-[90%] max-w-[700px] h-[90%] max-h-[500px] bg-colorBgContainer shadow-lg"
@@ -60,9 +68,9 @@ export function Modal(props: {
             >
               {props.children}
             </div>
-          </Transition.Child>
+          </Transition2>
         </RemoveScroll>
-      </Transition>
+      </Transition2>
     </FloatingPortal>
   );
 }
