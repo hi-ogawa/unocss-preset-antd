@@ -1,4 +1,3 @@
-import { Transition } from "@headlessui/react";
 import { ANTD_VERS } from "@hiogawa/unocss-preset-antd";
 import { objectPickBy, range } from "@hiogawa/utils";
 import { Debug, toSetSetState, useDelay } from "@hiogawa/utils-react";
@@ -328,7 +327,7 @@ export function StorySlide() {
           {show ? "Hide" : "Show"}
         </button>
         <div className="border h-[100px] overflow-hidden relative">
-          <Transition
+          <Transition2
             appear
             show={show}
             className="absolute top-2 right-2 inline-block duration-500 transform"
@@ -338,8 +337,8 @@ export function StorySlide() {
             leaveTo="translate-y-[-200%]"
           >
             <span className="border px-2 py-1">hello from top/right</span>
-          </Transition>
-          <Transition
+          </Transition2>
+          <Transition2
             appear
             show={show}
             className="absolute bottom-2 left-2 inline-block duration-500 transform"
@@ -349,7 +348,7 @@ export function StorySlide() {
             leaveTo="translate-x-[-200%]"
           >
             <span className="border px-2 py-1">hello from bottom/left</span>
-          </Transition>
+          </Transition2>
         </div>
       </section>
     </div>
