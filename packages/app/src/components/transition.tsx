@@ -8,7 +8,7 @@ import React from "react";
 // - always remount
 // - no forward ref
 // - no Transition.Child
-//   - can workaround by setting same `duraion-xxx` for all components
+//   - can workaround by setting same `duraion-xxx` for all components + set `appear` for inner components
 
 // TODO: test StrictMode (i.e. double effect callback)
 
@@ -25,7 +25,7 @@ interface TransitionClassProps {
 
 export function Transition2(
   props: {
-    show?: boolean;
+    show: boolean;
     appear?: boolean;
     children?: React.ReactNode;
   } & TransitionClassProps &

@@ -5,10 +5,10 @@ import {
   useId,
   useInteractions,
 } from "@floating-ui/react";
-import { Transition } from "@headlessui/react";
 import { tinyassert } from "@hiogawa/utils";
 import type React from "react";
 import { RemoveScroll } from "react-remove-scroll";
+import { Transition2 } from "./transition";
 
 export function Drawer(props: {
   open: boolean;
@@ -27,9 +27,11 @@ export function Drawer(props: {
 
   return (
     <FloatingPortal id={id}>
-      <Transition show={props.open} className="z-[100]">
+      <Transition2 show={props.open} className="fixed duration-300 z-[100]">
         {/* backdrop */}
-        <Transition.Child
+        <Transition2
+          appear
+          show={props.open}
           className="transition duration-300 fixed inset-0 bg-black"
           enterFrom="opacity-0"
           enterTo="opacity-40"
@@ -38,8 +40,10 @@ export function Drawer(props: {
         />
         {/* content */}
         <RemoveScroll className="fixed inset-0 overflow-hidden">
-          <Transition.Child
-            className="transition duration-300 transform inline-block h-full bg-[var(--antd-colorBgContainer)] shadow-lg"
+          <Transition2
+            appear
+            show={props.open}
+            className="transition duration-300 transform inline-block h-full bg-colorBgContainer shadow-lg"
             enterFrom="translate-x-[-100%]"
             enterTo="translate-x-[0]"
             leaveFrom="translate-x-[0]"
@@ -53,9 +57,9 @@ export function Drawer(props: {
             >
               {props.children}
             </div>
-          </Transition.Child>
+          </Transition2>
         </RemoveScroll>
-      </Transition>
+      </Transition2>
     </FloatingPortal>
   );
 }
