@@ -64,7 +64,7 @@ export function Transition2(
 
   React.useSyncExternalStore(
     React.useCallback((onStorechange) => manager.subscribe(onStorechange), []),
-    () => JSON.stringify([manager.rendered, manager.entered])
+    () => manager.getSnapshot()
   );
 
   React.useEffect(() => {
@@ -73,7 +73,7 @@ export function Transition2(
 
   return (
     <>
-      {manager.rendered && (
+      {manager.shouldRender() && (
         <EffectWrapper
           onLayoutEffect={() => manager.onLayout()}
           onEffect={() => manager.startEnter()}
@@ -102,9 +102,9 @@ function EffectWrapper(props: {
 class TransitionManager {
   private listeners = new Set<() => void>();
   private disposables = new Set<() => void>();
-  rendered: boolean = true;
-  entered: boolean = true;
-  el: HTMLElement | null = null;
+  private rendered: boolean = true;
+  private entered: boolean = true;
+  private el: HTMLElement | null = null;
 
   constructor(
     private options: {
@@ -118,12 +118,6 @@ class TransitionManager {
         leaveFrom: string[];
         leaveTo: string[];
       };
-      beforeEnterFrom?: () => void;
-      beforeEnterTo?: () => void;
-      afterEnter?: () => void;
-      beforeLeaveFrom?: () => void;
-      beforeLeaveTo?: () => void;
-      afterLeave?: () => void;
     }
   ) {
     this.rendered = this.entered = this.options.entered;
@@ -187,7 +181,7 @@ class TransitionManager {
     this.disposables.add(
       onTransitionEnd(el, () => {
         this.entered = true;
-        this.notify("afterEnter");
+        this.notify();
       })
     );
   }
@@ -214,7 +208,7 @@ class TransitionManager {
       onTransitionEnd(el, () => {
         this.entered = false;
         this.rendered = false;
-        this.notify("afterLeave");
+        this.notify();
       })
     );
   }
@@ -224,7 +218,10 @@ class TransitionManager {
     this.disposables.clear();
   }
 
+  //
   // api for React.useSyncExternalStore
+  //
+
   subscribe(listener: () => void) {
     this.listeners.add(listener);
     return () => {
@@ -233,11 +230,12 @@ class TransitionManager {
     };
   }
 
-  private notify(type?: "afterLeave" | "afterEnter") {
+  getSnapshot() {
+    return JSON.stringify([this.rendered, this.entered]);
+  }
+
+  private notify() {
     if (this.listeners.size === 0) return;
-    if (type) {
-      this.options[type]?.();
-    }
     this.listeners.forEach((f) => f());
   }
 }
