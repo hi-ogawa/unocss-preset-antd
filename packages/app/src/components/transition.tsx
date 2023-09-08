@@ -1,17 +1,14 @@
-import { typedBoolean } from "@hiogawa/utils";
 import React from "react";
 
-// based on packages/app-solid/src/components/transition.tsx
-
-// the use case of @headlessui/react is limited to simple usage of `Transition` component
+// the use case of @headlessui/react is limited to a simple usage of `Transition` component
 // so here we implement minimal version on own own
 
 // difference from headlessui
 // - always wrapped by div
 // - always remount
+// - no forward ref
 // - no Transition.Child
 //   - can workaround by setting same `duraion-xxx` for all components
-// - no forward ref
 
 // TODO: test StrictMode (i.e. double effect callback)
 
@@ -130,6 +127,8 @@ function processClassProps(
 // framework-agnostic animation utility
 //
 
+// TODO: is it usable for packages/app-solid/src/components/transition.tsx ?
+
 type TransitionState = "left" | "entering" | "entered" | "leaving";
 
 type TransitionCallbacks = {
@@ -176,7 +175,6 @@ class TransitionManager {
   setElement = (el: HTMLElement | null) => {
     this.dispose();
     this.el = el;
-    this.state;
   };
 
   onLayout() {
@@ -299,7 +297,7 @@ function parseDuration(s: string): number {
 }
 
 function splitClass(c: string): string[] {
-  return c.split(" ").filter(typedBoolean);
+  return c.split(" ").filter(Boolean);
 }
 
 function forceStyle(el: Element) {
