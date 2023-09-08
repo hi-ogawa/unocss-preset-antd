@@ -50,7 +50,7 @@ export function Transition2(
   const [manager] = React.useState(
     () =>
       new TransitionManager({
-        appear: props.appear,
+        entered: Boolean(props.show && !props.appear),
         classes: {
           // TODO: reactive props
           className: splitClass(props.className ?? ""),
@@ -64,7 +64,7 @@ export function Transition2(
 
   React.useSyncExternalStore(
     React.useCallback((onStorechange) => manager.subscribe(onStorechange), []),
-    () => manager.rendered
+    () => JSON.stringify([manager.rendered, manager.entered])
   );
 
   React.useEffect(() => {
@@ -102,11 +102,13 @@ function EffectWrapper(props: {
 class TransitionManager {
   private listeners = new Set<() => void>();
   private disposables = new Set<() => void>();
-  rendered: boolean = false;
+  rendered: boolean = true;
+  entered: boolean = true;
   el: HTMLElement | null = null;
 
   constructor(
     private options: {
+      entered: boolean;
       // TODO: manager itself doesn't have to be aware of classes?
       //       must support via beforeEnter/afterEnter/beforeLeave/afterLeave callbacks?
       classes: {
@@ -122,9 +124,14 @@ class TransitionManager {
       beforeLeaveFrom?: () => void;
       beforeLeaveTo?: () => void;
       afterLeave?: () => void;
-      appear?: boolean;
     }
-  ) {}
+  ) {
+    this.rendered = this.entered = this.options.entered;
+  }
+
+  shouldRender(): boolean {
+    return this.rendered;
+  }
 
   show(show: boolean) {
     if (show && !this.rendered) {
@@ -145,16 +152,24 @@ class TransitionManager {
   onLayout() {
     if (!this.el) return;
 
-    // handle "enterFrom" before paint
-    // TODO: sometimes "appear" works without this, so not entirely sure why.
     const el = this.el;
     const classes = this.options.classes;
-    el.classList.remove(...Object.values(classes).flat());
-    el.classList.add(...classes.className, ...classes.enterFrom);
+
+    // style before paint
+    // TODO: sometimes "appear" works without this, so not entirely sure why.
+    if (this.entered) {
+      el.classList.remove(...Object.values(classes).flat());
+      el.classList.add(...classes.className, ...classes.enterTo);
+    } else {
+      el.classList.remove(...Object.values(classes).flat());
+      el.classList.add(...classes.className, ...classes.enterFrom);
+    }
   }
 
   startEnter() {
     if (!this.el) return;
+    if (this.entered) return;
+
     this.dispose();
     const el = this.el;
     const classes = this.options.classes;
@@ -171,6 +186,7 @@ class TransitionManager {
     // notify after transition
     this.disposables.add(
       onTransitionEnd(el, () => {
+        this.entered = true;
         this.notify("afterEnter");
       })
     );
@@ -178,6 +194,8 @@ class TransitionManager {
 
   startLeave() {
     if (!this.el) return;
+    if (!this.entered) return;
+
     this.dispose();
     const el = this.el;
     const classes = this.options.classes;
@@ -194,6 +212,7 @@ class TransitionManager {
     // notify after transition
     this.disposables.add(
       onTransitionEnd(el, () => {
+        this.entered = false;
         this.rendered = false;
         this.notify("afterLeave");
       })

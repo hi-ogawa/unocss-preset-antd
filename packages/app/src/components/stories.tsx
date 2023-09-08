@@ -60,6 +60,7 @@ export function StoryButton() {
         </h2>
         <div className="flex w-28">
           <Transition2
+            appear
             show={fab.has(0)}
             className="transition duration-200"
             enterFrom="scale-30 opacity-0"
@@ -76,6 +77,7 @@ export function StoryButton() {
           </Transition2>
           <div className="flex-1"></div>
           <Transition2
+            // appear
             show={fab.has(1)}
             className="transition duration-200"
             enterFrom="scale-30 opacity-0"
