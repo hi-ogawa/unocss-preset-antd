@@ -75,7 +75,7 @@ export function StoryButton() {
             </button>
           </Transition2>
           <div className="flex-1"></div>
-          <Transition
+          <Transition2
             show={fab.has(1)}
             className="transition duration-200"
             enterFrom="scale-30 opacity-0"
@@ -89,7 +89,7 @@ export function StoryButton() {
             >
               <span className="i-ri-close-line w-6 h-6" />
             </button>
-          </Transition>
+          </Transition2>
         </div>
       </section>
     </main>

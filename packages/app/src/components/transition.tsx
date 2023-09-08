@@ -42,6 +42,7 @@ interface TransitionEventProps {
 export function Transition2(
   props: {
     show?: boolean;
+    appear?: boolean;
     children?: React.ReactNode;
   } & TransitionClassProps &
     TransitionEventProps
@@ -49,7 +50,9 @@ export function Transition2(
   const [manager] = React.useState(
     () =>
       new TransitionManager({
+        appear: props.appear,
         classes: {
+          // TODO: reactive props
           className: splitClass(props.className ?? ""),
           enterFrom: splitClass(props.enterFrom ?? ""),
           enterTo: splitClass(props.enterTo ?? ""),
@@ -71,7 +74,10 @@ export function Transition2(
   return (
     <>
       {manager.rendered && (
-        <EffectWrapper onMount={() => manager.startEnter()}>
+        <EffectWrapper
+          onLayoutEffect={() => manager.onLayout()}
+          onEffect={() => manager.startEnter()}
+        >
           <div ref={manager.setElement}>{props.children}</div>
         </EffectWrapper>
       )}
@@ -80,12 +86,12 @@ export function Transition2(
 }
 
 function EffectWrapper(props: {
-  onMount: () => void;
+  onEffect: () => void;
+  onLayoutEffect: () => void;
   children?: React.ReactNode;
 }) {
-  React.useEffect(() => {
-    props.onMount();
-  }, []);
+  React.useLayoutEffect(() => props.onLayoutEffect(), []);
+  React.useEffect(() => props.onEffect(), []);
   return <>{props.children}</>;
 }
 
@@ -116,6 +122,7 @@ class TransitionManager {
       beforeLeaveFrom?: () => void;
       beforeLeaveTo?: () => void;
       afterLeave?: () => void;
+      appear?: boolean;
     }
   ) {}
 
@@ -135,7 +142,17 @@ class TransitionManager {
     this.el = el;
   };
 
-  // effect
+  onLayout() {
+    if (!this.el) return;
+
+    // handle "enterFrom" before paint
+    // TODO: sometimes "appear" works without this, so not entirely sure why.
+    const el = this.el;
+    const classes = this.options.classes;
+    el.classList.remove(...Object.values(classes).flat());
+    el.classList.add(...classes.className, ...classes.enterFrom);
+  }
+
   startEnter() {
     if (!this.el) return;
     this.dispose();
