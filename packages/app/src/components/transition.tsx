@@ -9,8 +9,6 @@ import { useMergeRefs } from "./utils";
 // - no Transition.Child
 //   - workaround by setting same `duraion-xxx` for all components + set `appear` for inner components
 
-// TODO: test StrictMode (i.e. double effect callback)
-
 interface TransitionClassProps {
   className?: string;
   enter?: string;
@@ -169,6 +167,8 @@ class TransitionManager {
     this.dispose();
     if (show && this.state !== "entered") {
       this.state = "entering";
+      // normally this is no-op as `this.el === null`.
+      // `this.el !== null` happens when `show` flips (true -> false -> true) faster than transition animation.
       this.startEnter();
       this.notify();
     } else if (!show && this.state !== "left") {

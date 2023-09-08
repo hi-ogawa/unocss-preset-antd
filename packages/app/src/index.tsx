@@ -8,7 +8,11 @@ function main() {
   const el = document.querySelector("#root");
   tinyassert(el);
   const root = createRoot(el);
-  root.render(React.createElement(App));
+  let reactEl = <App />;
+  if (window.location.hash.split("?")[1]?.includes("strict")) {
+    reactEl = <React.StrictMode>{reactEl}</React.StrictMode>;
+  }
+  root.render(reactEl);
 }
 
 main();
