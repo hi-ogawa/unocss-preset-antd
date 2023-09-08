@@ -9,8 +9,6 @@ import React from "react";
 // difference from headlessui
 // - always wrapped by div
 // - always remount
-// - always appear = true
-//   - TODO: support
 // - no callback (beforeEnter, afterEnter, beforeLeave, afterLeave)
 //   - TODO: support
 // - no Transition.Child
@@ -50,7 +48,7 @@ export function Transition2(
   const [manager] = React.useState(
     () =>
       new TransitionManager({
-        entered: Boolean(props.show && !props.appear),
+        initiallyEntered: Boolean(props.show && !props.appear),
         classes: {
           // TODO: reactive props
           className: splitClass(props.className ?? ""),
@@ -109,7 +107,7 @@ class TransitionManager {
 
   constructor(
     private options: {
-      entered: boolean;
+      initiallyEntered: boolean;
       // TODO: manager itself doesn't have to be aware of classes?
       //       just support style manipulation via beforeEnter/afterEnter/beforeLeave/afterLeave callbacks?
       classes: {
@@ -121,7 +119,7 @@ class TransitionManager {
       };
     }
   ) {
-    this.state = this.options.entered ? "entered" : "left";
+    this.state = this.options.initiallyEntered ? "entered" : "left";
   }
 
   shouldRender(): boolean {
@@ -232,7 +230,6 @@ class TransitionManager {
   subscribe(listener: () => void) {
     this.listeners.add(listener);
     return () => {
-      this.dispose();
       this.listeners.delete(listener);
     };
   }
