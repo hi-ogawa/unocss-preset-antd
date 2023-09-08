@@ -13,15 +13,15 @@ import {
   useId,
   useInteractions,
 } from "@floating-ui/react";
-import { Transition } from "@headlessui/react";
 import React from "react";
 import { cls } from "../utils/misc";
+import { Transition2 } from "./transition";
 
 interface PopoverRenderProps {
   open: boolean;
   setOpen: (open: boolean) => void;
-  props: {};
-  arrowProps?: {};
+  props: Record<string, unknown>;
+  arrowProps?: Record<string, unknown>;
   context: FloatingContext; // context.placement is an actual placement e.g. after `flip` middleware is applied
 }
 
@@ -112,7 +112,7 @@ export function PopoverSimple({
         React.cloneElement(maybeCall(reference, [context]), props)
       }
       floating={({ props, open, arrowProps, context }) => (
-        <Transition
+        <Transition2
           show={open}
           className="transition duration-150"
           enterFrom="scale-80 opacity-0"
@@ -127,7 +127,7 @@ export function PopoverSimple({
             )}
             {maybeCall(floating, [context])}
           </div>
-        </Transition>
+        </Transition2>
       )}
     />
   );

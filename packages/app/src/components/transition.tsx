@@ -1,14 +1,13 @@
 import React from "react";
+import { useMergeRefs } from "./utils";
 
 // the use case of @headlessui/react is limited to a simple usage of `Transition` component
 // so here we implement minimal version on own own
 
-// difference from headlessui
-// - always wrapped by div
+// limitation compared to headlessui
 // - always remount
-// - no forward ref
 // - no Transition.Child
-//   - can workaround by setting same `duraion-xxx` for all components + set `appear` for inner components
+//   - workaround by setting same `duraion-xxx` for all components + set `appear` for inner components
 
 // TODO: test StrictMode (i.e. double effect callback)
 
@@ -23,13 +22,16 @@ interface TransitionClassProps {
   leaveTo?: string;
 }
 
-export function Transition2(
+export const Transition2 = React.forwardRef(function Transition2(
   props: {
     show: boolean;
     appear?: boolean;
-    children?: React.ReactNode;
+    as?: string;
   } & TransitionClassProps &
-    TransitionCallbacks
+    TransitionCallbacks &
+    // TODO: pass all rest props?
+    Pick<JSX.IntrinsicElements["div"], "children" | "style">,
+  ref: React.ForwardedRef<HTMLElement>
 ) {
   const [manager] = React.useState(
     () =>
@@ -49,6 +51,9 @@ export function Transition2(
     manager.show(props.show ?? false);
   }, [props.show]);
 
+  const mergedRefs = useMergeRefs(ref, manager.setElement);
+  const Component = (props.as as "div") ?? "div";
+
   return (
     <>
       {manager.shouldRender() && (
@@ -56,12 +61,14 @@ export function Transition2(
           onLayoutEffect={() => manager.onLayout()}
           onEffect={() => manager.onMount()}
         >
-          <div ref={manager.setElement}>{props.children}</div>
+          <Component ref={mergedRefs} style={props.style}>
+            {props.children}
+          </Component>
         </EffectWrapper>
       )}
     </>
   );
-}
+});
 
 function EffectWrapper(props: {
   onEffect: () => void;
