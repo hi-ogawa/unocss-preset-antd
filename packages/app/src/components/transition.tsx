@@ -162,12 +162,12 @@ class TransitionManager {
     this.dispose();
     if (show && this.state !== "entered") {
       this.state = "entering";
-      this.notify();
       this.startEnter();
+      this.notify();
     } else if (!show && this.state !== "left") {
       this.state = "leaving";
-      this.notify();
       this.startLeave();
+      this.notify();
     }
   }
 
