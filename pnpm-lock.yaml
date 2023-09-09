@@ -56,9 +56,6 @@ importers:
       '@floating-ui/react':
         specifier: ^0.24.2
         version: 0.24.2(@types/react@18.0.27)(react-dom@18.2.0)(react@18.2.0)
-      '@headlessui/react':
-        specifier: ^1.7.15
-        version: 1.7.15(react-dom@18.2.0)(react@18.2.0)
       '@hiogawa/unocss-preset-antd':
         specifier: workspace:*
         version: link:../lib
@@ -1624,18 +1621,6 @@ packages:
       - '@types/react'
     dev: false
 
-  /@headlessui/react@1.7.15(react-dom@18.2.0)(react@18.2.0):
-    resolution: {integrity: sha512-OTO0XtoRQ6JPB1cKNFYBZv2Q0JMqMGNhYP1CjPvcJvjz8YGokz8oAj89HIYZGN0gZzn/4kk9iUpmMF4Q21Gsqw==}
-    engines: {node: '>=10'}
-    peerDependencies:
-      react: ^16 || ^17 || ^18
-      react-dom: ^16 || ^17 || ^18
-    dependencies:
-      client-only: 0.0.1
-      react: 18.2.0
-      react-dom: 18.2.0(react@18.2.0)
-    dev: false
-
   /@hiogawa/isort-ts@1.0.0-pre.9(prettier@2.8.3)(typescript@4.9.5):
     resolution: {integrity: sha512-0L7RUnbjzSYateIO/NeORmEccfmW+1tvWRv5SHgOj+ux+boJEdQErbHa/dB9QocmWNB8YHF3Q/i9+RvbZB3maw==}
     hasBin: true
@@ -2533,10 +2518,6 @@ packages:
   /classnames@2.3.2:
     resolution: {integrity: sha512-CSbhY4cFEJRe6/GQzIk5qXZ4Jeg5pcsP7b5peFSDpffpe1cqjASH/n9UTjBwOp6XpMSTwQ8Za2K5V02ueA7Tmw==}
     dev: true
-
-  /client-only@0.0.1:
-    resolution: {integrity: sha512-IV3Ou0jSMzZrd3pZ48nLkT9DA7Ag1pnPzaiQhpW7c3RbcqqzvzzVu+L8gfqMp/8IM2MQtSiqaCxrrcfu8I8rMA==}
-    dev: false
 
   /cliui@6.0.0:
     resolution: {integrity: sha512-t6wbgtoCXvAzst7QgXxJYqPt0usEfbgQdftEPbLL/cvv6HPE5VgvqCuAIDR0NgU52ds6rFwqrgakNLrHEjCbrQ==}
