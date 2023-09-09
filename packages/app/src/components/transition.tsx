@@ -232,7 +232,7 @@ class TransitionManager {
     this.disposables.add(
       onTransitionEnd(el, () => {
         this.state = "entered";
-        this.notify(() => this.options.onEnterTo?.(el));
+        this.notify(() => this.options.onEntered?.(el));
       })
     );
   }
