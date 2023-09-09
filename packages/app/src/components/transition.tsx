@@ -13,16 +13,18 @@ import React from "react";
 // - https://github.com/tailwindlabs/headlessui/blob/8e93cd063067bb1ad95d098655670a7d9a4d9e4a/packages/%40headlessui-react/src/components/transitions/transition.tsx
 // - https://github.com/tailwindlabs/headlessui/blob/8e93cd063067bb1ad95d098655670a7d9a4d9e4a/packages/%40headlessui-react/src/components/transitions/utils/transition.ts
 
-interface TransitionClassProps {
-  className?: string;
-  enter?: string;
-  enterFrom?: string;
-  enterTo?: string;
-  entered?: string;
-  leave?: string;
-  leaveFrom?: string;
-  leaveTo?: string;
-}
+const TRANSITION_CLASS_TYPES = [
+  "className",
+  "enter",
+  "enterFrom",
+  "enterTo",
+  "entered",
+  "leave",
+  "leaveFrom",
+  "leaveTo",
+] as const;
+type TransitionClassType = (typeof TRANSITION_CLASS_TYPES)[number];
+type TransitionClassProps = Partial<Record<TransitionClassType, string>>;
 
 export const Transition = React.forwardRef(function Transition(
   props: {
@@ -31,7 +33,7 @@ export const Transition = React.forwardRef(function Transition(
     as?: string;
   } & TransitionClassProps &
     TransitionCallbacks &
-    // TODO: pass all rest props?
+    // TODO: delegate more props?
     Pick<JSX.IntrinsicElements["div"], "children" | "style">,
   ref: React.ForwardedRef<HTMLElement>
 ) {
@@ -39,7 +41,6 @@ export const Transition = React.forwardRef(function Transition(
     () =>
       new TransitionManager({
         initialEntered: Boolean(props.show && !props.appear),
-        // TODO: update options
         ...processClassProps(props),
       })
   );
@@ -52,6 +53,10 @@ export const Transition = React.forwardRef(function Transition(
   React.useEffect(() => {
     manager.show(props.show ?? false);
   }, [props.show]);
+
+  React.useEffect(() => {
+    Object.assign(manager.options, processClassProps(props));
+  }, [props]);
 
   const mergedRefs = useMergeRefs(ref, manager.setElement);
   const Component = (props.as as "div") ?? "div";
@@ -157,14 +162,18 @@ function processClassProps(
 
 type TransitionState = "left" | "entering" | "entered" | "leaving";
 
-type TransitionCallbacks = {
-  onEnterFrom?: (el: HTMLElement) => void;
-  onEnterTo?: (el: HTMLElement) => void;
-  onEntered?: (el: HTMLElement) => void;
-  onLeaveFrom?: (el: HTMLElement) => void;
-  onLeaveTo?: (el: HTMLElement) => void;
-  onLeft?: (el: HTMLElement) => void;
-};
+const TRANSITION_CALLBACK_TYPES = [
+  "onEnterFrom",
+  "onEnterTo",
+  "onEntered",
+  "onLeaveFrom",
+  "onLeaveTo",
+  "onLeft",
+] as const;
+type TransitionCallbackType = (typeof TRANSITION_CALLBACK_TYPES)[number];
+type TransitionCallbacks = Partial<
+  Record<TransitionCallbackType, (el: HTMLElement) => void>
+>;
 
 class TransitionManager {
   private listeners = new Set<() => void>();
@@ -173,7 +182,7 @@ class TransitionManager {
   private el: HTMLElement | null = null;
 
   constructor(
-    private options: {
+    public options: {
       initialEntered: boolean;
     } & TransitionCallbacks
   ) {
