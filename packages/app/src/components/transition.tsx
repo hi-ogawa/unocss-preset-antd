@@ -1,3 +1,4 @@
+import { objectOmit } from "@hiogawa/utils";
 import { useStableCallback } from "@hiogawa/utils-react";
 import React from "react";
 
@@ -30,13 +31,16 @@ export const Transition = React.forwardRef(function Transition(
   props: {
     show: boolean;
     appear?: boolean;
-    as?: string;
+    render?: (props: {}) => React.ReactNode; // custom render prop. default is <div {...props} />
   } & TransitionClassProps &
     TransitionCallbacks &
-    // TODO: delegate more props?
+    // picked only minimal props for cleaner typing/auto-completion but all props are delegated.
     Pick<JSX.IntrinsicElements["div"], "children" | "style">,
   ref: React.ForwardedRef<HTMLElement>
 ) {
+  //
+  // setup TransitionManager as external store
+  //
   const [manager] = React.useState(
     () =>
       new TransitionManager({
@@ -50,6 +54,9 @@ export const Transition = React.forwardRef(function Transition(
     () => manager.getSnapshot()
   );
 
+  //
+  // sync props to state
+  //
   React.useEffect(() => {
     manager.show(props.show ?? false);
   }, [props.show]);
@@ -58,8 +65,18 @@ export const Transition = React.forwardRef(function Transition(
     Object.assign(manager.options, processClassProps(props));
   }, [props]);
 
+  //
+  // render
+  //
   const mergedRefs = useMergeRefs(ref, manager.setElement);
-  const Component = (props.as as "div") ?? "div";
+  const render = props.render ?? ((props) => <div {...props} />);
+  const delegatedProps = objectOmit(props, [
+    "show",
+    "appear",
+    "render",
+    ...TRANSITION_CLASS_TYPES,
+    ...TRANSITION_CALLBACK_TYPES,
+  ]);
 
   return (
     <>
@@ -69,9 +86,10 @@ export const Transition = React.forwardRef(function Transition(
           onLayoutEffect={() => manager.onLayout()}
           onEffect={() => manager.onMount()}
         >
-          <Component ref={mergedRefs} style={props.style}>
-            {props.children}
-          </Component>
+          {render({
+            ref: mergedRefs,
+            ...delegatedProps,
+          })}
         </EffectWrapper>
       )}
     </>
