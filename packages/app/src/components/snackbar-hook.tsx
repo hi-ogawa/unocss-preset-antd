@@ -37,15 +37,19 @@ function createUseSnackbar() {
       itemId: string,
       newItem?: Partial<SnackbarItemState>
     ): void {
-      const index = items.findIndex((item) => item.id === itemId);
-      if (index >= 0) {
-        const item = items[index];
-        if (newItem) {
-          setArayState.splice(index, 1, { ...item, ...newItem });
-        } else {
-          setArayState.splice(index, 1);
+      setItems((items) => {
+        items = [...items];
+        const index = items.findIndex((item) => item.id === itemId);
+        if (index >= 0) {
+          const item = items[index];
+          if (newItem) {
+            items.splice(index, 1, { ...item, ...newItem });
+          } else {
+            items.splice(index, 1);
+          }
         }
-      }
+        return items;
+      });
     }
 
     function dismiss(itemId: string): void {

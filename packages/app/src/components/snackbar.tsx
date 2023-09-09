@@ -1,12 +1,13 @@
 import { Transition } from "@headlessui/react";
 import { tw } from "../styles/tw";
 import { cls } from "../utils/misc";
-import { CollapseTransition } from "./collapse";
+import { CollapseTransition, getCollapseProps2 } from "./collapse";
 import {
   SnackbarItemOptions,
   SnackbarItemState,
   useSnackbar,
 } from "./snackbar-hook";
+import { Transition2 } from "./transition";
 
 export function SnackbarConainer(props: {
   animationType: string;
@@ -16,6 +17,8 @@ export function SnackbarConainer(props: {
 
   const SnackbarAnimation =
     props.animationType === "1" ? SnackbarAnimation1 : SnackbarAnimation2;
+
+  console.log("==", items);
 
   return (
     <div className="flex flex-col absolute bottom-1 left-2">
@@ -109,16 +112,16 @@ function SnackbarAnimation2(
       {/*  */}
       {/* collpase transition */}
       {/*  */}
-      <CollapseTransition
+      <Transition2
         key={item.id}
         show={show}
         className="duration-300"
-        afterLeave={() => props.onDismiss3()}
+        {...getCollapseProps2()}
       >
         {/*  */}
         {/* slide/scale transtion */}
         {/*  */}
-        <Transition
+        <Transition2
           appear
           show={show}
           className="inline-block duration-300 transform py-1"
@@ -128,19 +131,19 @@ function SnackbarAnimation2(
           leaveTo="translate-y-[120%] scale-0 opacity-10"
         >
           {props.children}
-        </Transition>
+        </Transition2>
         {/*  */}
         {/* dummy transition to auto dismiss on timeout */}
         {/*  */}
-        <Transition
+        <Transition2
           appear
           show={show}
           className={props.durationClassName}
           enterFrom="opacity-0"
           enterTo="opacity-100"
-          afterEnter={() => props.onDismiss()}
+          onEntered={() => props.onDismiss()}
         />
-      </CollapseTransition>
+      </Transition2>
     </>
   );
 }
