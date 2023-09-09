@@ -60,6 +60,7 @@ export const Transition = React.forwardRef(function Transition(
     <>
       {manager.shouldRender() && (
         <EffectWrapper
+          // TODO: instead of separating effect, use next frame callback during `onLayoutEffect`?
           onLayoutEffect={() => manager.onLayout()}
           onEffect={() => manager.onMount()}
         >
@@ -100,6 +101,7 @@ function useMergeRefs<T>(...refs: React.Ref<T>[]): React.RefCallback<T> {
 function processClassProps(
   props: TransitionClassProps & TransitionCallbacks
 ): TransitionCallbacks {
+  // TODO: handle className during ssr with `show=true appear=false`?
   const classes = {
     className: splitClass(props.className ?? ""),
     enter: splitClass(props.enter ?? ""),
