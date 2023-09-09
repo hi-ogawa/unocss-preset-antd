@@ -48,11 +48,7 @@ export const Transition = React.forwardRef(function Transition(
         ...processClassProps(props),
       })
   );
-
-  React.useSyncExternalStore(
-    React.useCallback((onStorechange) => manager.subscribe(onStorechange), []),
-    () => manager.getSnapshot()
-  );
+  React.useSyncExternalStore(manager.subscribe, manager.getSnapshot);
 
   //
   // sync props to state
@@ -297,16 +293,14 @@ class TransitionManager {
   // api for React.useSyncExternalStore
   //
 
-  subscribe(listener: () => void) {
+  subscribe = (listener: () => void) => {
     this.listeners.add(listener);
     return () => {
       this.listeners.delete(listener);
     };
-  }
+  };
 
-  getSnapshot() {
-    return this.state;
-  }
+  getSnapshot = () => this.state;
 
   private notify(callback?: () => void) {
     if (this.listeners.size === 0) return;
