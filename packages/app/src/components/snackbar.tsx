@@ -1,7 +1,6 @@
-import { Transition } from "@headlessui/react";
 import { tw } from "../styles/tw";
 import { cls } from "../utils/misc";
-import { CollapseTransition, getCollapseProps2 } from "./collapse";
+import { getCollapseProps2 } from "./collapse";
 import {
   SnackbarItemOptions,
   SnackbarItemState,
@@ -17,8 +16,6 @@ export function SnackbarConainer(props: {
 
   const SnackbarAnimation =
     props.animationType === "1" ? SnackbarAnimation1 : SnackbarAnimation2;
-
-  console.log("==", items);
 
   return (
     <div className="flex flex-col absolute bottom-1 left-2">
@@ -58,16 +55,17 @@ function SnackbarAnimation1(
       {/*  */}
       {/* collpase transition */}
       {/*  */}
-      <CollapseTransition
+      <Transition2
         key={item.id}
         show={item.state === "show" || item.state === "dismiss-slide"}
         className="duration-300"
-        afterLeave={() => props.onDismiss3()}
+        onLeft={() => props.onDismiss3()}
+        {...getCollapseProps2()}
       >
         {/*  */}
         {/* slide transtion */}
         {/*  */}
-        <Transition
+        <Transition2
           appear
           show={item.state === "show"}
           className="inline-block duration-500 transform py-1"
@@ -75,22 +73,22 @@ function SnackbarAnimation1(
           enterTo="translate-x-0"
           leaveFrom="translate-x-0"
           leaveTo="translate-x-[-120%]"
-          afterLeave={() => props.onDismiss2()}
+          onLeft={() => props.onDismiss2()}
         >
           {props.children}
-        </Transition>
+        </Transition2>
         {/*  */}
         {/* dummy transition to auto trigger slide-out after timeout */}
         {/*  */}
-        <Transition
+        <Transition2
           appear
           show={item.state === "show"}
           className={props.durationClassName}
           enterFrom="opacity-0"
           enterTo="opacity-100"
-          afterEnter={() => props.onDismiss()}
+          onEntered={() => props.onDismiss()}
         />
-      </CollapseTransition>
+      </Transition2>
     </>
   );
 }

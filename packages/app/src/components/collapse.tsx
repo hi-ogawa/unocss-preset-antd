@@ -49,9 +49,9 @@ export function getCollapseProps2(): Partial<
   Parameters<typeof Transition2>[0]
 > {
   function uncollapse(el: HTMLElement) {
-    const child = el.firstElementChild;
-    tinyassert(child);
-    el.style.height = child.clientHeight + "px";
+    if (el.firstElementChild) {
+      el.style.height = el.firstElementChild.clientHeight + "px";
+    }
   }
 
   function collapse(el: HTMLElement) {
@@ -61,6 +61,7 @@ export function getCollapseProps2(): Partial<
   return {
     onEnterFrom: collapse,
     onEnterTo: uncollapse,
+    onEntered: uncollapse,
     onLeaveFrom: uncollapse,
     onLeaveTo: collapse,
   };
