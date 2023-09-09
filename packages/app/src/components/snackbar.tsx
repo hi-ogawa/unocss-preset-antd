@@ -56,7 +56,6 @@ function SnackbarAnimation1(
       {/* collpase transition */}
       {/*  */}
       <Transition2
-        key={item.id}
         show={item.state === "show" || item.state === "dismiss-slide"}
         className="duration-300"
         onLeft={() => props.onDismiss3()}
@@ -111,7 +110,6 @@ function SnackbarAnimation2(
       {/* collpase transition */}
       {/*  */}
       <Transition2
-        key={item.id}
         show={show}
         className="duration-300"
         {...getCollapseProps2()}
