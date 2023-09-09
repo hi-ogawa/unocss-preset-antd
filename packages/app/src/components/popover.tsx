@@ -15,7 +15,7 @@ import {
 } from "@floating-ui/react";
 import React from "react";
 import { cls } from "../utils/misc";
-import { Transition2 } from "./transition";
+import { Transition } from "./transition";
 
 interface PopoverRenderProps {
   open: boolean;
@@ -112,7 +112,7 @@ export function PopoverSimple({
         React.cloneElement(maybeCall(reference, [context]), props)
       }
       floating={({ props, open, arrowProps, context }) => (
-        <Transition2
+        <Transition
           show={open}
           className="transition duration-150"
           enterFrom="scale-80 opacity-0"
@@ -127,7 +127,7 @@ export function PopoverSimple({
             )}
             {maybeCall(floating, [context])}
           </div>
-        </Transition2>
+        </Transition>
       )}
     />
   );

@@ -9,7 +9,7 @@ import { tinyassert } from "@hiogawa/utils";
 import React from "react";
 import { RemoveScroll } from "react-remove-scroll";
 import { cls } from "../utils/misc";
-import { Transition2 } from "./transition";
+import { Transition } from "./transition";
 
 // copied from https://github.com/hi-ogawa/web-ext-tab-manager/blame/81710dead04859525b9c8be3a73a71926cae6da4/src/components/modal.tsx
 
@@ -31,13 +31,13 @@ export function Modal(props: {
 
   return (
     <FloatingPortal id={id}>
-      <Transition2
+      <Transition
         appear
         show={props.open}
         className="fixed inset-0 duration-300 z-100"
       >
         {/* backdrop */}
-        <Transition2
+        <Transition
           appear
           show={props.open}
           className="transition duration-300 fixed inset-0 bg-black"
@@ -48,7 +48,7 @@ export function Modal(props: {
         />
         {/* content */}
         <RemoveScroll className="fixed inset-0 overflow-hidden flex justify-center items-center">
-          <Transition2
+          <Transition
             appear
             show={props.open}
             className={cls(
@@ -68,9 +68,9 @@ export function Modal(props: {
             >
               {props.children}
             </div>
-          </Transition2>
+          </Transition>
         </RemoveScroll>
-      </Transition2>
+      </Transition>
     </FloatingPortal>
   );
 }

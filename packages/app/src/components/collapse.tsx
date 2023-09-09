@@ -1,7 +1,7 @@
-import type { Transition2 } from "./transition";
+import type { Transition } from "./transition";
 
-export function getCollapseProps2(): Partial<
-  Parameters<typeof Transition2>[0]
+export function getCollapseProps(): Partial<
+  React.ComponentProps<typeof Transition>
 > {
   function uncollapse(el: HTMLElement) {
     if (el.firstElementChild) {

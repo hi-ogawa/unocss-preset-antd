@@ -9,6 +9,10 @@ import React from "react";
 // - no Transition.Child
 //   - workaround by setting same `duraion-xxx` for all components + set `appear` for inner components
 
+// references
+// - https://github.com/tailwindlabs/headlessui/blob/8e93cd063067bb1ad95d098655670a7d9a4d9e4a/packages/%40headlessui-react/src/components/transitions/transition.tsx
+// - https://github.com/tailwindlabs/headlessui/blob/8e93cd063067bb1ad95d098655670a7d9a4d9e4a/packages/%40headlessui-react/src/components/transitions/utils/transition.ts
+
 interface TransitionClassProps {
   className?: string;
   enter?: string;
@@ -20,7 +24,7 @@ interface TransitionClassProps {
   leaveTo?: string;
 }
 
-export const Transition2 = React.forwardRef(function Transition2(
+export const Transition = React.forwardRef(function Transition(
   props: {
     show: boolean;
     appear?: boolean;

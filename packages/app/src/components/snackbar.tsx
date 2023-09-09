@@ -1,12 +1,12 @@
 import { tw } from "../styles/tw";
 import { cls } from "../utils/misc";
-import { getCollapseProps2 } from "./collapse";
+import { getCollapseProps } from "./collapse";
 import {
   SnackbarItemOptions,
   SnackbarItemState,
   useSnackbar,
 } from "./snackbar-hook";
-import { Transition2 } from "./transition";
+import { Transition } from "./transition";
 
 export function SnackbarConainer(props: {
   animationType: string;
@@ -55,16 +55,16 @@ function SnackbarAnimation1(
       {/*  */}
       {/* collpase transition */}
       {/*  */}
-      <Transition2
+      <Transition
         show={item.state === "show" || item.state === "dismiss-slide"}
         className="duration-300"
         onLeft={() => props.onDismiss3()}
-        {...getCollapseProps2()}
+        {...getCollapseProps()}
       >
         {/*  */}
         {/* slide transtion */}
         {/*  */}
-        <Transition2
+        <Transition
           appear
           show={item.state === "show"}
           className="inline-block duration-500 transform py-1"
@@ -75,11 +75,11 @@ function SnackbarAnimation1(
           onLeft={() => props.onDismiss2()}
         >
           {props.children}
-        </Transition2>
+        </Transition>
         {/*  */}
         {/* dummy transition to auto trigger slide-out after timeout */}
         {/*  */}
-        <Transition2
+        <Transition
           appear
           show={item.state === "show"}
           className={props.durationClassName}
@@ -87,7 +87,7 @@ function SnackbarAnimation1(
           enterTo="opacity-100"
           onEntered={() => props.onDismiss()}
         />
-      </Transition2>
+      </Transition>
     </>
   );
 }
@@ -109,15 +109,11 @@ function SnackbarAnimation2(
       {/*  */}
       {/* collpase transition */}
       {/*  */}
-      <Transition2
-        show={show}
-        className="duration-300"
-        {...getCollapseProps2()}
-      >
+      <Transition show={show} className="duration-300" {...getCollapseProps()}>
         {/*  */}
         {/* slide/scale transtion */}
         {/*  */}
-        <Transition2
+        <Transition
           appear
           show={show}
           className="inline-block duration-300 transform py-1"
@@ -127,11 +123,11 @@ function SnackbarAnimation2(
           leaveTo="translate-y-[120%] scale-0 opacity-10"
         >
           {props.children}
-        </Transition2>
+        </Transition>
         {/*  */}
         {/* dummy transition to auto dismiss on timeout */}
         {/*  */}
-        <Transition2
+        <Transition
           appear
           show={show}
           className={props.durationClassName}
@@ -139,7 +135,7 @@ function SnackbarAnimation2(
           enterTo="opacity-100"
           onEntered={() => props.onDismiss()}
         />
-      </Transition2>
+      </Transition>
     </>
   );
 }
