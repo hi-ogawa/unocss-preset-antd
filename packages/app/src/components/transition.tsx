@@ -76,14 +76,25 @@ export const Transition = React.forwardRef(function Transition(
 
   return (
     <>
-      {manager.shouldRender() &&
-        render({
-          ref: mergedRefs,
-          ...delegatedProps,
-        })}
+      {manager.shouldRender() && (
+        <EffectWrapper onLayoutEffect={() => manager.onLayout()}>
+          {render({
+            ref: mergedRefs,
+            ...delegatedProps,
+          })}
+        </EffectWrapper>
+      )}
     </>
   );
 });
+
+function EffectWrapper(props: {
+  onLayoutEffect: () => void;
+  children: React.ReactNode;
+}) {
+  React.useLayoutEffect(() => props.onLayoutEffect(), []);
+  return <>{props.children}</>;
+}
 
 function useMergeRefs<T>(...refs: React.Ref<T>[]): React.RefCallback<T> {
   return useStableCallback((el) => {
@@ -197,36 +208,44 @@ class TransitionManager {
   show(show: boolean) {
     if (show && this.state !== "entering" && this.state !== "entered") {
       this.state = "entering";
-      // it can be non-null when `show` flips (true -> false -> true) faster than transition animation.
-      this.el && this.startEnter(this.el);
+      // `startEnter` is usually handled in `onLayout` since `this.el` is null for normal cases.
+      // however `this.el` can be non-null when `show` flips (true -> false -> true) faster than transition animation.
+      this.startEnter();
       this.notify();
     }
     if (!show && this.state !== "leaving" && this.state !== "left") {
       this.state = "leaving";
-      this.el && this.startLeave(this.el);
+      this.startLeave();
       this.notify();
     }
   }
 
   // api compatible with ref callback
   setElement = (el: HTMLElement | null) => {
+    this.dispose();
     this.el = el;
-    if (el) {
-      if (this.state === "entered") {
-        this.options.onEntered?.(el);
-      } else if (this.state === "entering") {
-        this.startEnter(el);
-      }
-    }
   };
 
-  private startEnter(el: HTMLElement) {
-    // "enterFrom" -> "enterTo"
+  onLayout() {
+    if (!this.el) return;
+    if (this.state === "entered") {
+      this.options.onEntered?.(this.el);
+    } else if (this.state === "entering") {
+      this.startEnter();
+    }
+  }
+
+  private startEnter() {
+    if (!this.el) return;
+    const el = this.el;
+
+    // "enterFrom"
     this.options.onEnterFrom?.(el);
 
     this.dispose();
     this.disposables.add(
       onNextFrame(() => {
+        // "enterTo" on next frame
         this.options.onEnterTo?.(el);
 
         // notify "entered"
@@ -240,13 +259,17 @@ class TransitionManager {
     );
   }
 
-  private startLeave(el: HTMLElement) {
-    // "leaveFrom" -> "leaveTo"
+  private startLeave() {
+    if (!this.el) return;
+    const el = this.el;
+
+    // "leaveFrom"
     this.options.onLeaveFrom?.(el);
 
     this.dispose();
     this.disposables.add(
       onNextFrame(() => {
+        // "leaveTo" on next frame
         this.options.onLeaveTo?.(el);
 
         // notify "left"
