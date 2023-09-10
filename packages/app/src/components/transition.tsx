@@ -147,7 +147,7 @@ function processClassProps(
     },
     onEntered: (el) => {
       el.classList.remove(...all);
-      el.classList.add(...classes.className, ...classes.entered);
+      el.classList.add(...classes.className, ...classes.enterTo, ...classes.entered);
       props.onEntered?.(el);
     },
     onLeaveFrom: (el) => {
@@ -308,6 +308,14 @@ class TransitionManager {
     callback?.();
     this.listeners.forEach((f) => f());
   }
+}
+
+onNextFrame;
+function onNextFrame(callback: () => void) {
+  const id = window.requestAnimationFrame(callback);
+  return () => {
+    window.cancelAnimationFrame(id);
+  };
 }
 
 function onTransitionEnd(el: HTMLElement, callback: () => void) {
