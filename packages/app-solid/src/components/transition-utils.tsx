@@ -1,94 +1,10 @@
-import { objectOmit } from "@hiogawa/utils";
-import { useStableCallback } from "@hiogawa/utils-react";
-import React from "react";
-
-// the use case of @headlessui/react is limited to a simple usage of `Transition` component
-// so here we implement minimal version on own own
-
-// limitation compared to headlessui
-// - always remount
-// - no Transition.Child
-//   - workaround by setting same `duraion-xxx` for all components + set `appear` for inner components
-
-// references
-// - https://github.com/tailwindlabs/headlessui/blob/8e93cd063067bb1ad95d098655670a7d9a4d9e4a/packages/%40headlessui-react/src/components/transitions/transition.tsx
-// - https://github.com/tailwindlabs/headlessui/blob/8e93cd063067bb1ad95d098655670a7d9a4d9e4a/packages/%40headlessui-react/src/components/transitions/utils/transition.ts
-
-export const Transition = React.forwardRef(function Transition(
-  props: {
-    show: boolean;
-    appear?: boolean;
-    render?: (props: {}) => React.ReactNode; // custom render prop. default is <div {...props} />
-  } & TransitionClassProps &
-    TransitionCallbacks &
-    // picked only minimal props for cleaner typing/auto-completion but all props are delegated.
-    Pick<JSX.IntrinsicElements["div"], "children" | "style">,
-  ref: React.ForwardedRef<HTMLElement>
-) {
-  //
-  // setup TransitionManager as external store
-  //
-  const [manager] = React.useState(
-    () =>
-      new TransitionManager({
-        initialEntered: Boolean(props.show && !props.appear),
-        ...processClassProps(props),
-      })
-  );
-  React.useSyncExternalStore(manager.subscribe, manager.getSnapshot);
-
-  //
-  // sync props to state
-  //
-  React.useEffect(() => {
-    manager.show(props.show ?? false);
-  }, [props.show]);
-
-  React.useEffect(() => {
-    Object.assign(manager.options, processClassProps(props));
-  }, [props]);
-
-  //
-  // render
-  //
-  const delegatedProps = objectOmit(props, [
-    "show",
-    "appear",
-    "render",
-    ...TRANSITION_CLASS_TYPES,
-    ...TRANSITION_CALLBACK_TYPES,
-  ]);
-  const mergedRefs = useMergeRefs(ref, manager.setElement);
-  const render = props.render ?? ((props) => <div {...props} />);
-
-  return (
-    <>
-      {manager.shouldRender() &&
-        render({
-          ref: mergedRefs,
-          ...delegatedProps,
-        })}
-    </>
-  );
-});
-
-function useMergeRefs<T>(...refs: React.Ref<T>[]): React.RefCallback<T> {
-  return useStableCallback((el) => {
-    for (const ref of refs) {
-      if (ref) {
-        if (typeof ref === "function") {
-          ref(el);
-        } else {
-          // @ts-expect-error workaround readonly
-          ref.current = el;
-        }
-      }
-    }
-  });
-}
+//
+// framework-agnostic animation utility
+// (copied from packages/app/src/components/transition.tsx)
+//
 
 const TRANSITION_CLASS_TYPES = [
-  "className",
+  "class",
   "enter",
   "enterFrom",
   "enterTo",
@@ -97,15 +13,17 @@ const TRANSITION_CLASS_TYPES = [
   "leaveFrom",
   "leaveTo",
 ] as const;
-type TransitionClassType = (typeof TRANSITION_CLASS_TYPES)[number];
-type TransitionClassProps = Partial<Record<TransitionClassType, string>>;
 
-function processClassProps(
+type TransitionClassType = (typeof TRANSITION_CLASS_TYPES)[number];
+
+export type TransitionClassProps = Partial<Record<TransitionClassType, string>>;
+
+export function processClassProps(
   props: TransitionClassProps & TransitionCallbacks
 ): TransitionCallbacks {
   // TODO: handle className early for ssr with `show=true appear=false`?
   const classes = {
-    className: splitClass(props.className ?? ""),
+    className: splitClass(props.class ?? ""),
     enter: splitClass(props.enter ?? ""),
     enterFrom: splitClass(props.enterFrom ?? ""),
     enterTo: splitClass(props.enterTo ?? ""),
@@ -155,12 +73,6 @@ function splitClass(c: string): string[] {
   return c.split(" ").filter(Boolean);
 }
 
-//
-// framework-agnostic animation utility
-//
-
-// TODO: is it usable for packages/app-solid/src/components/transition.tsx ?
-
 type TransitionState = "left" | "entering" | "entered" | "leaving";
 
 const TRANSITION_CALLBACK_TYPES = [
@@ -171,12 +83,14 @@ const TRANSITION_CALLBACK_TYPES = [
   "onLeaveTo",
   "onLeft",
 ] as const;
+
 type TransitionCallbackType = (typeof TRANSITION_CALLBACK_TYPES)[number];
-type TransitionCallbacks = Partial<
+
+export type TransitionCallbacks = Partial<
   Record<TransitionCallbackType, (el: HTMLElement) => void>
 >;
 
-class TransitionManager {
+export class TransitionManager {
   private listeners = new Set<() => void>();
   private disposables = new Set<() => void>();
   private state: TransitionState = "left";

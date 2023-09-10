@@ -19,6 +19,7 @@ export function Drawer(
       <Transition show={props.open} class="duration-300">
         {/* backdrop */}
         <Transition
+          appear
           show={props.open}
           class="duration-300 fixed inset-0 bg-black"
           enterFrom="opacity-0"
@@ -29,6 +30,7 @@ export function Drawer(
         {/* content */}
         <div class="fixed inset-0 overflow-hidden">
           <Transition
+            appear
             show={props.open}
             class="duration-300 antd-floating inline-block h-full"
             enterFrom="translate-x-[-100%]"

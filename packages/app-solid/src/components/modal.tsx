@@ -19,6 +19,7 @@ export function Modal(
       <Transition show={props.open} class="duration-300">
         {/* backdrop */}
         <Transition
+          appear
           show={props.open}
           class="duration-300 fixed inset-0 bg-black"
           enterFrom="opacity-0"
@@ -29,6 +30,7 @@ export function Modal(
         {/* content */}
         <div class="fixed inset-0 overflow-hidden flex justify-center items-center">
           <Transition
+            appear
             show={props.open}
             class="duration-300 transform antd-floating"
             enterFrom="opacity-0 scale-90"
