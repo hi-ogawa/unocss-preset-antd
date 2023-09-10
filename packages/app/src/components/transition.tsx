@@ -64,8 +64,6 @@ export const Transition = React.forwardRef(function Transition(
   //
   // render
   //
-  const mergedRefs = useMergeRefs(ref, manager.setElement);
-  const render = props.render ?? ((props) => <div {...props} />);
   const delegatedProps = objectOmit(props, [
     "show",
     "appear",
@@ -73,6 +71,8 @@ export const Transition = React.forwardRef(function Transition(
     ...TRANSITION_CLASS_TYPES,
     ...TRANSITION_CALLBACK_TYPES,
   ]);
+  const mergedRefs = useMergeRefs(ref, manager.setElement);
+  const render = props.render ?? ((props) => <div {...props} />);
 
   return (
     <>
@@ -120,7 +120,7 @@ function useMergeRefs<T>(...refs: React.Ref<T>[]): React.RefCallback<T> {
 function processClassProps(
   props: TransitionClassProps & TransitionCallbacks
 ): TransitionCallbacks {
-  // TODO: handle className during ssr with `show=true appear=false`?
+  // TODO: handle className early for ssr with `show=true appear=false`?
   const classes = {
     className: splitClass(props.className ?? ""),
     enter: splitClass(props.enter ?? ""),
@@ -208,14 +208,15 @@ class TransitionManager {
   }
 
   show(show: boolean) {
-    this.dispose();
     if (show && this.state !== "entered") {
+      this.dispose();
       this.state = "entering";
       // normally this is no-op as `this.el === null`.
       // `this.el !== null` happens when `show` flips (true -> false -> true) faster than transition animation.
       this.startEnter();
       this.notify();
     } else if (!show && this.state !== "left") {
+      this.dispose();
       this.state = "leaving";
       this.startLeave();
       this.notify();
