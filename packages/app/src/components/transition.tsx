@@ -76,31 +76,14 @@ export const Transition = React.forwardRef(function Transition(
 
   return (
     <>
-      {manager.shouldRender() && (
-        <EffectWrapper
-          // TODO: instead of separating effect, use next frame callback during `onLayoutEffect`?
-          onLayoutEffect={() => manager.onLayout()}
-          onEffect={() => manager.onMount()}
-        >
-          {render({
-            ref: mergedRefs,
-            ...delegatedProps,
-          })}
-        </EffectWrapper>
-      )}
+      {manager.shouldRender() &&
+        render({
+          ref: mergedRefs,
+          ...delegatedProps,
+        })}
     </>
   );
 });
-
-function EffectWrapper(props: {
-  onEffect: () => void;
-  onLayoutEffect: () => void;
-  children?: React.ReactNode;
-}) {
-  React.useLayoutEffect(() => props.onLayoutEffect(), []);
-  React.useEffect(() => props.onEffect(), []);
-  return <>{props.children}</>;
-}
 
 function useMergeRefs<T>(...refs: React.Ref<T>[]): React.RefCallback<T> {
   return useStableCallback((el) => {
@@ -168,6 +151,10 @@ function processClassProps(
   };
 }
 
+function splitClass(c: string): string[] {
+  return c.split(" ").filter(Boolean);
+}
+
 //
 // framework-agnostic animation utility
 //
@@ -200,7 +187,7 @@ class TransitionManager {
       initialEntered: boolean;
     } & TransitionCallbacks
   ) {
-    this.state = this.options.initialEntered ? "entered" : "leaving";
+    this.state = this.options.initialEntered ? "entered" : "left";
   }
 
   shouldRender(): boolean {
@@ -208,79 +195,67 @@ class TransitionManager {
   }
 
   show(show: boolean) {
-    if (show && this.state !== "entered") {
-      this.dispose();
+    if (show && this.state !== "entering" && this.state !== "entered") {
       this.state = "entering";
-      // normally this is no-op as `this.el === null`.
-      // `this.el !== null` happens when `show` flips (true -> false -> true) faster than transition animation.
-      this.startEnter();
+      // it can be non-null when `show` flips (true -> false -> true) faster than transition animation.
+      this.el && this.startEnter(this.el);
       this.notify();
-    } else if (!show && this.state !== "left") {
-      this.dispose();
+    }
+    if (!show && this.state !== "leaving" && this.state !== "left") {
       this.state = "leaving";
-      this.startLeave();
+      this.el && this.startLeave(this.el);
       this.notify();
     }
   }
 
   // api compatible with ref callback
   setElement = (el: HTMLElement | null) => {
-    this.dispose();
     this.el = el;
+    if (el) {
+      if (this.state === "entered") {
+        this.options.onEntered?.(el);
+      } else if (this.state === "entering") {
+        this.startEnter(el);
+      }
+    }
   };
 
-  onLayout() {
-    if (!this.el) return;
-    this.dispose();
-    const el = this.el;
-
-    // style before paint
-    // TODO: in some cases, "appear" works without this. figure out what's the issue.
-    if (this.state === "entered") {
-      this.options.onEntered?.(el);
-    } else {
-      this.options.onEnterFrom?.(el);
-    }
-  }
-
-  onMount() {
-    if (this.state === "entered") return;
-    this.dispose();
-    this.startEnter();
-  }
-
-  private startEnter() {
-    if (!this.el) return;
-    const el = this.el;
-
+  private startEnter(el: HTMLElement) {
     // "enterFrom" -> "enterTo"
     this.options.onEnterFrom?.(el);
-    forceStyle(el);
-    this.options.onEnterTo?.(el);
 
-    // notify "entered"
+    this.dispose();
     this.disposables.add(
-      onTransitionEnd(el, () => {
-        this.state = "entered";
-        this.notify(() => this.options.onEntered?.(el));
+      onNextFrame(() => {
+        this.options.onEnterTo?.(el);
+
+        // notify "entered"
+        this.disposables.add(
+          onTransitionEnd(el, () => {
+            this.state = "entered";
+            this.notify(() => this.options.onEntered?.(el));
+          })
+        );
       })
     );
   }
 
-  private startLeave() {
-    if (!this.el) return;
-    const el = this.el;
-
+  private startLeave(el: HTMLElement) {
     // "leaveFrom" -> "leaveTo"
     this.options.onLeaveFrom?.(el);
-    forceStyle(el);
-    this.options.onLeaveTo?.(el);
 
-    // notify "left"
+    this.dispose();
     this.disposables.add(
-      onTransitionEnd(el, () => {
-        this.state = "left";
-        this.notify(() => this.options.onLeft?.(el));
+      onNextFrame(() => {
+        this.options.onLeaveTo?.(el);
+
+        // notify "left"
+        this.disposables.add(
+          onTransitionEnd(el, () => {
+            this.state = "left";
+            this.notify(() => this.options.onLeft?.(el));
+          })
+        );
       })
     );
   }
@@ -310,7 +285,6 @@ class TransitionManager {
   }
 }
 
-onNextFrame;
 function onNextFrame(callback: () => void) {
   const id = window.requestAnimationFrame(callback);
   return () => {
@@ -352,12 +326,4 @@ function parseDuration(s: string): number {
     return Number(s.slice(0, -1)) * 1000;
   }
   return 0;
-}
-
-function splitClass(c: string): string[] {
-  return c.split(" ").filter(Boolean);
-}
-
-function forceStyle(el: Element) {
-  window.getComputedStyle(el).transition ?? console.log("unreachable");
 }
