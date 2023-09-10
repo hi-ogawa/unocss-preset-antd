@@ -76,25 +76,14 @@ export const Transition = React.forwardRef(function Transition(
 
   return (
     <>
-      {manager.shouldRender() && (
-        <EffectWrapper onLayoutEffect={() => manager.onLayout()}>
-          {render({
-            ref: mergedRefs,
-            ...delegatedProps,
-          })}
-        </EffectWrapper>
-      )}
+      {manager.shouldRender() &&
+        render({
+          ref: mergedRefs,
+          ...delegatedProps,
+        })}
     </>
   );
 });
-
-function EffectWrapper(props: {
-  onLayoutEffect: () => void;
-  children: React.ReactNode;
-}) {
-  React.useLayoutEffect(() => props.onLayoutEffect(), []);
-  return <>{props.children}</>;
-}
 
 function useMergeRefs<T>(...refs: React.Ref<T>[]): React.RefCallback<T> {
   return useStableCallback((el) => {
@@ -224,16 +213,13 @@ class TransitionManager {
   setElement = (el: HTMLElement | null) => {
     this.dispose();
     this.el = el;
-  };
-
-  onLayout() {
-    if (!this.el) return;
+    if (!el) return;
     if (this.state === "entered") {
-      this.options.onEntered?.(this.el);
+      this.options.onEntered?.(el);
     } else if (this.state === "entering") {
       this.startEnter();
     }
-  }
+  };
 
   private startEnter() {
     if (!this.el) return;
