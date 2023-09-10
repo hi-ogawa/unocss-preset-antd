@@ -159,8 +159,6 @@ function splitClass(c: string): string[] {
 // framework-agnostic animation utility
 //
 
-// TODO: is it usable for packages/app-solid/src/components/transition.tsx ?
-
 type TransitionState = "left" | "entering" | "entered" | "leaving";
 
 const TRANSITION_CALLBACK_TYPES = [
@@ -197,7 +195,7 @@ class TransitionManager {
   show(show: boolean) {
     if (show && this.state !== "entering" && this.state !== "entered") {
       this.state = "entering";
-      // `startEnter` is usually handled in `onLayout` since `this.el` is null for normal cases.
+      // `startEnter` is usually handled in `setElement` since `this.el` is null here for normal cases.
       // however `this.el` can be non-null when `show` flips (true -> false -> true) faster than transition animation.
       this.startEnter();
       this.notify();
