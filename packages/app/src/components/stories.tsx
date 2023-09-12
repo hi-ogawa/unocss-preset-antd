@@ -1,3 +1,4 @@
+import { ReactTransition } from "@hiogawa/tiny-transition/dist/react";
 import { ANTD_VERS } from "@hiogawa/unocss-preset-antd";
 import { objectPickBy, range } from "@hiogawa/utils";
 import { Debug, toSetSetState, useDelay } from "@hiogawa/utils-react";
@@ -12,7 +13,6 @@ import { PopoverSimple } from "./popover";
 import { SnackbarConainer } from "./snackbar";
 import { useSnackbar } from "./snackbar-hook";
 import { TopProgressBar, useProgress } from "./top-progress-bar";
-import { Transition } from "./transition";
 
 export function StoryButton() {
   const [fab, setFabInner] = React.useState(new Set([0, 1]));
@@ -58,7 +58,7 @@ export function StoryButton() {
           </span>
         </h2>
         <div className="flex w-28">
-          <Transition
+          <ReactTransition
             appear
             show={fab.has(0)}
             className="transition duration-500"
@@ -73,9 +73,9 @@ export function StoryButton() {
             >
               <span className="i-ri-check-line w-6 h-6" />
             </button>
-          </Transition>
+          </ReactTransition>
           <div className="flex-1"></div>
-          <Transition
+          <ReactTransition
             // appear
             show={fab.has(1)}
             className="transition duration-500"
@@ -90,7 +90,7 @@ export function StoryButton() {
             >
               <span className="i-ri-close-line w-6 h-6" />
             </button>
-          </Transition>
+          </ReactTransition>
         </div>
         <pre>fab = {JSON.stringify([...fab])}</pre>
       </section>
@@ -327,7 +327,7 @@ export function StorySlide() {
           {show ? "Hide" : "Show"}
         </button>
         <div className="border h-[100px] overflow-hidden relative">
-          <Transition
+          <ReactTransition
             appear
             show={show}
             className="absolute top-2 right-2 inline-block duration-500 transform"
@@ -337,8 +337,8 @@ export function StorySlide() {
             leaveTo="translate-y-[-200%]"
           >
             <span className="border px-2 py-1">hello from top/right</span>
-          </Transition>
-          <Transition
+          </ReactTransition>
+          <ReactTransition
             appear
             show={show}
             className="absolute bottom-2 left-2 inline-block duration-500 transform"
@@ -348,7 +348,7 @@ export function StorySlide() {
             leaveTo="translate-x-[-200%]"
           >
             <span className="border px-2 py-1">hello from bottom/left</span>
-          </Transition>
+          </ReactTransition>
         </div>
       </section>
     </div>
@@ -370,14 +370,14 @@ export function StoryCollapse() {
         </button>
         <div className="flex flex-col p-3 border">
           <div>Fixed Div</div>
-          <Transition
+          <ReactTransition
             appear
             show={show}
             className="duration-500 overflow-hidden"
             {...getCollapseProps()}
           >
             <div className="pt-3">Collapsable Div</div>
-          </Transition>
+          </ReactTransition>
         </div>
       </section>
     </div>

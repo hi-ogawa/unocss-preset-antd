@@ -1,7 +1,7 @@
-import type { Transition } from "./transition";
+import type { ReactTransition } from "@hiogawa/tiny-transition/dist/react";
 
 export function getCollapseProps(): Partial<
-  React.ComponentProps<typeof Transition>
+  React.ComponentProps<typeof ReactTransition>
 > {
   function uncollapse(el: HTMLElement) {
     if (el.firstElementChild) {

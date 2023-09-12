@@ -1,9 +1,9 @@
 import { FloatingPortal } from "@floating-ui/react";
+import { ReactTransition } from "@hiogawa/tiny-transition/dist/react";
 import { useDelay, usePrevious, useRafTime } from "@hiogawa/utils-react";
 import React from "react";
 import { tw } from "../styles/tw";
 import { cls } from "../utils/misc";
-import { Transition } from "./transition";
 
 // based on https://github.com/hi-ogawa/ytsub-v3/blob/859264f683e8d1c6331ca1c630101c037a78dd94/app/components/top-progress-bar.tsx#L1-L2
 
@@ -12,7 +12,7 @@ export function TopProgressBar({ loading }: { loading: boolean }) {
 
   return (
     <FloatingPortal>
-      <Transition
+      <ReactTransition
         show={typeof progress.value === "number"}
         className={cls(tw.fixed.left_0.top_0.w_full.$)}
         leave="transition-opacity duration-250"
@@ -38,7 +38,7 @@ export function TopProgressBar({ loading }: { loading: boolean }) {
             transitionDuration: progress.finishing ? "500" : "0",
           }}
         />
-      </Transition>
+      </ReactTransition>
     </FloatingPortal>
   );
 }
