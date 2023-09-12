@@ -21,6 +21,7 @@
     "dist"
   ],
   "license": "MIT",
+  "homepage": "https://github.com/hi-ogawa/unocss-preset-antd/packages/tiny-transition",
   "repository": {
     "type": "git",
     "url": "https://github.com/hi-ogawa/unocss-preset-antd/",

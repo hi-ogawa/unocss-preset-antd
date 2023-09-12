@@ -1,4 +1,10 @@
 import {
+  TransitionCallbackProps,
+  TransitionClassProps,
+  TransitionManager,
+  convertClassPropsToCallbackProps,
+} from "@hiogawa/tiny-transition";
+import {
   JSX,
   Show,
   createEffect,
@@ -7,26 +13,22 @@ import {
   onCleanup,
   untrack,
 } from "solid-js";
-import {
-  TransitionCallbacks,
-  TransitionClassProps,
-  TransitionManager,
-  processClassProps,
-} from "./transition-utils";
 
 export function Transition(
   props: {
     show: boolean;
     appear?: boolean;
   } & TransitionClassProps &
-    TransitionCallbacks &
-    Pick<JSX.HTMLElementTags["div"], "children" | "style">
+    TransitionCallbackProps &
+    Pick<JSX.HTMLElementTags["div"], "class" | "children" | "style">
 ) {
-  const callbackOptions = createMemo(() => processClassProps(props));
+  const callbackOptions = createMemo(() =>
+    convertClassPropsToCallbackProps(props.class, props)
+  );
 
   const manager = new TransitionManager(
     untrack(() => ({
-      initialEntered: props.show && !props.appear,
+      defaultEntered: props.show && !props.appear,
       ...callbackOptions(),
     }))
   );

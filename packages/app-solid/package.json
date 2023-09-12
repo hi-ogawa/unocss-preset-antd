@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "@floating-ui/dom": "^1.2.9",
+    "@hiogawa/tiny-transition": "workspace:*",
     "@hiogawa/unocss-preset-antd": "workspace:*",
     "@solid-primitives/context": "^0.2.1",
     "@solid-primitives/refs": "^1.0.4",
