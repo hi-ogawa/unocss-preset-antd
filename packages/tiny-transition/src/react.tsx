@@ -12,16 +12,25 @@ import {
   TransitionManager,
 } from "./core";
 
-export const ReactTransition = React.forwardRef(function ReactTransition(
+// cheat typing to simplify dts rollup
+function simpleForawrdRef<
+  P,
+  T,
+  F extends (props: P, ref: React.ForwardedRef<T>) => JSX.Element
+>(f: F): (props: P & { ref?: React.Ref<T> }) => JSX.Element {
+  return React.forwardRef(f) as any;
+}
+
+export const ReactTransition = simpleForawrdRef(function ReactTransition(
   props: {
     show: boolean;
     appear?: boolean;
     render?: (props: Record<string, any>) => React.ReactNode;
   } & TransitionClassProps &
     TransitionCallbackProps & {
-      // to rollup dts, we need to inline and simplify Pick<JSX.IntrinsicElements["div"], ...>
-      className?: string | undefined;
-      style?: unknown | undefined;
+      // to rollup dts, we need to inline Pick<JSX.IntrinsicElements["div"], ...>
+      className?: string;
+      style?: unknown;
       children?: React.ReactNode;
     },
   ref: React.ForwardedRef<HTMLElement>
