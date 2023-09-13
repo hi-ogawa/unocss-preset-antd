@@ -1,6 +1,6 @@
 import {
-  TransitionCallbackProps,
-  TransitionClassProps,
+  type TransitionCallbackProps,
+  type TransitionClassProps,
   TransitionManager,
   convertClassPropsToCallbackProps,
 } from "@hiogawa/tiny-transition";

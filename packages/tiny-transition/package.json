@@ -28,6 +28,7 @@
     "directory": "packages/tiny-transition"
   },
   "scripts": {
+    "dev": "tsup --watch",
     "build": "tsup",
     "release": "pnpm publish --no-git-checks --access public"
   },
