@@ -13,7 +13,7 @@ import {
   useId,
   useInteractions,
 } from "@floating-ui/react";
-import { ReactTransition } from "@hiogawa/tiny-transition/dist/react";
+import { Transition } from "@hiogawa/tiny-transition/dist/react";
 import React from "react";
 import { cls } from "../utils/misc";
 
@@ -112,7 +112,7 @@ export function PopoverSimple({
         React.cloneElement(maybeCall(reference, [context]), props)
       }
       floating={({ props, open, arrowProps, context }) => (
-        <ReactTransition
+        <Transition
           show={open}
           className="transition duration-150"
           enterFrom="scale-80 opacity-0"
@@ -127,7 +127,7 @@ export function PopoverSimple({
             )}
             {maybeCall(floating, [context])}
           </div>
-        </ReactTransition>
+        </Transition>
       )}
     />
   );

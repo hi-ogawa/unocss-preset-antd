@@ -21,7 +21,7 @@ function simpleForawrdRef<
   return React.forwardRef(f) as any;
 }
 
-export const ReactTransition = simpleForawrdRef(function ReactTransition(
+export const Transition = simpleForawrdRef(function Transition(
   props: {
     show: boolean;
     appear?: boolean;

@@ -1,4 +1,4 @@
-import { ReactTransition } from "@hiogawa/tiny-transition/dist/react";
+import { Transition } from "@hiogawa/tiny-transition/dist/react";
 import { ANTD_VERS } from "@hiogawa/unocss-preset-antd";
 import { objectPickBy, range } from "@hiogawa/utils";
 import { Debug, toSetSetState, useDelay } from "@hiogawa/utils-react";
@@ -58,7 +58,7 @@ export function StoryButton() {
           </span>
         </h2>
         <div className="flex w-28">
-          <ReactTransition
+          <Transition
             appear
             show={fab.has(0)}
             className="transition duration-500"
@@ -73,9 +73,9 @@ export function StoryButton() {
             >
               <span className="i-ri-check-line w-6 h-6" />
             </button>
-          </ReactTransition>
+          </Transition>
           <div className="flex-1"></div>
-          <ReactTransition
+          <Transition
             // appear
             show={fab.has(1)}
             className="transition duration-500"
@@ -90,7 +90,7 @@ export function StoryButton() {
             >
               <span className="i-ri-close-line w-6 h-6" />
             </button>
-          </ReactTransition>
+          </Transition>
         </div>
         <pre>fab = {JSON.stringify([...fab])}</pre>
       </section>
@@ -327,7 +327,7 @@ export function StorySlide() {
           {show ? "Hide" : "Show"}
         </button>
         <div className="border h-[100px] overflow-hidden relative">
-          <ReactTransition
+          <Transition
             appear
             show={show}
             className="absolute top-2 right-2 inline-block duration-500 transform"
@@ -337,8 +337,8 @@ export function StorySlide() {
             leaveTo="translate-y-[-200%]"
           >
             <span className="border px-2 py-1">hello from top/right</span>
-          </ReactTransition>
-          <ReactTransition
+          </Transition>
+          <Transition
             appear
             show={show}
             className="absolute bottom-2 left-2 inline-block duration-500 transform"
@@ -348,7 +348,7 @@ export function StorySlide() {
             leaveTo="translate-x-[-200%]"
           >
             <span className="border px-2 py-1">hello from bottom/left</span>
-          </ReactTransition>
+          </Transition>
         </div>
       </section>
     </div>
@@ -370,14 +370,14 @@ export function StoryCollapse() {
         </button>
         <div className="flex flex-col p-3 border">
           <div>Fixed Div</div>
-          <ReactTransition
+          <Transition
             appear
             show={show}
             className="duration-500 overflow-hidden"
             {...getCollapseProps()}
           >
             <div className="pt-3">Collapsable Div</div>
-          </ReactTransition>
+          </Transition>
         </div>
       </section>
     </div>
