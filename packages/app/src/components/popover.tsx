@@ -1,7 +1,7 @@
 import {
-  FloatingContext,
+  type FloatingContext,
   FloatingPortal,
-  Placement,
+  type Placement,
   arrow,
   autoUpdate,
   flip,

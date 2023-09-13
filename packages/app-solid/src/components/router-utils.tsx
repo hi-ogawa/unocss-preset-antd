@@ -1,7 +1,7 @@
 import { createContextProvider } from "@solid-primitives/context";
 import { createHashHistory } from "history";
 import {
-  JSX,
+  type JSX,
   createEffect,
   createMemo,
   createSignal,

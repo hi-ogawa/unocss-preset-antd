@@ -2,8 +2,7 @@ import { execSync } from "node:child_process";
 import { themeScriptPlugin } from "@hiogawa/theme-script/dist/vite";
 import react from "@vitejs/plugin-react";
 import unocss from "unocss/vite";
-import { defineConfig } from "vite";
-import type { Plugin } from "vite";
+import { type Plugin, defineConfig } from "vite";
 
 export default defineConfig({
   build: {
