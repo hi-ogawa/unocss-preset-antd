@@ -1,6 +1,6 @@
 {
   "name": "@hiogawa/tiny-transition",
-  "version": "0.0.1-pre.0",
+  "version": "0.0.1-pre.1",
   "type": "module",
   "main": "./dist/index.js",
   "module": "./dist/index.js",
@@ -21,7 +21,7 @@
     "dist"
   ],
   "license": "MIT",
-  "homepage": "https://github.com/hi-ogawa/unocss-preset-antd/packages/tiny-transition",
+  "homepage": "https://github.com/hi-ogawa/unocss-preset-antd/tree/main/packages/tiny-transition",
   "repository": {
     "type": "git",
     "url": "https://github.com/hi-ogawa/unocss-preset-antd/",
