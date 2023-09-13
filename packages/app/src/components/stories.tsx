@@ -1,4 +1,4 @@
-import { Transition } from "@headlessui/react";
+import { Transition } from "@hiogawa/tiny-transition/dist/react";
 import { ANTD_VERS } from "@hiogawa/unocss-preset-antd";
 import { objectPickBy, range } from "@hiogawa/utils";
 import { Debug, toSetSetState, useDelay } from "@hiogawa/utils-react";
@@ -7,7 +7,7 @@ import { Controller, useForm } from "react-hook-form";
 import ReactSelect from "react-select";
 import { tw } from "../styles/tw";
 import { cls } from "../utils/misc";
-import { useCollapseProps } from "./collapse";
+import { getCollapseProps } from "./collapse";
 import { useModal } from "./modal";
 import { PopoverSimple } from "./popover";
 import { SnackbarConainer } from "./snackbar";
@@ -59,8 +59,9 @@ export function StoryButton() {
         </h2>
         <div className="flex w-28">
           <Transition
+            appear
             show={fab.has(0)}
-            className="transition duration-200"
+            className="transition duration-500"
             enterFrom="scale-30 opacity-0"
             enterTo="scale-100 opacity-100"
             leaveFrom="scale-100 opacity-100"
@@ -75,8 +76,9 @@ export function StoryButton() {
           </Transition>
           <div className="flex-1"></div>
           <Transition
+            // appear
             show={fab.has(1)}
-            className="transition duration-200"
+            className="transition duration-500"
             enterFrom="scale-30 opacity-0"
             enterTo="scale-100 opacity-100"
             leaveFrom="scale-100 opacity-100"
@@ -90,6 +92,7 @@ export function StoryButton() {
             </button>
           </Transition>
         </div>
+        <pre>fab = {JSON.stringify([...fab])}</pre>
       </section>
     </main>
   );
@@ -354,7 +357,6 @@ export function StorySlide() {
 
 export function StoryCollapse() {
   const [show, setShow] = React.useState(true);
-  const collapseProps = useCollapseProps();
 
   return (
     <div className="flex flex-col items-center gap-3 m-2">
@@ -371,8 +373,8 @@ export function StoryCollapse() {
           <Transition
             appear
             show={show}
-            className="h-0 duration-500 overflow-hidden"
-            {...collapseProps}
+            className="duration-500 overflow-hidden"
+            {...getCollapseProps()}
           >
             <div className="pt-3">Collapsable Div</div>
           </Transition>

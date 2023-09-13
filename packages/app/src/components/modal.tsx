@@ -5,7 +5,7 @@ import {
   useId,
   useInteractions,
 } from "@floating-ui/react";
-import { Transition } from "@headlessui/react";
+import { Transition } from "@hiogawa/tiny-transition/dist/react";
 import { tinyassert } from "@hiogawa/utils";
 import React from "react";
 import { RemoveScroll } from "react-remove-scroll";
@@ -31,9 +31,15 @@ export function Modal(props: {
 
   return (
     <FloatingPortal id={id}>
-      <Transition appear show={props.open} className="z-100">
+      <Transition
+        appear
+        show={props.open}
+        className="fixed inset-0 duration-300 z-100"
+      >
         {/* backdrop */}
-        <Transition.Child
+        <Transition
+          appear
+          show={props.open}
           className="transition duration-300 fixed inset-0 bg-black"
           enterFrom="opacity-0"
           enterTo="opacity-40"
@@ -42,7 +48,9 @@ export function Modal(props: {
         />
         {/* content */}
         <RemoveScroll className="fixed inset-0 overflow-hidden flex justify-center items-center">
-          <Transition.Child
+          <Transition
+            appear
+            show={props.open}
             className={cls(
               props.className,
               "transition duration-300 transform w-[90%] max-w-[700px] h-[90%] max-h-[500px] bg-colorBgContainer shadow-lg"
@@ -60,7 +68,7 @@ export function Modal(props: {
             >
               {props.children}
             </div>
-          </Transition.Child>
+          </Transition>
         </RemoveScroll>
       </Transition>
     </FloatingPortal>

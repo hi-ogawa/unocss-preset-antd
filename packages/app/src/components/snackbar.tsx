@@ -1,7 +1,7 @@
-import { Transition } from "@headlessui/react";
+import { Transition } from "@hiogawa/tiny-transition/dist/react";
 import { tw } from "../styles/tw";
 import { cls } from "../utils/misc";
-import { CollapseTransition } from "./collapse";
+import { getCollapseProps } from "./collapse";
 import {
   type SnackbarItemOptions,
   type SnackbarItemState,
@@ -55,11 +55,11 @@ function SnackbarAnimation1(
       {/*  */}
       {/* collpase transition */}
       {/*  */}
-      <CollapseTransition
-        key={item.id}
+      <Transition
         show={item.state === "show" || item.state === "dismiss-slide"}
         className="duration-300"
-        afterLeave={() => props.onDismiss3()}
+        onLeft={() => props.onDismiss3()}
+        {...getCollapseProps()}
       >
         {/*  */}
         {/* slide transtion */}
@@ -72,7 +72,7 @@ function SnackbarAnimation1(
           enterTo="translate-x-0"
           leaveFrom="translate-x-0"
           leaveTo="translate-x-[-120%]"
-          afterLeave={() => props.onDismiss2()}
+          onLeft={() => props.onDismiss2()}
         >
           {props.children}
         </Transition>
@@ -85,9 +85,9 @@ function SnackbarAnimation1(
           className={props.durationClassName}
           enterFrom="opacity-0"
           enterTo="opacity-100"
-          afterEnter={() => props.onDismiss()}
+          onEntered={() => props.onDismiss()}
         />
-      </CollapseTransition>
+      </Transition>
     </>
   );
 }
@@ -109,12 +109,7 @@ function SnackbarAnimation2(
       {/*  */}
       {/* collpase transition */}
       {/*  */}
-      <CollapseTransition
-        key={item.id}
-        show={show}
-        className="duration-300"
-        afterLeave={() => props.onDismiss3()}
-      >
+      <Transition show={show} className="duration-300" {...getCollapseProps()}>
         {/*  */}
         {/* slide/scale transtion */}
         {/*  */}
@@ -138,9 +133,9 @@ function SnackbarAnimation2(
           className={props.durationClassName}
           enterFrom="opacity-0"
           enterTo="opacity-100"
-          afterEnter={() => props.onDismiss()}
+          onEntered={() => props.onDismiss()}
         />
-      </CollapseTransition>
+      </Transition>
     </>
   );
 }

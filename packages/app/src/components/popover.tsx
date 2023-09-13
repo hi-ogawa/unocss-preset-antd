@@ -13,15 +13,15 @@ import {
   useId,
   useInteractions,
 } from "@floating-ui/react";
-import { Transition } from "@headlessui/react";
+import { Transition } from "@hiogawa/tiny-transition/dist/react";
 import React from "react";
 import { cls } from "../utils/misc";
 
 interface PopoverRenderProps {
   open: boolean;
   setOpen: (open: boolean) => void;
-  props: {};
-  arrowProps?: {};
+  props: Record<string, unknown>;
+  arrowProps?: Record<string, unknown>;
   context: FloatingContext; // context.placement is an actual placement e.g. after `flip` middleware is applied
 }
 

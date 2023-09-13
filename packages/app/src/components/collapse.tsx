@@ -1,45 +1,28 @@
-import { Transition } from "@headlessui/react";
-import { tinyassert } from "@hiogawa/utils";
-import React from "react";
+import type { Transition } from "@hiogawa/tiny-transition/dist/react";
 
-export function CollapseTransition(
-  props: Parameters<typeof Transition>[0] & object
-) {
-  const collpaseProps = useCollapseProps();
-  return <Transition {...props} {...collpaseProps} />;
-}
-
-export function useCollapseProps(): Partial<Parameters<typeof Transition>[0]> {
-  const refEl = React.useRef<HTMLDivElement>();
-
-  const refCallback: React.RefCallback<HTMLDivElement> = (el) => {
-    if (el) {
-      uncollapse(el);
+export function getCollapseProps(): Partial<
+  React.ComponentProps<typeof Transition>
+> {
+  function uncollapse(el: HTMLElement) {
+    if (el.firstElementChild) {
+      el.style.height = el.firstElementChild.clientHeight + "px";
     }
-    refEl.current = el ?? undefined;
-  };
-
-  function uncollapse(el: HTMLDivElement) {
-    const child = el.firstElementChild;
-    tinyassert(child);
-    el.style.height = child.clientHeight + "px";
   }
 
-  function collapse(el: HTMLDivElement) {
+  function collapse(el: HTMLElement) {
     el.style.height = "0px";
   }
 
-  function beforeEnter() {
-    const el = refEl.current;
-    tinyassert(el);
-    uncollapse(el);
-  }
-
-  function beforeLeave() {
-    const el = refEl.current;
-    tinyassert(el);
-    collapse(el);
-  }
-
-  return { ref: refCallback, beforeEnter, beforeLeave };
+  return {
+    onEnterFrom: collapse,
+    onEnterTo: uncollapse,
+    // slight hack for SnackbarAnimation1
+    // without this collapse parent cannot see children's height
+    onEntered: (el) =>
+      window.requestAnimationFrame(() => {
+        uncollapse(el);
+      }),
+    onLeaveFrom: uncollapse,
+    onLeaveTo: collapse,
+  };
 }
