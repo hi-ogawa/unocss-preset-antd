@@ -1,5 +1,5 @@
 import { Ref } from "@solid-primitives/refs";
-import { ParentProps, Setter, createSignal } from "solid-js";
+import { type ParentProps, type Setter, createSignal } from "solid-js";
 import { Portal } from "solid-js/web";
 import { createDismissInteraction } from "./popover";
 import { Transition } from "./transition";

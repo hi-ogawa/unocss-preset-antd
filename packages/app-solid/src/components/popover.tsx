@@ -1,9 +1,9 @@
 import {
-  ComputePositionConfig,
-  ComputePositionReturn,
-  Middleware,
-  MiddlewareData,
-  Placement,
+  type ComputePositionConfig,
+  type ComputePositionReturn,
+  type Middleware,
+  type MiddlewareData,
+  type Placement,
   arrow,
   autoUpdate,
   computePosition,
@@ -14,9 +14,9 @@ import {
 import { mapOption, tinyassert } from "@hiogawa/utils";
 import { Ref } from "@solid-primitives/refs";
 import {
-  Accessor,
-  JSX,
-  Setter,
+  type Accessor,
+  type JSX,
+  type Setter,
   createEffect,
   createMemo,
   createSignal,

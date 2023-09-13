@@ -5,7 +5,7 @@ import {
   convertClassPropsToCallbackProps,
 } from "@hiogawa/tiny-transition";
 import {
-  JSX,
+  type JSX,
   Show,
   createEffect,
   createMemo,

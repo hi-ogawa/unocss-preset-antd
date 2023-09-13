@@ -1,11 +1,10 @@
 import { antdPreset } from "@hiogawa/unocss-preset-antd";
 import {
+  dummyPreset,
   dummyPresetIconsRules,
-  dummyRule,
   filterColorPallete,
   transformerTypescriptDsl,
 } from "@hiogawa/unocss-typescript-dsl";
-import { dummyPreset } from "@hiogawa/unocss-typescript-dsl";
 import {
   defineConfig,
   presetIcons,
