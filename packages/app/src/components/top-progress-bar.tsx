@@ -43,6 +43,45 @@ export function TopProgressBar({ loading }: { loading: boolean }) {
   );
 }
 
+function ProgressBar() {
+}
+
+class ProgressBarManager {
+  constructor(private el: HTMLElement) {}
+
+  start() {
+    this.el;
+    // animationframe
+
+  }
+
+  finish() {
+  }
+
+  loopRAF() {
+    const id = window.requestAnimationFrame(time => {
+    });
+  }
+
+  subscribe = () => {
+  }
+
+  getSnapshot = () => {
+  }
+}
+
+function runRequestAnimationFrameLoop(f: (t: number) => void) {
+  // let id
+  const loop = (time: number) => {
+    window.requestAnimationFrame(time => {
+    });
+  }
+  const id = window.requestAnimationFrame(time => {
+  });
+  return () => {
+  }
+}
+
 interface UseProgressResult {
   value?: number; // \in [0, 1]
   finishing: boolean;
