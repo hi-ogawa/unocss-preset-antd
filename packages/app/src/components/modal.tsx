@@ -13,7 +13,7 @@ import { cls } from "../utils/misc";
 
 // copied from https://github.com/hi-ogawa/web-ext-tab-manager/blame/81710dead04859525b9c8be3a73a71926cae6da4/src/components/modal.tsx
 
-export function Modal(props: {
+function Modal(props: {
   open: boolean;
   onClose: () => void;
   children: React.ReactNode;
