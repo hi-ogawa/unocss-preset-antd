@@ -3,7 +3,6 @@
   "include": ["src"],
   "compilerOptions": {
     "types": ["vite/client"],
-    "jsx": "preserve",
-    "jsxImportSource": "solid-js"
+    "jsx": "preserve"
   }
 }
