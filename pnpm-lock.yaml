@@ -56,15 +56,15 @@ importers:
       '@floating-ui/react':
         specifier: ^0.24.2
         version: 0.24.2(@types/react@18.0.27)(react-dom@18.2.0)(react@18.2.0)
+      '@hiogawa/tiny-store':
+        specifier: 0.0.1-pre.1
+        version: 0.0.1-pre.1(react@18.2.0)
       '@hiogawa/tiny-transition':
         specifier: workspace:*
         version: link:../tiny-transition
       '@hiogawa/unocss-preset-antd':
         specifier: workspace:*
         version: link:../lib
-      jotai:
-        specifier: ^2.0.3
-        version: 2.0.3(react@18.2.0)
       react:
         specifier: ^18.2.0
         version: 18.2.0
@@ -1648,6 +1648,17 @@ packages:
     dependencies:
       vite: 4.1.1
     dev: true
+
+  /@hiogawa/tiny-store@0.0.1-pre.1(react@18.2.0):
+    resolution: {integrity: sha512-ZBMTyoQcrZ4/NC55uzDPdgds4UwNpCgXFt1+dnsOB2XXZYaG+0kSkCalRAUMaC5NPCWsSSHlJlHdquK6Q+wuXw==}
+    peerDependencies:
+      react: ^18.0.0
+    peerDependenciesMeta:
+      react:
+        optional: true
+    dependencies:
+      react: 18.2.0
+    dev: false
 
   /@hiogawa/unocss-typescript-dsl@2.0.0-pre.5(@iconify/utils@2.1.9)(@unocss/config@0.55.7)(@unocss/core@0.55.7)(local-pkg@0.4.3)(magic-string@0.30.3):
     resolution: {integrity: sha512-WrXry/3tDW2Y8d7U1GzTVyDxNvz1NFFji6ifZyQWI1m42CzKFm/rpiRhWYvI96apF1q+FN1L56DtLtJ1s//gtQ==}
@@ -3500,18 +3511,6 @@ packages:
     resolution: {integrity: sha512-3TV69ZbrvV6U5DfQimop50jE9Dl6J8O1ja1dvBbMba/sZ3YBEQqJ2VZRoQPVnhlzjNtU1vaXRZVrVjU4qtm8yA==}
     hasBin: true
     dev: true
-
-  /jotai@2.0.3(react@18.2.0):
-    resolution: {integrity: sha512-MMjhSPAL3RoeZD9WbObufRT2quThEAEknHHridf2ma8Ml7ZVQmUiHk0ssdbR3F0h3kcwhYqSGJ59OjhPge7RRg==}
-    engines: {node: '>=12.20.0'}
-    peerDependencies:
-      react: '>=17.0.0'
-    peerDependenciesMeta:
-      react:
-        optional: true
-    dependencies:
-      react: 18.2.0
-    dev: false
 
   /joycon@3.1.1:
     resolution: {integrity: sha512-34wB/Y7MW7bzjKRjUKTa46I2Z7eV62Rkhva+KkopW7Qvv/OSWBqvkSY7vusOPrNuZcUG3tApvdVgNB8POj3SPw==}

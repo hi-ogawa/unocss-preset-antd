@@ -1,5 +1,6 @@
+import { createTinyStore } from "@hiogawa/tiny-store";
+import { useTinyStore } from "@hiogawa/tiny-store/dist/react";
 import { toArraySetState } from "@hiogawa/utils-react";
-import { atom, useAtom } from "jotai";
 
 export interface SnackbarItemOptions {
   type?: "success" | "error";
@@ -13,10 +14,10 @@ export interface SnackbarItemState {
 }
 
 function createUseSnackbar() {
-  const itemsAtom = atom<SnackbarItemState[]>([]);
+  const itemsStore = createTinyStore<SnackbarItemState[]>([]);
 
   function useSnackbar() {
-    const [items, setItems] = useAtom(itemsAtom);
+    const [items, setItems] = useTinyStore(itemsStore);
     const setArayState = toArraySetState(setItems);
 
     function create(
