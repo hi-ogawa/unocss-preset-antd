@@ -14,9 +14,7 @@ jobs:
           node-version: 18
           cache: pnpm
       - run: pnpm i
-      - run: pnpm dev-setup
       - run: pnpm lint-check
-      - run: pnpm tsc
       - run: pnpm build
+      - run: pnpm tsc
       - run: pnpm -r generate-tw-test
-      - run: pnpm -C packages/app-solid build
