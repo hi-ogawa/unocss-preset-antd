@@ -1,6 +1,6 @@
 import { tinyassert, typedBoolean } from "@hiogawa/utils";
 import {
-  JSX,
+  type JSX,
   Show,
   createEffect,
   createMemo,

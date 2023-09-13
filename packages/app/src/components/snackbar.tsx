@@ -3,8 +3,8 @@ import { tw } from "../styles/tw";
 import { cls } from "../utils/misc";
 import { CollapseTransition } from "./collapse";
 import {
-  SnackbarItemOptions,
-  SnackbarItemState,
+  type SnackbarItemOptions,
+  type SnackbarItemState,
   useSnackbar,
 } from "./snackbar-hook";
 

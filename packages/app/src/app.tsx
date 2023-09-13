@@ -2,7 +2,7 @@ import React from "react";
 import {
   NavLink,
   Outlet,
-  RouteObject,
+  type RouteObject,
   RouterProvider,
   createHashRouter,
   redirect,

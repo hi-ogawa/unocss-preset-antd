@@ -1,11 +1,11 @@
 // used to generate tw-api.ts
 
 import {
+  dummyPreset,
   dummyRule,
   dummyVariant,
   filterColorPallete,
 } from "@hiogawa/unocss-typescript-dsl";
-import { dummyPreset } from "@hiogawa/unocss-typescript-dsl";
 import {
   defineConfig,
   presetUno,
