@@ -4,7 +4,8 @@ export function cls(...args: unknown[]): string {
   return args.filter(Boolean).join(" ");
 }
 
-export function onClickTarget(target: Node, callback: (hit: boolean) => void) {
+// @ts-expect-error unused
+function onClickTarget(target: Node, callback: (hit: boolean) => void) {
   onDocumentEvent("pointerdown", (e) => {
     const hit = e.target instanceof Node && target.contains(e.target);
     callback(Boolean(hit));
@@ -22,7 +23,8 @@ export function onDocumentEvent<K extends keyof DocumentEventMap>(
   });
 }
 
-export function createMatchMedia(query: string) {
+// @ts-expect-error unused
+function createMatchMedia(query: string) {
   const [matches, setMatches] = createSignal<boolean>();
 
   const media = window.matchMedia(query);

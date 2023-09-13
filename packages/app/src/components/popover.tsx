@@ -25,7 +25,7 @@ interface PopoverRenderProps {
   context: FloatingContext; // context.placement is an actual placement e.g. after `flip` middleware is applied
 }
 
-export function Popover(props: {
+function Popover(props: {
   placement: Placement;
   reference: (renderProps: PopoverRenderProps) => React.ReactNode;
   floating: (renderProps: PopoverRenderProps) => React.ReactNode;
