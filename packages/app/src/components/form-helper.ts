@@ -38,15 +38,17 @@ type BaseFormFieldHelper<T> = {
   value: T;
   onChange: (v: T) => void;
 };
+
+// TODO: valueAsNumber?
 type StringFormFieldHelper = {
-  valueProps: {
+  valueProps: () => {
     value: string;
     onChange: (e: { target: { value: string } }) => void;
   };
 };
 
 type BooleanFormFieldHelper = {
-  checkedProps: {
+  checkedProps: () => {
     checked: boolean;
     onChange: (e: { target: { checked: boolean } }) => void;
   };
@@ -61,16 +63,16 @@ function createFormFieldHelper<T>([state, setState]: [
     onChange: (v: T) => setState(() => v),
   };
   const stringHelper: StringFormFieldHelper = {
-    valueProps: {
+    valueProps: () => ({
       value: state as string,
       onChange: (e) => setState(() => e.target.value as T),
-    },
+    }),
   };
   const booleanHelper: BooleanFormFieldHelper = {
-    checkedProps: {
+    checkedProps: () => ({
       checked: state as boolean,
       onChange: (e) => setState(() => e.target.checked as T),
-    },
+    }),
   };
   return { ...baseHelper, ...stringHelper, ...booleanHelper } as any;
 }

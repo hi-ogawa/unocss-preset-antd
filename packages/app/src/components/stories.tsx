@@ -150,7 +150,7 @@ export function StoryColor() {
           <div className="border-t my-1"></div>
           <label className="flex items-center gap-2">
             <span className="text-colorTextLabel">Use react-select</span>
-            <input type="checkbox" {...form.useReactSelect.checkedProps} />
+            <input type="checkbox" {...form.useReactSelect.checkedProps()} />
           </label>
           {renderField("Text", form.color)}
           {renderField("Background", form.backgroundColor)}
@@ -409,7 +409,10 @@ export function StorySnackbar() {
         <h2 className="text-xl">Snackbar</h2>
         <div className="flex flex-col gap-1">
           Animation Type
-          <select className="antd-input p-1" {...form.animationType.valueProps}>
+          <select
+            className="antd-input p-1"
+            {...form.animationType.valueProps()}
+          >
             {[1, 2].map((v) => (
               <option key={v} value={v}>
                 {v}
@@ -421,7 +424,7 @@ export function StorySnackbar() {
           Duration
           <select
             className="antd-input p-1"
-            {...form.durationClassName.valueProps}
+            {...form.durationClassName.valueProps()}
           >
             {["duration-2000", "duration-4000", "duration-8000"].map((v) => (
               <option key={v} value={v}>
