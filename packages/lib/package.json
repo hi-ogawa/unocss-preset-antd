@@ -51,11 +51,6 @@
     "esbuild-register": "^3.4.2"
   },
   "peerDependencies": {
-    "@unocss/preset-uno": "*",
     "unocss": "*"
-  },
-  "dependencies": {
-    "@unocss/reset": "^0.48.5",
-    "local-pkg": "^0.4.3"
   }
 }

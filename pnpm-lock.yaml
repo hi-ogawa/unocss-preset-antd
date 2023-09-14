@@ -136,12 +136,6 @@ importers:
 
   packages/lib:
     dependencies:
-      '@unocss/reset':
-        specifier: ^0.48.5
-        version: 0.48.5
-      local-pkg:
-        specifier: ^0.4.3
-        version: 0.4.3
       unocss:
         specifier: '*'
         version: 0.48.5(vite@4.4.9)
