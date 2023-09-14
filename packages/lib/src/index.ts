@@ -1,12 +1,12 @@
 import { objectEntries, objectMapValues, objectPickBy } from "@hiogawa/utils";
-import type { Theme } from "@unocss/preset-uno";
 import type { Preset } from "unocss";
+import { name as packageName } from "../package.json";
 import { theme } from "./theme";
 import { tw } from "./tw";
 
-export function antdPreset(): Preset<Theme> {
+export function antdPreset(): Preset {
   return {
-    name: "antd-preset",
+    name: packageName,
     prefix: "antd-",
     theme: {
       aria: {
