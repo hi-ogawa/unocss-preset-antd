@@ -1,11 +1,20 @@
+import fs from "node:fs";
 import { defineConfig } from "tsup";
 
 export default defineConfig({
-  entry: ["src/index.ts", "src/reset-dev.ts", "src/reset-dev.css"],
-  external: ["./reset-dev.css"],
+  entry: ["src/index.ts"],
   format: ["esm", "cjs"],
-  dts: {
-    entry: ["src/index.ts", "src/reset-dev.ts"],
+  dts: true,
+  loader: {
+    ".css": "text",
   },
-  splitting: false,
+  define: {
+    // bundle default unocss reset to reduce runtime deps
+    __DEFINE_RAW__: JSON.stringify({
+      "@unocss/reset/tailwind.css": fs.readFileSync(
+        "node_modules/@unocss/reset/tailwind.css",
+        "utf-8"
+      ),
+    }),
+  },
 });

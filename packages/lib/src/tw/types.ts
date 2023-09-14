@@ -1726,9 +1726,4 @@ export type Shortcut =
   | `antd_link`
   | `antd_floating`
   | `antd_spin`
-  | `antd_reset`
-  | `antd_body`
-  | `antd_variables_compact`
-  | `antd_variables_dark`
-  | `antd_variables_default`
 ;

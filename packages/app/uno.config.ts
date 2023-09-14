@@ -1,4 +1,4 @@
-import { antdPreset } from "@hiogawa/unocss-preset-antd";
+import { unocssPresetAntd } from "@hiogawa/unocss-preset-antd";
 import {
   dummyPreset,
   dummyPresetIconsRules,
@@ -21,7 +21,7 @@ export default defineConfig({
     },
   },
   presets: [
-    antdPreset({ reset: false }), // no auto reset for dev reloading (see packages/app/src/styles/index.ts)
+    unocssPresetAntd(),
     filterColorPallete(presetUno()),
     presetIcons({
       extraProperties: {
@@ -36,6 +36,7 @@ export default defineConfig({
     ...dummyPresetIconsRules(["ri"]),
   ],
   transformers: [
+    // @ts-ignore peer dep version?
     transformerTypescriptDsl(),
     transformerDirectives(),
     transformerVariantGroup(),

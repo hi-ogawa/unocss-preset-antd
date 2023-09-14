@@ -136,12 +136,6 @@ importers:
 
   packages/lib:
     dependencies:
-      '@unocss/reset':
-        specifier: ^0.48.5
-        version: 0.48.5
-      local-pkg:
-        specifier: ^0.4.3
-        version: 0.4.3
       unocss:
         specifier: '*'
         version: 0.48.5(vite@4.4.9)
@@ -152,6 +146,9 @@ importers:
       '@unocss/preset-uno':
         specifier: ^0.48.5
         version: 0.48.5
+      '@unocss/reset':
+        specifier: ^0.55.7
+        version: 0.55.7
       antd:
         specifier: ^5.1.7
         version: 5.1.7(react-dom@18.2.0)(react@18.2.0)
@@ -2169,6 +2166,10 @@ packages:
 
   /@unocss/reset@0.48.5:
     resolution: {integrity: sha512-+JJT3Btj1oNX4XwKBDPRUYre3NYBNmi0PsC3tqkHN2VphJG0iZl91XNfsveLz8pVpDJPUDdLH4xsqh52WmxU1g==}
+
+  /@unocss/reset@0.55.7:
+    resolution: {integrity: sha512-yvmLhxqUNgf6wue7IvhV/FdrQW9H9LF1Bmmhwwaiz2aV0E74aN4pbuYPZwNq3YafsQvNQ0UdtuXjddY4QMRCPw==}
+    dev: true
 
   /@unocss/scope@0.48.5:
     resolution: {integrity: sha512-2xPJWUyDUnJkn37n6+a0t4vKb8l07UeGTHM4jxOvKdML4Gi5tsxulyj+lBPP+wLWu9fNiFe7HlEejbh/J13QVw==}
@@ -5555,7 +5556,7 @@ packages:
       merge-anything: 5.1.7
       solid-js: 1.7.6
       solid-refresh: 0.5.2(solid-js@1.7.6)
-      vite: 4.4.9(@types/node@16.18.12)
+      vite: 4.4.9
       vitefu: 0.2.4(vite@4.4.9)
     transitivePeerDependencies:
       - supports-color
@@ -5594,6 +5595,41 @@ packages:
       fsevents: 2.3.3
     dev: true
 
+  /vite@4.4.9:
+    resolution: {integrity: sha512-2mbUn2LlUmNASWwSCNSJ/EG2HuSRTnVNaydp6vMCm5VIqJsjMfbIWtbH2kDuwUVW5mMUKKZvGPX/rqeqVvv1XA==}
+    engines: {node: ^14.18.0 || >=16.0.0}
+    hasBin: true
+    peerDependencies:
+      '@types/node': '>= 14'
+      less: '*'
+      lightningcss: ^1.21.0
+      sass: '*'
+      stylus: '*'
+      sugarss: '*'
+      terser: ^5.4.0
+    peerDependenciesMeta:
+      '@types/node':
+        optional: true
+      less:
+        optional: true
+      lightningcss:
+        optional: true
+      sass:
+        optional: true
+      stylus:
+        optional: true
+      sugarss:
+        optional: true
+      terser:
+        optional: true
+    dependencies:
+      esbuild: 0.18.20
+      postcss: 8.4.29
+      rollup: 3.29.1
+    optionalDependencies:
+      fsevents: 2.3.3
+    dev: true
+
   /vite@4.4.9(@types/node@16.18.12):
     resolution: {integrity: sha512-2mbUn2LlUmNASWwSCNSJ/EG2HuSRTnVNaydp6vMCm5VIqJsjMfbIWtbH2kDuwUVW5mMUKKZvGPX/rqeqVvv1XA==}
     engines: {node: ^14.18.0 || >=16.0.0}
@@ -5628,6 +5664,7 @@ packages:
       rollup: 3.29.1
     optionalDependencies:
       fsevents: 2.3.3
+    dev: false
 
   /vitefu@0.2.4(vite@4.4.9):
     resolution: {integrity: sha512-fanAXjSaf9xXtOOeno8wZXIhgia+CZury481LsDaV++lSvcU2R9Ch2bPh3PYFyoHW+w9LqAeYRISVQjUIew14g==}
@@ -5637,7 +5674,7 @@ packages:
       vite:
         optional: true
     dependencies:
-      vite: 4.4.9(@types/node@16.18.12)
+      vite: 4.4.9
     dev: true
 
   /wcwidth@1.0.1:

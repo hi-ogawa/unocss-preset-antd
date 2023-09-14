@@ -1,6 +1,6 @@
 {
   "name": "@hiogawa/unocss-preset-antd",
-  "version": "2.2.1-pre.3",
+  "version": "2.2.1-pre.5",
   "type": "module",
   "main": "./dist/index.js",
   "module": "./dist/index.js",
@@ -10,15 +10,6 @@
       "import": "./dist/index.js",
       "require": "./dist/index.cjs",
       "types": "./dist/index.d.ts"
-    },
-    "./dist/reset-dev": {
-      "import": "./dist/reset-dev.js",
-      "require": "./dist/reset-dev.cjs",
-      "types": "./dist/reset-dev.d.ts"
-    },
-    "./dist/reset.css": {
-      "import": "./dist/reset.css",
-      "require": "./dist/reset.css"
     }
   },
   "files": [
@@ -27,6 +18,7 @@
     "dist/reset.css"
   ],
   "license": "MIT",
+  "homepage": "https://github.com/hi-ogawa/unocss-preset-antd/packages/lib",
   "repository": {
     "type": "git",
     "url": "https://github.com/hi-ogawa/unocss-preset-antd",
@@ -34,9 +26,7 @@
   },
   "scripts": {
     "dev": "tsup --watch",
-    "build": "run-s build:*",
-    "build:reset": "vite build && cp -f dist/vite/assets/index-*.css dist/reset.css",
-    "build:tsup": "tsup",
+    "build": "tsup",
     "build-theme": "pnpm -s ts ./src/build-theme.ts > ./src/theme.ts",
     "generate-tw": "unocss-typescript-dsl --outDir src/tw",
     "generate-tw-test": "unocss-typescript-dsl --stdout | diff src/tw/types.ts -",
@@ -46,16 +36,12 @@
   "devDependencies": {
     "@types/node": "^16.18.12",
     "@unocss/preset-uno": "^0.48.5",
+    "@unocss/reset": "^0.55.7",
     "antd": "^5.1.7",
     "esbuild": "^0.17.5",
     "esbuild-register": "^3.4.2"
   },
   "peerDependencies": {
-    "@unocss/preset-uno": "*",
     "unocss": "*"
-  },
-  "dependencies": {
-    "@unocss/reset": "^0.48.5",
-    "local-pkg": "^0.4.3"
   }
 }
