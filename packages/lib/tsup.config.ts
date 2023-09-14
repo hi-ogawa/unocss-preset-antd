@@ -11,7 +11,10 @@ export default defineConfig({
   define: {
     // bundle default unocss reset to reduce runtime deps
     __DEFINE_RAW__: JSON.stringify({
-      "@unocss/reset/tailwind.css": fs.readFileSync("node_modules/@unocss/reset/tailwind.css", "utf-8"),
+      "@unocss/reset/tailwind.css": fs.readFileSync(
+        "node_modules/@unocss/reset/tailwind.css",
+        "utf-8"
+      ),
     }),
   },
 });

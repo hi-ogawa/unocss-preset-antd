@@ -1,4 +1,4 @@
-import { objectEntries, objectPickBy } from "@hiogawa/utils";
+import { objectEntries, objectMapValues, objectPickBy } from "@hiogawa/utils";
 import type { Theme } from "@unocss/preset-uno";
 import type { Preset } from "unocss";
 import { theme } from "./theme";
@@ -12,7 +12,7 @@ export function antdPreset(): Preset<Theme> {
       aria: {
         invalid: 'invalid="true"',
       },
-      colors: objectPickBy(VARS, (_, k) => k.startsWith("color")),
+      colors: objectPickBy(ANTD_VARS, (_, k) => k.startsWith("color")),
       animation: {
         // builtin spin is not "composable" and cannot be used with `translate-xxx` etc... (https://github.com/unocss/unocss/blob/339f2b2c9be41a5505e7f4509eea1cf00a87a8d1/packages/preset-wind/src/theme.ts#L19)
         keyframes: {
@@ -36,8 +36,9 @@ export function antdPreset(): Preset<Theme> {
         .border_t_current.aspect_square.$,
 
       // modal, popover, snackbar, etc...
-      floating: tw.bg_colorBgElevated._(`shadow-[${VARS.boxShadowSecondary}]`)
-        .$,
+      floating: tw.bg_colorBgElevated._(
+        `shadow-[${ANTD_VARS.boxShadowSecondary}]`
+      ).$,
 
       // a href
       link: tw.cursor_pointer.transition.text_colorLink.hover(
@@ -120,7 +121,7 @@ export function antdPreset(): Preset<Theme> {
       "menu-item": "antd-btn antd-btn-text",
       "menu-item-active": tw.important(
         tw.text_colorPrimary
-          ._(`bg-[${VARS.controlItemBgActive}]`)
+          ._(`bg-[${ANTD_VARS.controlItemBgActive}]`)
           .dark(tw.text_white.bg_colorPrimary)
       ).$,
     },
@@ -132,25 +133,25 @@ export function antdPreset(): Preset<Theme> {
   };
 }
 
-// VARS.colorText => "var(--antd-colorText)"
-const VARS = Object.fromEntries(
-  Object.keys(theme.default).map((k) => [k, `var(--antd-${k})`])
-) as Record<keyof typeof theme.default, string>;
+// ANTD_VARS.colorText => "var(--antd-colorText)"
+export const ANTD_VARS = objectMapValues(
+  theme.default,
+  (_v, k) => `var(--antd-${k})`
+);
 
-// export for `StoryColor` in packages/app/src/components/stories.tsx
-export { VARS as ANTD_VERS };
-
-function toCssVariables(
-  tokens: Record<string, unknown>
-): Record<string, string> {
-  return Object.fromEntries(
-    Object.entries(tokens).map(([k, v]) => ["--antd-" + k, String(v)])
-  );
+function inlintCssVars(
+  tokens: Record<string, unknown>,
+  indent: number
+): string {
+  const pre = " ".repeat(indent);
+  return objectEntries(tokens)
+    .map(([k, v]) => `${pre}--antd-${k}: ${String(v)};\n`)
+    .join("");
 }
 
 // defined by tsup.config.ts
 declare let __DEFINE_RAW__: {
-  "@unocss/reset/tailwind.css": string,
+  "@unocss/reset/tailwind.css": string;
 };
 
 function getResetCSS() {
@@ -171,28 +172,24 @@ ${__DEFINE_RAW__["@unocss/reset/tailwind.css"]}
 
 :root {
   color-scheme: light;
-  ${objectEntries(toCssVariables(theme.default))
-    .map(([k, v]) => `  ${k}: ${v};\n`)
-    .join("")}
+${inlintCssVars(theme.default, 2)}
 }
 
 .dark {
   color-scheme: dark;
-  ${objectEntries(toCssVariables(theme.dark))
-    .map(([k, v]) => `  ${k}: ${v};\n`)
-    .join("")}
+${inlintCssVars(theme.dark, 2)}
 }
 
 body {
-  font-family: ${VARS.fontFamily};
-  background-color: ${VARS.colorBgContainer};
-  color: ${VARS.colorText};
+  font-family: ${ANTD_VARS.fontFamily};
+  background-color: ${ANTD_VARS.colorBgContainer};
+  color: ${ANTD_VARS.colorText};
 }
 
 *,
 ::before,
 ::after {
-  border-color: ${VARS.colorBorderSecondary};
+  border-color: ${ANTD_VARS.colorBorderSecondary};
 }
 
 /**********************************/

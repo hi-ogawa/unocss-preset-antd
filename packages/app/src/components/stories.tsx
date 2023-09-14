@@ -1,5 +1,5 @@
 import { Transition } from "@hiogawa/tiny-transition/dist/react";
-import { ANTD_VERS } from "@hiogawa/unocss-preset-antd";
+import { ANTD_VARS } from "@hiogawa/unocss-preset-antd";
 import { objectPickBy, range } from "@hiogawa/utils";
 import { Debug, toSetSetState, useDelay } from "@hiogawa/utils-react";
 import React from "react";
@@ -114,7 +114,7 @@ export function StoryInput() {
   );
 }
 
-const ANTD_COLORS = objectPickBy(ANTD_VERS, (_, k) => k.startsWith("color"));
+const ANTD_COLORS = objectPickBy(ANTD_VARS, (_, k) => k.startsWith("color"));
 const ANTD_COLORS_OPTIONS = Object.entries(ANTD_COLORS).map(
   ([label, value]) => ({ label, value })
 );
@@ -122,9 +122,9 @@ const ANTD_COLORS_OPTIONS = Object.entries(ANTD_COLORS).map(
 export function StoryColor() {
   const form = useForm({
     defaultValues: {
-      color: ANTD_VERS.colorText,
-      backgroundColor: ANTD_VERS.colorBgContainer,
-      borderColor: ANTD_VERS.colorBorderSecondary,
+      color: ANTD_VARS.colorText,
+      backgroundColor: ANTD_VARS.colorBgContainer,
+      borderColor: ANTD_VARS.colorBorderSecondary,
     },
   });
 
