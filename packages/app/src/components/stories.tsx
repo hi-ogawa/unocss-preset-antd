@@ -3,7 +3,6 @@ import { ANTD_VARS } from "@hiogawa/unocss-preset-antd";
 import { objectPickBy, range } from "@hiogawa/utils";
 import { Debug, toSetSetState, useDelay } from "@hiogawa/utils-react";
 import React from "react";
-import { useForm } from "react-hook-form";
 import ReactSelect from "react-select";
 import { tw } from "../styles/tw";
 import { cls } from "../utils/misc";
@@ -397,13 +396,12 @@ export function StoryCollapse() {
 
 export function StorySnackbar() {
   const snackbar = useSnackbar();
-
-  const form = useForm({
-    defaultValues: {
+  const form = createFormHelper(
+    React.useState({
       animationType: "2",
       durationClassName: "duration-4000",
-    },
-  });
+    })
+  );
 
   return (
     <div className="flex flex-col items-center gap-3 m-2">
@@ -411,10 +409,7 @@ export function StorySnackbar() {
         <h2 className="text-xl">Snackbar</h2>
         <div className="flex flex-col gap-1">
           Animation Type
-          <select
-            className="antd-input p-1"
-            {...form.register("animationType")}
-          >
+          <select className="antd-input p-1" {...form.animationType.valueProps}>
             {[1, 2].map((v) => (
               <option key={v} value={v}>
                 {v}
@@ -426,7 +421,7 @@ export function StorySnackbar() {
           Duration
           <select
             className="antd-input p-1"
-            {...form.register("durationClassName")}
+            {...form.durationClassName.valueProps}
           >
             {["duration-2000", "duration-4000", "duration-8000"].map((v) => (
               <option key={v} value={v}>
@@ -466,8 +461,8 @@ export function StorySnackbar() {
         </div>
         <div className="border h-[500px] p-3 flex flex-col relative overflow-hidden">
           <SnackbarConainer
-            animationType={form.watch("animationType")}
-            durationClassName={form.watch("durationClassName")}
+            animationType={form.animationType.value}
+            durationClassName={form.durationClassName.value}
           />
         </div>
         <Debug debug={snackbar.items} />
