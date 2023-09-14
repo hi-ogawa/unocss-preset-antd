@@ -3,13 +3,14 @@ import { ANTD_VARS } from "@hiogawa/unocss-preset-antd";
 import { objectPickBy, range } from "@hiogawa/utils";
 import { Debug, toSetSetState, useDelay } from "@hiogawa/utils-react";
 import React from "react";
-import { Controller, useForm } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import ReactSelect from "react-select";
 import { tw } from "../styles/tw";
 import { cls } from "../utils/misc";
 import { getCollapseProps } from "./collapse";
 import { useModal } from "./modal";
 import { PopoverSimple } from "./popover";
+import { SimpleSelect } from "./select";
 import { SnackbarConainer } from "./snackbar";
 import { useSnackbar } from "./snackbar-hook";
 import { TopProgressBar, useProgress } from "./top-progress-bar";
@@ -122,11 +123,13 @@ const ANTD_COLORS_OPTIONS = Object.entries(ANTD_COLORS).map(
 export function StoryColor() {
   const form = useForm({
     defaultValues: {
+      useReactSelect: false,
       color: ANTD_VARS.colorText,
       backgroundColor: ANTD_VARS.colorBgContainer,
       borderColor: ANTD_VARS.colorBorderSecondary,
     },
   });
+  const { useReactSelect } = form.watch();
 
   return (
     <div className="flex flex-col items-center gap-3 m-2">
@@ -143,6 +146,10 @@ export function StoryColor() {
             </div>
           </div>
           <div className="border-t my-1"></div>
+          <label className="flex items-center gap-2">
+            <span className="text-colorTextLabel">Use react-select</span>
+            <input type="checkbox" {...form.register("useReactSelect")} />
+          </label>
           {renderField("color", "Text")}
           {renderField("backgroundColor", "Background")}
           {renderField("borderColor", "Border")}
@@ -159,35 +166,38 @@ export function StoryColor() {
     name: Parameters<typeof form.register>[0],
     label: string
   ) {
+    const value = form.watch(name);
+    const onChange = (v: string) => form.setValue(name, v);
     return (
       <label className="flex flex-col gap-1">
         <span className="text-colorTextLabel">{label}</span>
-        <Controller
-          control={form.control}
-          name={name}
-          render={({ field }) => (
-            // TODO: preview by hover?
-            <ReactSelect
-              unstyled
-              options={ANTD_COLORS_OPTIONS}
-              value={ANTD_COLORS_OPTIONS.find(
-                (option) => option.value === field.value
-              )}
-              onChange={(option) => field.onChange(option?.value)}
-              classNames={{
-                control: () => "antd-input px-2",
-                placeholder: () => "text-colorTextSecondary",
-                menu: () => "border antd-floating mt-2",
-                menuList: () => "flex flex-col gap-1 py-1",
-                option: (state) =>
-                  cls(
-                    "antd-menu-item cursor-pointer p-1 px-2 text-sm",
-                    state.isSelected && "antd-menu-item-active"
-                  ),
-              }}
-            />
-          )}
-        />
+        {useReactSelect ? (
+          <ReactSelect
+            unstyled
+            options={ANTD_COLORS_OPTIONS}
+            value={ANTD_COLORS_OPTIONS.find((option) => option.value === value)}
+            onChange={(option) => onChange(option!.value)}
+            classNames={{
+              control: () => "antd-input px-2",
+              placeholder: () => "text-colorTextSecondary",
+              menu: () => "border antd-floating mt-2",
+              menuList: () => "flex flex-col gap-1 py-1",
+              option: (state) =>
+                cls(
+                  "antd-menu-item cursor-pointer p-1 px-2 text-sm",
+                  state.isSelected && "antd-menu-item-active"
+                ),
+            }}
+          />
+        ) : (
+          <SimpleSelect
+            className="antd-input p-2"
+            value={ANTD_COLORS_OPTIONS.find((option) => option.value === value)}
+            options={ANTD_COLORS_OPTIONS}
+            onChange={(option) => onChange(option!.value)}
+            labelFn={(v) => v?.label}
+          />
+        )}
       </label>
     );
   }
