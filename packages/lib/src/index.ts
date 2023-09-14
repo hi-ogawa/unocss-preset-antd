@@ -1,12 +1,10 @@
-import fs from "node:fs";
-import path from "node:path";
-import { objectPickBy, typedBoolean } from "@hiogawa/utils";
+import { objectEntries, objectPickBy } from "@hiogawa/utils";
 import type { Theme } from "@unocss/preset-uno";
 import type { Preset } from "unocss";
 import { theme } from "./theme";
 import { tw } from "./tw";
 
-export function antdPreset(options?: { reset?: boolean }): Preset<Theme> {
+export function antdPreset(): Preset<Theme> {
   return {
     name: "antd-preset",
     prefix: "antd-",
@@ -29,38 +27,6 @@ export function antdPreset(options?: { reset?: boolean }): Preset<Theme> {
       },
     },
     shortcuts: {
-      /**
-       * pass theme variables via shortcuts, which can be used e.g. by
-       *
-          :root {
-            --at-apply: "antd-variables-default";
-          }
-          .dark {
-            --at-apply: "antd-variables-dark";
-          }
-       *
-       */
-      "variables-default": [toCssVariables(theme.default)],
-      "variables-dark": [toCssVariables(theme.dark)],
-      "variables-compact": [toCssVariables(theme.compact)],
-
-      /**
-       * base style e.g.
-       *
-          body {
-            --at-apply: "antd-body";
-          }
-          *, ::before, ::after {
-            --at-apply: "antd-reset";
-          }
-       *
-       */
-      body: tw._(`font-[${VARS.fontFamily}]`).bg_colorBgContainer.text_colorText
-        .$,
-
-      // default border color e.g. for card, divider, etc...
-      reset: tw.border_colorBorderSecondary.$,
-
       /**
        * misc
        */
@@ -159,12 +125,10 @@ export function antdPreset(options?: { reset?: boolean }): Preset<Theme> {
       ).$,
     },
     preflights: [
-      (options?.reset ?? true) && {
-        getCSS: () =>
-          // TODO: esm?
-          fs.promises.readFile(path.join(__dirname, "reset.css"), "utf-8"),
+      {
+        getCSS: () => getResetCSS(),
       },
-    ].filter(typedBoolean),
+    ],
   };
 }
 
@@ -182,4 +146,57 @@ function toCssVariables(
   return Object.fromEntries(
     Object.entries(tokens).map(([k, v]) => ["--antd-" + k, String(v)])
   );
+}
+
+// defined by tsup.config.ts
+declare let __DEFINE_RAW__: {
+  "@unocss/reset/tailwind.css": string,
+};
+
+function getResetCSS() {
+  return `
+/********************************************************************/
+/* [START] @unocss/reset/tailwind.css bundled by unocss-preset-antd */
+/*******************************************************************/
+
+${__DEFINE_RAW__["@unocss/reset/tailwind.css"]}
+
+/******************************************************************/
+/* [END] @unocss/reset/tailwind.css bundled by unocss-preset-antd */
+/******************************************************************/
+
+/************************************/
+/* [START] unocss-preset-antd reset */
+/************************************/
+
+:root {
+  color-scheme: light;
+  ${objectEntries(toCssVariables(theme.default))
+    .map(([k, v]) => `  ${k}: ${v};\n`)
+    .join("")}
+}
+
+.dark {
+  color-scheme: dark;
+  ${objectEntries(toCssVariables(theme.dark))
+    .map(([k, v]) => `  ${k}: ${v};\n`)
+    .join("")}
+}
+
+body {
+  font-family: ${VARS.fontFamily};
+  background-color: ${VARS.colorBgContainer};
+  color: ${VARS.colorText};
+}
+
+*,
+::before,
+::after {
+  border-color: ${VARS.colorBorderSecondary};
+}
+
+/**********************************/
+/* [END] unocss-preset-antd reset */
+/**********************************/
+`;
 }

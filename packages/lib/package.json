@@ -35,7 +35,7 @@
   "scripts": {
     "dev": "tsup --watch",
     "build": "run-s build:*",
-    "build:reset": "vite build && cp -f dist/vite/assets/index-*.css dist/reset.css",
+    "xbuild:reset": "vite build && cp -f dist/vite/assets/index-*.css dist/reset.css",
     "build:tsup": "tsup",
     "build-theme": "pnpm -s ts ./src/build-theme.ts > ./src/theme.ts",
     "generate-tw": "unocss-typescript-dsl --outDir src/tw",
