@@ -12,10 +12,10 @@ import {
   transformerDirectives,
   transformerVariantGroup,
 } from "unocss";
-import { antdPreset } from "./src";
+import { unocssPresetAntd } from "./src";
 
 export default defineConfig({
-  presets: [filterColorPallete(presetUno()), antdPreset(), dummyPreset()],
+  presets: [filterColorPallete(presetUno()), unocssPresetAntd(), dummyPreset()],
   rules: [
     dummyRule("ring-<num>"),
     dummyRule("opacity-<percent>"),

@@ -4,7 +4,7 @@ import { name as packageName } from "../package.json";
 import { theme } from "./theme";
 import { tw } from "./tw";
 
-export function antdPreset(): Preset {
+export function unocssPresetAntd(): Preset {
   return {
     name: packageName,
     prefix: "antd-",
