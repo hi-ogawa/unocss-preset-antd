@@ -123,7 +123,7 @@ const ANTD_COLORS_OPTIONS = Object.entries(ANTD_COLORS).map(
 export function StoryColor() {
   const form = useForm({
     defaultValues: {
-      useReactSelect: true,
+      useReactSelect: false,
       color: ANTD_VARS.colorText,
       backgroundColor: ANTD_VARS.colorBgContainer,
       borderColor: ANTD_VARS.colorBorderSecondary,
