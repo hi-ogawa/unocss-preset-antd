@@ -3,7 +3,7 @@ import { ANTD_VARS } from "@hiogawa/unocss-preset-antd";
 import { objectPickBy, range } from "@hiogawa/utils";
 import { Debug, toSetSetState, useDelay } from "@hiogawa/utils-react";
 import React from "react";
-import { Controller, useForm } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import ReactSelect from "react-select";
 import { tw } from "../styles/tw";
 import { cls } from "../utils/misc";
@@ -166,47 +166,38 @@ export function StoryColor() {
     name: Parameters<typeof form.register>[0],
     label: string
   ) {
+    const value = form.watch(name);
+    const onChange = (v: string) => form.setValue(name, v);
     return (
       <label className="flex flex-col gap-1">
         <span className="text-colorTextLabel">{label}</span>
-        <Controller
-          control={form.control}
-          name={name}
-          render={({ field }) =>
-            // TODO: preview by hover?
-            useReactSelect ? (
-              <ReactSelect
-                unstyled
-                options={ANTD_COLORS_OPTIONS}
-                value={ANTD_COLORS_OPTIONS.find(
-                  (option) => option.value === field.value
-                )}
-                onChange={(option) => field.onChange(option?.value)}
-                classNames={{
-                  control: () => "antd-input px-2",
-                  placeholder: () => "text-colorTextSecondary",
-                  menu: () => "border antd-floating mt-2",
-                  menuList: () => "flex flex-col gap-1 py-1",
-                  option: (state) =>
-                    cls(
-                      "antd-menu-item cursor-pointer p-1 px-2 text-sm",
-                      state.isSelected && "antd-menu-item-active"
-                    ),
-                }}
-              />
-            ) : (
-              <SimpleSelect
-                className="antd-input p-2"
-                value={ANTD_COLORS_OPTIONS.find(
-                  (option) => option.value === field.value
-                )}
-                options={ANTD_COLORS_OPTIONS}
-                onChange={(option) => field.onChange(option?.value)}
-                labelFn={(v) => v?.label}
-              />
-            )
-          }
-        />
+        {useReactSelect ? (
+          <ReactSelect
+            unstyled
+            options={ANTD_COLORS_OPTIONS}
+            value={ANTD_COLORS_OPTIONS.find((option) => option.value === value)}
+            onChange={(option) => onChange(option!.value)}
+            classNames={{
+              control: () => "antd-input px-2",
+              placeholder: () => "text-colorTextSecondary",
+              menu: () => "border antd-floating mt-2",
+              menuList: () => "flex flex-col gap-1 py-1",
+              option: (state) =>
+                cls(
+                  "antd-menu-item cursor-pointer p-1 px-2 text-sm",
+                  state.isSelected && "antd-menu-item-active"
+                ),
+            }}
+          />
+        ) : (
+          <SimpleSelect
+            className="antd-input p-2"
+            value={ANTD_COLORS_OPTIONS.find((option) => option.value === value)}
+            options={ANTD_COLORS_OPTIONS}
+            onChange={(option) => onChange(option!.value)}
+            labelFn={(v) => v?.label}
+          />
+        )}
       </label>
     );
   }
