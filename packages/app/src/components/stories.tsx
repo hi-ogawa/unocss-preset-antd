@@ -122,7 +122,7 @@ const ANTD_COLORS_OPTIONS = Object.entries(ANTD_COLORS).map(
 
 export function StoryColor() {
   const [formState, setFormState] = React.useState({
-    useReactSelect: false,
+    reactSelect: false,
     color: ANTD_VARS.colorText,
     backgroundColor: ANTD_VARS.colorBgContainer,
     borderColor: ANTD_VARS.colorBorderSecondary,
@@ -150,7 +150,7 @@ export function StoryColor() {
           <div className="border-t my-1"></div>
           <label className="flex items-center gap-2">
             <span className="text-colorTextLabel">Use react-select</span>
-            <input type="checkbox" {...form.useReactSelect.checkedProps()} />
+            <input type="checkbox" {...form.reactSelect.checkedProps()} />
           </label>
           {renderField("Text", form.color)}
           {renderField("Background", form.backgroundColor)}
@@ -171,7 +171,7 @@ export function StoryColor() {
     return (
       <label className="flex flex-col gap-1">
         <span className="text-colorTextLabel">{label}</span>
-        {formState.useReactSelect ? (
+        {formState.reactSelect ? (
           <ReactSelect
             unstyled
             options={ANTD_COLORS_OPTIONS}
