@@ -45,7 +45,11 @@ export const Transition = simpleForawrdRef(function Transition(
         ...convertClassPropsToCallbackProps(props.className, props),
       })
   );
-  React.useSyncExternalStore(manager.subscribe, manager.getSnapshot);
+  React.useSyncExternalStore(
+    manager.subscribe,
+    manager.getSnapshot,
+    manager.getSnapshot
+  );
 
   //
   // sync props to state
