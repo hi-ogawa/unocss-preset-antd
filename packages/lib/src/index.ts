@@ -4,6 +4,16 @@ import { name as packageName } from "../package.json";
 import { theme } from "./theme";
 import { tw } from "./tw";
 
+// typed css variable name helper
+//   ANTD_VARS.colorText => "var(--antd-colorText)"
+export const ANTD_VARS = objectMapValues(
+  theme.default,
+  (_v, k) => `var(--antd-${k})`
+);
+
+// re-export all theme constants
+export { theme as ANTD_THEME };
+
 export function unocssPresetAntd(): Preset {
   return {
     name: packageName,
@@ -133,11 +143,9 @@ export function unocssPresetAntd(): Preset {
   };
 }
 
-// ANTD_VARS.colorText => "var(--antd-colorText)"
-export const ANTD_VARS = objectMapValues(
-  theme.default,
-  (_v, k) => `var(--antd-${k})`
-);
+//
+// default reset css
+//
 
 function inlintCssVars(
   tokens: Record<string, unknown>,
