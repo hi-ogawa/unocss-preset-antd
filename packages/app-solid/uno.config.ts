@@ -31,6 +31,7 @@ export default defineConfig({
   ],
   rules: [...dummyPresetIconsRules(["ri"])],
   transformers: [
+    // @ts-ignore
     transformerTypescriptDsl(),
     transformerDirectives(),
     transformerVariantGroup(),
