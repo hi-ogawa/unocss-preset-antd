@@ -8,6 +8,7 @@ import ReactSelect from "react-select";
 import { tw } from "../styles/tw";
 import { cls } from "../utils/misc";
 import { getCollapseProps } from "./collapse";
+import { createFormHelper } from "./form-helper";
 import { useModal } from "./modal";
 import { PopoverSimple } from "./popover";
 import { SimpleSelect } from "./select";
@@ -121,15 +122,13 @@ const ANTD_COLORS_OPTIONS = Object.entries(ANTD_COLORS).map(
 );
 
 export function StoryColor() {
-  const form = useForm({
-    defaultValues: {
-      useReactSelect: false,
-      color: ANTD_VARS.colorText,
-      backgroundColor: ANTD_VARS.colorBgContainer,
-      borderColor: ANTD_VARS.colorBorderSecondary,
-    },
+  const [formState, setFormState] = React.useState({
+    useReactSelect: false,
+    color: ANTD_VARS.colorText,
+    backgroundColor: ANTD_VARS.colorBgContainer,
+    borderColor: ANTD_VARS.colorBorderSecondary,
   });
-  const { useReactSelect } = form.watch();
+  const form = createFormHelper([formState, setFormState]);
 
   return (
     <div className="flex flex-col items-center gap-3 m-2">
@@ -140,7 +139,11 @@ export function StoryColor() {
             <span className="text-colorTextLabel">Preview</span>
             <div
               className="border h-[50px] flex justify-center items-center"
-              style={form.watch()}
+              style={{
+                color: formState.color,
+                backgroundColor: formState.backgroundColor,
+                borderColor: formState.borderColor,
+              }}
             >
               Hello World
             </div>
@@ -148,11 +151,11 @@ export function StoryColor() {
           <div className="border-t my-1"></div>
           <label className="flex items-center gap-2">
             <span className="text-colorTextLabel">Use react-select</span>
-            <input type="checkbox" {...form.register("useReactSelect")} />
+            <input type="checkbox" {...form.useReactSelect.checkedProps} />
           </label>
-          {renderField("color", "Text")}
-          {renderField("backgroundColor", "Background")}
-          {renderField("borderColor", "Border")}
+          {renderField("Text", form.color)}
+          {renderField("Background", form.backgroundColor)}
+          {renderField("Border", form.borderColor)}
         </div>
       </section>
     </div>
@@ -163,15 +166,13 @@ export function StoryColor() {
   //
 
   function renderField(
-    name: Parameters<typeof form.register>[0],
-    label: string
+    label: string,
+    { value, onChange }: { value: string; onChange: (v: string) => void }
   ) {
-    const value = form.watch(name);
-    const onChange = (v: string) => form.setValue(name, v);
     return (
       <label className="flex flex-col gap-1">
         <span className="text-colorTextLabel">{label}</span>
-        {useReactSelect ? (
+        {formState.useReactSelect ? (
           <ReactSelect
             unstyled
             options={ANTD_COLORS_OPTIONS}
