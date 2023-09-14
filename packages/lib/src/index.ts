@@ -155,6 +155,7 @@ declare let __DEFINE_RAW__: {
 };
 
 function getResetCSS() {
+  // TODO: use "--un-default-border-color" for global border color https://github.com/unocss/unocss/commit/d0d35cb00ca2a3e9fdb9a1c3143ca32ba7b04df3
   return `
 /********************************************************************/
 /* [START] @unocss/reset/tailwind.css bundled by unocss-preset-antd */
