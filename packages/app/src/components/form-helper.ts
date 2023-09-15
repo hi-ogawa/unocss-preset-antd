@@ -1,4 +1,9 @@
-// TODO: to js-utils?
+// TODO:
+// - valueAsNumber? (parse/stringify?)
+// - helper for onSubmit handler
+// - form status helper (e.g. isValid, isDirty)?
+// - validation (e.g. required)?
+// - array helper?
 
 //
 // form helper
