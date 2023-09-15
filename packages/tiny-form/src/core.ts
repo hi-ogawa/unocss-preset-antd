@@ -2,7 +2,6 @@ import { objectHas } from "@hiogawa/utils";
 
 // TODO
 // - memo?
-// - input name attribute?
 // - valueAsNumber? (parse/stringify?)
 // - form status helper (e.g. isValid, isDirty)?
 // - validation (e.g. required)?
@@ -53,8 +52,8 @@ function createFieldRecordHelper<T extends {}>([state, setState]: readonly [
     {},
     {
       get(_target, p, _receiver) {
-        const k = p as keyof T;
-        return createFormFieldHelper([
+        const k = p as keyof T & string;
+        return createFormFieldHelper(k, [
           state[k],
           (next) => setState((prev) => ({ ...prev, [k]: next(prev[k]) })),
         ]);
@@ -82,6 +81,7 @@ type BaseFormFieldHelper<T> = {
 
 type StringFormFieldHelper = {
   valueProps: () => {
+    name: string;
     value: string;
     onChange: (e: { target: { value: string } }) => void;
   };
@@ -89,15 +89,16 @@ type StringFormFieldHelper = {
 
 type BooleanFormFieldHelper = {
   checkedProps: () => {
+    name: string;
     checked: boolean;
     onChange: (e: { target: { checked: boolean } }) => void;
   };
 };
 
-function createFormFieldHelper<T>([state, setState]: readonly [
-  T,
-  SetState<T>
-]): FormFieldHelper<T> {
+function createFormFieldHelper<T>(
+  name: string,
+  [state, setState]: readonly [T, SetState<T>]
+): FormFieldHelper<T> {
   const rawProps = {
     value: state,
     onChange: (v: T) => setState(() => v),
@@ -108,12 +109,14 @@ function createFormFieldHelper<T>([state, setState]: readonly [
   };
   const stringHelper: StringFormFieldHelper = {
     valueProps: () => ({
+      name,
       value: state as string,
       onChange: (e) => setState(() => e.target.value as T),
     }),
   };
   const booleanHelper: BooleanFormFieldHelper = {
     checkedProps: () => ({
+      name,
       checked: state as boolean,
       onChange: (e) => setState(() => e.target.checked as T),
     }),
