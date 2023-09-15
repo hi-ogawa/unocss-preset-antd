@@ -19,7 +19,7 @@ export type TinyFormHelper<T> = {
 
 type SetState<T> = (toNext: (prev: T) => T) => void;
 
-// can memoize by [state, setState]
+// should memoize by [state, setState]
 export function createTinyForm<T extends {}>([state, setState]: readonly [
   T,
   SetState<T>
@@ -54,7 +54,7 @@ function createFieldRecordHelper<T extends {}>([state, setState]: readonly [
     {
       get(_target, p, _receiver) {
         const k = p as keyof T & string;
-        // can memoize by [state[k], setState] for each k
+        // should memoize by [state[k], setState]
         return createFormFieldHelper(k, [
           state[k],
           (next) => setState((prev) => ({ ...prev, [k]: next(prev[k]) })),
