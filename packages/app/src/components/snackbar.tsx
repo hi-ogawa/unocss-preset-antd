@@ -1,4 +1,6 @@
 import { Transition } from "@hiogawa/tiny-transition/dist/react";
+import { useStableCallback } from "@hiogawa/utils-react";
+import React from "react";
 import { tw } from "../styles/tw";
 import { cls } from "../utils/misc";
 import { getCollapseProps } from "./collapse";
@@ -29,7 +31,7 @@ export function SnackbarConainer(props: {
         >
           <SnackbarItem
             type={item.options?.type}
-            onClose={() => update(item.id, { step: Infinity })}
+            onClose={() => update(item.id, { step: 1 })}
           >
             {item.node}
           </SnackbarItem>
@@ -48,90 +50,74 @@ interface SnackbarAnimationProp {
 }
 
 function SnackbarAnimation1(props: SnackbarAnimationProp) {
+  const duration = Number(props.durationClassName.split("-")[1]);
+  useTimeout(() => props.setStep(1), duration);
+
+  // 0. slide in
+  // 1. slide out
+  // 2. collapse down
   const step = props.item.step;
   return (
-    <>
-      {/*  */}
-      {/* collpase transition */}
-      {/*  */}
+    <Transition
+      show={step < 2}
+      className="duration-300"
+      onLeft={() => props.remove()}
+      {...getCollapseProps()}
+    >
       <Transition
-        show={step < 2}
-        className="duration-300"
-        onLeft={() => props.remove()}
-        {...getCollapseProps()}
+        appear
+        show={step < 1}
+        className="inline-block duration-500 transform py-1"
+        enterFrom="translate-x-[-120%]"
+        enterTo="translate-x-0"
+        leaveFrom="translate-x-0"
+        leaveTo="translate-x-[-120%]"
+        onLeft={() => props.setStep(2)}
       >
-        {/*  */}
-        {/* slide transtion */}
-        {/*  */}
-        <Transition
-          appear
-          show={step < 1}
-          className="inline-block duration-500 transform py-1"
-          enterFrom="translate-x-[-120%]"
-          enterTo="translate-x-0"
-          leaveFrom="translate-x-0"
-          leaveTo="translate-x-[-120%]"
-          onLeft={() => props.setStep(2)}
-        >
-          {props.children}
-        </Transition>
-        {/*  */}
-        {/* dummy transition to auto trigger slide-out after timeout */}
-        {/*  */}
-        <Transition
-          appear
-          show={step < 1}
-          className={props.durationClassName}
-          enterFrom="opacity-0"
-          enterTo="opacity-100"
-          onEntered={() => props.setStep(1)}
-        />
+        {props.children}
       </Transition>
-    </>
+    </Transition>
   );
 }
 
 function SnackbarAnimation2(props: SnackbarAnimationProp) {
+  const duration = Number(props.durationClassName.split("-")[1]);
+  useTimeout(() => props.setStep(1), duration);
+
+  // 0. slide in + scale up
+  // 1. slide out + scale down + collapse down
   const step = props.item.step;
   return (
-    <>
-      {/*  */}
-      {/* collpase transition */}
-      {/*  */}
+    <Transition
+      show={step < 1}
+      className="duration-300"
+      onLeft={() => props.remove()}
+      {...getCollapseProps()}
+    >
       <Transition
+        appear
         show={step < 1}
-        className="duration-300"
-        onLeft={() => props.remove()}
-        {...getCollapseProps()}
+        className="inline-block duration-300 transform py-1"
+        enterFrom="translate-y-[120%] scale-0 opacity-10"
+        enterTo="translate-y-0 scale-100 opacity-100"
+        leaveFrom="translate-y-0 scale-100 opacity-100"
+        leaveTo="translate-y-[120%] scale-0 opacity-10"
       >
-        {/*  */}
-        {/* slide/scale transtion */}
-        {/*  */}
-        <Transition
-          appear
-          show={step < 1}
-          className="inline-block duration-300 transform py-1"
-          enterFrom="translate-y-[120%] scale-0 opacity-10"
-          enterTo="translate-y-0 scale-100 opacity-100"
-          leaveFrom="translate-y-0 scale-100 opacity-100"
-          leaveTo="translate-y-[120%] scale-0 opacity-10"
-        >
-          {props.children}
-        </Transition>
-        {/*  */}
-        {/* dummy transition to auto dismiss on timeout */}
-        {/*  */}
-        <Transition
-          appear
-          show={step < 1}
-          className={props.durationClassName}
-          enterFrom="opacity-0"
-          enterTo="opacity-100"
-          onEntered={() => props.setStep(1)}
-        />
+        {props.children}
       </Transition>
-    </>
+    </Transition>
   );
+}
+
+function useTimeout(f: () => void, ms: number) {
+  f = useStableCallback(f);
+
+  React.useEffect(() => {
+    const t = window.setTimeout(() => f(), ms);
+    return () => {
+      window.clearTimeout(t);
+    };
+  }, []);
 }
 
 function SnackbarItem(
