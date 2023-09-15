@@ -1,6 +1,5 @@
 import { createTinyStore } from "@hiogawa/tiny-store";
 import { useTinyStore } from "@hiogawa/tiny-store/dist/react";
-import { toArraySetState } from "@hiogawa/utils-react";
 
 export interface SnackbarItemOptions {
   type?: "success" | "error";
@@ -10,31 +9,30 @@ export interface SnackbarItemState {
   id: string;
   node: React.ReactNode;
   options?: SnackbarItemOptions;
-  state: "show" | "dismiss-slide" | "dismiss-collapse";
+  step: number;
 }
+
+export const useSnackbar = createUseSnackbar();
 
 function createUseSnackbar() {
   const itemsStore = createTinyStore<SnackbarItemState[]>([]);
 
   function useSnackbar() {
     const [items, setItems] = useTinyStore(itemsStore);
-    const setArayState = toArraySetState(setItems);
 
-    function create(
-      node: React.ReactNode,
-      options?: SnackbarItemOptions
-    ): string {
-      const id = String(Math.random());
-      setArayState.push({
-        node,
-        options,
-        id,
-        state: "show",
-      });
-      return id;
+    function create(node: React.ReactNode, options?: SnackbarItemOptions) {
+      setItems((items) => [
+        ...items,
+        {
+          node,
+          options,
+          id: generateId(),
+          step: 0,
+        },
+      ]);
     }
 
-    function __update(
+    function update(
       itemId: string,
       newItem?: Partial<SnackbarItemState>
     ): void {
@@ -53,18 +51,28 @@ function createUseSnackbar() {
       });
     }
 
-    function dismiss(itemId: string): void {
-      __update(itemId, { state: "dismiss-slide" });
-    }
-
     function remove(itemId: string): void {
-      __update(itemId);
+      update(itemId);
     }
 
-    return { items, create, __update, dismiss, remove };
+    return { items, create, update, remove };
   }
 
   return useSnackbar;
 }
 
-export const useSnackbar = createUseSnackbar();
+function generateId() {
+  return Math.floor(Math.random() * 2 ** 45)
+    .toString(32)
+    .padStart(9, "0");
+}
+
+// TODO: rework API for react external state
+export class ToastManager {
+  create() {}
+  update() {}
+  dismiss() {}
+  remove() {}
+  subscribe = () => {};
+  getSnapshot = () => {};
+}

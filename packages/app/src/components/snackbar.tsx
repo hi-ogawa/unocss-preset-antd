@@ -12,7 +12,7 @@ export function SnackbarConainer(props: {
   animationType: string;
   durationClassName: string;
 }) {
-  const { items, dismiss, __update, remove } = useSnackbar();
+  const { items, update, remove } = useSnackbar();
 
   const SnackbarAnimation =
     props.animationType === "1" ? SnackbarAnimation1 : SnackbarAnimation2;
@@ -23,14 +23,13 @@ export function SnackbarConainer(props: {
         <SnackbarAnimation
           key={item.id}
           item={item}
-          onDismiss={() => dismiss(item.id)}
-          onDismiss2={() => __update(item.id, { state: "dismiss-collapse" })}
-          onDismiss3={() => remove(item.id)}
           durationClassName={props.durationClassName}
+          setStep={(step: number) => update(item.id, { step })}
+          remove={() => remove(item.id)}
         >
           <SnackbarItem
             type={item.options?.type}
-            onClose={() => dismiss(item.id)}
+            onClose={() => update(item.id, { step: Infinity })}
           >
             {item.node}
           </SnackbarItem>
@@ -40,25 +39,25 @@ export function SnackbarConainer(props: {
   );
 }
 
-function SnackbarAnimation1(
-  props: React.PropsWithChildren<{
-    item: SnackbarItemState;
-    onDismiss: () => void;
-    onDismiss2: () => void;
-    onDismiss3: () => void;
-    durationClassName: string;
-  }>
-) {
-  const item = props.item;
+interface SnackbarAnimationProp {
+  item: SnackbarItemState;
+  setStep: (step: number) => void;
+  remove: () => void;
+  durationClassName: string; // TODO: let ToastManager handle auto-dismiss timeout
+  children?: React.ReactNode;
+}
+
+function SnackbarAnimation1(props: SnackbarAnimationProp) {
+  const step = props.item.step;
   return (
     <>
       {/*  */}
       {/* collpase transition */}
       {/*  */}
       <Transition
-        show={item.state === "show" || item.state === "dismiss-slide"}
+        show={step < 2}
         className="duration-300"
-        onLeft={() => props.onDismiss3()}
+        onLeft={() => props.remove()}
         {...getCollapseProps()}
       >
         {/*  */}
@@ -66,13 +65,13 @@ function SnackbarAnimation1(
         {/*  */}
         <Transition
           appear
-          show={item.state === "show"}
+          show={step < 1}
           className="inline-block duration-500 transform py-1"
           enterFrom="translate-x-[-120%]"
           enterTo="translate-x-0"
           leaveFrom="translate-x-0"
           leaveTo="translate-x-[-120%]"
-          onLeft={() => props.onDismiss2()}
+          onLeft={() => props.setStep(2)}
         >
           {props.children}
         </Transition>
@@ -81,41 +80,36 @@ function SnackbarAnimation1(
         {/*  */}
         <Transition
           appear
-          show={item.state === "show"}
+          show={step < 1}
           className={props.durationClassName}
           enterFrom="opacity-0"
           enterTo="opacity-100"
-          onEntered={() => props.onDismiss()}
+          onEntered={() => props.setStep(1)}
         />
       </Transition>
     </>
   );
 }
 
-function SnackbarAnimation2(
-  props: React.PropsWithChildren<{
-    item: SnackbarItemState;
-    onDismiss: () => void;
-    onDismiss2: () => void;
-    onDismiss3: () => void;
-    durationClassName: string;
-  }>
-) {
-  const item = props.item;
-  const show = item.state === "show";
-
+function SnackbarAnimation2(props: SnackbarAnimationProp) {
+  const step = props.item.step;
   return (
     <>
       {/*  */}
       {/* collpase transition */}
       {/*  */}
-      <Transition show={show} className="duration-300" {...getCollapseProps()}>
+      <Transition
+        show={step < 1}
+        className="duration-300"
+        onLeft={() => props.remove()}
+        {...getCollapseProps()}
+      >
         {/*  */}
         {/* slide/scale transtion */}
         {/*  */}
         <Transition
           appear
-          show={show}
+          show={step < 1}
           className="inline-block duration-300 transform py-1"
           enterFrom="translate-y-[120%] scale-0 opacity-10"
           enterTo="translate-y-0 scale-100 opacity-100"
@@ -129,11 +123,11 @@ function SnackbarAnimation2(
         {/*  */}
         <Transition
           appear
-          show={show}
+          show={step < 1}
           className={props.durationClassName}
           enterFrom="opacity-0"
           enterTo="opacity-100"
-          onEntered={() => props.onDismiss()}
+          onEntered={() => props.setStep(1)}
         />
       </Transition>
     </>
