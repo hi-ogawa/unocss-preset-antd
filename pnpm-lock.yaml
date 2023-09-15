@@ -14,6 +14,9 @@ importers:
       '@hiogawa/icheck-ts':
         specifier: 0.0.1-pre.15
         version: 0.0.1-pre.15(typescript@5.2.2)
+      '@hiogawa/inline-template':
+        specifier: 0.0.1-pre.4
+        version: 0.0.1-pre.4
       '@hiogawa/isort-ts':
         specifier: 1.1.2-pre.0
         version: 1.1.2-pre.0(prettier@2.8.3)(typescript@5.2.2)
@@ -1637,6 +1640,11 @@ packages:
       typescript: '*'
     dependencies:
       typescript: 5.2.2
+    dev: true
+
+  /@hiogawa/inline-template@0.0.1-pre.4:
+    resolution: {integrity: sha512-arO6LzZs8iMvcbbwmgzGU9wNIeLhKiaJyleKZuK1efL808kQU1ampA1EE5H7jmA6jfHALw1uRWGSoyOzGSZA0w==}
+    hasBin: true
     dev: true
 
   /@hiogawa/isort-ts@1.1.2-pre.0(prettier@2.8.3)(typescript@5.2.2):

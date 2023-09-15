@@ -15,6 +15,7 @@
   "devDependencies": {
     "@changesets/cli": "^2.26.0",
     "@hiogawa/icheck-ts": "0.0.1-pre.15",
+    "@hiogawa/inline-template": "0.0.1-pre.4",
     "@hiogawa/isort-ts": "1.1.2-pre.0",
     "@hiogawa/theme-script": "^0.0.3",
     "@hiogawa/unocss-typescript-dsl": "2.0.0-pre.5",
