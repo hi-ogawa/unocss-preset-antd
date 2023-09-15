@@ -3,6 +3,7 @@ import userEvent from "@testing-library/user-event";
 import React from "react";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { createTinyForm } from "./core";
+import { useTinyForm } from "./react";
 
 afterEach(cleanup);
 
@@ -11,13 +12,11 @@ describe(createTinyForm, () => {
     const mockSubmit = vi.fn();
 
     function Demo() {
-      const form = createTinyForm(
-        React.useState({
-          username: "",
-          password: "",
-          remember: false,
-        })
-      );
+      const form = useTinyForm({
+        username: "",
+        password: "",
+        remember: false,
+      });
 
       return (
         <form onSubmit={form.handleSubmit(() => mockSubmit(form.data))}>

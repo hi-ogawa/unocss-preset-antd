@@ -11,7 +11,7 @@ import { objectHas } from "@hiogawa/utils";
 // form helper
 //
 
-type TinyFormHelper<T> = {
+export type TinyFormHelper<T> = {
   data: T;
   fields: { [K in keyof T]: FormFieldHelper<T[K]> };
   handleSubmit: (callback: () => void) => (e: unknown) => void;
@@ -19,6 +19,7 @@ type TinyFormHelper<T> = {
 
 type SetState<T> = (toNext: (prev: T) => T) => void;
 
+// can memoize by [state, setState]
 export function createTinyForm<T extends {}>([state, setState]: readonly [
   T,
   SetState<T>
@@ -53,6 +54,7 @@ function createFieldRecordHelper<T extends {}>([state, setState]: readonly [
     {
       get(_target, p, _receiver) {
         const k = p as keyof T & string;
+        // can memoize by [state[k], setState] for each k
         return createFormFieldHelper(k, [
           state[k],
           (next) => setState((prev) => ({ ...prev, [k]: next(prev[k]) })),
