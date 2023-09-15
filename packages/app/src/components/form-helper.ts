@@ -1,4 +1,6 @@
-// simplified but convenient enough alternative for
+import { objectHas } from "@hiogawa/utils";
+
+// inspired by and simplified alternative for
 // - https://github.com/react-hook-form/react-hook-form
 // - https://github.com/edmundhung/conform
 
@@ -16,7 +18,32 @@
 
 type FormHelper<T> = { [K in keyof T]: FormFieldHelper<T[K]> };
 
+type FormHelper2<T> = {
+  data: T;
+  fields: { [K in keyof T]: FormFieldHelper<T[K]> };
+  handleSubmit: (callback: () => void) => (e: unknown) => void;
+};
+
 type SetState<T> = (toNext: (prev: T) => T) => void;
+
+export function createFormHelperV2<T extends {}>([state, setState]: readonly [
+  T,
+  SetState<T>
+]): FormHelper2<T> {
+  return {
+    data: state,
+    fields: createFormHelper([state, setState]),
+    handleSubmit: (callback) => (e) => {
+      if (
+        objectHas(e, "preventDefault") &&
+        typeof e.preventDefault === "function"
+      ) {
+        e.preventDefault();
+      }
+      callback();
+    },
+  };
+}
 
 export function createFormHelper<T extends {}>([state, setState]: readonly [
   T,
