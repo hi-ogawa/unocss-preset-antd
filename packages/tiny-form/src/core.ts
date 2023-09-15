@@ -1,6 +1,7 @@
 import { objectHas } from "@hiogawa/utils";
 
-// TODO: extra features?
+// TODO
+// - memoizeOne?
 // - valueAsNumber? (parse/stringify?)
 // - form status helper (e.g. isValid, isDirty)?
 // - validation (e.g. required)?
