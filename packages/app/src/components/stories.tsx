@@ -8,7 +8,7 @@ import ReactSelect from "react-select";
 import { tw } from "../styles/tw";
 import { cls } from "../utils/misc";
 import { getCollapseProps } from "./collapse";
-import { createFormHelper, createFormHelperV2 } from "./form-helper";
+import { createFormHelper } from "./form-helper";
 import { useModal } from "./modal";
 import { PopoverSimple } from "./popover";
 import { SimpleSelect } from "./select";
@@ -122,16 +122,14 @@ const ANTD_COLORS_OPTIONS = Object.entries(ANTD_COLORS).map(
 );
 
 export function StoryColor() {
-  const [formState, setFormState] = useTinyStoreStorage(
-    "unocss-preset-antd:StoryColor",
-    {
+  const form = createFormHelper(
+    useTinyStoreStorage("unocss-preset-antd:StoryColor", {
       reactSelect: false,
       color: ANTD_VARS.colorText,
       backgroundColor: ANTD_VARS.colorBgContainer,
       borderColor: ANTD_VARS.colorBorderSecondary,
-    }
+    })
   );
-  const form = createFormHelper([formState, setFormState]);
 
   return (
     <div className="flex flex-col items-center gap-3 m-2">
@@ -143,9 +141,9 @@ export function StoryColor() {
             <div
               className="border h-[50px] flex justify-center items-center"
               style={{
-                color: formState.color,
-                backgroundColor: formState.backgroundColor,
-                borderColor: formState.borderColor,
+                color: form.data.color,
+                backgroundColor: form.data.backgroundColor,
+                borderColor: form.data.borderColor,
               }}
             >
               Hello World
@@ -154,11 +152,14 @@ export function StoryColor() {
           <div className="border-t my-1"></div>
           <label className="flex items-center gap-2">
             <span className="text-colorTextLabel">Use react-select</span>
-            <input type="checkbox" {...form.reactSelect.checkedProps()} />
+            <input
+              type="checkbox"
+              {...form.fields.reactSelect.checkedProps()}
+            />
           </label>
-          {renderField("Text", form.color)}
-          {renderField("Background", form.backgroundColor)}
-          {renderField("Border", form.borderColor)}
+          {renderField("Text", form.fields.color)}
+          {renderField("Background", form.fields.backgroundColor)}
+          {renderField("Border", form.fields.borderColor)}
         </div>
       </section>
     </div>
@@ -175,7 +176,7 @@ export function StoryColor() {
     return (
       <label className="flex flex-col gap-1">
         <span className="text-colorTextLabel">{label}</span>
-        {formState.reactSelect ? (
+        {form.data.reactSelect ? (
           <ReactSelect
             unstyled
             options={ANTD_COLORS_OPTIONS}
@@ -208,7 +209,7 @@ export function StoryColor() {
 }
 
 export function StoryForm() {
-  const form = createFormHelperV2(
+  const form = createFormHelper(
     React.useState({
       email: "",
       password: "",
@@ -475,7 +476,7 @@ export function StorySnackbar() {
           Animation Type
           <select
             className="antd-input p-1"
-            {...form.animationType.valueProps()}
+            {...form.fields.animationType.valueProps()}
           >
             {[1, 2].map((v) => (
               <option key={v} value={v}>
@@ -488,7 +489,7 @@ export function StorySnackbar() {
           Duration
           <select
             className="antd-input p-1"
-            {...form.durationClassName.valueProps()}
+            {...form.fields.durationClassName.valueProps()}
           >
             {["duration-2000", "duration-4000", "duration-8000"].map((v) => (
               <option key={v} value={v}>
@@ -528,8 +529,8 @@ export function StorySnackbar() {
         </div>
         <div className="border h-[500px] p-3 flex flex-col relative overflow-hidden">
           <SnackbarConainer
-            animationType={form.animationType.value}
-            durationClassName={form.durationClassName.value}
+            animationType={form.data.animationType}
+            durationClassName={form.data.durationClassName}
           />
         </div>
         <Debug debug={snackbar.items} />

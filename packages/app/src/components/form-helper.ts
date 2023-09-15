@@ -16,9 +16,7 @@ import { objectHas } from "@hiogawa/utils";
 // form helper
 //
 
-type FormHelper<T> = { [K in keyof T]: FormFieldHelper<T[K]> };
-
-type FormHelper2<T> = {
+type FormHelper<T> = {
   data: T;
   fields: { [K in keyof T]: FormFieldHelper<T[K]> };
   handleSubmit: (callback: () => void) => (e: unknown) => void;
@@ -26,13 +24,13 @@ type FormHelper2<T> = {
 
 type SetState<T> = (toNext: (prev: T) => T) => void;
 
-export function createFormHelperV2<T extends {}>([state, setState]: readonly [
+export function createFormHelper<T extends {}>([state, setState]: readonly [
   T,
   SetState<T>
-]): FormHelper2<T> {
+]): FormHelper<T> {
   return {
     data: state,
-    fields: createFormHelper([state, setState]),
+    fields: createFieldRecordHelper([state, setState]),
     handleSubmit: (callback) => (e) => {
       if (
         objectHas(e, "preventDefault") &&
@@ -45,10 +43,16 @@ export function createFormHelperV2<T extends {}>([state, setState]: readonly [
   };
 }
 
-export function createFormHelper<T extends {}>([state, setState]: readonly [
+//
+// Proxy-based field record helper
+//
+
+type FieldRecordHelper<T> = { [K in keyof T]: FormFieldHelper<T[K]> };
+
+function createFieldRecordHelper<T extends {}>([state, setState]: readonly [
   T,
   SetState<T>
-]): FormHelper<T> {
+]): FieldRecordHelper<T> {
   return new Proxy(
     {},
     {
@@ -76,7 +80,6 @@ type BaseFormFieldHelper<T> = {
   onChange: (v: T) => void;
 };
 
-// TODO: valueAsNumber?
 type StringFormFieldHelper = {
   valueProps: () => {
     value: string;
@@ -91,7 +94,7 @@ type BooleanFormFieldHelper = {
   };
 };
 
-function createFormFieldHelper<T>([state, setState]: [
+function createFormFieldHelper<T>([state, setState]: readonly [
   T,
   SetState<T>
 ]): FormFieldHelper<T> {
