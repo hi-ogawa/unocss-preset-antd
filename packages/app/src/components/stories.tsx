@@ -1,3 +1,4 @@
+import { useTinyStoreStorage } from "@hiogawa/tiny-store/dist/react";
 import { Transition } from "@hiogawa/tiny-transition/dist/react";
 import { ANTD_VARS } from "@hiogawa/unocss-preset-antd";
 import { objectPickBy, range } from "@hiogawa/utils";
@@ -121,12 +122,15 @@ const ANTD_COLORS_OPTIONS = Object.entries(ANTD_COLORS).map(
 );
 
 export function StoryColor() {
-  const [formState, setFormState] = React.useState({
-    reactSelect: false,
-    color: ANTD_VARS.colorText,
-    backgroundColor: ANTD_VARS.colorBgContainer,
-    borderColor: ANTD_VARS.colorBorderSecondary,
-  });
+  const [formState, setFormState] = useTinyStoreStorage(
+    "unocss-preset-antd:StoryColor",
+    {
+      reactSelect: false,
+      color: ANTD_VARS.colorText,
+      backgroundColor: ANTD_VARS.colorBgContainer,
+      borderColor: ANTD_VARS.colorBorderSecondary,
+    }
+  );
   const form = createFormHelper([formState, setFormState]);
 
   return (
@@ -397,7 +401,7 @@ export function StoryCollapse() {
 export function StorySnackbar() {
   const snackbar = useSnackbar();
   const form = createFormHelper(
-    React.useState({
+    useTinyStoreStorage("unocss-preset-antd:StorySnackbar", {
       animationType: "2",
       durationClassName: "duration-4000",
     })

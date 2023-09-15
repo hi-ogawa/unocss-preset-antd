@@ -13,7 +13,7 @@ type FormHelper<T> = { [K in keyof T]: FormFieldHelper<T[K]> };
 
 type SetState<T> = (toNext: (prev: T) => T) => void;
 
-export function createFormHelper<T extends {}>([state, setState]: [
+export function createFormHelper<T extends {}>([state, setState]: readonly [
   T,
   SetState<T>
 ]): FormHelper<T> {
