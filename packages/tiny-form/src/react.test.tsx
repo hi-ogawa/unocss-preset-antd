@@ -13,7 +13,7 @@ describe(createTinyForm, () => {
     function Demo() {
       const form = createTinyForm(
         React.useState({
-          email: "",
+          username: "",
           password: "",
           remember: false,
         })
@@ -23,7 +23,7 @@ describe(createTinyForm, () => {
         <form onSubmit={form.handleSubmit(() => mockSubmit(form.data))}>
           <label>
             Username
-            <input {...form.fields.email.valueProps()} />
+            <input {...form.fields.username.valueProps()} />
           </label>
           <label>
             Password
@@ -42,36 +42,44 @@ describe(createTinyForm, () => {
     render(<Demo />);
     expect(JSON.parse(await getTestidText("debug"))).toMatchInlineSnapshot(`
       {
-        "email": "",
         "password": "",
         "remember": false,
+        "username": "",
       }
+    `);
+
+    // "name" attribute
+    expect(screen.getByLabelText("Username")).toMatchInlineSnapshot(`
+      <input
+        name="username"
+        value=""
+      />
     `);
 
     await userEvent.type(screen.getByLabelText("Username"), "asdf");
     expect(JSON.parse(await getTestidText("debug"))).toMatchInlineSnapshot(`
       {
-        "email": "asdf",
         "password": "",
         "remember": false,
+        "username": "asdf",
       }
     `);
 
     await userEvent.type(screen.getByLabelText("Password"), "jkl;");
     expect(JSON.parse(await getTestidText("debug"))).toMatchInlineSnapshot(`
       {
-        "email": "asdf",
         "password": "jkl;",
         "remember": false,
+        "username": "asdf",
       }
     `);
 
     await userEvent.click(screen.getByLabelText("Remember"));
     expect(JSON.parse(await getTestidText("debug"))).toMatchInlineSnapshot(`
       {
-        "email": "asdf",
         "password": "jkl;",
         "remember": true,
+        "username": "asdf",
       }
     `);
 
@@ -81,9 +89,9 @@ describe(createTinyForm, () => {
       [
         [
           {
-            "email": "asdf",
             "password": "jkl;",
             "remember": true,
+            "username": "asdf",
           },
         ],
       ]
