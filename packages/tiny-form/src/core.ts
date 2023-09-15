@@ -74,6 +74,10 @@ type FormFieldHelper<T> = BaseFormFieldHelper<T> &
 type BaseFormFieldHelper<T> = {
   value: T;
   onChange: (v: T) => void;
+  rawProps: () => {
+    value: T;
+    onChange: (v: T) => void;
+  };
 };
 
 type StringFormFieldHelper = {
@@ -94,9 +98,13 @@ function createFormFieldHelper<T>([state, setState]: readonly [
   T,
   SetState<T>
 ]): FormFieldHelper<T> {
-  const baseHelper: BaseFormFieldHelper<T> = {
+  const rawProps = {
     value: state,
     onChange: (v: T) => setState(() => v),
+  };
+  const baseHelper: BaseFormFieldHelper<T> = {
+    ...rawProps,
+    rawProps: () => rawProps,
   };
   const stringHelper: StringFormFieldHelper = {
     valueProps: () => ({
