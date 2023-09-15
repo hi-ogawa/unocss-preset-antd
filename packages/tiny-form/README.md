@@ -9,7 +9,8 @@ API is inspired by
 
 ## example
 
-- https://github.com/hi-ogawa/unocss-preset-antd/blob/ddcab1ccf96984393cfe8825d9308af669fea0bd/packages/app/src/components/stories.tsx#L211-L269
+- https://unocss-preset-antd-hiro18181.vercel.app/#/Form
+- https://github.com/hi-ogawa/unocss-preset-antd/blob/main/packages/app/src/components/stories.tsx
 
 <!--
 %template-input-start:example%
