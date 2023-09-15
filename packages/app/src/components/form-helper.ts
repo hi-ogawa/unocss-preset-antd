@@ -1,6 +1,11 @@
-// TODO:
+// simplified but convenient enough alternative for
+// - https://github.com/react-hook-form/react-hook-form
+// - https://github.com/edmundhung/conform
+
+// TODO
+// hopefully extra features can be provided on top of basic createFormHelper
 // - valueAsNumber? (parse/stringify?)
-// - helper for onSubmit handler
+// - helper for onSubmit handler preventDefault
 // - form status helper (e.g. isValid, isDirty)?
 // - validation (e.g. required)?
 // - array helper?

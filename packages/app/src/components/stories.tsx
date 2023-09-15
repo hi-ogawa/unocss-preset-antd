@@ -207,6 +207,64 @@ export function StoryColor() {
   }
 }
 
+export function StoryForm() {
+  const [formState, setFormState] = React.useState({
+    email: "",
+    password: "",
+    remember: false,
+  });
+  const form = createFormHelper([formState, setFormState]);
+  const isValid = Boolean(formState.email && formState.password);
+
+  return (
+    <div className="flex flex-col items-center gap-3 m-2">
+      <section className="w-full max-w-lg border p-4">
+        <form
+          className="flex flex-col gap-3"
+          onSubmit={(e) => {
+            e.preventDefault();
+          }}
+        >
+          <h2 className="text-xl">Signin</h2>
+          <div className="flex flex-col gap-3">
+            <label className="flex flex-col gap-1">
+              <span className="text-colorTextLabel">Email</span>
+              <input className="antd-input p-1" {...form.email.valueProps()} />
+            </label>
+            <label className="flex flex-col gap-1">
+              <span className="text-colorTextLabel">Password</span>
+              <input
+                className="antd-input p-1"
+                type="password"
+                {...form.password.valueProps()}
+              />
+            </label>
+            <label className="flex items-center gap-2">
+              <span className="text-colorTextLabel">
+                Stay signed in for a week
+              </span>
+              <input type="checkbox" {...form.remember.checkedProps()} />
+            </label>
+            <button
+              className="antd-btn antd-btn-primary p-1"
+              disabled={!isValid}
+            >
+              Signin
+            </button>
+            <div className="border-t my-1"></div>
+            <label className="flex flex-col gap-1 text-colorTextSecondary">
+              <span>Debug</span>
+              <pre className="text-sm">
+                {JSON.stringify(formState, null, 2)}
+              </pre>
+            </label>
+          </div>
+        </form>
+      </section>
+    </div>
+  );
+}
+
 export function StoryTypography() {
   return (
     <div className="flex flex-col items-center gap-3 m-2">
