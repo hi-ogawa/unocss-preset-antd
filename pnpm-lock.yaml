@@ -59,6 +59,9 @@ importers:
       '@floating-ui/react':
         specifier: ^0.24.2
         version: 0.24.2(@types/react@18.0.27)(react-dom@18.2.0)(react@18.2.0)
+      '@hiogawa/tiny-form':
+        specifier: workspace:*
+        version: link:../tiny-form
       '@hiogawa/tiny-store':
         specifier: 0.0.1-pre.1
         version: 0.0.1-pre.1(react@18.2.0)
@@ -155,6 +158,12 @@ importers:
       esbuild-register:
         specifier: ^3.4.2
         version: 3.4.2(esbuild@0.17.5)
+
+  packages/tiny-form:
+    devDependencies:
+      '@hiogawa/utils':
+        specifier: 1.6.1-pre.7
+        version: 1.6.1-pre.7
 
   packages/tiny-transition:
     devDependencies:

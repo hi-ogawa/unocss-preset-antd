@@ -1,13 +1,7 @@
 import { objectHas } from "@hiogawa/utils";
 
-// inspired by and simplified alternative for
-// - https://github.com/react-hook-form/react-hook-form
-// - https://github.com/edmundhung/conform
-
-// TODO
-// hopefully extra features can be provided on top of basic createFormHelper
+// TODO: extra features?
 // - valueAsNumber? (parse/stringify?)
-// - helper for onSubmit handler preventDefault
 // - form status helper (e.g. isValid, isDirty)?
 // - validation (e.g. required)?
 // - array helper?
@@ -16,7 +10,7 @@ import { objectHas } from "@hiogawa/utils";
 // form helper
 //
 
-type FormHelper<T> = {
+type TinyFormHelper<T> = {
   data: T;
   fields: { [K in keyof T]: FormFieldHelper<T[K]> };
   handleSubmit: (callback: () => void) => (e: unknown) => void;
@@ -24,10 +18,10 @@ type FormHelper<T> = {
 
 type SetState<T> = (toNext: (prev: T) => T) => void;
 
-export function createFormHelper<T extends {}>([state, setState]: readonly [
+export function createTinyForm<T extends {}>([state, setState]: readonly [
   T,
   SetState<T>
-]): FormHelper<T> {
+]): TinyFormHelper<T> {
   return {
     data: state,
     fields: createFieldRecordHelper([state, setState]),

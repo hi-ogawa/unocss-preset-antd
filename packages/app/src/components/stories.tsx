@@ -1,3 +1,4 @@
+import { createTinyForm } from "@hiogawa/tiny-form";
 import { useTinyStoreStorage } from "@hiogawa/tiny-store/dist/react";
 import { Transition } from "@hiogawa/tiny-transition/dist/react";
 import { ANTD_VARS } from "@hiogawa/unocss-preset-antd";
@@ -8,7 +9,6 @@ import ReactSelect from "react-select";
 import { tw } from "../styles/tw";
 import { cls } from "../utils/misc";
 import { getCollapseProps } from "./collapse";
-import { createFormHelper } from "./form-helper";
 import { useModal } from "./modal";
 import { PopoverSimple } from "./popover";
 import { SimpleSelect } from "./select";
@@ -122,7 +122,7 @@ const ANTD_COLORS_OPTIONS = Object.entries(ANTD_COLORS).map(
 );
 
 export function StoryColor() {
-  const form = createFormHelper(
+  const form = createTinyForm(
     useTinyStoreStorage("unocss-preset-antd:StoryColor", {
       reactSelect: false,
       color: ANTD_VARS.colorText,
@@ -209,7 +209,7 @@ export function StoryColor() {
 }
 
 export function StoryForm() {
-  const form = createFormHelper(
+  const form = createTinyForm(
     React.useState({
       email: "",
       password: "",
@@ -461,7 +461,7 @@ export function StoryCollapse() {
 
 export function StorySnackbar() {
   const snackbar = useSnackbar();
-  const form = createFormHelper(
+  const form = createTinyForm(
     useTinyStoreStorage("unocss-preset-antd:StorySnackbar", {
       animationType: "2",
       durationClassName: "duration-4000",
