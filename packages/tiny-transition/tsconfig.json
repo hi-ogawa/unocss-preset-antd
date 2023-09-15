@@ -1,16 +1,8 @@
 {
-  "extends": "@tsconfig/strictest/tsconfig.json",
+  "extends": "../../tsconfig.base.json",
   "include": ["src"],
   "compilerOptions": {
-    "resolveJsonModule": true,
-    "noUncheckedIndexedAccess": false,
-    "exactOptionalPropertyTypes": false,
-    "noEmit": true,
-    "jsx": "react",
-    "moduleResolution": "Node",
-    "module": "ESNext",
-    "target": "ESNext",
-    "lib": ["ESNext", "DOM"],
-    "types": ["@types/react"]
+    "types": ["vite/client"],
+    "jsx": "react"
   }
 }
