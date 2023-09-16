@@ -1,9 +1,10 @@
+import { createTinyForm } from "@hiogawa/tiny-form";
+import { useTinyStoreStorage } from "@hiogawa/tiny-store/dist/react";
 import { Transition } from "@hiogawa/tiny-transition/dist/react";
 import { ANTD_VARS } from "@hiogawa/unocss-preset-antd";
 import { objectPickBy, range } from "@hiogawa/utils";
 import { Debug, toSetSetState, useDelay } from "@hiogawa/utils-react";
 import React from "react";
-import { useForm } from "react-hook-form";
 import ReactSelect from "react-select";
 import { tw } from "../styles/tw";
 import { cls } from "../utils/misc";
@@ -121,15 +122,14 @@ const ANTD_COLORS_OPTIONS = Object.entries(ANTD_COLORS).map(
 );
 
 export function StoryColor() {
-  const form = useForm({
-    defaultValues: {
-      useReactSelect: false,
+  const form = createTinyForm(
+    useTinyStoreStorage("unocss-preset-antd:StoryColor", {
+      reactSelect: false,
       color: ANTD_VARS.colorText,
       backgroundColor: ANTD_VARS.colorBgContainer,
       borderColor: ANTD_VARS.colorBorderSecondary,
-    },
-  });
-  const { useReactSelect } = form.watch();
+    })
+  );
 
   return (
     <div className="flex flex-col items-center gap-3 m-2">
@@ -140,7 +140,11 @@ export function StoryColor() {
             <span className="text-colorTextLabel">Preview</span>
             <div
               className="border h-[50px] flex justify-center items-center"
-              style={form.watch()}
+              style={{
+                color: form.data.color,
+                backgroundColor: form.data.backgroundColor,
+                borderColor: form.data.borderColor,
+              }}
             >
               Hello World
             </div>
@@ -148,11 +152,14 @@ export function StoryColor() {
           <div className="border-t my-1"></div>
           <label className="flex items-center gap-2">
             <span className="text-colorTextLabel">Use react-select</span>
-            <input type="checkbox" {...form.register("useReactSelect")} />
+            <input
+              type="checkbox"
+              {...form.fields.reactSelect.props({ checked: true })}
+            />
           </label>
-          {renderField("color", "Text")}
-          {renderField("backgroundColor", "Background")}
-          {renderField("borderColor", "Border")}
+          {renderField("Text", form.fields.color)}
+          {renderField("Background", form.fields.backgroundColor)}
+          {renderField("Border", form.fields.borderColor)}
         </div>
       </section>
     </div>
@@ -163,15 +170,13 @@ export function StoryColor() {
   //
 
   function renderField(
-    name: Parameters<typeof form.register>[0],
-    label: string
+    label: string,
+    { value, onChange }: { value: string; onChange: (v: string) => void }
   ) {
-    const value = form.watch(name);
-    const onChange = (v: string) => form.setValue(name, v);
     return (
       <label className="flex flex-col gap-1">
         <span className="text-colorTextLabel">{label}</span>
-        {useReactSelect ? (
+        {form.data.reactSelect ? (
           <ReactSelect
             unstyled
             options={ANTD_COLORS_OPTIONS}
@@ -201,6 +206,84 @@ export function StoryColor() {
       </label>
     );
   }
+}
+
+export function StoryForm() {
+  const form = createTinyForm(
+    React.useState({
+      username: "",
+      password: "",
+      age: undefined as number | undefined,
+      subscribe: false,
+    })
+  );
+
+  return (
+    <div className="flex flex-col items-center gap-3 m-2">
+      <section className="w-full max-w-lg border p-4">
+        <form
+          className="flex flex-col gap-3"
+          onSubmit={form.handleSubmit(() => {
+            window.alert(
+              "Submission data\n" + JSON.stringify(form.data, null, 2)
+            );
+          })}
+        >
+          <h2 className="text-xl">Register</h2>
+          <div className="flex flex-col gap-3">
+            <label className="flex flex-col gap-1">
+              <span className="text-colorTextLabel">Username</span>
+              <input
+                className="antd-input p-1"
+                required
+                {...form.fields.username.props()}
+              />
+            </label>
+            <label className="flex flex-col gap-1">
+              <span className="text-colorTextLabel">Password</span>
+              <input
+                className="antd-input p-1"
+                type="password"
+                required
+                {...form.fields.password.props()}
+              />
+            </label>
+            <label className="flex flex-col gap-1">
+              <span className="text-colorTextLabel">Age (optional)</span>
+              <input
+                type="number"
+                className="antd-input p-1"
+                name={form.fields.age.name}
+                value={String(form.fields.age.value ?? "")}
+                onChange={(e) =>
+                  form.fields.age.onChange(
+                    e.target.value ? Number(e.target.value) : undefined
+                  )
+                }
+              />
+            </label>
+            <label className="flex items-center gap-2">
+              <span className="text-colorTextLabel">
+                Subscribe to a news letter
+              </span>
+              <input
+                type="checkbox"
+                {...form.fields.subscribe.props({ checked: true })}
+              />
+            </label>
+            <button className="antd-btn antd-btn-primary p-1">Submit</button>
+            <div className="border-t my-1"></div>
+            <label className="flex flex-col gap-1 text-colorTextSecondary">
+              <span>Debug</span>
+              <pre className="text-sm">
+                {JSON.stringify(form.data, null, 2)}
+              </pre>
+            </label>
+          </div>
+        </form>
+      </section>
+    </div>
+  );
 }
 
 export function StoryTypography() {
@@ -396,13 +479,12 @@ export function StoryCollapse() {
 
 export function StorySnackbar() {
   const snackbar = useSnackbar();
-
-  const form = useForm({
-    defaultValues: {
+  const form = createTinyForm(
+    useTinyStoreStorage("unocss-preset-antd:StorySnackbar", {
       animationType: "2",
       durationClassName: "duration-4000",
-    },
-  });
+    })
+  );
 
   return (
     <div className="flex flex-col items-center gap-3 m-2">
@@ -412,7 +494,7 @@ export function StorySnackbar() {
           Animation Type
           <select
             className="antd-input p-1"
-            {...form.register("animationType")}
+            {...form.fields.animationType.props()}
           >
             {[1, 2].map((v) => (
               <option key={v} value={v}>
@@ -425,7 +507,7 @@ export function StorySnackbar() {
           Duration
           <select
             className="antd-input p-1"
-            {...form.register("durationClassName")}
+            {...form.fields.durationClassName.props()}
           >
             {["duration-2000", "duration-4000", "duration-8000"].map((v) => (
               <option key={v} value={v}>
@@ -465,8 +547,8 @@ export function StorySnackbar() {
         </div>
         <div className="border h-[500px] p-3 flex flex-col relative overflow-hidden">
           <SnackbarConainer
-            animationType={form.watch("animationType")}
-            durationClassName={form.watch("durationClassName")}
+            animationType={form.data.animationType}
+            durationClassName={form.data.durationClassName}
           />
         </div>
         <Debug debug={snackbar.items} />
