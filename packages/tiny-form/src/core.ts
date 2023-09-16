@@ -77,6 +77,21 @@ type BaseFormFieldHelper<T> = {
     value: T;
     onChange: (v: T) => void;
   };
+  props: (options?: FormFieldOptions<T>) => {
+    name: string;
+    value?: string;
+    checked?: boolean;
+    onChange: (e: { target: { value: string; checked: boolean } }) => void;
+  };
+};
+
+type FormFieldOptions<T> = {
+  /* use `checked` attribute instead of `value` attribute */
+  checked?: boolean;
+  transform?: {
+    toValue: (v: T) => string;
+    fromValue: (v: string) => T;
+  };
 };
 
 type StringFormFieldHelper = {
@@ -106,6 +121,22 @@ function createFormFieldHelper<T>(
   const baseHelper: BaseFormFieldHelper<T> = {
     ...rawProps,
     rawProps: () => rawProps,
+    props(options) {
+      if (options?.checked) {
+        return {
+          name,
+          checked: state as boolean,
+          onChange: (e) => setState(() => e.target.checked as T),
+        };
+      }
+      const toValue = options?.transform?.toValue ?? ((v) => v as string);
+      const fromValue = options?.transform?.fromValue ?? ((v) => v as T);
+      return {
+        name,
+        value: toValue(state),
+        onChange: (e) => setState(() => fromValue(e.target.value)),
+      };
+    },
   };
   const stringHelper: StringFormFieldHelper = {
     valueProps: () => ({
