@@ -17,7 +17,7 @@ export function getCollapseProps(): Partial<
     onEnterFrom: collapse,
     onEnterTo: uncollapse,
     // slight hack for toast animation
-    // without this collapse parent cannot see children's height
+    // without this hack, collapse parent cannot see children's height
     onEntered: (el) =>
       window.requestAnimationFrame(() => {
         uncollapse(el);
