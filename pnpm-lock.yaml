@@ -27,8 +27,8 @@ importers:
         specifier: 2.0.0-pre.5
         version: 2.0.0-pre.5(@iconify/utils@2.1.9)(@unocss/config@0.55.7)(@unocss/core@0.55.7)(local-pkg@0.4.3)(magic-string@0.30.3)
       '@hiogawa/utils':
-        specifier: 1.6.1-pre.7
-        version: 1.6.1-pre.7
+        specifier: 1.6.1-pre.8
+        version: 1.6.1-pre.8
       '@hiogawa/utils-react':
         specifier: 1.3.1-pre.0
         version: 1.3.1-pre.0(react@18.2.0)
@@ -1731,6 +1731,10 @@ packages:
 
   /@hiogawa/utils@1.6.1-pre.7:
     resolution: {integrity: sha512-KFSgUTQiv8WD+ludYGiSt2QeXvlpaN+81h/eZZM++FKJQZcWTyLFNR5h1/on1TpXGxzois6D3PRMPXQwDywuUQ==}
+    dev: true
+
+  /@hiogawa/utils@1.6.1-pre.8:
+    resolution: {integrity: sha512-OX7i+ylN5T4iRf+Nv0bhCuHtx4k6AnpgeCQNWl3otNYnp6PAGRngvKSlD4XxPo3K4SsscXy+3Sk7WHceefXW/g==}
     dev: true
 
   /@iconify-json/ri@1.1.4:

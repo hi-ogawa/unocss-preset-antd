@@ -7,6 +7,18 @@ API is inspired by
 - https://github.com/react-hook-form/react-hook-form
 - https://github.com/edmundhung/conform
 
+## features
+
+- type-safe form input fields accessor: `form.fields`
+- input props helper: `value/checked/onChange`
+- track form dirty state: `isDirty/resetDirty`
+
+### not supported
+
+- array
+- nested object
+- validator integration
+
 ## example
 
 - https://unocss-preset-antd-hiro18181.vercel.app/#/Form

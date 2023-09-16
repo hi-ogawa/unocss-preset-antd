@@ -2,7 +2,7 @@ import { createTinyForm } from "@hiogawa/tiny-form";
 import { useTinyStoreStorage } from "@hiogawa/tiny-store/dist/react";
 import { Transition } from "@hiogawa/tiny-transition/dist/react";
 import { ANTD_VARS } from "@hiogawa/unocss-preset-antd";
-import { objectPickBy, range } from "@hiogawa/utils";
+import { none, objectPickBy, range } from "@hiogawa/utils";
 import { Debug, toSetSetState, useDelay } from "@hiogawa/utils-react";
 import React from "react";
 import ReactSelect from "react-select";
@@ -211,8 +211,9 @@ export function StoryColor() {
 export function StoryForm() {
   const form = createTinyForm(
     React.useState({
-      email: "",
+      username: "",
       password: "",
+      age: none<number>(),
       remember: false,
     })
   );
@@ -228,14 +229,14 @@ export function StoryForm() {
             );
           })}
         >
-          <h2 className="text-xl">Signin</h2>
+          <h2 className="text-xl">Register</h2>
           <div className="flex flex-col gap-3">
             <label className="flex flex-col gap-1">
-              <span className="text-colorTextLabel">Email</span>
+              <span className="text-colorTextLabel">Username</span>
               <input
                 className="antd-input p-1"
                 required
-                {...form.fields.email.valueProps()}
+                {...form.fields.username.props()}
               />
             </label>
             <label className="flex flex-col gap-1">
@@ -244,16 +245,32 @@ export function StoryForm() {
                 className="antd-input p-1"
                 type="password"
                 required
-                {...form.fields.password.valueProps()}
+                {...form.fields.password.props()}
+              />
+            </label>
+            <label className="flex flex-col gap-1">
+              <span className="text-colorTextLabel">Age (optional)</span>
+              <input
+                type="number"
+                className="antd-input p-1"
+                {...form.fields.age.props({
+                  transform: {
+                    toValue: (v) => String(v ?? ""),
+                    fromValue: (v) => (v ? Number(v) : undefined),
+                  },
+                })}
               />
             </label>
             <label className="flex items-center gap-2">
               <span className="text-colorTextLabel">
                 Stay signed in for a week
               </span>
-              <input type="checkbox" {...form.fields.remember.checkedProps()} />
+              <input
+                type="checkbox"
+                {...form.fields.remember.props({ checked: true })}
+              />
             </label>
-            <button className="antd-btn antd-btn-primary p-1">Signin</button>
+            <button className="antd-btn antd-btn-primary p-1">Submit</button>
             <div className="border-t my-1"></div>
             <label className="flex flex-col gap-1 text-colorTextSecondary">
               <span>Debug</span>

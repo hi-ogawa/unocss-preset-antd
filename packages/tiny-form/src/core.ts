@@ -88,6 +88,7 @@ type BaseFormFieldHelper<T> = {
 type FormFieldOptions<T> = {
   /* use `checked` attribute instead of `value` attribute */
   checked?: boolean;
+  // TODO: provide builtin transform? (e.g. number, optional number, etc...)
   transform?: {
     toValue: (v: T) => string;
     fromValue: (v: string) => T;
