@@ -15,7 +15,7 @@ describe(createTinyForm, () => {
       const form = useTinyForm({
         username: "",
         password: "",
-        remember: false,
+        subscribe: false,
       });
 
       return (
@@ -27,17 +27,20 @@ describe(createTinyForm, () => {
         >
           <label>
             Username
-            <input {...form.fields.username.valueProps()} />
+            <input {...form.fields.username.props()} />
           </label>
           <label>
             Password
-            <input type="password" {...form.fields.password.valueProps()} />
+            <input type="password" {...form.fields.password.props()} />
           </label>
           <label>
-            Remember
-            <input type="checkbox" {...form.fields.remember.checkedProps()} />
+            Subscribe
+            <input
+              type="checkbox"
+              {...form.fields.subscribe.props({ checked: true })}
+            />
           </label>
-          <button>Signin</button>
+          <button>Submit</button>
           <pre data-testid="debug">
             {JSON.stringify({ data: form.data, isDirty: form.isDirty })}
           </pre>
@@ -50,7 +53,7 @@ describe(createTinyForm, () => {
       {
         "data": {
           "password": "",
-          "remember": false,
+          "subscribe": false,
           "username": "",
         },
         "isDirty": false,
@@ -70,7 +73,7 @@ describe(createTinyForm, () => {
       {
         "data": {
           "password": "",
-          "remember": false,
+          "subscribe": false,
           "username": "asdf",
         },
         "isDirty": true,
@@ -82,19 +85,19 @@ describe(createTinyForm, () => {
       {
         "data": {
           "password": "jkl;",
-          "remember": false,
+          "subscribe": false,
           "username": "asdf",
         },
         "isDirty": true,
       }
     `);
 
-    await userEvent.click(screen.getByLabelText("Remember"));
+    await userEvent.click(screen.getByLabelText("Subscribe"));
     expect(JSON.parse(await getTestidText("debug"))).toMatchInlineSnapshot(`
       {
         "data": {
           "password": "jkl;",
-          "remember": true,
+          "subscribe": true,
           "username": "asdf",
         },
         "isDirty": true,
@@ -108,7 +111,7 @@ describe(createTinyForm, () => {
         [
           {
             "password": "jkl;",
-            "remember": true,
+            "subscribe": true,
             "username": "asdf",
           },
         ],
@@ -118,7 +121,7 @@ describe(createTinyForm, () => {
       {
         "data": {
           "password": "jkl;",
-          "remember": true,
+          "subscribe": true,
           "username": "asdf",
         },
         "isDirty": false,

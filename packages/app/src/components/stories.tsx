@@ -214,7 +214,7 @@ export function StoryForm() {
       username: "",
       password: "",
       age: none<number>(),
-      remember: false,
+      subscribe: false,
     })
   );
 
@@ -263,11 +263,11 @@ export function StoryForm() {
             </label>
             <label className="flex items-center gap-2">
               <span className="text-colorTextLabel">
-                Stay signed in for a week
+                Subscribe to news letter
               </span>
               <input
                 type="checkbox"
-                {...form.fields.remember.props({ checked: true })}
+                {...form.fields.subscribe.props({ checked: true })}
               />
             </label>
             <button className="antd-btn antd-btn-primary p-1">Submit</button>
