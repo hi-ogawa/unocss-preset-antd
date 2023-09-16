@@ -53,8 +53,8 @@ interface SnackbarAnimationProp {
 }
 
 function SnackbarAnimation1({ item, toast, children }: SnackbarAnimationProp) {
-  // 0.  slide in
-  // 1.  slide out
+  // 0. slide in
+  // 1. slide out
   // 1.5 collapse down
   return (
     <Transition
