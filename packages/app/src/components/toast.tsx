@@ -8,11 +8,9 @@
 // - track unmount for remove
 // - track mouseover for pause
 
-export type ToastItem<T> = Required<ToastItemCreate<T>>;
-
-type ToastItemCreate<T> = {
-  id?: string;
-  step?: number;
+export type ToastItem<T> = {
+  id: string;
+  step: number;
   data: T;
 };
 
