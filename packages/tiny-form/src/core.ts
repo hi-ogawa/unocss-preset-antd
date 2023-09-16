@@ -60,10 +60,12 @@ function createFieldRecordHelper<T extends {}>([state, setState]: readonly [
 //
 
 type FormFieldHelper<T> = {
+  name: string;
   value: T;
   onChange: (v: T) => void;
   // separate `rawProps` for easier object spread
   rawProps: () => {
+    name: string;
     value: T;
     onChange: (v: T) => void;
   };
@@ -98,6 +100,7 @@ function createFormFieldHelper<T>(
   [state, setState]: readonly [T, SetState<T>]
 ): FormFieldHelper<T> {
   const rawProps = {
+    name,
     value: state,
     onChange: (v: T) => setState(() => v),
   };
