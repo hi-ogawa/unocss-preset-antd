@@ -74,7 +74,7 @@ type BaseFormFieldHelper<T> = {
     name: string;
     value?: string;
     checked?: boolean;
-    onChange: (e: { target: { value: string; checked: boolean } }) => void;
+    onChange: (e: { target: { value: string; checked?: boolean } }) => void;
   };
 };
 
@@ -88,6 +88,7 @@ type FormFieldOptions<T> = {
   };
 };
 
+// TODO: remove in favor of FormFieldOptions
 type StringFormFieldHelper = {
   valueProps: () => {
     name: string;
@@ -96,6 +97,7 @@ type StringFormFieldHelper = {
   };
 };
 
+// TODO: remove
 type BooleanFormFieldHelper = {
   checkedProps: () => {
     name: string;

@@ -154,7 +154,7 @@ export function StoryColor() {
             <span className="text-colorTextLabel">Use react-select</span>
             <input
               type="checkbox"
-              {...form.fields.reactSelect.checkedProps()}
+              {...form.fields.reactSelect.props({ checked: true })}
             />
           </label>
           {renderField("Text", form.fields.color)}
@@ -493,7 +493,7 @@ export function StorySnackbar() {
           Animation Type
           <select
             className="antd-input p-1"
-            {...form.fields.animationType.valueProps()}
+            {...form.fields.animationType.props()}
           >
             {[1, 2].map((v) => (
               <option key={v} value={v}>
@@ -506,7 +506,7 @@ export function StorySnackbar() {
           Duration
           <select
             className="antd-input p-1"
-            {...form.fields.durationClassName.valueProps()}
+            {...form.fields.durationClassName.props()}
           >
             {["duration-2000", "duration-4000", "duration-8000"].map((v) => (
               <option key={v} value={v}>
