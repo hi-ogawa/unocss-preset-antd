@@ -253,7 +253,12 @@ export function StoryForm() {
               <input
                 type="number"
                 className="antd-input p-1"
-                {...form.fields.age.props({ valueAsNumber: true })}
+                {...form.fields.age.props({
+                  transform: {
+                    toValue: (v) => String(v ?? ""),
+                    fromValue: (v) => (v ? Number(v) : undefined),
+                  },
+                })}
               />
             </label>
             <label className="flex items-center gap-2">
