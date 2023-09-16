@@ -16,11 +16,11 @@
   "dependencies": {
     "@floating-ui/react": "^0.24.2",
     "@hiogawa/tiny-store": "0.0.1-pre.1",
+    "@hiogawa/tiny-form": "workspace:*",
     "@hiogawa/tiny-transition": "workspace:*",
     "@hiogawa/unocss-preset-antd": "workspace:*",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "react-hook-form": "^7.43.7",
     "react-remove-scroll": "^2.5.5",
     "react-router-dom": "^6.8.0",
     "react-select": "^5.7.0"
