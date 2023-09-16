@@ -19,7 +19,12 @@ describe(createTinyForm, () => {
       });
 
       return (
-        <form onSubmit={form.handleSubmit(() => mockSubmit(form.data))}>
+        <form
+          onSubmit={form.handleSubmit(() => {
+            mockSubmit(form.data);
+            form.resetDirty();
+          })}
+        >
           <label>
             Username
             <input {...form.fields.username.valueProps()} />
@@ -33,7 +38,9 @@ describe(createTinyForm, () => {
             <input type="checkbox" {...form.fields.remember.checkedProps()} />
           </label>
           <button>Signin</button>
-          <pre data-testid="debug">{JSON.stringify(form.data, null, 2)}</pre>
+          <pre data-testid="debug">
+            {JSON.stringify({ data: form.data, isDirty: form.isDirty })}
+          </pre>
         </form>
       );
     }
@@ -41,9 +48,12 @@ describe(createTinyForm, () => {
     render(<Demo />);
     expect(JSON.parse(await getTestidText("debug"))).toMatchInlineSnapshot(`
       {
-        "password": "",
-        "remember": false,
-        "username": "",
+        "data": {
+          "password": "",
+          "remember": false,
+          "username": "",
+        },
+        "isDirty": false,
       }
     `);
 
@@ -58,27 +68,36 @@ describe(createTinyForm, () => {
     await userEvent.type(screen.getByLabelText("Username"), "asdf");
     expect(JSON.parse(await getTestidText("debug"))).toMatchInlineSnapshot(`
       {
-        "password": "",
-        "remember": false,
-        "username": "asdf",
+        "data": {
+          "password": "",
+          "remember": false,
+          "username": "asdf",
+        },
+        "isDirty": true,
       }
     `);
 
     await userEvent.type(screen.getByLabelText("Password"), "jkl;");
     expect(JSON.parse(await getTestidText("debug"))).toMatchInlineSnapshot(`
       {
-        "password": "jkl;",
-        "remember": false,
-        "username": "asdf",
+        "data": {
+          "password": "jkl;",
+          "remember": false,
+          "username": "asdf",
+        },
+        "isDirty": true,
       }
     `);
 
     await userEvent.click(screen.getByLabelText("Remember"));
     expect(JSON.parse(await getTestidText("debug"))).toMatchInlineSnapshot(`
       {
-        "password": "jkl;",
-        "remember": true,
-        "username": "asdf",
+        "data": {
+          "password": "jkl;",
+          "remember": true,
+          "username": "asdf",
+        },
+        "isDirty": true,
       }
     `);
 
@@ -94,6 +113,16 @@ describe(createTinyForm, () => {
           },
         ],
       ]
+    `);
+    expect(JSON.parse(await getTestidText("debug"))).toMatchInlineSnapshot(`
+      {
+        "data": {
+          "password": "jkl;",
+          "remember": true,
+          "username": "asdf",
+        },
+        "isDirty": false,
+      }
     `);
   });
 });
