@@ -64,8 +64,14 @@ function generateId() {
 export class ToastManager<T> {
   public items: ToastItem<T>[] = [];
 
-  create() {
-    this.items;
+  create(item: ToastItemCreate<T>) {
+    this.items = [...this.items];
+    this.items.push({
+      id: item.id ?? generateId(),
+      step: item.step ?? TOAST_STEP.START,
+      duration: item.duration ?? 4000,
+      data: item.data,
+    });
     this.notify();
   }
 
@@ -73,7 +79,11 @@ export class ToastManager<T> {
     const index = this.items.findIndex((item) => item.id === id);
     if (index >= 0) {
       this.items = [...this.items];
-      this.items[index] = { ...this.items[index], ...newItem };
+      if (newItem.step === TOAST_STEP.REMOVE) {
+        this.items.splice(index, 1);
+      } else {
+        this.items[index] = { ...this.items[index], ...newItem };
+      }
       this.notify();
     }
   }
@@ -83,8 +93,7 @@ export class ToastManager<T> {
   }
 
   remove(id: string) {
-    this.items = this.items.filter((item) => item.id !== id);
-    this.notify();
+    this.update(id, { step: TOAST_STEP.REMOVE });
   }
 
   //
@@ -113,9 +122,11 @@ export const TOAST_STEP = {
   REMOVE: 2,
 };
 
-type ToastItem<T> = {
-  id: string;
-  step: number;
-  duration: number;
+type ToastItem<T> = Required<ToastItemCreate<T>>;
+
+type ToastItemCreate<T> = {
+  id?: string;
+  step?: number;
+  duration?: number;
   data: T;
 };
