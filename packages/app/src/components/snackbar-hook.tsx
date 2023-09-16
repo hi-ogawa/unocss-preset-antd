@@ -27,35 +27,28 @@ function createUseSnackbar() {
           node,
           options,
           id: generateId(),
-          step: 0,
+          step: TOAST_STEP.START,
         },
       ]);
     }
 
-    function update(
-      itemId: string,
-      newItem?: Partial<SnackbarItemState>
-    ): void {
+    function update(itemId: string, newItem: Partial<SnackbarItemState>): void {
       setItems((items) => {
         items = [...items];
         const index = items.findIndex((item) => item.id === itemId);
         if (index >= 0) {
           const item = items[index];
-          if (newItem) {
-            items.splice(index, 1, { ...item, ...newItem });
-          } else {
+          if (newItem.step === TOAST_STEP.REMOVE) {
             items.splice(index, 1);
+          } else {
+            items.splice(index, 1, { ...item, ...newItem });
           }
         }
         return items;
       });
     }
 
-    function remove(itemId: string): void {
-      update(itemId);
-    }
-
-    return { items, create, update, remove };
+    return { items, create, update };
   }
 
   return useSnackbar;
@@ -86,7 +79,7 @@ export class ToastManager<T> {
   }
 
   dismiss(id: string) {
-    this.update(id, { step: 1 });
+    this.update(id, { step: TOAST_STEP.DISMISS });
   }
 
   remove(id: string) {
@@ -112,6 +105,13 @@ export class ToastManager<T> {
     this.listeners.forEach((f) => f());
   }
 }
+
+// animation can utilize intermidiate step between [0, 2]
+export const TOAST_STEP = {
+  START: 0,
+  DISMISS: 1,
+  REMOVE: 2,
+};
 
 type ToastItem<T> = {
   id: string;
