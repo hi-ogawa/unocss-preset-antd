@@ -1,3 +1,4 @@
+import { none } from "@hiogawa/utils";
 import { cleanup, render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import React from "react";
@@ -15,6 +16,7 @@ describe(createTinyForm, () => {
       const form = useTinyForm({
         username: "",
         password: "",
+        age: none<number>(),
         subscribe: false,
       });
 
@@ -32,6 +34,18 @@ describe(createTinyForm, () => {
           <label>
             Password
             <input type="password" {...form.fields.password.props()} />
+          </label>
+          <label>
+            Age
+            <input
+              type="number"
+              {...form.fields.age.props({
+                transform: {
+                  toValue: (v) => String(v ?? ""),
+                  fromValue: (v) => (v ? Number(v) : undefined),
+                },
+              })}
+            />
           </label>
           <label>
             Subscribe
@@ -92,6 +106,31 @@ describe(createTinyForm, () => {
       }
     `);
 
+    await userEvent.type(screen.getByLabelText("Age"), "20");
+    expect(JSON.parse(await getTestidText("debug"))).toMatchInlineSnapshot(`
+      {
+        "data": {
+          "age": 20,
+          "password": "jkl;",
+          "subscribe": false,
+          "username": "asdf",
+        },
+        "isDirty": true,
+      }
+    `);
+
+    await userEvent.clear(screen.getByLabelText("Age"));
+    expect(JSON.parse(await getTestidText("debug"))).toMatchInlineSnapshot(`
+      {
+        "data": {
+          "password": "jkl;",
+          "subscribe": false,
+          "username": "asdf",
+        },
+        "isDirty": true,
+      }
+    `);
+
     await userEvent.click(screen.getByLabelText("Subscribe"));
     expect(JSON.parse(await getTestidText("debug"))).toMatchInlineSnapshot(`
       {
@@ -110,6 +149,7 @@ describe(createTinyForm, () => {
       [
         [
           {
+            "age": undefined,
             "password": "jkl;",
             "subscribe": true,
             "username": "asdf",
