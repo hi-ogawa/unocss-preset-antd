@@ -522,7 +522,9 @@ export function StorySnackbar() {
             <button
               className="flex-1 antd-btn antd-btn-default px-2"
               onClick={() => {
-                snackbar.create("Successfuly toasted!", { type: "success" });
+                snackbar.create({
+                  data: { node: "Successfuly toasted!", type: "success" },
+                });
               }}
             >
               Success
@@ -530,7 +532,9 @@ export function StorySnackbar() {
             <button
               className="flex-1 antd-btn antd-btn-default px-2"
               onClick={() => {
-                snackbar.create("This didn't work.", { type: "error" });
+                snackbar.create({
+                  data: { node: "This didn't work.", type: "error" },
+                });
               }}
             >
               Error
@@ -538,7 +542,7 @@ export function StorySnackbar() {
             <button
               className="flex-1 antd-btn antd-btn-default px-2"
               onClick={() => {
-                snackbar.create("Some neutral message");
+                snackbar.create({ data: { node: "Some neutral message" } });
               }}
             >
               Default

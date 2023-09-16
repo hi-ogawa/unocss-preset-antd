@@ -4,12 +4,8 @@ import React from "react";
 import { tw } from "../styles/tw";
 import { cls } from "../utils/misc";
 import { getCollapseProps } from "./collapse";
-import {
-  type SnackbarItemOptions,
-  type SnackbarItemState,
-  TOAST_STEP,
-  useSnackbar,
-} from "./snackbar-hook";
+import { type SnackbarItemState, useSnackbar } from "./snackbar-hook";
+import { TOAST_STEP } from "./toast";
 
 export function SnackbarConainer(props: {
   animationType: string;
@@ -30,11 +26,11 @@ export function SnackbarConainer(props: {
           setStep={(step: number) => manager.update(item.id, { step })}
         >
           <SnackbarItem
-            type={item.options?.type}
-            onClose={() => manager.update(item.id, { step: 1 })}
-          >
-            {item.node}
-          </SnackbarItem>
+            item={item}
+            onClose={() =>
+              manager.update(item.id, { step: TOAST_STEP.DISMISS })
+            }
+          />
         </SnackbarAnimation>
       ))}
     </div>
@@ -119,24 +115,19 @@ function useTimeout(f: () => void, ms: number) {
   }, []);
 }
 
-function SnackbarItem(
-  props: SnackbarItemOptions & {
-    onClose: () => void;
-    children: React.ReactNode;
-  }
-) {
+function SnackbarItem(props: { item: SnackbarItemState; onClose: () => void }) {
   return (
     <div className="antd-floating w-[350px]">
       <div className="flex items-center gap-3 p-3">
         <span
           className={cls(
-            props.type === "success" &&
+            props.item.data.type === "success" &&
               tw.i_ri_checkbox_circle_fill.text_colorSuccess.text_2xl.$,
-            props.type === "error" &&
+            props.item.data.type === "error" &&
               tw.i_ri_error_warning_fill.text_colorError.text_2xl.$
           )}
         />
-        <div className="flex-1">{props.children}</div>
+        <div className="flex-1">{props.item.data.node}</div>
         <button
           className={
             tw.antd_btn.antd_btn_ghost.i_ri_close_line.text_colorTextSecondary
