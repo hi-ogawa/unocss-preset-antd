@@ -79,7 +79,9 @@ type FormFieldHelper<T> = {
 type FormFieldOptions<T> = {
   /* use `checked` attribute instead of `value` attribute */
   checked?: boolean;
-  // TODO: provide builtin transform? (e.g. number, optional number, etc...)
+  // there are many caveats when dealing with controlled input with forced validation
+  // but it's still conveninent for some simple use cases
+  // cf. https://github.com/solidjs/solid/issues/1756
   transform?: {
     toValue: (v: T) => string;
     fromValue: (v: string) => T;
