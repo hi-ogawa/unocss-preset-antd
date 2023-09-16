@@ -251,21 +251,15 @@ export function StoryForm() {
             <label className="flex flex-col gap-1">
               <span className="text-colorTextLabel">Age (optional)</span>
               <input
-                // cf.
-                // https://github.com/solidjs/solid/issues/1756
-                // https://technology.blog.gov.uk/2020/02/24/why-the-gov-uk-design-system-team-changed-the-input-type-for-numbers/
-                inputMode="numeric"
-                pattern="[0-9]*"
+                type="number"
                 className="antd-input p-1"
                 name={form.fields.age.name}
-                value={form.fields.age.value ?? ""}
-                onChange={(e) => {
-                  if (!e.target.validity.patternMismatch) {
-                    form.fields.age.onChange(
-                      e.target.value ? Number(e.target.value) : undefined
-                    );
-                  }
-                }}
+                value={String(form.fields.age.value ?? "")}
+                onChange={(e) =>
+                  form.fields.age.onChange(
+                    e.target.value ? Number(e.target.value) : undefined
+                  )
+                }
               />
             </label>
             <label className="flex items-center gap-2">

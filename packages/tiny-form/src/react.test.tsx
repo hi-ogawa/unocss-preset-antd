@@ -38,18 +38,15 @@ describe(createTinyForm, () => {
           <label>
             Age
             <input
-              inputMode="numeric"
-              pattern="[0-9]*"
+              type="number"
               className="antd-input p-1"
               name={form.fields.age.name}
-              value={form.fields.age.value ?? ""}
-              onChange={(e) => {
-                if (!e.target.validity.patternMismatch) {
-                  form.fields.age.onChange(
-                    e.target.value ? Number(e.target.value) : undefined
-                  );
-                }
-              }}
+              value={String(form.fields.age.value ?? "")}
+              onChange={(e) =>
+                form.fields.age.onChange(
+                  e.target.value ? Number(e.target.value) : undefined
+                )
+              }
             />
           </label>
           <label>
