@@ -70,28 +70,11 @@ type FormFieldHelper<T> = {
     onChange: (v: T) => void;
   };
   // helper for input/select element
-  props: (options?: FormFieldOptions<T>) => {
+  props: (options?: { checked?: true }) => {
     name: string;
     value?: string;
     checked?: boolean;
     onChange: (e: { target: { value: string; checked?: boolean } }) => void;
-  };
-};
-
-type FormFieldOptions<T> = {
-  /* use `checked` attribute instead of `value` attribute */
-  checked?: boolean;
-  // there are many caveats when dealing with controlled input with forced validation
-  // but it's still conveninent for some simple use cases
-  // cf. https://github.com/solidjs/solid/issues/1756
-  transform?: {
-    // TODO:
-    // how about more generalized `transform` api like
-    //   toProps: T => Props,
-    //   fromEvent: Event => T
-    // which could cover `checked` case.
-    toValue: (v: T) => string;
-    fromValue: (v: string) => T;
   };
 };
 
@@ -107,21 +90,17 @@ function createFormFieldHelper<T>(
   return {
     ...rawProps,
     rawProps: () => rawProps,
-    props(options) {
-      if (options?.checked) {
-        return {
-          name,
-          checked: state as boolean,
-          onChange: (e) => setState(() => e.target.checked as T),
-        };
-      }
-      const toValue = options?.transform?.toValue ?? ((v) => v as string);
-      const fromValue = options?.transform?.fromValue ?? ((v) => v as T);
-      return {
-        name,
-        value: toValue(state),
-        onChange: (e) => setState(() => fromValue(e.target.value)),
-      };
-    },
+    props: (options) =>
+      options?.checked
+        ? {
+            name,
+            checked: state as boolean,
+            onChange: (e) => setState(() => e.target.checked as T),
+          }
+        : {
+            name,
+            value: state as string,
+            onChange: (e) => setState(() => e.target.value as T),
+          },
   };
 }
