@@ -65,18 +65,21 @@ type FormFieldHelper<T> = {
   // separate `rawProps` for easier object spread
   rawProps: () => {
     value: T;
-    onChange: (v: T) => void;
+    onChange: (v: T) => void; // TODO: raw props should support `(prev: T) => T` action
   };
   // helper for input/select element
   props: (options?: FormFieldOptions<T>) => {
     name: string;
     value?: string;
     checked?: boolean;
-    onChange: (e: { target: { value: string; checked?: boolean } }) => void;
+    onChange: (e: {
+      target: { value: string; valueAsNumber?: number; checked?: boolean };
+    }) => void;
   };
 };
 
 type FormFieldOptions<T> = {
+  valueAsNumber?: boolean;
   /* use `checked` attribute instead of `value` attribute */
   checked?: boolean;
   // TODO: provide builtin transform? (e.g. number, optional number, etc...)
@@ -103,6 +106,13 @@ function createFormFieldHelper<T>(
           name,
           checked: state as boolean,
           onChange: (e) => setState(() => e.target.checked as T),
+        };
+      }
+      if (options?.valueAsNumber) {
+        return {
+          name,
+          value: Number.isFinite(state) ? (state as string) : "",
+          onChange: (e) => setState(() => e.target.valueAsNumber as T), // TODO: still NaN can creep in...
         };
       }
       const toValue = options?.transform?.toValue ?? ((v) => v as string);
