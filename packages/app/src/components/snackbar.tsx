@@ -52,8 +52,8 @@ export function SnackbarConainer({
             </SnackbarAnimation>
           ))}
       </div>
-      <div className="flex flex-col absolute top-1 items-center w-full">
-        {/* TODO: reverse z? */}
+      {/* reverse twice to correct z-order */}
+      <div className="flex flex-col-reverse absolute top-1 items-center w-full">
         {itemsByPosition
           .get("top-center")
           ?.reverse()
@@ -74,6 +74,8 @@ interface SnackbarAnimationProp {
 }
 
 function SnackbarAnimation1({ item, toast, children }: SnackbarAnimationProp) {
+  // TODO: support position
+
   // steps
   // 0. slide in
   // 1. slide out
@@ -107,7 +109,6 @@ function SnackbarAnimation2({ item, toast, children }: SnackbarAnimationProp) {
   // 1. slide out + scale down + collapse down
   return (
     <Transition
-      appear
       show={item.step < TOAST_STEP.DISMISS}
       className="duration-300"
       onLeft={() => toast.remove(item.id)}
