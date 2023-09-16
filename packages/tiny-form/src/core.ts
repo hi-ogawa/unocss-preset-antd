@@ -83,6 +83,11 @@ type FormFieldOptions<T> = {
   // but it's still conveninent for some simple use cases
   // cf. https://github.com/solidjs/solid/issues/1756
   transform?: {
+    // TODO:
+    // how about more generalized `transform` api like
+    //   toProps: T => Props,
+    //   fromEvent: Event => T
+    // which could cover `checked` case.
     toValue: (v: T) => string;
     fromValue: (v: string) => T;
   };
