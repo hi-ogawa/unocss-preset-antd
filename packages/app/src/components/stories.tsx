@@ -12,8 +12,7 @@ import { getCollapseProps } from "./collapse";
 import { useModal } from "./modal";
 import { PopoverSimple } from "./popover";
 import { SimpleSelect } from "./select";
-import { SnackbarConainer } from "./snackbar";
-import { useSnackbar } from "./snackbar-hook";
+import { SnackbarConainer, toast, useSyncToast } from "./snackbar";
 import { TopProgressBar, useProgress } from "./top-progress-bar";
 
 export function StoryButton() {
@@ -478,7 +477,8 @@ export function StoryCollapse() {
 }
 
 export function StorySnackbar() {
-  const snackbar = useSnackbar();
+  useSyncToast();
+
   const form = createTinyForm(
     useTinyStoreStorage("unocss-preset-antd:StorySnackbar", {
       animationType: "2",
@@ -519,7 +519,7 @@ export function StorySnackbar() {
             <button
               className="flex-1 antd-btn antd-btn-default px-2"
               onClick={() => {
-                snackbar.create({
+                toast.create({
                   duration,
                   data: { node: "Successfuly toasted!", type: "success" },
                 });
@@ -530,7 +530,7 @@ export function StorySnackbar() {
             <button
               className="flex-1 antd-btn antd-btn-default px-2"
               onClick={() => {
-                snackbar.create({
+                toast.create({
                   duration,
                   data: { node: "This didn't work.", type: "error" },
                 });
@@ -541,7 +541,7 @@ export function StorySnackbar() {
             <button
               className="flex-1 antd-btn antd-btn-default px-2"
               onClick={() => {
-                snackbar.create({
+                toast.create({
                   duration,
                   data: { node: "Some neutral message" },
                 });
@@ -554,7 +554,7 @@ export function StorySnackbar() {
         <div className="border h-[500px] p-3 flex flex-col relative overflow-hidden">
           <SnackbarConainer animationType={form.data.animationType} />
         </div>
-        <Debug debug={snackbar.items} />
+        <Debug debug={toast.items} />
       </section>
     </div>
   );

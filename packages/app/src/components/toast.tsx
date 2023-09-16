@@ -1,5 +1,5 @@
 //
-// toast manager
+// framework agnostic toast core logic
 //
 
 export type ToastItemBase<T> = Required<ToastItemCreate<T>>;
@@ -7,7 +7,7 @@ export type ToastItemBase<T> = Required<ToastItemCreate<T>>;
 type ToastItemCreate<T> = {
   id?: string;
   step?: number;
-  duration?: number;
+  duration?: number; // ToastManager doesn't have to be aware of auto-dismiss duration? If so, it can move to `data`
   data: T;
 };
 
@@ -45,6 +45,7 @@ export class ToastManager<T> {
     }
   }
 
+  // convenience methods not needed for now
   dismiss(id: string) {
     this.update(id, { step: TOAST_STEP.DISMISS });
   }

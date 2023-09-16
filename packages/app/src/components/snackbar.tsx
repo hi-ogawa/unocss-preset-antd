@@ -4,28 +4,42 @@ import React from "react";
 import { tw } from "../styles/tw";
 import { cls } from "../utils/misc";
 import { getCollapseProps } from "./collapse";
-import { type ToastItem, useSnackbar } from "./snackbar-hook";
-import { TOAST_STEP } from "./toast";
+import { TOAST_STEP, type ToastItemBase, ToastManager } from "./toast";
+
+type ToastData = {
+  node: React.ReactNode;
+  type?: "success" | "error";
+};
+
+type ToastItem = ToastItemBase<ToastData>;
+
+export const toast = new ToastManager<ToastData>();
+
+export function useSyncToast() {
+  React.useSyncExternalStore(
+    toast.subscribe,
+    toast.getSnapshot,
+    toast.getSnapshot
+  );
+}
 
 export function SnackbarConainer(props: { animationType: string }) {
-  const manager = useSnackbar();
+  useSyncToast();
 
   const SnackbarAnimation =
     props.animationType === "1" ? SnackbarAnimation1 : SnackbarAnimation2;
 
   return (
     <div className="flex flex-col absolute bottom-1 left-2">
-      {[...manager.items].reverse().map((item) => (
+      {[...toast.items].reverse().map((item) => (
         <SnackbarAnimation
           key={item.id}
           item={item}
-          setStep={(step: number) => manager.update(item.id, { step })}
+          setStep={(step: number) => toast.update(item.id, { step })}
         >
           <SnackbarItem
             item={item}
-            onClose={() =>
-              manager.update(item.id, { step: TOAST_STEP.DISMISS })
-            }
+            onClose={() => toast.update(item.id, { step: TOAST_STEP.DISMISS })}
           />
         </SnackbarAnimation>
       ))}
