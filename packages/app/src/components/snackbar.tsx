@@ -74,7 +74,7 @@ interface SnackbarAnimationProp {
 }
 
 function SnackbarAnimation1({ item, toast, children }: SnackbarAnimationProp) {
-  // TODO: support position
+  // TODO: "center" position doesn't make sense...
 
   // steps
   // 0. slide in
