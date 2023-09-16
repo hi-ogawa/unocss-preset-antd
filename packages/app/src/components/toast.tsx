@@ -13,7 +13,6 @@ export type ToastItem<T> = Required<ToastItemCreate<T>>;
 type ToastItemCreate<T> = {
   id?: string;
   step?: number;
-  duration?: number; // ToastManager doesn't have to be aware of auto-dismiss duration? If so, it can move to `data`
   data: T;
 };
 
@@ -26,13 +25,12 @@ export const TOAST_STEP = {
 export class ToastManager<T> {
   public items: ToastItem<T>[] = [];
 
-  create(item: ToastItemCreate<T>) {
+  create(data: T) {
     this.items = [...this.items];
     this.items.push({
-      id: item.id ?? generateId(),
-      step: item.step ?? TOAST_STEP.START,
-      duration: item.duration ?? 4000,
-      data: item.data,
+      id: generateId(), // TODO: support upsert by id?
+      step: TOAST_STEP.START,
+      data,
     });
     this.notify();
   }

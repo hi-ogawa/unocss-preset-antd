@@ -518,8 +518,9 @@ export function StorySnackbar() {
               className="flex-1 antd-btn antd-btn-default px-2"
               onClick={() => {
                 toast.create({
+                  node: "Successfuly toasted!",
+                  type: "success",
                   duration,
-                  data: { node: "Successfuly toasted!", type: "success" },
                 });
               }}
             >
@@ -529,8 +530,9 @@ export function StorySnackbar() {
               className="flex-1 antd-btn antd-btn-default px-2"
               onClick={() => {
                 toast.create({
+                  node: "This didn't work.",
+                  type: "error",
                   duration,
-                  data: { node: "This didn't work.", type: "error" },
                 });
               }}
             >
@@ -540,8 +542,8 @@ export function StorySnackbar() {
               className="flex-1 antd-btn antd-btn-default px-2"
               onClick={() => {
                 toast.create({
+                  node: "Some neutral message",
                   duration,
-                  data: { node: "Some neutral message" },
                 });
               }}
             >

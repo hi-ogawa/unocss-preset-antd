@@ -6,8 +6,10 @@ import { cls } from "../utils/misc";
 import { getCollapseProps } from "./collapse";
 import { TOAST_STEP, type ToastItem, ToastManager } from "./toast";
 
+// TODO: position
 type ToastData = {
   node: React.ReactNode;
+  duration: number;
   type?: "success" | "error";
 };
 type CustomToastItem = ToastItem<ToastData>;
@@ -52,7 +54,7 @@ function SnackbarAnimation1({ item, toast, children }: SnackbarAnimationProp) {
   // TODO: pause on hover?
   useTimeout(
     () => toast.update(item.id, { step: TOAST_STEP.DISMISS }),
-    item.duration
+    item.data.duration
   );
 
   // 0.  slide in
@@ -84,7 +86,7 @@ function SnackbarAnimation1({ item, toast, children }: SnackbarAnimationProp) {
 function SnackbarAnimation2({ item, toast, children }: SnackbarAnimationProp) {
   useTimeout(
     () => toast.update(item.id, { step: TOAST_STEP.DISMISS }),
-    item.duration
+    item.data.duration
   );
 
   // 0. slide in + scale up
