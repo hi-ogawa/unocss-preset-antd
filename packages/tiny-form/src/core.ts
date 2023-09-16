@@ -10,7 +10,8 @@ export type TinyFormHelper<T> = {
   handleSubmit: (callback: () => void) => (e: unknown) => void;
 };
 
-type SetState<T> = (toNext: (prev: T) => T) => void;
+type SetState<T> = (newValue: NewValue<T>) => void;
+type NewValue<T> = T | ((prev: T) => T);
 
 export function createTinyForm<T extends {}>([state, setState]: readonly [
   T,
@@ -48,11 +49,22 @@ function createFieldRecordHelper<T extends {}>([state, setState]: readonly [
         const k = p as keyof T & string;
         return createFormFieldHelper(k, [
           state[k],
-          (next) => setState((prev) => ({ ...prev, [k]: next(prev[k]) })),
+          (newValue) =>
+            setState((prev) => ({
+              ...prev,
+              [k]: resolveNewValue(prev[k], newValue),
+            })),
         ]);
       },
     }
   ) as any;
+}
+
+function resolveNewValue<T>(prev: T, newValue: NewValue<T>): T {
+  // cannot narrow enough since `T` itself could be a function
+  return typeof newValue === "function"
+    ? (newValue as (prev: T) => T)(prev)
+    : newValue;
 }
 
 //
@@ -62,12 +74,12 @@ function createFieldRecordHelper<T extends {}>([state, setState]: readonly [
 type FormFieldHelper<T> = {
   name: string;
   value: T;
-  onChange: (v: T) => void;
+  onChange: SetState<T>;
   // duplicate `rawProps` for easier object spread
   rawProps: () => {
     name: string;
     value: T;
-    onChange: (v: T) => void;
+    onChange: SetState<T>;
   };
   // basic helper for input/select element
   props: (options?: { checked?: true }) => {
@@ -85,7 +97,7 @@ function createFormFieldHelper<T>(
   const rawProps = {
     name,
     value: state,
-    onChange: (v: T) => setState(() => v),
+    onChange: setState,
   };
   return {
     ...rawProps,
