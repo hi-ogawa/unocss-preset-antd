@@ -1,4 +1,5 @@
 import { Transition } from "@hiogawa/tiny-transition/dist/react";
+import { groupBy } from "@hiogawa/utils";
 import { useStableCallback } from "@hiogawa/utils-react";
 import React from "react";
 import { cls } from "../utils/misc";
@@ -37,14 +38,32 @@ export function SnackbarConainer({
   const SnackbarAnimation =
     animationType === "1" ? SnackbarAnimation1 : SnackbarAnimation2;
 
+  const itemsByPosition = groupBy(toast.items, (item) => item.data.position);
+
   return (
-    <div className="flex flex-col absolute bottom-1 left-2">
-      {[...toast.items].reverse().map((item) => (
-        <SnackbarAnimation key={item.id} toast={toast} item={item}>
-          <SnackbarItem item={item} toast={toast} />
-        </SnackbarAnimation>
-      ))}
-    </div>
+    <>
+      <div className="flex flex-col absolute bottom-1 left-2">
+        {itemsByPosition
+          .get("bottom-left")
+          ?.reverse()
+          .map((item) => (
+            <SnackbarAnimation key={item.id} toast={toast} item={item}>
+              <SnackbarItem item={item} toast={toast} />
+            </SnackbarAnimation>
+          ))}
+      </div>
+      <div className="flex flex-col absolute top-1 items-center w-full">
+        {/* TODO: reverse z? */}
+        {itemsByPosition
+          .get("top-center")
+          ?.reverse()
+          .map((item) => (
+            <SnackbarAnimation key={item.id} toast={toast} item={item}>
+              <SnackbarItem item={item} toast={toast} />
+            </SnackbarAnimation>
+          ))}
+      </div>
+    </>
   );
 }
 
@@ -88,6 +107,7 @@ function SnackbarAnimation2({ item, toast, children }: SnackbarAnimationProp) {
   // 1. slide out + scale down + collapse down
   return (
     <Transition
+      appear
       show={item.step < TOAST_STEP.DISMISS}
       className="duration-300"
       onLeft={() => toast.remove(item.id)}
@@ -97,10 +117,18 @@ function SnackbarAnimation2({ item, toast, children }: SnackbarAnimationProp) {
         appear
         show={item.step < TOAST_STEP.DISMISS}
         className="inline-block duration-300 transform py-1"
-        enterFrom="translate-y-[120%] scale-0 opacity-10"
-        enterTo="translate-y-0 scale-100 opacity-100"
-        leaveFrom="translate-y-0 scale-100 opacity-100"
-        leaveTo="translate-y-[120%] scale-0 opacity-10"
+        enterFrom={cls(
+          "scale-0 opacity-10",
+          item.data.position === "bottom-left" && "translate-y-[120%]",
+          item.data.position === "top-center" && "translate-y-[-120%]"
+        )}
+        enterTo={cls("translate-y-0 scale-100 opacity-100")}
+        leaveFrom={cls("translate-y-0 scale-100 opacity-100")}
+        leaveTo={cls(
+          "scale-0 opacity-10",
+          item.data.position === "bottom-left" && "translate-y-[120%]",
+          item.data.position === "top-center" && "translate-y-[-120%]"
+        )}
       >
         {children}
       </Transition>
