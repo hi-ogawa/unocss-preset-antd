@@ -63,13 +63,13 @@ type FormFieldHelper<T> = {
   name: string;
   value: T;
   onChange: (v: T) => void;
-  // separate `rawProps` for easier object spread
+  // duplicate `rawProps` for easier object spread
   rawProps: () => {
     name: string;
     value: T;
     onChange: (v: T) => void;
   };
-  // helper for input/select element
+  // basic helper for input/select element
   props: (options?: { checked?: true }) => {
     name: string;
     value?: string;
