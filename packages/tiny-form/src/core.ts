@@ -59,17 +59,15 @@ function createFieldRecordHelper<T extends {}>([state, setState]: readonly [
 // form field helper
 //
 
-type FormFieldHelper<T> = BaseFormFieldHelper<T> &
-  (T extends string ? StringFormFieldHelper : {}) &
-  (T extends boolean ? BooleanFormFieldHelper : {});
-
-type BaseFormFieldHelper<T> = {
+type FormFieldHelper<T> = {
   value: T;
   onChange: (v: T) => void;
+  // separate `rawProps` for easier object spread
   rawProps: () => {
     value: T;
     onChange: (v: T) => void;
   };
+  // helper for input/select element
   props: (options?: FormFieldOptions<T>) => {
     name: string;
     value?: string;
@@ -88,24 +86,6 @@ type FormFieldOptions<T> = {
   };
 };
 
-// TODO: remove in favor of FormFieldOptions
-type StringFormFieldHelper = {
-  valueProps: () => {
-    name: string;
-    value: string;
-    onChange: (e: { target: { value: string } }) => void;
-  };
-};
-
-// TODO: remove
-type BooleanFormFieldHelper = {
-  checkedProps: () => {
-    name: string;
-    checked: boolean;
-    onChange: (e: { target: { checked: boolean } }) => void;
-  };
-};
-
 function createFormFieldHelper<T>(
   name: string,
   [state, setState]: readonly [T, SetState<T>]
@@ -114,7 +94,7 @@ function createFormFieldHelper<T>(
     value: state,
     onChange: (v: T) => setState(() => v),
   };
-  const baseHelper: BaseFormFieldHelper<T> = {
+  return {
     ...rawProps,
     rawProps: () => rawProps,
     props(options) {
@@ -134,19 +114,4 @@ function createFormFieldHelper<T>(
       };
     },
   };
-  const stringHelper: StringFormFieldHelper = {
-    valueProps: () => ({
-      name,
-      value: state as string,
-      onChange: (e) => setState(() => e.target.value as T),
-    }),
-  };
-  const booleanHelper: BooleanFormFieldHelper = {
-    checkedProps: () => ({
-      name,
-      checked: state as boolean,
-      onChange: (e) => setState(() => e.target.checked as T),
-    }),
-  };
-  return { ...baseHelper, ...stringHelper, ...booleanHelper } as any;
 }
