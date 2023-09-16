@@ -1,12 +1,5 @@
 import { objectHas } from "@hiogawa/utils";
 
-// TODO
-// - memo?
-// - valueAsNumber? (parse/stringify?)
-// - form status helper (e.g. isValid, isDirty)?
-// - validation (e.g. required)?
-// - array helper?
-
 //
 // form helper
 //
