@@ -1,7 +1,6 @@
 import { Transition } from "@hiogawa/tiny-transition/dist/react";
 import { useStableCallback } from "@hiogawa/utils-react";
 import React from "react";
-import { tw } from "../styles/tw";
 import { cls } from "../utils/misc";
 import { getCollapseProps } from "./collapse";
 import { TOAST_STEP, type ToastItem, ToastManager } from "./toast";
@@ -130,17 +129,14 @@ function SnackbarItem({
         <span
           className={cls(
             item.data.type === "success" &&
-              tw.i_ri_checkbox_circle_fill.text_colorSuccess.text_2xl.$,
+              "i-ri-checkbox-circle-fill text-colorSuccess text-2xl",
             item.data.type === "error" &&
-              tw.i_ri_error_warning_fill.text_colorError.text_2xl.$
+              "i-ri-error-warning-fill text-colorError text-2xl"
           )}
         />
         <div className="flex-1">{item.data.node}</div>
         <button
-          className={
-            tw.antd_btn.antd_btn_ghost.i_ri_close_line.text_colorTextSecondary
-              .text_lg.$
-          }
+          className="antd-btn antd-btn-ghost i-ri-close-line text-colorTextSecondary text-lg"
           onClick={() => toast.update(item.id, { step: TOAST_STEP.DISMISS })}
         />
       </div>
