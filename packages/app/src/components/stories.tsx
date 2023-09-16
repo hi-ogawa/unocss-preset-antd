@@ -12,7 +12,7 @@ import { getCollapseProps } from "./collapse";
 import { useModal } from "./modal";
 import { PopoverSimple } from "./popover";
 import { SimpleSelect } from "./select";
-import { SnackbarConainer, toast, useSyncToast } from "./snackbar";
+import { SnackbarConainer, toast } from "./snackbar";
 import { TopProgressBar, useProgress } from "./top-progress-bar";
 
 export function StoryButton() {
@@ -477,8 +477,6 @@ export function StoryCollapse() {
 }
 
 export function StorySnackbar() {
-  useSyncToast();
-
   const form = createTinyForm(
     useTinyStoreStorage("unocss-preset-antd:StorySnackbar", {
       animationType: "2",
@@ -552,12 +550,24 @@ export function StorySnackbar() {
           </div>
         </div>
         <div className="border h-[500px] p-3 flex flex-col relative overflow-hidden">
-          <SnackbarConainer animationType={form.data.animationType} />
+          <SnackbarConainer
+            toast={toast}
+            animationType={form.data.animationType}
+          />
         </div>
-        <Debug debug={toast.items} />
+        <DebugToast />
       </section>
     </div>
   );
+}
+
+function DebugToast() {
+  React.useSyncExternalStore(
+    toast.subscribe,
+    toast.getSnapshot,
+    toast.getSnapshot
+  );
+  return <Debug debug={toast.items} />;
 }
 
 export function StoryPopover() {

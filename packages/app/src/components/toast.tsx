@@ -2,7 +2,13 @@
 // framework agnostic toast core logic
 //
 
-export type ToastItemBase<T> = Required<ToastItemCreate<T>>;
+// HTMLElement based api?
+// - setContainerElement
+// - setItemElement
+// - track unmount for remove
+// - track mouseover for pause
+
+export type ToastItem<T> = Required<ToastItemCreate<T>>;
 
 type ToastItemCreate<T> = {
   id?: string;
@@ -11,15 +17,14 @@ type ToastItemCreate<T> = {
   data: T;
 };
 
-// animation can utilize intermidiate step between [0, 2]
+// animation can utilize intermediate step between [0, 1] and [1, oo)
 export const TOAST_STEP = {
   START: 0,
   DISMISS: 1,
-  REMOVE: 2,
 };
 
 export class ToastManager<T> {
-  public items: ToastItemBase<T>[] = [];
+  public items: ToastItem<T>[] = [];
 
   create(item: ToastItemCreate<T>) {
     this.items = [...this.items];
@@ -32,31 +37,24 @@ export class ToastManager<T> {
     this.notify();
   }
 
-  update(id: string, newItem: Partial<ToastItemBase<T>>) {
+  update(id: string, newItem: Partial<ToastItem<T>>) {
     const index = this.items.findIndex((item) => item.id === id);
     if (index >= 0) {
       this.items = [...this.items];
-      if (newItem.step === TOAST_STEP.REMOVE) {
-        this.items.splice(index, 1);
-      } else {
-        this.items[index] = { ...this.items[index], ...newItem };
-      }
+      this.items[index] = { ...this.items[index], ...newItem };
       this.notify();
     }
   }
 
-  // convenience methods not needed for now
-  dismiss(id: string) {
-    this.update(id, { step: TOAST_STEP.DISMISS });
-  }
-
   remove(id: string) {
-    this.update(id, { step: TOAST_STEP.REMOVE });
+    this.items = this.items.filter((item) => item.id !== id);
+    this.notify();
   }
 
   //
   // api for React.useSyncExternalStore
   //
+
   private listeners = new Set<() => void>();
 
   subscribe = (listener: () => void) => {
