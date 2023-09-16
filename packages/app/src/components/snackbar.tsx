@@ -12,7 +12,9 @@ type ToastData = {
   duration: number;
   type?: "success" | "error";
 };
+
 type CustomToastItem = ToastItem<ToastData>;
+
 type CustomToastManager = ToastManager<ToastData>;
 
 export const toast = new ToastManager<ToastData>();
@@ -51,12 +53,6 @@ interface SnackbarAnimationProp {
 }
 
 function SnackbarAnimation1({ item, toast, children }: SnackbarAnimationProp) {
-  // TODO: pause on hover?
-  useTimeout(
-    () => toast.update(item.id, { step: TOAST_STEP.DISMISS }),
-    item.data.duration
-  );
-
   // 0.  slide in
   // 1.  slide out
   // 1.5 collapse down
@@ -84,11 +80,6 @@ function SnackbarAnimation1({ item, toast, children }: SnackbarAnimationProp) {
 }
 
 function SnackbarAnimation2({ item, toast, children }: SnackbarAnimationProp) {
-  useTimeout(
-    () => toast.update(item.id, { step: TOAST_STEP.DISMISS }),
-    item.data.duration
-  );
-
   // 0. slide in + scale up
   // 1. slide out + scale down + collapse down
   return (
@@ -113,43 +104,60 @@ function SnackbarAnimation2({ item, toast, children }: SnackbarAnimationProp) {
   );
 }
 
-function useTimeout(f: () => void, ms: number) {
-  f = useStableCallback(f);
-
-  React.useEffect(() => {
-    const t = window.setTimeout(() => f(), ms);
-    return () => {
-      window.clearTimeout(t);
-    };
-  }, []);
-}
-
-function SnackbarItem(props: {
+function SnackbarItem({
+  item,
+  toast,
+}: {
   item: CustomToastItem;
   toast: CustomToastManager;
 }) {
+  // pause auto-dismiss timeout on hover
+  const [pause, setPause] = React.useState(false);
+
+  // auto-dismiss timeout
+  useTimeout(
+    () => toast.update(item.id, { step: TOAST_STEP.DISMISS }),
+    pause ? Infinity : item.data.duration
+  );
+
   return (
-    <div className="antd-floating w-[350px]">
+    <div
+      className="antd-floating w-[350px]"
+      onMouseEnter={() => setPause(true)}
+      onMouseLeave={() => setPause(false)}
+    >
       <div className="flex items-center gap-3 p-3">
         <span
           className={cls(
-            props.item.data.type === "success" &&
+            item.data.type === "success" &&
               tw.i_ri_checkbox_circle_fill.text_colorSuccess.text_2xl.$,
-            props.item.data.type === "error" &&
+            item.data.type === "error" &&
               tw.i_ri_error_warning_fill.text_colorError.text_2xl.$
           )}
         />
-        <div className="flex-1">{props.item.data.node}</div>
+        <div className="flex-1">{item.data.node}</div>
         <button
           className={
             tw.antd_btn.antd_btn_ghost.i_ri_close_line.text_colorTextSecondary
               .text_lg.$
           }
-          onClick={() =>
-            props.toast.update(props.item.id, { step: TOAST_STEP.DISMISS })
-          }
+          onClick={() => toast.update(item.id, { step: TOAST_STEP.DISMISS })}
         />
       </div>
     </div>
   );
+}
+
+function useTimeout(f: () => void, ms: number) {
+  f = useStableCallback(f);
+
+  React.useEffect(() => {
+    if (ms === Infinity) {
+      return;
+    }
+    const t = window.setTimeout(() => f(), ms);
+    return () => {
+      window.clearTimeout(t);
+    };
+  }, [ms]);
 }
