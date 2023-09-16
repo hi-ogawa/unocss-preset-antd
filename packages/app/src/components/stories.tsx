@@ -2,7 +2,7 @@ import { createTinyForm } from "@hiogawa/tiny-form";
 import { useTinyStoreStorage } from "@hiogawa/tiny-store/dist/react";
 import { Transition } from "@hiogawa/tiny-transition/dist/react";
 import { ANTD_VARS } from "@hiogawa/unocss-preset-antd";
-import { none, objectPickBy, range } from "@hiogawa/utils";
+import { objectPickBy, range } from "@hiogawa/utils";
 import { Debug, toSetSetState, useDelay } from "@hiogawa/utils-react";
 import React from "react";
 import ReactSelect from "react-select";
@@ -213,7 +213,7 @@ export function StoryForm() {
     React.useState({
       username: "",
       password: "",
-      age: none<number>(),
+      age: undefined as number | undefined,
       subscribe: false,
     })
   );
@@ -263,7 +263,7 @@ export function StoryForm() {
             </label>
             <label className="flex items-center gap-2">
               <span className="text-colorTextLabel">
-                Subscribe to news letter
+                Subscribe to a news letter
               </span>
               <input
                 type="checkbox"
