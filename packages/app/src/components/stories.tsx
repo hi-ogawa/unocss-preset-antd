@@ -12,7 +12,12 @@ import { getCollapseProps } from "./collapse";
 import { useModal } from "./modal";
 import { PopoverSimple } from "./popover";
 import { SimpleSelect } from "./select";
-import { SnackbarConainer, toast } from "./snackbar";
+import {
+  SnackbarConainer,
+  TOAST_POSITIONS,
+  type ToastPosition,
+  toast,
+} from "./snackbar";
 import { TopProgressBar, useProgress } from "./top-progress-bar";
 
 export function StoryButton() {
@@ -480,10 +485,11 @@ export function StorySnackbar() {
   const form = createTinyForm(
     useTinyStoreStorage("unocss-preset-antd:StorySnackbar", {
       animationType: "2",
-      duration: 2,
+      duration: 2000,
+      position: "bottom-left" as ToastPosition,
     })
   );
-  const duration = form.data.duration * 1000;
+  const { duration, position } = form.data;
 
   return (
     <div className="flex flex-col items-center gap-3 m-2">
@@ -506,9 +512,17 @@ export function StorySnackbar() {
           Duration
           <SimpleSelect
             className="antd-input p-1"
-            options={[2, 4, 8]}
-            labelFn={(v) => `${v}s`}
+            options={[2000, 4000, 8000]}
+            labelFn={(v) => `${v / 1000}s`}
             {...form.fields.duration.rawProps()}
+          />
+        </div>
+        <div className="flex flex-col gap-1">
+          Duration
+          <SimpleSelect
+            className="antd-input p-1"
+            options={TOAST_POSITIONS}
+            {...form.fields.position.rawProps()}
           />
         </div>
         <div className="flex flex-col gap-1">
@@ -520,6 +534,7 @@ export function StorySnackbar() {
                 toast.create({
                   node: "Successfuly toasted!",
                   type: "success",
+                  position,
                   duration,
                 });
               }}
@@ -532,6 +547,7 @@ export function StorySnackbar() {
                 toast.create({
                   node: "This didn't work.",
                   type: "error",
+                  position,
                   duration,
                 });
               }}
@@ -543,6 +559,8 @@ export function StorySnackbar() {
               onClick={() => {
                 toast.create({
                   node: "Some neutral message",
+                  type: "default",
+                  position,
                   duration,
                 });
               }}

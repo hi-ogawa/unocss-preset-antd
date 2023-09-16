@@ -5,11 +5,14 @@ import { cls } from "../utils/misc";
 import { getCollapseProps } from "./collapse";
 import { TOAST_STEP, type ToastItem, ToastManager } from "./toast";
 
-// TODO: position
+export const TOAST_POSITIONS = ["bottom-left", "top-center"] as const;
+export type ToastPosition = (typeof TOAST_POSITIONS)[number];
+
 type ToastData = {
   node: React.ReactNode;
   duration: number;
-  type?: "success" | "error";
+  type: "success" | "error" | "default";
+  position: ToastPosition;
 };
 
 type CustomToastItem = ToastItem<ToastData>;
@@ -52,6 +55,7 @@ interface SnackbarAnimationProp {
 }
 
 function SnackbarAnimation1({ item, toast, children }: SnackbarAnimationProp) {
+  // steps
   // 0. slide in
   // 1. slide out
   // 1.5 collapse down
@@ -79,6 +83,7 @@ function SnackbarAnimation1({ item, toast, children }: SnackbarAnimationProp) {
 }
 
 function SnackbarAnimation2({ item, toast, children }: SnackbarAnimationProp) {
+  // steps
   // 0. slide in + scale up
   // 1. slide out + scale down + collapse down
   return (
