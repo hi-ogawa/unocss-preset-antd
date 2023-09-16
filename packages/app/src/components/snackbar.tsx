@@ -4,13 +4,10 @@ import React from "react";
 import { tw } from "../styles/tw";
 import { cls } from "../utils/misc";
 import { getCollapseProps } from "./collapse";
-import { type SnackbarItemState, useSnackbar } from "./snackbar-hook";
+import { type ToastItem, useSnackbar } from "./snackbar-hook";
 import { TOAST_STEP } from "./toast";
 
-export function SnackbarConainer(props: {
-  animationType: string;
-  durationClassName: string;
-}) {
+export function SnackbarConainer(props: { animationType: string }) {
   const manager = useSnackbar();
 
   const SnackbarAnimation =
@@ -22,7 +19,6 @@ export function SnackbarConainer(props: {
         <SnackbarAnimation
           key={item.id}
           item={item}
-          durationClassName={props.durationClassName}
           setStep={(step: number) => manager.update(item.id, { step })}
         >
           <SnackbarItem
@@ -38,15 +34,13 @@ export function SnackbarConainer(props: {
 }
 
 interface SnackbarAnimationProp {
-  item: SnackbarItemState;
+  item: ToastItem;
   setStep: (step: number) => void;
-  durationClassName: string; // TODO: let ToastManager handle auto-dismiss timeout
   children?: React.ReactNode;
 }
 
 function SnackbarAnimation1(props: SnackbarAnimationProp) {
-  const duration = Number(props.durationClassName.split("-")[1]);
-  useTimeout(() => props.setStep(TOAST_STEP.DISMISS), duration);
+  useTimeout(() => props.setStep(TOAST_STEP.DISMISS), props.item.duration);
 
   // 0.  slide in
   // 1.  slide out
@@ -76,8 +70,7 @@ function SnackbarAnimation1(props: SnackbarAnimationProp) {
 }
 
 function SnackbarAnimation2(props: SnackbarAnimationProp) {
-  const duration = Number(props.durationClassName.split("-")[1]);
-  useTimeout(() => props.setStep(TOAST_STEP.DISMISS), duration);
+  useTimeout(() => props.setStep(TOAST_STEP.DISMISS), props.item.duration);
 
   // 0. slide in + scale up
   // 1. slide out + scale down + collapse down
@@ -115,7 +108,7 @@ function useTimeout(f: () => void, ms: number) {
   }, []);
 }
 
-function SnackbarItem(props: { item: SnackbarItemState; onClose: () => void }) {
+function SnackbarItem(props: { item: ToastItem; onClose: () => void }) {
   return (
     <div className="antd-floating w-[350px]">
       <div className="flex items-center gap-3 p-3">

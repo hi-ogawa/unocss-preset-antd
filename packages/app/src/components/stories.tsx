@@ -482,9 +482,10 @@ export function StorySnackbar() {
   const form = createTinyForm(
     useTinyStoreStorage("unocss-preset-antd:StorySnackbar", {
       animationType: "2",
-      durationClassName: "duration-4000",
+      duration: 2,
     })
   );
+  const duration = form.data.duration * 1000;
 
   return (
     <div className="flex flex-col items-center gap-3 m-2">
@@ -505,16 +506,12 @@ export function StorySnackbar() {
         </div>
         <div className="flex flex-col gap-1">
           Duration
-          <select
+          <SimpleSelect
             className="antd-input p-1"
-            {...form.fields.durationClassName.props()}
-          >
-            {["duration-2000", "duration-4000", "duration-8000"].map((v) => (
-              <option key={v} value={v}>
-                {Number(v.split("-")[1]) / 1000}s
-              </option>
-            ))}
-          </select>
+            options={[2, 4, 8]}
+            labelFn={(v) => `${v}s`}
+            {...form.fields.duration.rawProps()}
+          />
         </div>
         <div className="flex flex-col gap-1">
           Toast Type
@@ -523,6 +520,7 @@ export function StorySnackbar() {
               className="flex-1 antd-btn antd-btn-default px-2"
               onClick={() => {
                 snackbar.create({
+                  duration,
                   data: { node: "Successfuly toasted!", type: "success" },
                 });
               }}
@@ -533,6 +531,7 @@ export function StorySnackbar() {
               className="flex-1 antd-btn antd-btn-default px-2"
               onClick={() => {
                 snackbar.create({
+                  duration,
                   data: { node: "This didn't work.", type: "error" },
                 });
               }}
@@ -542,7 +541,10 @@ export function StorySnackbar() {
             <button
               className="flex-1 antd-btn antd-btn-default px-2"
               onClick={() => {
-                snackbar.create({ data: { node: "Some neutral message" } });
+                snackbar.create({
+                  duration,
+                  data: { node: "Some neutral message" },
+                });
               }}
             >
               Default
@@ -550,10 +552,7 @@ export function StorySnackbar() {
           </div>
         </div>
         <div className="border h-[500px] p-3 flex flex-col relative overflow-hidden">
-          <SnackbarConainer
-            animationType={form.data.animationType}
-            durationClassName={form.data.durationClassName}
-          />
+          <SnackbarConainer animationType={form.data.animationType} />
         </div>
         <Debug debug={snackbar.items} />
       </section>

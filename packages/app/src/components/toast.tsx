@@ -2,7 +2,7 @@
 // toast manager
 //
 
-export type ToastItem<T> = Required<ToastItemCreate<T>>;
+export type ToastItemBase<T> = Required<ToastItemCreate<T>>;
 
 type ToastItemCreate<T> = {
   id?: string;
@@ -19,7 +19,7 @@ export const TOAST_STEP = {
 };
 
 export class ToastManager<T> {
-  public items: ToastItem<T>[] = [];
+  public items: ToastItemBase<T>[] = [];
 
   create(item: ToastItemCreate<T>) {
     this.items = [...this.items];
@@ -32,7 +32,7 @@ export class ToastManager<T> {
     this.notify();
   }
 
-  update(id: string, newItem: Partial<ToastItem<T>>) {
+  update(id: string, newItem: Partial<ToastItemBase<T>>) {
     const index = this.items.findIndex((item) => item.id === id);
     if (index >= 0) {
       this.items = [...this.items];

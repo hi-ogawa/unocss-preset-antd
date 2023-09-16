@@ -1,12 +1,12 @@
 import React from "react";
-import { type ToastItem, ToastManager } from "./toast";
+import { type ToastItemBase, ToastManager } from "./toast";
 
 type ToastData = {
   node: React.ReactNode;
   type?: "success" | "error";
 };
 
-export type SnackbarItemState = ToastItem<ToastData>;
+export type ToastItem = ToastItemBase<ToastData>;
 
 export const useSnackbar = createUseToast<ToastData>();
 
