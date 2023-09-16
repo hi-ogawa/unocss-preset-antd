@@ -2,9 +2,13 @@ import { Transition } from "@hiogawa/tiny-transition/dist/react";
 import { groupBy } from "@hiogawa/utils";
 import { useStableCallback } from "@hiogawa/utils-react";
 import React from "react";
-import { cls } from "../utils/misc";
-import { getCollapseProps } from "./collapse";
-import { TOAST_STEP, type ToastItem, ToastManager } from "./toast";
+import { cls } from "../../utils/misc";
+import { getCollapseProps } from "../collapse";
+import { TOAST_STEP, type ToastItem, ToastManager } from "./core";
+
+//
+// example toast implementation for react
+//
 
 export const TOAST_POSITIONS = ["bottom-left", "top-center"] as const;
 export type ToastPosition = (typeof TOAST_POSITIONS)[number];
@@ -22,7 +26,7 @@ type CustomToastManager = ToastManager<ToastData>;
 
 export const toast = new ToastManager<ToastData>();
 
-export function SnackbarConainer({
+export function ToastContainer({
   toast,
   animationType,
 }: {
@@ -35,8 +39,7 @@ export function SnackbarConainer({
     toast.getSnapshot
   );
 
-  const SnackbarAnimation =
-    animationType === "1" ? SnackbarAnimation1 : SnackbarAnimation2;
+  const AnimationWrapper = animationType === "1" ? Animation1 : Animation2;
 
   const itemsByPosition = groupBy(toast.items, (item) => item.data.position);
 
@@ -47,9 +50,9 @@ export function SnackbarConainer({
           .get("bottom-left")
           ?.reverse()
           .map((item) => (
-            <SnackbarAnimation key={item.id} toast={toast} item={item}>
-              <SnackbarItem item={item} toast={toast} />
-            </SnackbarAnimation>
+            <AnimationWrapper key={item.id} toast={toast} item={item}>
+              <ToastItemComponent item={item} toast={toast} />
+            </AnimationWrapper>
           ))}
       </div>
       {/* reverse twice to correct z-order */}
@@ -58,22 +61,22 @@ export function SnackbarConainer({
           .get("top-center")
           ?.reverse()
           .map((item) => (
-            <SnackbarAnimation key={item.id} toast={toast} item={item}>
-              <SnackbarItem item={item} toast={toast} />
-            </SnackbarAnimation>
+            <AnimationWrapper key={item.id} toast={toast} item={item}>
+              <ToastItemComponent item={item} toast={toast} />
+            </AnimationWrapper>
           ))}
       </div>
     </>
   );
 }
 
-interface SnackbarAnimationProp {
+interface AnimationProps {
   item: CustomToastItem;
   toast: CustomToastManager;
   children?: React.ReactNode;
 }
 
-function SnackbarAnimation1({ item, toast, children }: SnackbarAnimationProp) {
+function Animation1({ item, toast, children }: AnimationProps) {
   // TODO: "center" position doesn't make sense...
 
   // steps
@@ -103,7 +106,7 @@ function SnackbarAnimation1({ item, toast, children }: SnackbarAnimationProp) {
   );
 }
 
-function SnackbarAnimation2({ item, toast, children }: SnackbarAnimationProp) {
+function Animation2({ item, toast, children }: AnimationProps) {
   // steps
   // 0. slide in + scale up
   // 1. slide out + scale down + collapse down
@@ -137,7 +140,7 @@ function SnackbarAnimation2({ item, toast, children }: SnackbarAnimationProp) {
   );
 }
 
-function SnackbarItem({
+function ToastItemComponent({
   item,
   toast,
 }: {

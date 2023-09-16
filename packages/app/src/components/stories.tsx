@@ -13,11 +13,11 @@ import { useModal } from "./modal";
 import { PopoverSimple } from "./popover";
 import { SimpleSelect } from "./select";
 import {
-  SnackbarConainer,
   TOAST_POSITIONS,
+  ToastContainer,
   type ToastPosition,
   toast,
-} from "./snackbar";
+} from "./toast/example";
 import { TopProgressBar, useProgress } from "./top-progress-bar";
 
 export function StoryButton() {
@@ -481,9 +481,9 @@ export function StoryCollapse() {
   );
 }
 
-export function StorySnackbar() {
+export function StoryToast() {
   const form = createTinyForm(
-    useTinyStoreStorage("unocss-preset-antd:StorySnackbar", {
+    useTinyStoreStorage("unocss-preset-antd:StoryToast", {
       animationType: "2",
       duration: 2000,
       position: "bottom-left" as ToastPosition,
@@ -494,7 +494,7 @@ export function StorySnackbar() {
   return (
     <div className="flex flex-col items-center gap-3 m-2">
       <section className="flex flex-col gap-4 w-full max-w-2xl border p-3">
-        <h2 className="text-xl">Snackbar</h2>
+        <h2 className="text-xl">Toast</h2>
         <div className="flex flex-col gap-1">
           Animation Type
           <select
@@ -570,7 +570,7 @@ export function StorySnackbar() {
           </div>
         </div>
         <div className="border h-[500px] p-3 flex flex-col relative overflow-hidden">
-          <SnackbarConainer
+          <ToastContainer
             toast={toast}
             animationType={form.data.animationType}
           />
