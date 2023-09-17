@@ -34,7 +34,7 @@ export function ReactToastContainer({
     options?.renderItem ?? ((props) => <ItemComponent {...props} />);
 
   return (
-    <div className={options?.className} style={options?.style}>
+    <div>
       <div className="= flex flex-col absolute bottom-1 left-2">
         {itemsByPosition
           .get("bottom-left")

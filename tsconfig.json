@@ -8,6 +8,12 @@
       "path": "packages/app-solid"
     },
     {
+      "path": "packages/tiny-toast"
+    },
+    {
+      "path": "packages/tiny-transition"
+    },
+    {
       "path": "packages/lib"
     }
   ]

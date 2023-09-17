@@ -22,8 +22,6 @@ export function createReactToastManager() {
 }
 
 export type ReactToastContainerOptions = {
-  style?: React.CSSProperties;
-  className?: string;
   renderAnimation?: (props: {
     item: ReactToastItem;
     toast: ReactToastManager;
