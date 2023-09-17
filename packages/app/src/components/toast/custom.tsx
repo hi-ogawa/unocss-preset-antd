@@ -1,3 +1,4 @@
+import { TOAST_STEP } from "@hiogawa/tiny-toast";
 import {
   ReactToastContainer,
   type ReactToastItem,
@@ -7,9 +8,8 @@ import TINY_TOAST_REACT_CSS from "@hiogawa/tiny-toast/dist/react.css?raw";
 import { Transition } from "@hiogawa/tiny-transition/dist/react";
 import { useStableCallback } from "@hiogawa/utils-react";
 import React from "react";
-import { cls } from "../../../utils/misc";
-import { getCollapseProps } from "../../collapse";
-import { TOAST_STEP } from "../core";
+import { cls } from "../../utils/misc";
+import { getCollapseProps } from "../collapse";
 
 export function ToastContainer({
   toast,
@@ -17,8 +17,8 @@ export function ToastContainer({
   toastType,
 }: {
   toast: ReactToastManager;
-  animationType: number;
-  toastType: number;
+  animationType: string;
+  toastType: string;
 }) {
   return (
     <>
@@ -28,11 +28,11 @@ export function ToastContainer({
         toast={toast}
         options={{
           renderAnimation:
-            animationType === 1
+            animationType === "custom"
               ? (props) => <Animation1 {...props} />
               : undefined,
           renderItem:
-            toastType === 1
+            toastType === "custom"
               ? (props) => <ToastItemComponent1 {...props} />
               : undefined,
         }}

@@ -1,5 +1,9 @@
 import { createTinyForm } from "@hiogawa/tiny-form";
 import { useTinyStoreStorage } from "@hiogawa/tiny-store/dist/react";
+import {
+  TOAST_POSITIONS,
+  type ToastPosition,
+} from "@hiogawa/tiny-toast/dist/react";
 import { Transition } from "@hiogawa/tiny-transition/dist/react";
 import { ANTD_VARS } from "@hiogawa/unocss-preset-antd";
 import { objectPickBy, range } from "@hiogawa/utils";
@@ -12,12 +16,8 @@ import { getCollapseProps } from "./collapse";
 import { useModal } from "./modal";
 import { PopoverSimple } from "./popover";
 import { SimpleSelect } from "./select";
-import {
-  TOAST_POSITIONS,
-  type ToastPosition,
-  toast,
-} from "./toast/example/api";
-import { ToastContainer } from "./toast/example/ui";
+import { toast } from "./toast/api";
+import { ToastContainer } from "./toast/custom";
 import { TopProgressBar, useProgress } from "./top-progress-bar";
 
 export function StoryButton() {
@@ -484,8 +484,8 @@ export function StoryCollapse() {
 export function StoryToast() {
   const form = createTinyForm(
     useTinyStoreStorage("unocss-preset-antd:StoryToast", {
-      animationType: 2,
-      toastType: 1,
+      animationType: "custom",
+      toastType: "custom",
       duration: 2000,
       position: "bottom-left" as ToastPosition,
     })
@@ -500,7 +500,7 @@ export function StoryToast() {
           Animation Type
           <SimpleSelect
             className="antd-input p-1"
-            options={[1, 2]}
+            options={["default", "custom"]}
             {...form.fields.animationType.rawProps()}
           />
         </div>
@@ -508,7 +508,7 @@ export function StoryToast() {
           Toast Type
           <SimpleSelect
             className="antd-input p-1"
-            options={[1, 2]}
+            options={["default", "custom"]}
             {...form.fields.toastType.rawProps()}
           />
         </div>
