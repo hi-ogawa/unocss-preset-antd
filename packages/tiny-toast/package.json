@@ -32,7 +32,10 @@
     "directory": "packages/tiny-transition"
   },
   "scripts": {
-    "dev-todo": "tsup --watch",
+    "// TODO: tsup and unocss doesn't nicely interleave": "",
+    "dev": "pnpm run /^dev:/",
+    "dev:tsup": "tsup --watch",
+    "dev:unocss": "unocss dist/react.js --write-transformed --out-file dist/react.css --watch",
     "build": "pnpm run --seq /^build:/",
     "build:tsup": "tsup",
     "build:unocss": "unocss dist/react.js dist/react.cjs --write-transformed --out-file dist/react.css",
