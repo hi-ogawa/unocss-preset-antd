@@ -1,5 +1,8 @@
 import fs from "node:fs";
+import { createRequire } from "node:module";
 import { defineConfig } from "tsup";
+
+const require = createRequire(import.meta.url);
 
 export default defineConfig({
   entry: ["src/index.ts"],
@@ -12,7 +15,7 @@ export default defineConfig({
     // bundle default unocss reset to reduce runtime deps
     __DEFINE_RAW__: JSON.stringify({
       "@unocss/reset/tailwind.css": fs.readFileSync(
-        "node_modules/@unocss/reset/tailwind.css",
+        require.resolve("@unocss/reset/tailwind.css"),
         "utf-8"
       ),
     }),
