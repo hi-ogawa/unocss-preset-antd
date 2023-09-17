@@ -623,7 +623,7 @@ export function StoryToast() {
             </button>
           </div>
         </div>
-        <div className="border h-[500px] p-3 flex flex-col relative overflow-hidden">
+        <div className="border h-[500px] flex flex-col relative overflow-hidden">
           <ToastContainer
             toast={toast}
             animationType={form.data.animationType}
