@@ -816,6 +816,19 @@ export type Autocomplete_percent =
   | `100`
 ;
 
+export type Autocomplete_percentage =
+  | `10%`
+  | `20%`
+  | `30%`
+  | `40%`
+  | `50%`
+  | `60%`
+  | `70%`
+  | `80%`
+  | `90%`
+  | `100%`
+;
+
 export type Autocomplete_directions =
   | `x`
   | `y`
@@ -823,6 +836,22 @@ export type Autocomplete_directions =
   | `b`
   | `l`
   | `r`
+;
+
+export type Autocomplete_position =
+  | `relative`
+  | `absolute`
+  | `fixed`
+  | `sticky`
+  | `static`
+;
+
+export type Autocomplete_globalKeyword =
+  | `inherit`
+  | `initial`
+  | `revert`
+  | `revert-layer`
+  | `unset`
 ;
 
 export type RuleStatic =
