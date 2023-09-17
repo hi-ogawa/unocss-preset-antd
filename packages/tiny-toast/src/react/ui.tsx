@@ -50,15 +50,17 @@ export function ReactToastContainer({
         options?.className,
         "= fixed inset-0 z-9999 pointer-events-none"
       )}
+      onMouseEnter={() => toast.pause(true)}
+      onMouseLeave={() => toast.pause(false)}
     >
       <style
         // injected by misc/inject-css.mjs at build time
         dangerouslySetInnerHTML={{ __html: `/*__INJECT_CSS__*/` }}
       />
-      <div className="= flex flex-col absolute bottom-1 left-2 pointer-events-auto">
+      <div className="= [&_*]:pointer-events-auto flex flex-col absolute bottom-1 left-2">
         {itemsByPosition.get("bottom-left")?.map((item) => render(item))}
       </div>
-      <div className="= flex flex-col-reverse absolute top-1 items-center w-full pointer-events-auto">
+      <div className="= [&_*]:pointer-events-auto flex flex-col-reverse absolute top-1 items-center w-full">
         {itemsByPosition.get("top-center")?.map((item) => render(item))}
       </div>
     </div>
@@ -142,21 +144,17 @@ function ItemComponent({
   item: ReactToastItem;
   toast: ReactToastManager;
 }) {
-  // pause auto-dismiss timeout on hover
-  const [pause, setPause] = React.useState(false);
-
   // auto-dismiss timeout
+  // TODO: move this logic to core/TransitionManager?
   useTimeout(
     () => toast.dismiss(item.id),
-    pause ? Infinity : item.data.duration
+    toast.paused ? Infinity : item.data.duration
   );
 
   return (
     <div
       style={item.data.style}
       className={cls(item.data.className, "= shadow-lg")}
-      onMouseEnter={() => setPause(true)}
-      onMouseLeave={() => setPause(false)}
     >
       <div className="= flex items-center gap-3 p-3">
         {item.data.type && (

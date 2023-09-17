@@ -16,6 +16,7 @@ export const TOAST_STEP = {
 
 export class ToastManager<T> {
   public items: ToastItem<T>[] = [];
+  public paused = false;
 
   create(data: T) {
     this.items = [...this.items];
@@ -46,11 +47,17 @@ export class ToastManager<T> {
     this.notify();
   }
 
+  pause(paused: boolean) {
+    this.paused = paused;
+    this.notify();
+  }
+
   //
   // api for React.useSyncExternalStore
   //
 
   private listeners = new Set<() => void>();
+  private snapshot = {};
 
   subscribe = (listener: () => void) => {
     this.listeners.add(listener);
@@ -59,9 +66,10 @@ export class ToastManager<T> {
     };
   };
 
-  getSnapshot = () => this.items;
+  getSnapshot = () => this.snapshot;
 
   notify() {
+    this.snapshot = {};
     this.listeners.forEach((f) => f());
   }
 }

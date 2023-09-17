@@ -80,21 +80,13 @@ function ToastItemComponent1({
   item: ReactToastItem;
   toast: ReactToastManager;
 }) {
-  // pause auto-dismiss timeout on hover
-  const [pause, setPause] = React.useState(false);
-
-  // auto-dismiss timeout
   useTimeout(
     () => toast.dismiss(item.id),
-    pause ? Infinity : item.data.duration
+    toast.paused ? Infinity : item.data.duration
   );
 
   return (
-    <div
-      className="antd-floating w-[350px]"
-      onMouseEnter={() => setPause(true)}
-      onMouseLeave={() => setPause(false)}
-    >
+    <div className="antd-floating w-[350px]">
       <div className="flex items-center gap-3 p-3">
         {item.data.type && (
           <span

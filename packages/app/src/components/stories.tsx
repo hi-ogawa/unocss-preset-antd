@@ -492,6 +492,12 @@ export function StoryToast() {
   );
   const { duration, position } = form.data;
 
+  React.useSyncExternalStore(
+    toast.subscribe,
+    toast.getSnapshot,
+    toast.getSnapshot
+  );
+
   return (
     <div className="flex flex-col items-center gap-3 m-2">
       <section className="flex flex-col gap-4 w-full max-w-2xl border p-3">
@@ -607,6 +613,14 @@ export function StoryToast() {
             >
               Remove all
             </button>
+            <button
+              className="antd-btn antd-btn-default px-4 w-[100px]"
+              onClick={() => {
+                toast.pause(!toast.paused);
+              }}
+            >
+              {toast.paused ? "Unpause" : "Pause"}
+            </button>
           </div>
         </div>
         <div className="border h-[500px] p-3 flex flex-col relative overflow-hidden">
@@ -616,19 +630,15 @@ export function StoryToast() {
             toastType={form.data.toastType}
           />
         </div>
-        <DebugToast />
+        <Debug
+          debug={{
+            paused: toast.paused,
+            items: toast.items,
+          }}
+        />
       </section>
     </div>
   );
-}
-
-function DebugToast() {
-  React.useSyncExternalStore(
-    toast.subscribe,
-    toast.getSnapshot,
-    toast.getSnapshot
-  );
-  return <Debug debug={toast.items} />;
 }
 
 export function StoryPopover() {
