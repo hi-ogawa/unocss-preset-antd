@@ -533,6 +533,18 @@ export type Theme_fontSize =
   | `9xl`
 ;
 
+export type Theme_fontWeight =
+  | `thin`
+  | `extralight`
+  | `light`
+  | `normal`
+  | `medium`
+  | `semibold`
+  | `bold`
+  | `extrabold`
+  | `black`
+;
+
 export type Theme_breakpoints =
   | `sm`
   | `md`
@@ -764,6 +776,10 @@ export type Theme_containers =
   | `prose`
 ;
 
+export type Theme_zIndex =
+  | `auto`
+;
+
 export type Theme_media =
   | `portrait`
   | `landscape`
@@ -817,6 +833,19 @@ export type Autocomplete_percent =
   | `100`
 ;
 
+export type Autocomplete_percentage =
+  | `10%`
+  | `20%`
+  | `30%`
+  | `40%`
+  | `50%`
+  | `60%`
+  | `70%`
+  | `80%`
+  | `90%`
+  | `100%`
+;
+
 export type Autocomplete_directions =
   | `x`
   | `y`
@@ -824,6 +853,22 @@ export type Autocomplete_directions =
   | `b`
   | `l`
   | `r`
+;
+
+export type Autocomplete_position =
+  | `relative`
+  | `absolute`
+  | `fixed`
+  | `sticky`
+  | `static`
+;
+
+export type Autocomplete_globalKeyword =
+  | `inherit`
+  | `initial`
+  | `revert`
+  | `revert-layer`
+  | `unset`
 ;
 
 export type RuleStatic =
@@ -1014,6 +1059,7 @@ export type RuleStatic =
   | `list_outside`
   | `list_inside`
   | `list_none`
+  | `list_image_none`
   | `list_inherit`
   | `list_initial`
   | `list_revert`
@@ -1124,6 +1170,7 @@ export type RuleStatic =
   | `justify_between`
   | `justify_around`
   | `justify_evenly`
+  | `justify_stretch`
   | `justify_inherit`
   | `justify_initial`
   | `justify_revert`
@@ -1148,6 +1195,132 @@ export type RuleStatic =
   | `justify_self_revert`
   | `justify_self_revert_layer`
   | `justify_self_unset`
+  | `flex_justify_start`
+  | `grid_justify_start`
+  | `flex_justify_end`
+  | `grid_justify_end`
+  | `flex_justify_center`
+  | `grid_justify_center`
+  | `flex_justify_between`
+  | `grid_justify_between`
+  | `flex_justify_around`
+  | `grid_justify_around`
+  | `flex_justify_evenly`
+  | `grid_justify_evenly`
+  | `flex_justify_stretch`
+  | `grid_justify_stretch`
+  | `flex_justify_inherit`
+  | `grid_justify_inherit`
+  | `flex_justify_initial`
+  | `grid_justify_initial`
+  | `flex_justify_revert`
+  | `grid_justify_revert`
+  | `flex_justify_revert_layer`
+  | `grid_justify_revert_layer`
+  | `flex_justify_unset`
+  | `grid_justify_unset`
+  | `flex_justify_items_start`
+  | `grid_justify_items_start`
+  | `flex_justify_items_end`
+  | `grid_justify_items_end`
+  | `flex_justify_items_center`
+  | `grid_justify_items_center`
+  | `flex_justify_items_stretch`
+  | `grid_justify_items_stretch`
+  | `flex_justify_items_inherit`
+  | `grid_justify_items_inherit`
+  | `flex_justify_items_initial`
+  | `grid_justify_items_initial`
+  | `flex_justify_items_revert`
+  | `grid_justify_items_revert`
+  | `flex_justify_items_revert_layer`
+  | `grid_justify_items_revert_layer`
+  | `flex_justify_items_unset`
+  | `grid_justify_items_unset`
+  | `flex_justify_self_auto`
+  | `grid_justify_self_auto`
+  | `flex_justify_self_start`
+  | `grid_justify_self_start`
+  | `flex_justify_self_end`
+  | `grid_justify_self_end`
+  | `flex_justify_self_center`
+  | `grid_justify_self_center`
+  | `flex_justify_self_stretch`
+  | `grid_justify_self_stretch`
+  | `flex_justify_self_inherit`
+  | `grid_justify_self_inherit`
+  | `flex_justify_self_initial`
+  | `grid_justify_self_initial`
+  | `flex_justify_self_revert`
+  | `grid_justify_self_revert`
+  | `flex_justify_self_revert_layer`
+  | `grid_justify_self_revert_layer`
+  | `flex_justify_self_unset`
+  | `grid_justify_self_unset`
+  | `flex_content_center`
+  | `grid_content_center`
+  | `flex_content_start`
+  | `grid_content_start`
+  | `flex_content_end`
+  | `grid_content_end`
+  | `flex_content_between`
+  | `grid_content_between`
+  | `flex_content_around`
+  | `grid_content_around`
+  | `flex_content_evenly`
+  | `grid_content_evenly`
+  | `flex_content_inherit`
+  | `grid_content_inherit`
+  | `flex_content_initial`
+  | `grid_content_initial`
+  | `flex_content_revert`
+  | `grid_content_revert`
+  | `flex_content_revert_layer`
+  | `grid_content_revert_layer`
+  | `flex_content_unset`
+  | `grid_content_unset`
+  | `flex_items_start`
+  | `grid_items_start`
+  | `flex_items_end`
+  | `grid_items_end`
+  | `flex_items_center`
+  | `grid_items_center`
+  | `flex_items_baseline`
+  | `grid_items_baseline`
+  | `flex_items_stretch`
+  | `grid_items_stretch`
+  | `flex_items_inherit`
+  | `grid_items_inherit`
+  | `flex_items_initial`
+  | `grid_items_initial`
+  | `flex_items_revert`
+  | `grid_items_revert`
+  | `flex_items_revert_layer`
+  | `grid_items_revert_layer`
+  | `flex_items_unset`
+  | `grid_items_unset`
+  | `flex_self_auto`
+  | `grid_self_auto`
+  | `flex_self_start`
+  | `grid_self_start`
+  | `flex_self_end`
+  | `grid_self_end`
+  | `flex_self_center`
+  | `grid_self_center`
+  | `flex_self_stretch`
+  | `grid_self_stretch`
+  | `flex_self_baseline`
+  | `grid_self_baseline`
+  | `flex_self_inherit`
+  | `grid_self_inherit`
+  | `flex_self_initial`
+  | `grid_self_initial`
+  | `flex_self_revert`
+  | `grid_self_revert`
+  | `flex_self_revert_layer`
+  | `grid_self_revert_layer`
+  | `flex_self_unset`
+  | `grid_self_unset`
   | `divide_solid`
   | `divide_dashed`
   | `divide_dotted`
@@ -1195,12 +1368,14 @@ export type RuleStatic =
   | `scroll_revert_layer`
   | `scroll_unset`
   | `truncate`
+  | `text_truncate`
   | `text_ellipsis`
   | `text_clip`
   | `break_normal`
   | `break_words`
   | `break_all`
   | `break_keep`
+  | `break_anywhere`
   | `bg_none`
   | `box_decoration_slice`
   | `box_decoration_clone`
@@ -1264,11 +1439,9 @@ export type RuleStatic =
   | `text_justify`
   | `text_start`
   | `text_end`
-  | `text_inherit`
-  | `text_initial`
-  | `text_revert`
-  | `text_revert_layer`
-  | `text_unset`
+  | `text_wrap`
+  | `text_nowrap`
+  | `text_balance`
   | `font_synthesis_weight`
   | `font_synthesis_style`
   | `font_synthesis_small_caps`
@@ -3771,6 +3944,7 @@ export type RuleDynamic =
   | `brightness_${Autocomplete_percent}`
   | `${"backdrop" | "filter"}_blur_${Theme_blur}`
   | `blur_${Theme_blur}`
+  | `filter_blur`
   | `ring_offset_opacity_${Autocomplete_percent}`
   | `ring_offset_${Theme_colors}`
   | `ring_opacity_${Autocomplete_percent}`
@@ -3803,8 +3977,9 @@ export type RuleDynamic =
   | `${"underline" | "decoration"}_${Autocomplete_num}`
   | `decoration_${"underline" | "overline" | "line_through"}`
   | `text_opacity_${Autocomplete_percent}`
+  | `text_${"inherit" | "initial" | "revert" | "revert_layer" | "unset"}`
   | `text_${Theme_colors}`
-  | `text_${Theme_colors}`
+  | `${"color" | "c"}_${Theme_colors}`
   | `stacked_fractions`
   | `diagonal_fractions`
   | `tabular_nums`
@@ -3813,14 +3988,16 @@ export type RuleDynamic =
   | `lining_nums`
   | `slashed_zero`
   | `ordinal`
+  | `font_${Theme_fontFamily}`
   | `word_spacing_${Theme_wordSpacing}`
   | `tracking_${Theme_letterSpacing}`
-  | `${"leading" | "lh"}_${Theme_lineHeight}`
-  | `${"font" | "fw"}_${"100" | "200" | "300" | "400" | "500" | "600" | "700" | "800" | "900" | "thin" | "extralight" | "light" | "normal" | "medium" | "semibold" | "bold" | "extrabold" | "black"}`
+  | `${"leading" | "lh" | "line_height"}_${Theme_lineHeight}`
+  | `${"font" | "fw"}_${"100" | "200" | "300" | "400" | "500" | "600" | "700" | "800" | "900"}`
+  | `${"font" | "fw"}_${Theme_fontWeight}`
   | `text_size_${Theme_fontSize}`
   | `text_${Theme_fontSize}`
-  | `font_${Theme_fontFamily}`
   | `${"vertical" | "align" | "v"}_${"mid" | "base" | "btm" | "baseline" | "top" | "start" | "middle" | "bottom" | "end" | "text_top" | "text_bottom" | "sub" | "super" | "inherit" | "initial" | "revert" | "revert_layer" | "unset"}`
+  | `${"vertical" | "align" | "v"}_${Autocomplete_percentage}`
   | `indent_${Theme_textIndent}`
   | `${"m" | "p"}_${"bs" | "be" | "is" | "ie"}_${Autocomplete_num}`
   | `${"m" | "p"}_${"block" | "inline"}_${Autocomplete_num}`
@@ -3904,7 +4081,8 @@ export type RuleDynamic =
   | `animate_${"fill" | "mode" | "fill_mode"}`
   | `animate_${"fill" | "mode" | "fill_mode"}_${"none" | "forwards" | "backwards" | "both" | "inherit" | "initial" | "revert" | "revert_layer" | "unset"}`
   | `animate_${"none" | "forwards" | "backwards" | "both" | "inherit" | "initial" | "revert" | "revert_layer" | "unset"}`
-  | `animate_delay_${Theme_easing}`
+  | `animate_ease`
+  | `animate_ease_${Theme_easing}`
   | `animate_delay`
   | `animate_delay_${Theme_duration}`
   | `animate_duration`
@@ -3937,6 +4115,8 @@ export type RuleDynamic =
   | `${"block" | "inline"}_${Theme_width}`
   | `${"max" | "min"}_${"w" | "h" | "block" | "inline"}`
   | `${"max" | "min"}_${"w" | "h" | "block" | "inline"}_${Theme_width}`
+  | `${"w" | "h"}_full`
+  | `${"max" | "min"}_${"w" | "h"}_full`
   | `aspect_${"square" | "video" | "ratio"}`
   | `aspect_ratio_${"square" | "video"}`
   | `grid_${"rows" | "cols"}_${Autocomplete_num}`
@@ -3953,13 +4133,16 @@ export type RuleDynamic =
   | `${"position" | "pos"}_inset_${"block" | "inline"}_${Theme_spacing}`
   | `${"position" | "pos"}_inset_${"bs" | "be" | "is" | "ie"}_${Theme_spacing}`
   | `${"position" | "pos"}_${"top" | "left" | "right" | "bottom"}_${Theme_spacing}`
+  | `${"position" | "pos"}_${Autocomplete_position}`
+  | `${"position" | "pos"}_${Autocomplete_globalKeyword}`
+  | `${Autocomplete_position}`
 ;
 
 export type Variant =
   | `print`
-  | `${"at_" | "lt_" | ""}${Theme_breakpoints}`
-  | `${"first_letter" | "first_line" | "any_link" | "link" | "visited" | "target" | "open" | "hover" | "active" | "focus_visible" | "focus_within" | "focus" | "autofill" | "enabled" | "disabled" | "read_only" | "read_write" | "placeholder_shown" | "default" | "checked" | "indeterminate" | "valid" | "invalid" | "in_range" | "out_of_range" | "required" | "optional" | "root" | "empty" | "even_of_type" | "even" | "odd_of_type" | "odd" | "first_of_type" | "first" | "last_of_type" | "last" | "only_child" | "only_of_type" | "placeholder" | "before" | "after" | "selection" | "marker" | "file"}`
-  | `${"not" | "is" | "where" | "has"}_${"any_link" | "link" | "visited" | "target" | "open" | "hover" | "active" | "focus_visible" | "focus_within" | "focus" | "autofill" | "enabled" | "disabled" | "read_only" | "read_write" | "placeholder_shown" | "default" | "checked" | "indeterminate" | "valid" | "invalid" | "in_range" | "out_of_range" | "required" | "optional" | "root" | "empty" | "even_of_type" | "even" | "odd_of_type" | "odd" | "first_of_type" | "first" | "last_of_type" | "last" | "only_child" | "only_of_type" | ""}`
+  | `${"at_" | "lt_" | "max_" | ""}${Theme_breakpoints}`
+  | `${"placeholder_shown" | "backdrop_element" | "indeterminate" | "focus_visible" | "first_of_type" | "first_letter" | "out_of_range" | "focus_within" | "even_of_type" | "last_of_type" | "only_of_type" | "odd_of_type" | "placeholder" | "first_line" | "read_write" | "only_child" | "read_only" | "selection" | "any_link" | "autofill" | "optional" | "required" | "in_range" | "disabled" | "visited" | "default" | "checked" | "invalid" | "enabled" | "target" | "active" | "before" | "marker" | "valid" | "empty" | "hover" | "focus" | "first" | "after" | "link" | "open" | "root" | "even" | "last" | "file" | "odd" | "backdrop"}`
+  | `${"not" | "is" | "where" | "has"}_${"placeholder_shown" | "indeterminate" | "focus_visible" | "first_of_type" | "out_of_range" | "focus_within" | "even_of_type" | "last_of_type" | "only_of_type" | "odd_of_type" | "read_write" | "only_child" | "read_only" | "any_link" | "autofill" | "optional" | "required" | "in_range" | "disabled" | "visited" | "default" | "checked" | "invalid" | "enabled" | "target" | "active" | "valid" | "empty" | "hover" | "focus" | "first" | "link" | "open" | "root" | "even" | "last" | "odd" | ""}`
   | `dark`
   | `light`
   | `rtl`

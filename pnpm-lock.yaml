@@ -24,8 +24,8 @@ importers:
         specifier: ^0.0.3
         version: 0.0.3(vite@4.4.9)
       '@hiogawa/unocss-typescript-dsl':
-        specifier: 2.0.0-pre.6
-        version: 2.0.0-pre.6(@iconify/utils@2.1.9)(@unocss/config@0.55.7)(@unocss/core@0.55.7)(local-pkg@0.4.3)(magic-string@0.30.3)
+        specifier: 2.0.0-pre.8
+        version: 2.0.0-pre.8(@iconify/utils@2.1.9)(@unocss/config@0.55.7)(@unocss/core@0.55.7)(local-pkg@0.4.3)(magic-string@0.30.3)
       '@hiogawa/utils':
         specifier: 1.6.1-pre.8
         version: 1.6.1-pre.8
@@ -1707,8 +1707,8 @@ packages:
       react: 18.2.0
     dev: false
 
-  /@hiogawa/unocss-typescript-dsl@2.0.0-pre.6(@iconify/utils@2.1.9)(@unocss/config@0.55.7)(@unocss/core@0.55.7)(local-pkg@0.4.3)(magic-string@0.30.3):
-    resolution: {integrity: sha512-G07y5XCUJVEfk18DcB1Lcyxn6iG2Xqcc0AF+moNeYs2iAAb4G2k9/KoZ+E6piLqM8nPvZ8iTAYbsddUP+cubJg==}
+  /@hiogawa/unocss-typescript-dsl@2.0.0-pre.8(@iconify/utils@2.1.9)(@unocss/config@0.55.7)(@unocss/core@0.55.7)(local-pkg@0.4.3)(magic-string@0.30.3):
+    resolution: {integrity: sha512-AY2JT6opqjjuW6/bmhO9EijVxUxsUl3kLDtrRkM4sKR67jU9mzv16W1gDp5Frh5m2k+ewgBJOOhKK6lTXyjn4Q==}
     hasBin: true
     peerDependencies:
       '@iconify/utils': '*'
