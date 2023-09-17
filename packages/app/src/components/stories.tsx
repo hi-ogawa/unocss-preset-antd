@@ -12,8 +12,12 @@ import { getCollapseProps } from "./collapse";
 import { useModal } from "./modal";
 import { PopoverSimple } from "./popover";
 import { SimpleSelect } from "./select";
-import { SnackbarConainer } from "./snackbar";
-import { useSnackbar } from "./snackbar-hook";
+import {
+  TOAST_POSITIONS,
+  type ToastPosition,
+  toast,
+} from "./toast/example/api";
+import { ToastContainer } from "./toast/example/ui";
 import { TopProgressBar, useProgress } from "./top-progress-bar";
 
 export function StoryButton() {
@@ -477,19 +481,20 @@ export function StoryCollapse() {
   );
 }
 
-export function StorySnackbar() {
-  const snackbar = useSnackbar();
+export function StoryToast() {
   const form = createTinyForm(
-    useTinyStoreStorage("unocss-preset-antd:StorySnackbar", {
+    useTinyStoreStorage("unocss-preset-antd:StoryToast", {
       animationType: "2",
-      durationClassName: "duration-4000",
+      duration: 2000,
+      position: "bottom-left" as ToastPosition,
     })
   );
+  const { duration, position } = form.data;
 
   return (
     <div className="flex flex-col items-center gap-3 m-2">
       <section className="flex flex-col gap-4 w-full max-w-2xl border p-3">
-        <h2 className="text-xl">Snackbar</h2>
+        <h2 className="text-xl">Toast</h2>
         <div className="flex flex-col gap-1">
           Animation Type
           <select
@@ -505,16 +510,20 @@ export function StorySnackbar() {
         </div>
         <div className="flex flex-col gap-1">
           Duration
-          <select
+          <SimpleSelect
             className="antd-input p-1"
-            {...form.fields.durationClassName.props()}
-          >
-            {["duration-2000", "duration-4000", "duration-8000"].map((v) => (
-              <option key={v} value={v}>
-                {Number(v.split("-")[1]) / 1000}s
-              </option>
-            ))}
-          </select>
+            options={[2000, 4000, 8000]}
+            labelFn={(v) => `${v / 1000}s`}
+            {...form.fields.duration.rawProps()}
+          />
+        </div>
+        <div className="flex flex-col gap-1">
+          Duration
+          <SimpleSelect
+            className="antd-input p-1"
+            options={TOAST_POSITIONS}
+            {...form.fields.position.rawProps()}
+          />
         </div>
         <div className="flex flex-col gap-1">
           Toast Type
@@ -522,7 +531,12 @@ export function StorySnackbar() {
             <button
               className="flex-1 antd-btn antd-btn-default px-2"
               onClick={() => {
-                snackbar.create("Successfuly toasted!", { type: "success" });
+                toast.create({
+                  node: "Successfuly toasted!",
+                  type: "success",
+                  position,
+                  duration,
+                });
               }}
             >
               Success
@@ -530,7 +544,12 @@ export function StorySnackbar() {
             <button
               className="flex-1 antd-btn antd-btn-default px-2"
               onClick={() => {
-                snackbar.create("This didn't work.", { type: "error" });
+                toast.create({
+                  node: "This didn't work.",
+                  type: "error",
+                  position,
+                  duration,
+                });
               }}
             >
               Error
@@ -538,23 +557,61 @@ export function StorySnackbar() {
             <button
               className="flex-1 antd-btn antd-btn-default px-2"
               onClick={() => {
-                snackbar.create("Some neutral message");
+                toast.create({
+                  node: "Some neutral message",
+                  type: "default",
+                  position,
+                  duration,
+                });
               }}
             >
               Default
             </button>
           </div>
         </div>
+        <div className="flex flex-col gap-1">
+          Extra actions
+          <div className="flex gap-2">
+            <button
+              className="antd-btn antd-btn-default px-4"
+              onClick={() => {
+                for (const item of toast.items) {
+                  toast.dismiss(item.id);
+                }
+              }}
+            >
+              Dismiss all
+            </button>
+            <button
+              className="antd-btn antd-btn-default px-4"
+              onClick={() => {
+                toast.items = [];
+                toast.notify();
+              }}
+            >
+              Remove all
+            </button>
+          </div>
+        </div>
         <div className="border h-[500px] p-3 flex flex-col relative overflow-hidden">
-          <SnackbarConainer
+          <ToastContainer
+            toast={toast}
             animationType={form.data.animationType}
-            durationClassName={form.data.durationClassName}
           />
         </div>
-        <Debug debug={snackbar.items} />
+        <DebugToast />
       </section>
     </div>
   );
+}
+
+function DebugToast() {
+  React.useSyncExternalStore(
+    toast.subscribe,
+    toast.getSnapshot,
+    toast.getSnapshot
+  );
+  return <Debug debug={toast.items} />;
 }
 
 export function StoryPopover() {

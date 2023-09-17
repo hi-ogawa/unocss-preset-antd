@@ -45,7 +45,7 @@ export function unocssPresetAntd(): Preset {
       spin: tw.animate_spin_composable.rounded_full.border_1.border_transparent
         .border_t_current.aspect_square.$,
 
-      // modal, popover, snackbar, etc...
+      // modal, popover, toast, etc...
       floating: tw.bg_colorBgElevated._(
         `shadow-[${ANTD_VARS.boxShadowSecondary}]`
       ).$,
