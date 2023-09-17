@@ -2,6 +2,8 @@
 // framework agnostic toast core logic
 //
 
+// TODO: create `tiny-toast` pacakge
+
 // HTMLElement based api?
 // - setContainerElement
 // - setItemElement
