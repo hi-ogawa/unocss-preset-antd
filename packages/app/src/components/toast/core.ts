@@ -33,6 +33,7 @@ export class ToastManager<T> {
     this.notify();
   }
 
+  // TODO: SetAction
   update(id: string, newItem: Partial<ToastItem<T>>) {
     const index = this.items.findIndex((item) => item.id === id);
     if (index >= 0) {
@@ -46,19 +47,8 @@ export class ToastManager<T> {
     this.update(id, { step: TOAST_STEP.DISMISS });
   }
 
-  dismissAll() {
-    for (const item of this.items) {
-      this.dismiss(item.id);
-    }
-  }
-
   remove(id: string) {
     this.items = this.items.filter((item) => item.id !== id);
-    this.notify();
-  }
-
-  removeAll() {
-    this.items = [];
     this.notify();
   }
 
@@ -77,7 +67,7 @@ export class ToastManager<T> {
 
   getSnapshot = () => this.items;
 
-  private notify() {
+  notify() {
     this.listeners.forEach((f) => f());
   }
 }
