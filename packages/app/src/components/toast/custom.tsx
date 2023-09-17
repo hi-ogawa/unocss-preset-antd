@@ -4,7 +4,6 @@ import {
   type ReactToastItem,
   type ReactToastManager,
 } from "@hiogawa/tiny-toast/dist/react";
-import TINY_TOAST_REACT_CSS from "@hiogawa/tiny-toast/dist/react.css?raw";
 import { Transition } from "@hiogawa/tiny-transition/dist/react";
 import { useStableCallback } from "@hiogawa/utils-react";
 import React from "react";
@@ -21,23 +20,19 @@ export function ToastContainer({
   toastType: string;
 }) {
   return (
-    <>
-      {/* TODO: pre-inject css into ReactToastContainer while building? */}
-      <style dangerouslySetInnerHTML={{ __html: TINY_TOAST_REACT_CSS }} />
-      <ReactToastContainer
-        toast={toast}
-        options={{
-          renderAnimation:
-            animationType === "custom"
-              ? (props) => <Animation1 {...props} />
-              : undefined,
-          renderItem:
-            toastType === "custom"
-              ? (props) => <ToastItemComponent1 {...props} />
-              : undefined,
-        }}
-      />
-    </>
+    <ReactToastContainer
+      toast={toast}
+      options={{
+        renderAnimation:
+          animationType === "custom"
+            ? (props) => <Animation1 {...props} />
+            : undefined,
+        renderItem:
+          toastType === "custom"
+            ? (props) => <ToastItemComponent1 {...props} />
+            : undefined,
+      }}
+    />
   );
 }
 

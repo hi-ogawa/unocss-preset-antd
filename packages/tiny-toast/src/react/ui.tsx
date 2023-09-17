@@ -35,6 +35,10 @@ export function ReactToastContainer({
 
   return (
     <div>
+      <style
+        // injected by misc/inject-css.mjs at build time
+        dangerouslySetInnerHTML={{ __html: `/*__INJECT_CSS__*/` }}
+      />
       <div className="= flex flex-col absolute bottom-1 left-2">
         {itemsByPosition
           .get("bottom-left")
