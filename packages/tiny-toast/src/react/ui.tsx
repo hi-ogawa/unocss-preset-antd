@@ -45,7 +45,7 @@ export function ReactToastContainer({
         // injected by misc/inject-css.mjs at build time
         dangerouslySetInnerHTML={{ __html: `/*__INJECT_CSS__*/` }}
       />
-      <div className="= flex flex-col absolute bottom-1 left-2">
+      <div className="= flex flex-col absolute bottom-1 left-2 pointer-events-auto">
         {itemsByPosition
           .get("bottom-left")
           ?.reverse()
@@ -59,8 +59,7 @@ export function ReactToastContainer({
             </React.Fragment>
           ))}
       </div>
-      {/* reverse twice to correct z-order */}
-      <div className="= flex flex-col-reverse absolute top-1 items-center w-full">
+      <div className="= flex flex-col-reverse absolute top-1 items-center w-full pointer-events-auto">
         {itemsByPosition
           .get("top-center")
           ?.reverse()
@@ -87,13 +86,14 @@ function AnimationWrapper({
   toast: ReactToastManager;
   children?: React.ReactNode;
 }) {
-  // TODO: implement without @hiogawa/tiny-transition?
+  // TODO: can implement without @hiogawa/tiny-transition?
 
   // steps
   // 0. slide in + scale up
   // 1. slide out + scale down + collapse down
   return (
     <Transition
+      appear
       show={item.step < TOAST_STEP.DISMISS}
       className="= duration-300"
       onLeaveFrom={(el) => {
@@ -144,15 +144,9 @@ function ItemComponent({
     pause ? Infinity : item.data.duration
   );
 
-  // some styles are copied from react-hot-toast e.g.
-  // https://github.com/timolins/react-hot-toast/blob/1713dd3598ee5b746ccc9c66750d6f53394e58f1/src/components/toast-bar.tsx#L28
-
   return (
     <div
-      className={cls(
-        item.data.className,
-        "= z-9999 pointer-events-auto bg-white text-[#363636] rounded shadow-[0_3px_10px_rgba(0,_0,_0,_0.1),_0_3px_3px_rgba(0,_0,_0,_0.05)]"
-      )}
+      className={cls(item.data.className, "= shadow-lg")}
       style={item.data.style}
       onMouseEnter={() => setPause(true)}
       onMouseLeave={() => setPause(false)}
@@ -162,9 +156,9 @@ function ItemComponent({
           <span
             className={cls(
               item.data.type === "success" &&
-                "= i-ri-checkbox-circle-fill text-[#61d345] text-2xl",
+                "= i-ri-checkbox-circle-fill text-green text-2xl",
               item.data.type === "error" &&
-                "= i-ri-alert-fill text-[#ff4b4b] text-2xl",
+                "= i-ri-alert-fill text-red text-2xl",
               item.data.type === "info" && "= i-ri-information-line text-2xl"
             )}
           />
