@@ -2,29 +2,14 @@ import { Transition } from "@hiogawa/tiny-transition/dist/react";
 import { groupBy } from "@hiogawa/utils";
 import { useStableCallback } from "@hiogawa/utils-react";
 import React from "react";
-import { cls } from "../../utils/misc";
-import { getCollapseProps } from "../collapse";
-import { TOAST_STEP, type ToastItem, ToastManager } from "./core";
+import { cls } from "../../../utils/misc";
+import { getCollapseProps } from "../../collapse";
+import { TOAST_STEP } from "../core";
+import type { CustomToastItem, CustomToastManager } from "./api";
 
 //
 // example toast implementation for react
 //
-
-export const TOAST_POSITIONS = ["bottom-left", "top-center"] as const;
-export type ToastPosition = (typeof TOAST_POSITIONS)[number];
-
-type ToastData = {
-  node: React.ReactNode;
-  duration: number;
-  type: "success" | "error" | "default";
-  position: ToastPosition;
-};
-
-type CustomToastItem = ToastItem<ToastData>;
-
-type CustomToastManager = ToastManager<ToastData>;
-
-export const toast = new ToastManager<ToastData>();
 
 export function ToastContainer({
   toast,

@@ -14,10 +14,10 @@ import { PopoverSimple } from "./popover";
 import { SimpleSelect } from "./select";
 import {
   TOAST_POSITIONS,
-  ToastContainer,
   type ToastPosition,
   toast,
-} from "./toast/example";
+} from "./toast/example/api";
+import { ToastContainer } from "./toast/example/ui";
 import { TopProgressBar, useProgress } from "./top-progress-bar";
 
 export function StoryButton() {
