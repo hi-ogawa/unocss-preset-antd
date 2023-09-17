@@ -15,10 +15,10 @@ export interface ReactToastData {
 
 export type ReactToastItem = ToastItem<ReactToastData>;
 
-export type ReactToastManager = ToastManager<ReactToastData>;
+export class ReactToastManager extends ToastManager<ReactToastData> {}
 
 export function createReactToastManager() {
-  return new ToastManager<ReactToastData>();
+  return new ReactToastManager();
 }
 
 export type ReactToastContainerOptions = {
