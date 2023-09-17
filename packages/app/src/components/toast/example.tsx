@@ -152,7 +152,7 @@ function ToastItemComponent({
 
   // auto-dismiss timeout
   useTimeout(
-    () => toast.update(item.id, { step: TOAST_STEP.DISMISS }),
+    () => toast.dismiss(item.id),
     pause ? Infinity : item.data.duration
   );
 
@@ -174,7 +174,7 @@ function ToastItemComponent({
         <div className="flex-1">{item.data.node}</div>
         <button
           className="antd-btn antd-btn-ghost i-ri-close-line text-colorTextSecondary text-lg"
-          onClick={() => toast.update(item.id, { step: TOAST_STEP.DISMISS })}
+          onClick={() => toast.dismiss(item.id)}
         />
       </div>
     </div>

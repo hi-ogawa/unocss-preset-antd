@@ -569,6 +569,27 @@ export function StoryToast() {
             </button>
           </div>
         </div>
+        <div className="flex flex-col gap-1">
+          Extra actions
+          <div className="flex gap-2">
+            <button
+              className="antd-btn antd-btn-default px-4"
+              onClick={() => {
+                toast.dismissAll();
+              }}
+            >
+              Dismiss all
+            </button>
+            <button
+              className="antd-btn antd-btn-default px-4"
+              onClick={() => {
+                toast.removeAll();
+              }}
+            >
+              Remove all
+            </button>
+          </div>
+        </div>
         <div className="border h-[500px] p-3 flex flex-col relative overflow-hidden">
           <ToastContainer
             toast={toast}
