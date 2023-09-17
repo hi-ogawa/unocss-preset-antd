@@ -1,3 +1,4 @@
+import { createReactToastManager } from "@hiogawa/tiny-toast/dist/react";
 import React from "react";
 import { type ToastItem, ToastManager } from "../core";
 
@@ -15,4 +16,4 @@ export type CustomToastItem = ToastItem<ToastData>;
 
 export type CustomToastManager = ToastManager<ToastData>;
 
-export const toast = new ToastManager<ToastData>();
+export const toast = createReactToastManager();
