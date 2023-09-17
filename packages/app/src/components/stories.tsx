@@ -483,7 +483,7 @@ export function StoryCollapse() {
 
 export function StoryToast() {
   const form = createTinyForm(
-    useTinyStoreStorage("unocss-preset-antd:StoryToast", {
+    useTinyStoreStorage("unocss-preset-antd:StoryToast-v2", {
       animationType: "default",
       toastType: "custom",
       duration: 2000,
