@@ -1,5 +1,5 @@
 import { Transition } from "@hiogawa/tiny-transition/dist/react";
-import { groupBy, tinyassert } from "@hiogawa/utils";
+import { groupBy } from "@hiogawa/utils";
 import { useStableCallback } from "@hiogawa/utils-react";
 import React from "react";
 import { TOAST_STEP } from "../core";
@@ -33,6 +33,16 @@ export function ReactToastContainer({
   const renderItem =
     options?.renderItem ?? ((props) => <ItemComponent {...props} />);
 
+  const render = (item: ReactToastItem) => (
+    <React.Fragment key={item.id}>
+      {renderAnimation({
+        toast,
+        item,
+        children: renderItem({ toast, item }),
+      })}
+    </React.Fragment>
+  );
+
   return (
     <div
       className={cls(
@@ -46,32 +56,10 @@ export function ReactToastContainer({
         dangerouslySetInnerHTML={{ __html: `/*__INJECT_CSS__*/` }}
       />
       <div className="= flex flex-col absolute bottom-1 left-2 pointer-events-auto">
-        {itemsByPosition
-          .get("bottom-left")
-          ?.reverse()
-          .map((item) => (
-            <React.Fragment key={item.id}>
-              {renderAnimation({
-                toast,
-                item,
-                children: renderItem({ toast, item }),
-              })}
-            </React.Fragment>
-          ))}
+        {itemsByPosition.get("bottom-left")?.map((item) => render(item))}
       </div>
       <div className="= flex flex-col-reverse absolute top-1 items-center w-full pointer-events-auto">
-        {itemsByPosition
-          .get("top-center")
-          ?.reverse()
-          .map((item) => (
-            <React.Fragment key={item.id}>
-              {renderAnimation({
-                toast,
-                item,
-                children: renderItem({ toast, item }),
-              })}
-            </React.Fragment>
-          ))}
+        {itemsByPosition.get("top-center")?.map((item) => render(item))}
       </div>
     </div>
   );
@@ -96,14 +84,8 @@ function AnimationWrapper({
       appear
       show={item.step < TOAST_STEP.DISMISS}
       className="= duration-300"
-      onLeaveFrom={(el) => {
-        tinyassert(el.firstElementChild);
-        el.style.height = el.firstElementChild.clientHeight + "px";
-      }}
-      onLeaveTo={(el) => {
-        el.style.height = "0px";
-      }}
       onLeft={() => toast.remove(item.id)}
+      {...getCollapseProps()}
     >
       <Transition
         appear
@@ -126,6 +108,31 @@ function AnimationWrapper({
       </Transition>
     </Transition>
   );
+}
+
+// cf. packages/app/src/components/collapse.tsx
+function getCollapseProps(): Partial<React.ComponentProps<typeof Transition>> {
+  function uncollapse(el: HTMLElement) {
+    if (el.firstElementChild) {
+      el.style.height = el.firstElementChild.clientHeight + "px";
+    }
+  }
+
+  function collapse(el: HTMLElement) {
+    el.style.height = "0px";
+  }
+
+  function reset(el: HTMLElement) {
+    el.style.height = "";
+  }
+
+  return {
+    onEnterFrom: collapse,
+    onEnterTo: uncollapse,
+    onEntered: reset,
+    onLeaveFrom: uncollapse,
+    onLeaveTo: collapse,
+  };
 }
 
 function ItemComponent({
