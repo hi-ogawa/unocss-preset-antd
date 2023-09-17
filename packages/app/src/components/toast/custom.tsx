@@ -23,6 +23,7 @@ export function ToastContainer({
     <ReactToastContainer
       toast={toast}
       options={{
+        className: "!absolute",
         renderAnimation:
           animationType === "custom"
             ? (props) => <Animation1 {...props} />

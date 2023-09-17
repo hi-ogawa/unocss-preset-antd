@@ -34,7 +34,13 @@ export function ReactToastContainer({
     options?.renderItem ?? ((props) => <ItemComponent {...props} />);
 
   return (
-    <div>
+    <div
+      className={cls(
+        options?.className,
+        "= fixed inset-0 z-9999 pointer-events-none"
+      )}
+      style={options?.style}
+    >
       <style
         // injected by misc/inject-css.mjs at build time
         dangerouslySetInnerHTML={{ __html: `/*__INJECT_CSS__*/` }}
@@ -145,7 +151,7 @@ function ItemComponent({
     <div
       className={cls(
         item.data.className,
-        "= bg-white text-[#363636] rounded shadow-[0_3px_10px_rgba(0,_0,_0,_0.1),_0_3px_3px_rgba(0,_0,_0,_0.05)]"
+        "= z-9999 pointer-events-auto bg-white text-[#363636] rounded shadow-[0_3px_10px_rgba(0,_0,_0,_0.1),_0_3px_3px_rgba(0,_0,_0,_0.05)]"
       )}
       style={item.data.style}
       onMouseEnter={() => setPause(true)}

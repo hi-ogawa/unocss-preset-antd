@@ -21,6 +21,8 @@ export type ReactToastItem = ToastItem<ReactToastData>;
 export class ReactToastManager extends ToastManager<ReactToastData> {}
 
 export type ReactToastContainerOptions = {
+  style?: React.CSSProperties;
+  className?: string;
   renderAnimation?: (props: {
     item: ReactToastItem;
     toast: ReactToastManager;
