@@ -45,11 +45,11 @@ export function ReactToastContainer({
 
   return (
     <div
+      style={options?.style}
       className={cls(
         options?.className,
         "= fixed inset-0 z-9999 pointer-events-none"
       )}
-      style={options?.style}
     >
       <style
         // injected by misc/inject-css.mjs at build time
@@ -153,8 +153,8 @@ function ItemComponent({
 
   return (
     <div
-      className={cls(item.data.className, "= shadow-lg")}
       style={item.data.style}
+      className={cls(item.data.className, "= shadow-lg")}
       onMouseEnter={() => setPause(true)}
       onMouseLeave={() => setPause(false)}
     >

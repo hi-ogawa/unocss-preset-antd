@@ -1,6 +1,6 @@
 # tiny-toast
 
-Simple toast UI
+Somewhat framework-agnostic simple toast UI system
 
 ## example
 
