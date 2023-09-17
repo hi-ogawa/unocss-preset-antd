@@ -6,8 +6,12 @@ import {
 } from "unocss";
 
 export default defineConfig({
-  // need to transform dist js files which is excluded by default
-  include: [/.*\.js/, /.*\.cjs/],
+  content: {
+    pipeline: {
+      // need to transform dist js files which is excluded by default
+      include: [/.*\.js/, /.*\.cjs/],
+    },
+  },
   presets: [
     presetUno(),
     presetIcons({
