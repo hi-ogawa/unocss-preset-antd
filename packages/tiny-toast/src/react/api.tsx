@@ -9,8 +9,8 @@ export type ToastPosition = (typeof TOAST_POSITIONS)[number];
 export interface ReactToastData {
   node: React.ReactNode;
   duration: number;
-  type: "success" | "error" | "default";
   position: ToastPosition;
+  type?: "success" | "error" | "info";
 }
 
 export type ReactToastItem = ToastItem<ReactToastData>;
