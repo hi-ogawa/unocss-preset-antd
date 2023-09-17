@@ -1,3 +1,3 @@
-import { createReactToastManager } from "@hiogawa/tiny-toast/dist/react";
+import { ReactToastManager } from "@hiogawa/tiny-toast/dist/react";
 
-export const toast = createReactToastManager();
+export const toast = new ReactToastManager();

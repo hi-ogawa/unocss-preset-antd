@@ -11,15 +11,14 @@ export interface ReactToastData {
   duration: number;
   position: ToastPosition;
   type?: "success" | "error" | "info";
+  style?: React.CSSProperties;
+  className?: string;
 }
 
 export type ReactToastItem = ToastItem<ReactToastData>;
 
+// TODO: defaultToastData as manager option?
 export class ReactToastManager extends ToastManager<ReactToastData> {}
-
-export function createReactToastManager() {
-  return new ReactToastManager();
-}
 
 export type ReactToastContainerOptions = {
   renderAnimation?: (props: {
