@@ -19,7 +19,3 @@ or
 or
 
 - implement in preact and bundle it?
-
-```sh
-npx unocss 'src/react/ui.tsx' --out-file dist/dev.css
-```

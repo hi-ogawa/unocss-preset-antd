@@ -3,27 +3,50 @@ import { groupBy, tinyassert } from "@hiogawa/utils";
 import { useStableCallback } from "@hiogawa/utils-react";
 import React from "react";
 import { TOAST_STEP } from "../core";
-import type { ReactToastItem, ReactToastManager } from "./api";
+import type {
+  ReactToastContainerOptions,
+  ReactToastItem,
+  ReactToastManager,
+} from "./api";
 
-export function ReactToastContainer({ toast }: { toast: ReactToastManager }) {
+export function ReactToastContainer({
+  toast,
+  options,
+}: {
+  toast: ReactToastManager;
+  options?: ReactToastContainerOptions;
+}) {
   React.useSyncExternalStore(
     toast.subscribe,
     toast.getSnapshot,
     toast.getSnapshot
   );
 
-  const itemsByPosition = groupBy(toast.items, (item) => item.data.position);
+  const itemsByPosition = React.useMemo(
+    () => groupBy(toast.items, (item) => item.data.position),
+    [toast.items]
+  );
+
+  const renderAnimation =
+    options?.renderAnimation ?? ((props) => <AnimationWrapper {...props} />);
+
+  const renderItem =
+    options?.renderItem ?? ((props) => <ItemComponent {...props} />);
 
   return (
-    <>
+    <div className={options?.className} style={options?.style}>
       <div className="= flex flex-col absolute bottom-1 left-2">
         {itemsByPosition
           .get("bottom-left")
           ?.reverse()
           .map((item) => (
-            <AnimationWrapper key={item.id} toast={toast} item={item}>
-              <ItemComponent item={item} toast={toast} />
-            </AnimationWrapper>
+            <React.Fragment key={item.id}>
+              {renderAnimation({
+                toast,
+                item,
+                children: renderItem({ toast, item }),
+              })}
+            </React.Fragment>
           ))}
       </div>
       {/* reverse twice to correct z-order */}
@@ -32,23 +55,29 @@ export function ReactToastContainer({ toast }: { toast: ReactToastManager }) {
           .get("top-center")
           ?.reverse()
           .map((item) => (
-            <AnimationWrapper key={item.id} toast={toast} item={item}>
-              <ItemComponent item={item} toast={toast} />
-            </AnimationWrapper>
+            <React.Fragment key={item.id}>
+              {renderAnimation({
+                toast,
+                item,
+                children: renderItem({ toast, item }),
+              })}
+            </React.Fragment>
           ))}
       </div>
-    </>
+    </div>
   );
 }
 
-interface AnimationProps {
+function AnimationWrapper({
+  item,
+  toast,
+  children,
+}: {
   item: ReactToastItem;
   toast: ReactToastManager;
   children?: React.ReactNode;
-}
-
-function AnimationWrapper({ item, toast, children }: AnimationProps) {
-  // TODO: implement without Transition?
+}) {
+  // TODO: implement without @hiogawa/tiny-transition?
 
   // steps
   // 0. slide in + scale up

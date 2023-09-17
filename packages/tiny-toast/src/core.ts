@@ -5,7 +5,7 @@
 export type ToastItem<T> = {
   id: string;
   step: number;
-  data: T;
+  data: T; // feels awkward to be aware of `data`...
 };
 
 // animation can utilize intermediate step between [0, 1] and [1, oo)

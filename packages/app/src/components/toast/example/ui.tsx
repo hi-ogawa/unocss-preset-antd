@@ -34,7 +34,7 @@ export function ToastContainer({
   const itemsByPosition = groupBy(toast.items, (item) => item.data.position);
 
   return (
-    <>
+    <div>
       <div className="flex flex-col absolute bottom-1 left-2">
         {itemsByPosition
           .get("bottom-left")
@@ -56,7 +56,7 @@ export function ToastContainer({
             </AnimationWrapper>
           ))}
       </div>
-    </>
+    </div>
   );
 }
 
