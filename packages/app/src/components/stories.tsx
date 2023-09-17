@@ -484,7 +484,8 @@ export function StoryCollapse() {
 export function StoryToast() {
   const form = createTinyForm(
     useTinyStoreStorage("unocss-preset-antd:StoryToast", {
-      animationType: "2",
+      animationType: 2,
+      toastType: 1,
       duration: 2000,
       position: "bottom-left" as ToastPosition,
     })
@@ -497,16 +498,19 @@ export function StoryToast() {
         <h2 className="text-xl">Toast</h2>
         <div className="flex flex-col gap-1">
           Animation Type
-          <select
+          <SimpleSelect
             className="antd-input p-1"
-            {...form.fields.animationType.props()}
-          >
-            {[1, 2].map((v) => (
-              <option key={v} value={v}>
-                {v}
-              </option>
-            ))}
-          </select>
+            options={[1, 2]}
+            {...form.fields.animationType.rawProps()}
+          />
+        </div>
+        <div className="flex flex-col gap-1">
+          Toast Type
+          <SimpleSelect
+            className="antd-input p-1"
+            options={[1, 2]}
+            {...form.fields.toastType.rawProps()}
+          />
         </div>
         <div className="flex flex-col gap-1">
           Duration
@@ -526,7 +530,7 @@ export function StoryToast() {
           />
         </div>
         <div className="flex flex-col gap-1">
-          Toast Type
+          Toast Status
           <div className="flex gap-2">
             <button
               className="flex-1 antd-btn antd-btn-default px-2"
@@ -558,8 +562,20 @@ export function StoryToast() {
               className="flex-1 antd-btn antd-btn-default px-2"
               onClick={() => {
                 toast.create({
+                  node: "Some info",
+                  type: "info",
+                  position,
+                  duration,
+                });
+              }}
+            >
+              Info
+            </button>
+            <button
+              className="flex-1 antd-btn antd-btn-default px-2"
+              onClick={() => {
+                toast.create({
                   node: "Some neutral message",
-                  type: "default",
                   position,
                   duration,
                 });
@@ -597,6 +613,7 @@ export function StoryToast() {
           <ToastContainer
             toast={toast}
             animationType={form.data.animationType}
+            toastType={form.data.toastType}
           />
         </div>
         <DebugToast />

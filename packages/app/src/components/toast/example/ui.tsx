@@ -14,9 +14,11 @@ import type { CustomToastItem, CustomToastManager } from "./api";
 export function ToastContainer({
   toast,
   animationType,
+  toastType,
 }: {
   toast: CustomToastManager;
-  animationType: string;
+  animationType: number;
+  toastType: number;
 }) {
   React.useSyncExternalStore(
     toast.subscribe,
@@ -24,7 +26,10 @@ export function ToastContainer({
     toast.getSnapshot
   );
 
-  const AnimationWrapper = animationType === "1" ? Animation1 : Animation2;
+  const AnimationWrapper = [Animation1, Animation2][animationType - 1];
+  const ItemComponent = [ToastItemComponent1, ToastItemComponent2][
+    toastType - 1
+  ];
 
   const itemsByPosition = groupBy(toast.items, (item) => item.data.position);
 
@@ -36,7 +41,7 @@ export function ToastContainer({
           ?.reverse()
           .map((item) => (
             <AnimationWrapper key={item.id} toast={toast} item={item}>
-              <ToastItemComponent item={item} toast={toast} />
+              <ItemComponent item={item} toast={toast} />
             </AnimationWrapper>
           ))}
       </div>
@@ -47,7 +52,7 @@ export function ToastContainer({
           ?.reverse()
           .map((item) => (
             <AnimationWrapper key={item.id} toast={toast} item={item}>
-              <ToastItemComponent item={item} toast={toast} />
+              <ItemComponent item={item} toast={toast} />
             </AnimationWrapper>
           ))}
       </div>
@@ -125,7 +130,7 @@ function Animation2({ item, toast, children }: AnimationProps) {
   );
 }
 
-function ToastItemComponent({
+function ToastItemComponent1({
   item,
   toast,
 }: {
@@ -148,19 +153,63 @@ function ToastItemComponent({
       onMouseLeave={() => setPause(false)}
     >
       <div className="flex items-center gap-3 p-3">
-        <span
-          className={cls(
-            item.data.type === "success" &&
-              "i-ri-checkbox-circle-fill text-colorSuccess text-2xl",
-            item.data.type === "error" &&
-              "i-ri-error-warning-fill text-colorError text-2xl"
-          )}
-        />
+        {item.data.type && (
+          <span
+            className={cls(
+              item.data.type === "success" &&
+                "i-ri-checkbox-circle-fill text-colorSuccess text-2xl",
+              item.data.type === "error" &&
+                "i-ri-alert-fill text-colorError text-2xl",
+              item.data.type === "info" && "i-ri-information-line text-2xl"
+            )}
+          />
+        )}
         <div className="flex-1">{item.data.node}</div>
         <button
           className="antd-btn antd-btn-ghost i-ri-close-line text-colorTextSecondary text-lg"
           onClick={() => toast.dismiss(item.id)}
         />
+      </div>
+    </div>
+  );
+}
+
+function ToastItemComponent2({
+  item,
+  toast,
+}: {
+  item: CustomToastItem;
+  toast: CustomToastManager;
+}) {
+  // pause auto-dismiss timeout on hover
+  const [pause, setPause] = React.useState(false);
+
+  // auto-dismiss timeout
+  useTimeout(
+    () => toast.dismiss(item.id),
+    pause ? Infinity : item.data.duration
+  );
+
+  return (
+    <div
+      // box-shadow from https://github.com/timolins/react-hot-toast/blob/1713dd3598ee5b746ccc9c66750d6f53394e58f1/src/components/toast-bar.tsx#L28
+      className="shadow-[0_3px_10px_rgba(0,_0,_0,_0.1),_0_3px_3px_rgba(0,_0,_0,_0.05)]"
+      onMouseEnter={() => setPause(true)}
+      onMouseLeave={() => setPause(false)}
+    >
+      <div className="flex items-center gap-3 p-3">
+        {item.data.type && (
+          <span
+            className={cls(
+              item.data.type === "success" &&
+                "i-ri-checkbox-circle-fill text-[#52c41a] text-2xl",
+              item.data.type === "error" &&
+                "i-ri-alert-fill text-[#ff4b4b] text-2xl",
+              item.data.type === "info" && "i-ri-information-line text-2xl"
+            )}
+          />
+        )}
+        <div className="flex-1">{item.data.node}</div>
       </div>
     </div>
   );
