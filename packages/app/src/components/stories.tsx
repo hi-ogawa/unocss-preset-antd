@@ -705,7 +705,12 @@ export function StoryPopover() {
 // https://drafts.csswg.org/css-easing-2/#cubic-bezier-easing-functions
 // https://developer.mozilla.org/en-US/docs/Web/CSS/transition-timing-function
 export function StoryCubicBézier() {
-  const form = createTinyForm(React.useState({ input: "0.25, 0.1, 0.25, 1" }));
+  const form = createTinyForm(
+    React.useState({
+      input: "0.25, 0.1, 0.25, 1",
+      play: 0,
+    })
+  );
   const numbers = form.data.input.split(",").map((v) => Number.parseFloat(v));
   const [x1, _y1, x2, _y2] = numbers;
   const isValid =
@@ -715,6 +720,12 @@ export function StoryCubicBézier() {
     x1 <= 1 &&
     0 <= x2 &&
     x2 <= 1;
+
+  React.useEffect(() => {
+    if (form.data.play > 1) {
+      form.fields.play.onChange(1);
+    }
+  }, [form.data.play]);
 
   return (
     <div className="flex flex-col items-center gap-3 m-2">
@@ -739,10 +750,6 @@ export function StoryCubicBézier() {
               {...form.fields.input.props()}
             />
           </label>
-          {/* TODO */}
-          {/* <button className="antd-btn antd-btn-primary p-1" onClick={() => {}}>
-            Play
-          </button> */}
           <div className="self-center w-full">
             <svg
               // flip y for conventional axis direction
@@ -754,6 +761,51 @@ export function StoryCubicBézier() {
               <rect x="0" y="0" width="100" height="100" opacity={0.2} />
               {isValid && renderSvg({ numbers })}
             </svg>
+          </div>
+          <button
+            className="antd-btn antd-btn-primary p-1"
+            onClick={() => {
+              form.fields.play.onChange((prev) => prev + 1);
+            }}
+            disabled={!isValid}
+          >
+            Play
+          </button>
+          <div className="flex flex-col gap-5">
+            <label className="flex flex-col gap-1">
+              <span className="text-colorTextSecondary">linear</span>
+              <div className="h-1 w-full relative bg-colorBorder">
+                <Transition
+                  key={form.data.play}
+                  show={form.data.play === 1}
+                  appear
+                  className="absolute inset-0 bg-colorSuccess"
+                  style={{
+                    transformOrigin: "0 0",
+                    transition: "transform 4s linear",
+                  }}
+                  enterFrom="scale-x-0"
+                  enterTo="scale-x-100"
+                />
+              </div>
+            </label>
+            <label className="flex flex-col gap-1">
+              <span className="text-colorTextSecondary">cubic-bezier</span>
+              <div className="h-1 w-full relative bg-colorBorder">
+                <Transition
+                  key={form.data.play}
+                  show={form.data.play === 1}
+                  appear
+                  className="absolute inset-0 bg-colorSuccess"
+                  style={{
+                    transformOrigin: "0 0",
+                    transition: `transform 4s cubic-bezier(${form.data.input})`,
+                  }}
+                  enterFrom="scale-x-0"
+                  enterTo="scale-x-100"
+                />
+              </div>
+            </label>
           </div>
         </div>
       </section>
