@@ -54,7 +54,6 @@ export function ReactToastContainer({
         // injected by misc/inject-css.mjs at build time
         dangerouslySetInnerHTML={{ __html: `/*__INJECT_CSS__*/` }}
       />
-      {/* TODO: reverse z-order? */}
       {/* note that AnimationWrapper's py-1.5 gives uniform gap */}
       <div className="= [&_*]:pointer-events-auto absolute bottom-3 left-4 flex flex-col">
         {itemsByPosition.get("bottom-left")?.map((item) => render(item))}
