@@ -30,8 +30,7 @@ export interface ReactToastData {
 
 export type ReactToastItem = ToastItem<ReactToastData>;
 
-type ReactToastOptions = Omit<ReactToastData, "render"> &
-  Pick<ReactToastItem, "duration">;
+type ReactToastOptions = Omit<ReactToastData, "render"> & ToastCoreOptions;
 
 const DEFAULT_OPTIONS: ReactToastOptions = {
   duration: 4000,
@@ -55,7 +54,7 @@ function createByTypeFactory(type: ToastType) {
   return function (
     this: ReactToastManager,
     node: React.ReactNode | RenderReactNode,
-    options?: Partial<ReactToastOptions & ToastCoreOptions>
+    options?: Partial<ReactToastOptions>
   ) {
     this.create(
       {
