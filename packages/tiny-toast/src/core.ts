@@ -1,8 +1,11 @@
-import { createPauseableTimeout, generateId } from "./utils";
+import { PauseableTimeout, generateId } from "./utils";
 
 export type ToastItem<T> = {
   id: string;
   step: number;
+  // TODO
+  // duration: number;
+  dismissTimeout: PauseableTimeout;
   data: T; // feels awkward to be aware of `data`...
 };
 
@@ -15,20 +18,19 @@ export const TOAST_STEP = {
 export class ToastManager<T> {
   public items: ToastItem<T>[] = [];
   public paused = false;
-  // TODO
-  private timeouts = new Map<
-    string,
-    ReturnType<typeof createPauseableTimeout>
-  >();
 
   create(data: T) {
-    this.items = [...this.items];
-    this.items.push({
+    const item: ToastItem<T> = {
       id: generateId(), // TODO: support upsert by id?
       step: TOAST_STEP.START,
+      // TODO: configurable timeout
+      dismissTimeout: new PauseableTimeout(() => this.dismiss(item.id), 4000),
       data,
-    });
-    this.timeouts;
+    };
+    if (!this.paused) {
+      item.dismissTimeout.start();
+    }
+    this.items = [...this.items, item];
     this.notify();
   }
 
@@ -53,6 +55,13 @@ export class ToastManager<T> {
 
   pause(paused: boolean) {
     this.paused = paused;
+    for (const item of this.items) {
+      if (paused) {
+        item.dismissTimeout.stop();
+      } else {
+        item.dismissTimeout.start();
+      }
+    }
     this.notify();
   }
 

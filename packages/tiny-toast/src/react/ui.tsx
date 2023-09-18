@@ -2,7 +2,7 @@ import { Transition } from "@hiogawa/tiny-transition/dist/react";
 import { groupBy } from "@hiogawa/utils";
 import React from "react";
 import { TOAST_STEP } from "../core";
-import { PauseableTimeout, cls } from "../utils";
+import { cls } from "../utils";
 import type {
   ReactToastContainerOptions,
   ReactToastItem,
@@ -57,6 +57,7 @@ export function ReactToastContainer({
         // injected by misc/inject-css.mjs at build time
         dangerouslySetInnerHTML={{ __html: `/*__INJECT_CSS__*/` }}
       />
+      {/* TODO: reverse z-order? */}
       {/* note that AnimationWrapper's py-1 gives uniform gap */}
       <div className="= [&_*]:pointer-events-auto absolute bottom-1 left-2 flex flex-col">
         {itemsByPosition.get("bottom-left")?.map((item) => render(item))}
@@ -138,42 +139,7 @@ function getCollapseProps(): Partial<React.ComponentProps<typeof Transition>> {
   };
 }
 
-function ItemComponent({
-  item,
-  toast,
-}: {
-  item: ReactToastItem;
-  toast: ReactToastManager;
-}) {
-  // auto-dismiss timeout
-  // TODO: move to core
-
-  const [timeout] = React.useState(
-    () => new PauseableTimeout(() => toast.dismiss(item.id), item.data.duration)
-  );
-
-  React.useSyncExternalStore(
-    timeout.subscribe,
-    timeout.getSnapshot,
-    timeout.getSnapshot
-  );
-
-  // cannot dispose since React.StrictMode would break it...
-  React.useEffect(() => {
-    timeout.start();
-    return () => {
-      timeout.stop();
-    };
-  }, []);
-
-  React.useEffect(() => {
-    if (toast.paused) {
-      timeout.stop();
-    } else {
-      timeout.start();
-    }
-  }, [toast.paused]);
-
+function ItemComponent({ item }: { item: ReactToastItem }) {
   return (
     <div
       style={item.data.style}
@@ -191,9 +157,6 @@ function ItemComponent({
             )}
           />
         )}
-        <div>
-          ({timeout.state.t}, {timeout.runningMs})
-        </div>
         <div className="= flex-1">{item.data.node}</div>
       </div>
     </div>

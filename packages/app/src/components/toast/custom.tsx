@@ -5,7 +5,6 @@ import {
   type ReactToastManager,
 } from "@hiogawa/tiny-toast/dist/react";
 import { Transition } from "@hiogawa/tiny-transition/dist/react";
-import { useStableCallback } from "@hiogawa/utils-react";
 import React from "react";
 import { cls } from "../../utils/misc";
 import { getCollapseProps } from "../collapse";
@@ -80,11 +79,6 @@ function ToastItemComponent1({
   item: ReactToastItem;
   toast: ReactToastManager;
 }) {
-  useTimeout(
-    () => toast.dismiss(item.id),
-    toast.paused ? Infinity : item.data.duration
-  );
-
   return (
     <div className="antd-floating w-[350px]">
       <div className="flex items-center gap-3 p-3">
@@ -107,18 +101,4 @@ function ToastItemComponent1({
       </div>
     </div>
   );
-}
-
-function useTimeout(f: () => void, ms: number) {
-  f = useStableCallback(f);
-
-  React.useEffect(() => {
-    if (ms === Infinity) {
-      return;
-    }
-    const t = window.setTimeout(() => f(), ms);
-    return () => {
-      window.clearTimeout(t);
-    };
-  }, [ms]);
 }
