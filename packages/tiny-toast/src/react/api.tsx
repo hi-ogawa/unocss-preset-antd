@@ -81,8 +81,4 @@ export type ReactToastContainerOptions = {
     toast: ReactToastManager;
     children: React.ReactNode;
   }) => React.ReactNode;
-  renderItem?: (props: {
-    item: ReactToastItem;
-    toast: ReactToastManager;
-  }) => React.ReactNode;
 };

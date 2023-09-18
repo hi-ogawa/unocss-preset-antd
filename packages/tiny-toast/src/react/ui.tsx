@@ -30,15 +30,12 @@ export function ReactToastContainer({
   const renderAnimation =
     options?.renderAnimation ?? ((props) => <AnimationWrapper {...props} />);
 
-  const renderItem =
-    options?.renderItem ?? ((props) => <ItemComponent {...props} />);
-
   const render = (item: ReactToastItem) => (
     <React.Fragment key={item.id}>
       {renderAnimation({
         toast,
         item,
-        children: renderItem({ toast, item }),
+        children: <ItemComponent toast={toast} item={item} />,
       })}
     </React.Fragment>
   );
