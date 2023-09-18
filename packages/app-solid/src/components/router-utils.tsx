@@ -1,5 +1,5 @@
 import { createContextProvider } from "@solid-primitives/context";
-import { createHashHistory } from "history";
+import { createBrowserHistory } from "history";
 import {
   type JSX,
   createEffect,
@@ -14,7 +14,7 @@ import {
 // TODO: compare with solid-router
 
 // expose global history as context signal
-const __history = createHashHistory();
+const __history = createBrowserHistory();
 
 const [HistoryProvider, useHistory] = createContextProvider(({}) => {
   const [history, setHistory] = createSignal(__history, {
