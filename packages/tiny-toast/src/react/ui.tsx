@@ -1,6 +1,5 @@
 import { Transition } from "@hiogawa/tiny-transition/dist/react";
 import { groupBy } from "@hiogawa/utils";
-import { useStableCallback } from "@hiogawa/utils-react";
 import React from "react";
 import { TOAST_STEP } from "../core";
 import type {
@@ -146,11 +145,31 @@ function ItemComponent({
   toast: ReactToastManager;
 }) {
   // auto-dismiss timeout
-  // TODO: move this logic to core/TransitionManager?
-  useTimeout(
-    () => toast.dismiss(item.id),
-    toast.paused ? Infinity : item.data.duration
-  );
+  // TODO: move to core
+
+  const [timeout] = React.useState(() => {
+    const timeout = createPauseableTimeout(
+      () => toast.dismiss(item.id),
+      item.data.duration
+    );
+    return timeout;
+  });
+
+  // cannot dispose since React.StrictMode would break it...
+  React.useEffect(() => {
+    timeout.start();
+    return () => {
+      timeout.stop();
+    };
+  }, []);
+
+  React.useEffect(() => {
+    if (toast.paused) {
+      timeout.stop();
+    } else {
+      timeout.start();
+    }
+  }, [toast.paused]);
 
   return (
     <div
@@ -175,20 +194,72 @@ function ItemComponent({
   );
 }
 
-function useTimeout(f: () => void, ms: number) {
-  f = useStableCallback(f);
-
-  React.useEffect(() => {
-    if (ms === Infinity) {
-      return;
-    }
-    const t = window.setTimeout(() => f(), ms);
-    return () => {
-      window.clearTimeout(t);
-    };
-  }, [ms]);
-}
-
 function cls(...args: unknown[]) {
   return args.filter(Boolean).join(" ");
+}
+
+// pause-able setTimeout
+function createPauseableTimeout(
+  callback: () => void,
+  ms: number
+  // options?: { onDisposed?: () => void }
+) {
+  // TODO: handle ms === Infinity
+
+  type State =
+    | {
+        t: "stopped";
+      }
+    | {
+        t: "started";
+        startedAt: number;
+        stop: () => void;
+      }
+    | {
+        t: "disposed";
+      };
+
+  let state: State = { t: "stopped" };
+  let totalMs = 0;
+
+  function callbackWrapper() {
+    state = { t: "disposed" };
+    callback();
+    // options?.onDisposed?.();
+  }
+
+  return {
+    start: () => {
+      if (state.t === "stopped") {
+        state = {
+          t: "started",
+          startedAt: Date.now(),
+          stop: setupTimeout(callbackWrapper, ms - totalMs),
+        };
+      }
+    },
+    stop: () => {
+      if (state.t === "started") {
+        state.stop();
+        totalMs += Date.now() - state.startedAt;
+        state = { t: "stopped" };
+      }
+    },
+    dispose: () => {
+      if (state.t === "started") {
+        state.stop();
+      }
+      state = { t: "disposed" };
+      // options?.onDisposed?.();
+    },
+    state: () => state,
+  };
+}
+
+// destroy callback style api
+function setupTimeout(f: () => void, ms: number) {
+  let handle = setTimeout(f, ms);
+  return () => {
+    clearTimeout(handle);
+  };
 }
