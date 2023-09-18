@@ -139,9 +139,15 @@ function getCollapseProps(): Partial<React.ComponentProps<typeof Transition>> {
   };
 }
 
-function ItemComponent({ item }: { item: ReactToastItem }) {
+function ItemComponent({
+  item,
+  toast,
+}: {
+  item: ReactToastItem;
+  toast: ReactToastManager;
+}) {
   if (item.data.type === "custom") {
-    return <>{item.data.node}</>;
+    return <>{item.data.render({ item, toast })}</>;
   }
   return (
     <div
@@ -161,7 +167,7 @@ function ItemComponent({ item }: { item: ReactToastItem }) {
             )}
           />
         )}
-        <div className="= flex-1 px-2">{item.data.node}</div>
+        <div className="= flex-1 px-2">{item.data.render({ item, toast })}</div>
       </div>
     </div>
   );

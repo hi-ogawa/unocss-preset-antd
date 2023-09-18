@@ -17,7 +17,7 @@ import { useModal } from "./modal";
 import { PopoverSimple } from "./popover";
 import { SimpleSelect } from "./select";
 import { toast } from "./toast/api";
-import { ToastContainer } from "./toast/custom";
+import { CustomToastItemComponent, ToastContainer } from "./toast/custom";
 import { TopProgressBar, useProgress } from "./top-progress-bar";
 
 export function StoryButton() {
@@ -585,10 +585,13 @@ export function StoryToast() {
             <button
               className="flex-1 antd-btn antd-btn-default px-2"
               onClick={() => {
-                toast.custom("Custom component", {
-                  position,
-                  duration,
-                });
+                toast.custom(
+                  (props) => <CustomToastItemComponent {...props} />,
+                  {
+                    position,
+                    duration,
+                  }
+                );
               }}
             >
               Custom

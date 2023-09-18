@@ -15,15 +15,20 @@ export const TOAST_TYPES = [
 
 export type ToastType = (typeof TOAST_TYPES)[number];
 
+type RenderReactNode = (props: {
+  item: ReactToastItem;
+  toast: ReactToastManager;
+}) => React.ReactNode;
+
 export interface ReactToastData {
-  node: React.ReactNode; // TODO: self-referential render callback (item, toast) => React.ReactNode
+  render: RenderReactNode;
   position: ToastPosition; // TODO: move to core?
   type?: ToastType;
   style?: React.CSSProperties;
   className?: string;
 }
 
-type ReactToastOptions = Omit<ReactToastData, "node">;
+type ReactToastOptions = Omit<ReactToastData, "render">;
 
 export type ReactToastItem = ToastItem<ReactToastData>;
 
@@ -44,12 +49,12 @@ export class ReactToastManager extends ToastManager<ReactToastData> {
 function createByTypeFactory(type: ToastType) {
   return function (
     this: ReactToastManager,
-    node: React.ReactNode,
+    node: React.ReactNode | RenderReactNode,
     options?: Partial<ReactToastOptions & ToastCoreOptions>
   ) {
     this.create(
       {
-        node,
+        render: typeof node === "function" ? node : () => node,
         ...this.defaultOptions,
         ...options,
         type,

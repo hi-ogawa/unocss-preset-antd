@@ -6,7 +6,6 @@ import {
 } from "@hiogawa/tiny-toast/dist/react";
 import { Transition } from "@hiogawa/tiny-transition/dist/react";
 import React from "react";
-import { cls } from "../../utils/misc";
 import { getCollapseProps } from "../collapse";
 
 export function ToastContainer({
@@ -29,7 +28,7 @@ export function ToastContainer({
             : undefined,
         renderItem:
           toastType === "custom"
-            ? (props) => <ToastItemComponent1 {...props} />
+            ? (props) => <CustomToastItemComponent {...props} />
             : undefined,
       }}
     />
@@ -72,7 +71,7 @@ function Animation1({ item, toast, children }: AnimationProps) {
   );
 }
 
-function ToastItemComponent1({
+export function CustomToastItemComponent({
   item,
   toast,
 }: {
@@ -80,20 +79,10 @@ function ToastItemComponent1({
   toast: ReactToastManager;
 }) {
   return (
-    <div className="antd-floating w-[350px]">
+    <div className="antd-floating w-[300px]">
       <div className="flex items-center gap-3 p-3">
-        {item.data.type && (
-          <span
-            className={cls(
-              item.data.type === "success" &&
-                "i-ri-checkbox-circle-fill text-colorSuccess text-2xl",
-              item.data.type === "error" &&
-                "i-ri-alert-fill text-colorError text-2xl",
-              item.data.type === "info" && "i-ri-information-line text-2xl"
-            )}
-          />
-        )}
-        <div className="flex-1">{item.data.node}</div>
+        <span className="i-ri-star-smile-fill text-[#ffff88] text-2xl" />
+        <div className="flex-1">Close button example</div>
         <button
           className="antd-btn antd-btn-ghost i-ri-close-line text-colorTextSecondary text-lg"
           onClick={() => toast.dismiss(item.id)}
