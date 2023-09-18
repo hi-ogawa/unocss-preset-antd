@@ -5,7 +5,11 @@ export type ToastItem<T> = {
   step: number;
   duration: number;
   dismissTimeout: PauseableTimeout;
-  data: T; // feels awkward to be aware of `data`...
+  data: T;
+};
+
+export type ToastCoreOptions = {
+  duration: number;
 };
 
 // animation can utilize intermediate step between [0, 1] and [1, oo)
@@ -17,17 +21,13 @@ export const TOAST_STEP = {
 export class ToastManager<T> {
   public items: ToastItem<T>[] = [];
   public paused = false;
-  public defaultOptions = {
+  public defaultCoreOptions: ToastCoreOptions = {
     duration: 4000,
   };
 
-  create(
-    data: T,
-    options?: {
-      duration?: number;
-    }
-  ) {
-    const duration = options?.duration ?? this.defaultOptions.duration;
+  // TODO: rename to createCore/updateCore?
+  create(data: T, options?: Partial<ToastCoreOptions>) {
+    const duration = options?.duration ?? this.defaultCoreOptions.duration;
     const item: ToastItem<T> = {
       id: generateId(), // TODO: support upsert by id?
       step: TOAST_STEP.START,

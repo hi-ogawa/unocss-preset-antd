@@ -541,14 +541,18 @@ export function StoryToast() {
             <button
               className="flex-1 antd-btn antd-btn-default px-2"
               onClick={() => {
-                toast.create(
-                  {
-                    node: "Successfuly toasted!",
-                    type: "success",
-                    position,
-                  },
-                  { duration }
-                );
+                toast.createReact("Successfuly toasted!", {
+                  type: "success",
+                  duration,
+                });
+                // toast.create(
+                //   {
+                //     node: "Successfuly toasted!",
+                //     type: "success",
+                //     position,
+                //   },
+                //   { duration }
+                // );
               }}
             >
               Success

@@ -1,23 +1,42 @@
 import type React from "react";
-import { type ToastItem, ToastManager } from "../core";
+import { type ToastCoreOptions, type ToastItem, ToastManager } from "../core";
 
 export const TOAST_POSITIONS = ["bottom-left", "top-center"] as const;
 
 export type ToastPosition = (typeof TOAST_POSITIONS)[number];
 
-// allow interface argumentation?
 export interface ReactToastData {
-  node: React.ReactNode;
-  position: ToastPosition;
+  node: React.ReactNode; // TODO: self-referential render callback (item, toast) => React.ReactNode
+  position: ToastPosition; // TODO: move to core?
   type?: "success" | "error" | "info";
   style?: React.CSSProperties;
   className?: string;
 }
 
+type ReactToastOptions = Omit<ReactToastData, "node">;
+
 export type ReactToastItem = ToastItem<ReactToastData>;
 
-// TODO: defaultToastData as manager option?
-export class ReactToastManager extends ToastManager<ReactToastData> {}
+export class ReactToastManager extends ToastManager<ReactToastData> {
+  public defaultOptions: ReactToastOptions = {
+    position: "top-center",
+  };
+
+  createReact(
+    node: React.ReactNode,
+    options?: Partial<ReactToastOptions & ToastCoreOptions>
+  ) {
+    this.create(
+      {
+        node,
+        // poor-man's merge
+        ...this.defaultOptions,
+        ...options,
+      },
+      options
+    );
+  }
+}
 
 export type ReactToastContainerOptions = {
   style?: React.CSSProperties;
