@@ -485,7 +485,6 @@ export function StoryToast() {
   const form = createTinyForm(
     useTinyStoreStorage("unocss-preset-antd:StoryToast-v2", {
       animationType: "default",
-      toastType: "custom",
       duration: 2000,
       position: "bottom-left" as ToastPosition,
     })
@@ -508,14 +507,6 @@ export function StoryToast() {
             className="antd-input p-1"
             options={["default", "custom"]}
             {...form.fields.animationType.rawProps()}
-          />
-        </div>
-        <div className="flex flex-col gap-1">
-          Toast Type
-          <SimpleSelect
-            className="antd-input p-1"
-            options={["default", "custom"]}
-            {...form.fields.toastType.rawProps()}
           />
         </div>
         <div className="flex flex-col gap-1">
@@ -631,7 +622,6 @@ export function StoryToast() {
           <ToastContainer
             toast={toast}
             animationType={form.data.animationType}
-            toastType={form.data.toastType}
           />
         </div>
         <Debug

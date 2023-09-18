@@ -11,11 +11,9 @@ import { getCollapseProps } from "../collapse";
 export function ToastContainer({
   toast,
   animationType,
-  toastType,
 }: {
   toast: ReactToastManager;
   animationType: string;
-  toastType: string;
 }) {
   return (
     <ReactToastContainer
@@ -25,10 +23,6 @@ export function ToastContainer({
         renderAnimation:
           animationType === "custom"
             ? (props) => <Animation1 {...props} />
-            : undefined,
-        renderItem:
-          toastType === "custom"
-            ? (props) => <CustomToastItemComponent {...props} />
             : undefined,
       }}
     />
@@ -79,7 +73,7 @@ export function CustomToastItemComponent({
   toast: ReactToastManager;
 }) {
   return (
-    <div className="antd-floating w-[300px]">
+    <div className="antd-floating rounded w-[300px]">
       <div className="flex items-center gap-3 p-3">
         <span className="i-ri-star-smile-fill text-[#ffff88] text-2xl" />
         <div className="flex-1">Close button example</div>
