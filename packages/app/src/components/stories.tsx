@@ -6,7 +6,7 @@ import {
 } from "@hiogawa/tiny-toast/dist/react";
 import { Transition } from "@hiogawa/tiny-transition/dist/react";
 import { ANTD_VARS } from "@hiogawa/unocss-preset-antd";
-import { objectPickBy, range } from "@hiogawa/utils";
+import { none, objectKeys, objectPickBy, range } from "@hiogawa/utils";
 import { Debug, toSetSetState, useDelay } from "@hiogawa/utils-react";
 import React from "react";
 import ReactSelect from "react-select";
@@ -705,12 +705,22 @@ export function StoryPopover() {
 // https://drafts.csswg.org/css-easing-2/#cubic-bezier-easing-functions
 // https://developer.mozilla.org/en-US/docs/Web/CSS/transition-timing-function
 export function StoryCubicBézier() {
+  const PRESETS = {
+    ease: [0.25, 0.1, 0.25, 1],
+    "ease-in": [0.42, 0, 1, 1],
+    "ease-out": [0, 0, 0.58, 1],
+    "ease-in-out": [0.42, 0, 0.58, 1],
+  };
+  type Preset = keyof typeof PRESETS;
+
   const form = createTinyForm(
     React.useState({
       input: "0.25, 0.1, 0.25, 1",
+      preset: none<Preset>(),
       play: false,
     })
   );
+
   const numbers = form.data.input.split(",").map((v) => Number.parseFloat(v));
   const [x1, _y1, x2, _y2] = numbers;
   const isValid =
@@ -724,20 +734,26 @@ export function StoryCubicBézier() {
   return (
     <div className="flex flex-col items-center gap-3 m-2">
       <section className="flex flex-col gap-3 w-full max-w-lg border p-4">
-        <div className="flex items-baseline gap-2">
-          <h2 className="text-xl">Cubic Bézier</h2>
-          <span className="flex-1" />
-          <a
-            className="antd-link"
-            href="https://drafts.csswg.org/css-easing-2/#cubic-bezier-easing-functions"
-            target="_blank"
-          >
-            csswg
-          </a>
-        </div>
+        <h2 className="text-xl">Cubic Bézier</h2>
         <div className="flex flex-col gap-3">
           <label className="flex flex-col gap-1">
-            <span className="text-colorTextSecondary">x1, y1, x2, y2</span>
+            <div className="flex items-center">
+              <span className="text-colorTextSecondary flex-1">
+                x1, y1, x2, y2
+              </span>
+              <SimpleSelect
+                className="antd-input px-1 text-sm"
+                value={form.fields.preset.value}
+                options={[undefined, ...objectKeys(PRESETS)]}
+                labelFn={(v) => v ?? "- Preset -"}
+                onChange={(v) => {
+                  if (v) {
+                    form.fields.input.onChange(PRESETS[v].join(", "));
+                  }
+                  form.fields.preset.onChange(v);
+                }}
+              />
+            </div>
             <input
               className="antd-input p-1"
               aria-invalid={!isValid}
@@ -824,14 +840,6 @@ export function StoryCubicBézier() {
           <circle cx={x2} cy={y2} r="1" />
           <circle cx="100" cy="100" r="1" />
         </g>
-        {/* <g className="text-colorSuccess">
-          <line x1="0" y1="0" x2="0" y2="0" >
-            <animate attributeName="y2" values="0;100" dur="4s" />
-          </line>
-          <line x1="0" y1="0" x2="0" y2="0">
-            <animate attributeName="x2" values="0;100" dur="4s" />
-          </line>
-        </g> */}
       </>
     );
   }
