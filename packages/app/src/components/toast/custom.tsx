@@ -22,7 +22,9 @@ export function ToastContainer({
         className: "!absolute",
         renderAnimation:
           animationType === "custom"
-            ? (props) => <Animation1 {...props} />
+            ? (props) => <CustomAnimation {...props} />
+            : animationType === "none"
+            ? (props) => <NoAnimation {...props} />
             : undefined,
       }}
     />
@@ -35,7 +37,17 @@ interface AnimationProps {
   children?: React.ReactNode;
 }
 
-function Animation1({ item, toast, children }: AnimationProps) {
+function NoAnimation({ item, toast, children }: AnimationProps) {
+  React.useEffect(() => {
+    if (item.step === TOAST_STEP.DISMISS) {
+      toast.remove(item.id);
+    }
+  }, [item.step]);
+
+  return <div className="py-1">{children}</div>;
+}
+
+function CustomAnimation({ item, toast, children }: AnimationProps) {
   // TODO: "center" position doesn't make sense...
 
   // steps

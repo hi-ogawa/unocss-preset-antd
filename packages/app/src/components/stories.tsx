@@ -505,7 +505,7 @@ export function StoryToast() {
           Animation Type
           <SimpleSelect
             className="antd-input p-1"
-            options={["default", "custom"]}
+            options={["default", "custom", "none"]}
             {...form.fields.animationType.rawProps()}
           />
         </div>
