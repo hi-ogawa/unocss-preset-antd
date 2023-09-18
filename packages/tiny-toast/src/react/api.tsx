@@ -5,10 +5,20 @@ export const TOAST_POSITIONS = ["bottom-left", "top-center"] as const;
 
 export type ToastPosition = (typeof TOAST_POSITIONS)[number];
 
+export const TOAST_TYPES = [
+  "success",
+  "error",
+  "info",
+  "blank",
+  "custom",
+] as const;
+
+export type ToastType = (typeof TOAST_TYPES)[number];
+
 export interface ReactToastData {
   node: React.ReactNode; // TODO: self-referential render callback (item, toast) => React.ReactNode
   position: ToastPosition; // TODO: move to core?
-  type?: "success" | "error" | "info";
+  type?: ToastType;
   style?: React.CSSProperties;
   className?: string;
 }
@@ -18,12 +28,22 @@ type ReactToastOptions = Omit<ReactToastData, "node">;
 export type ReactToastItem = ToastItem<ReactToastData>;
 
 export class ReactToastManager extends ToastManager<ReactToastData> {
+  // TODO: api is awkward... use constructor?
   public defaultOptions: ReactToastOptions = {
     position: "top-center",
+    type: "blank",
   };
 
-  // TODO: naming
-  createWrapper(
+  success = createByTypeFactory("success");
+  error = createByTypeFactory("error");
+  info = createByTypeFactory("info");
+  blank = createByTypeFactory("blank");
+  custom = createByTypeFactory("custom");
+}
+
+function createByTypeFactory(type: ToastType) {
+  return function (
+    this: ReactToastManager,
     node: React.ReactNode,
     options?: Partial<ReactToastOptions & ToastCoreOptions>
   ) {
@@ -32,10 +52,11 @@ export class ReactToastManager extends ToastManager<ReactToastData> {
         node,
         ...this.defaultOptions,
         ...options,
+        type,
       },
       options
     );
-  }
+  };
 }
 
 export type ReactToastContainerOptions = {

@@ -541,8 +541,7 @@ export function StoryToast() {
             <button
               className="flex-1 antd-btn antd-btn-default px-2"
               onClick={() => {
-                toast.createWrapper("Successfuly toasted!", {
-                  type: "success",
+                toast.success("Successfuly toasted!", {
                   position,
                   duration,
                 });
@@ -553,8 +552,7 @@ export function StoryToast() {
             <button
               className="flex-1 antd-btn antd-btn-default px-2"
               onClick={() => {
-                toast.createWrapper("This didn't work.", {
-                  type: "error",
+                toast.error("This didn't work.", {
                   position,
                   duration,
                 });
@@ -565,8 +563,7 @@ export function StoryToast() {
             <button
               className="flex-1 antd-btn antd-btn-default px-2"
               onClick={() => {
-                toast.createWrapper("Some info", {
-                  type: "info",
+                toast.info("Some info", {
                   position,
                   duration,
                 });
@@ -577,13 +574,24 @@ export function StoryToast() {
             <button
               className="flex-1 antd-btn antd-btn-default px-2"
               onClick={() => {
-                toast.createWrapper("Some neutral message", {
+                toast.blank("Just message", {
                   position,
                   duration,
                 });
               }}
             >
-              Default
+              Blank
+            </button>
+            <button
+              className="flex-1 antd-btn antd-btn-default px-2"
+              onClick={() => {
+                toast.custom("Custom component", {
+                  position,
+                  duration,
+                });
+              }}
+            >
+              Custom
             </button>
           </div>
         </div>

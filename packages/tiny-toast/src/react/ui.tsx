@@ -140,6 +140,9 @@ function getCollapseProps(): Partial<React.ComponentProps<typeof Transition>> {
 }
 
 function ItemComponent({ item }: { item: ReactToastItem }) {
+  if (item.data.type === "custom") {
+    return <>{item.data.node}</>;
+  }
   return (
     <div
       style={item.data.style}
@@ -153,7 +156,8 @@ function ItemComponent({ item }: { item: ReactToastItem }) {
                 "= i-ri-checkbox-circle-fill text-green text-2xl",
               item.data.type === "error" &&
                 "= i-ri-alert-fill text-red text-2xl",
-              item.data.type === "info" && "= i-ri-information-line text-2xl"
+              item.data.type === "info" &&
+                "= i-ri-information-line text-blue text-2xl"
             )}
           />
         )}
