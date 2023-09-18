@@ -148,7 +148,7 @@ function ItemComponent({
   return (
     <div
       style={item.data.style}
-      className={cls(item.data.className, "= shadow-lg")}
+      className={cls(item.data.className, "= rounded-lg shadow-lg")}
     >
       <div className="= flex items-center p-3">
         {item.data.type && (
@@ -157,7 +157,7 @@ function ItemComponent({
               item.data.type === "success" &&
                 "= i-ri-checkbox-circle-fill text-green text-2xl",
               item.data.type === "error" &&
-                "= i-ri-alert-fill text-red text-2xl",
+                "= i-ri-close-circle-fill text-red text-2xl",
               item.data.type === "info" &&
                 "= i-ri-information-line text-blue text-2xl"
             )}
