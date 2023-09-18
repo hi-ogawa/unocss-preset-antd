@@ -1,6 +1,4 @@
-//
-// framework agnostic toast core logic
-//
+import { generateId } from "./utils";
 
 export type ToastItem<T> = {
   id: string;
@@ -72,9 +70,4 @@ export class ToastManager<T> {
     this.snapshot = {};
     this.listeners.forEach((f) => f());
   }
-}
-
-function generateId() {
-  // prettier-ignore
-  return Math.floor(Math.random() * 2 ** 50).toString(32).padStart(10, "0");
 }
