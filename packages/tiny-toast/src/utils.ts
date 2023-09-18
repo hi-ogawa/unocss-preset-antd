@@ -15,7 +15,6 @@ export class PauseableTimeout {
   public state: PauseableTimeoutState = { t: "stopped" };
   public runningMs = 0;
 
-  // TODO: handle ms === Infinity
   constructor(private callback: () => void, public ms: number) {}
 
   start() {
@@ -47,8 +46,11 @@ export class PauseableTimeout {
   }
 }
 
-// destroy callback style api
+// destroy callback style api + handle Infinity
 function setupTimeout(f: () => void, ms: number) {
+  if (ms === Infinity) {
+    return () => {};
+  }
   let handle = setTimeout(f, ms);
   return () => {
     clearTimeout(handle);
