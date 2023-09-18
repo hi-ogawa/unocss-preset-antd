@@ -145,7 +145,7 @@ function ItemComponent({ item }: { item: ReactToastItem }) {
       style={item.data.style}
       className={cls(item.data.className, "= shadow-lg")}
     >
-      <div className="= flex items-center gap-3 p-3">
+      <div className="= flex items-center p-3">
         {item.data.type && (
           <span
             className={cls(
@@ -157,7 +157,7 @@ function ItemComponent({ item }: { item: ReactToastItem }) {
             )}
           />
         )}
-        <div className="= flex-1">{item.data.node}</div>
+        <div className="= flex-1 px-2">{item.data.node}</div>
       </div>
     </div>
   );

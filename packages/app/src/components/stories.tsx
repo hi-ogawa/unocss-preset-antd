@@ -544,6 +544,7 @@ export function StoryToast() {
                 toast.createReact("Successfuly toasted!", {
                   type: "success",
                   duration,
+                  className: "!antd-floating",
                 });
                 // toast.create(
                 //   {
