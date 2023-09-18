@@ -631,6 +631,7 @@ export function StoryToast() {
           />
         </div>
         <Debug
+          className="text-xs"
           debug={{
             paused: toast.paused,
             items: toast.items,

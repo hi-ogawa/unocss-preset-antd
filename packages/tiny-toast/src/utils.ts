@@ -16,7 +16,7 @@ export class PauseableTimeout {
   public runningMs = 0;
 
   // TODO: handle ms === Infinity
-  constructor(private callback: () => void, private ms: number) {}
+  constructor(private callback: () => void, public ms: number) {}
 
   start() {
     if (this.state.t === "stopped") {
@@ -26,10 +26,8 @@ export class PauseableTimeout {
         stop: setupTimeout(() => {
           this.state = { t: "disposed" };
           this.callback();
-          this.notify();
         }, this.ms - this.runningMs),
       };
-      this.notify();
     }
   }
 
@@ -38,7 +36,6 @@ export class PauseableTimeout {
       this.state.stop();
       this.runningMs += Date.now() - this.state.startedAt;
       this.state = { t: "stopped" };
-      this.notify();
     }
   }
 
@@ -47,23 +44,6 @@ export class PauseableTimeout {
       this.state.stop();
     }
     this.state = { t: "disposed" };
-    this.notify();
-  }
-
-  // external store api
-  private listeners = new Set<() => void>();
-
-  subscribe = (listener: () => void) => {
-    this.listeners.add(listener);
-    return () => {
-      this.listeners.delete(listener);
-    };
-  };
-
-  getSnapshot = () => this.state;
-
-  notify() {
-    this.listeners.forEach((f) => f());
   }
 }
 
