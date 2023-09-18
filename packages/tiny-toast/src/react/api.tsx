@@ -22,14 +22,13 @@ export class ReactToastManager extends ToastManager<ReactToastData> {
     position: "top-center",
   };
 
-  createReact(
+  create(
     node: React.ReactNode,
     options?: Partial<ReactToastOptions & ToastCoreOptions>
   ) {
-    this.create(
+    this.createCore(
       {
         node,
-        // poor-man's merge
         ...this.defaultOptions,
         ...options,
       },
