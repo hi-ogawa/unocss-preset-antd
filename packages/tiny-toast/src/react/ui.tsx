@@ -58,11 +58,11 @@ export function ReactToastContainer({
         dangerouslySetInnerHTML={{ __html: `/*__INJECT_CSS__*/` }}
       />
       {/* TODO: reverse z-order? */}
-      {/* note that AnimationWrapper's py-1 gives uniform gap */}
-      <div className="= [&_*]:pointer-events-auto absolute bottom-1 left-2 flex flex-col">
+      {/* note that AnimationWrapper's py-1.5 gives uniform gap */}
+      <div className="= [&_*]:pointer-events-auto absolute bottom-3 left-4 flex flex-col">
         {itemsByPosition.get("bottom-left")?.map((item) => render(item))}
       </div>
-      <div className="= [&_*]:pointer-events-auto absolute top-1 flex flex-col-reverse items-center w-full">
+      <div className="= [&_*]:pointer-events-auto absolute top-3 flex flex-col-reverse items-center w-full">
         {itemsByPosition.get("top-center")?.map((item) => render(item))}
       </div>
     </div>
