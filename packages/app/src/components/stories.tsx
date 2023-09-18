@@ -703,6 +703,7 @@ export function StoryPopover() {
 // cf.
 // https://developer.mozilla.org/en-US/docs/Web/SVG/Tutorial/Paths#b%C3%A9zier_curves
 // https://drafts.csswg.org/css-easing-2/#cubic-bezier-easing-functions
+// https://developer.mozilla.org/en-US/docs/Web/CSS/transition-timing-function
 export function StoryCubicBézier() {
   const form = createTinyForm(React.useState({ input: "0.25, 0.1, 0.25, 1" }));
   const numbers = form.data.input.split(",").map((v) => Number.parseFloat(v));
@@ -723,20 +724,13 @@ export function StoryCubicBézier() {
           <span className="flex-1" />
           <a
             className="antd-link"
-            href="https://developer.mozilla.org/en-US/docs/Web/SVG/Tutorial/Paths#b%C3%A9zier_curves"
-            target="_blank"
-          >
-            mdn
-          </a>
-          <a
-            className="antd-link"
             href="https://drafts.csswg.org/css-easing-2/#cubic-bezier-easing-functions"
             target="_blank"
           >
             csswg
           </a>
         </div>
-        <div className="flex flex-col gap-2">
+        <div className="flex flex-col gap-3">
           <label className="flex flex-col gap-1">
             <span className="text-colorTextSecondary">x1, y1, x2, y2</span>
             <input
@@ -745,6 +739,10 @@ export function StoryCubicBézier() {
               {...form.fields.input.props()}
             />
           </label>
+          {/* TODO */}
+          {/* <button className="antd-btn antd-btn-primary p-1" onClick={() => {}}>
+            Play
+          </button> */}
           <div className="self-center w-full">
             <svg
               // flip y for conventional axis direction
@@ -775,6 +773,14 @@ export function StoryCubicBézier() {
           <circle cx={x2} cy={y2} r="1" />
           <circle cx="100" cy="100" r="1" />
         </g>
+        {/* <g className="text-colorSuccess">
+          <line x1="0" y1="0" x2="0" y2="0" >
+            <animate attributeName="y2" values="0;100" dur="4s" />
+          </line>
+          <line x1="0" y1="0" x2="0" y2="0">
+            <animate attributeName="x2" values="0;100" dur="4s" />
+          </line>
+        </g> */}
       </>
     );
   }
