@@ -708,7 +708,7 @@ export function StoryCubicBézier() {
   const form = createTinyForm(
     React.useState({
       input: "0.25, 0.1, 0.25, 1",
-      play: 0,
+      play: false,
     })
   );
   const numbers = form.data.input.split(",").map((v) => Number.parseFloat(v));
@@ -720,12 +720,6 @@ export function StoryCubicBézier() {
     x1 <= 1 &&
     0 <= x2 &&
     x2 <= 1;
-
-  React.useEffect(() => {
-    if (form.data.play > 1) {
-      form.fields.play.onChange(1);
-    }
-  }, [form.data.play]);
 
   return (
     <div className="flex flex-col items-center gap-3 m-2">
@@ -763,11 +757,14 @@ export function StoryCubicBézier() {
             </svg>
           </div>
           <button
-            className="antd-btn antd-btn-primary p-1"
-            onClick={() => {
-              form.fields.play.onChange((prev) => prev + 1);
-            }}
+            className={cls(
+              "antd-btn antd-btn-primary p-1",
+              !form.data.play && "brightness-80"
+            )}
             disabled={!isValid}
+            onClick={() => {
+              form.fields.play.onChange((prev) => !prev);
+            }}
           >
             Play
           </button>
@@ -775,35 +772,37 @@ export function StoryCubicBézier() {
             <label className="flex flex-col gap-1">
               <span className="text-colorTextSecondary">linear</span>
               <div className="h-1 w-full relative bg-colorBorder">
-                <Transition
-                  key={form.data.play}
-                  show={form.data.play === 1}
-                  appear
-                  className="absolute inset-0 bg-colorSuccess"
-                  style={{
-                    transformOrigin: "0 0",
-                    transition: "transform 4s linear",
-                  }}
-                  enterFrom="scale-x-0"
-                  enterTo="scale-x-100"
-                />
+                {form.data.play && (
+                  <Transition
+                    show
+                    appear
+                    className="absolute inset-0 bg-colorSuccess"
+                    style={{
+                      transformOrigin: "0 0",
+                      transition: "transform 4s linear",
+                    }}
+                    enterFrom="scale-x-0"
+                    enterTo="scale-x-100"
+                  />
+                )}
               </div>
             </label>
             <label className="flex flex-col gap-1">
               <span className="text-colorTextSecondary">cubic-bezier</span>
               <div className="h-1 w-full relative bg-colorBorder">
-                <Transition
-                  key={form.data.play}
-                  show={form.data.play === 1}
-                  appear
-                  className="absolute inset-0 bg-colorSuccess"
-                  style={{
-                    transformOrigin: "0 0",
-                    transition: `transform 4s cubic-bezier(${form.data.input})`,
-                  }}
-                  enterFrom="scale-x-0"
-                  enterTo="scale-x-100"
-                />
+                {form.data.play && (
+                  <Transition
+                    show
+                    appear
+                    className="absolute inset-0 bg-colorSuccess"
+                    style={{
+                      transformOrigin: "0 0",
+                      transition: `transform 4s cubic-bezier(${form.data.input})`,
+                    }}
+                    enterFrom="scale-x-0"
+                    enterTo="scale-x-100"
+                  />
+                )}
               </div>
             </label>
           </div>
