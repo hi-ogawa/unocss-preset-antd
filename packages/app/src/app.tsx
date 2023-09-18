@@ -4,7 +4,7 @@ import {
   Outlet,
   type RouteObject,
   RouterProvider,
-  createHashRouter,
+  createBrowserRouter,
   redirect,
 } from "react-router-dom";
 import { Drawer } from "./components/drawer";
@@ -28,7 +28,7 @@ const storiesRoutes = Object.entries(stories).map(
   })
 );
 
-const router = createHashRouter([
+const router = createBrowserRouter([
   {
     element: <Root />,
     children: [
