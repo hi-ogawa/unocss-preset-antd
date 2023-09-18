@@ -21,7 +21,7 @@ API is inspired by
 
 ## example
 
-- https://unocss-preset-antd-hiro18181.vercel.app/#/Form
+- https://unocss-preset-antd-hiro18181.vercel.app/Form
 - https://github.com/hi-ogawa/unocss-preset-antd/blob/main/packages/app/src/components/stories.tsx
 
 <!--
