@@ -1,6 +1,6 @@
 # tiny-toast
 
-Somewhat framework-agnostic simple toast UI system
+Simple toast UI system with framework-agnostic core module is separated.
 
 ## example
 
