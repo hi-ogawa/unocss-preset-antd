@@ -64,9 +64,7 @@ function Animation1({ item, toast, children }: AnimationProps) {
         enterTo="translate-x-0"
         leaveFrom="translate-x-0"
         leaveTo="translate-x-[-120%]"
-        onLeft={() =>
-          toast.updateCore(item.id, { step: TOAST_STEP.DISMISS + 0.5 })
-        }
+        onLeft={() => toast.update(item.id, { step: TOAST_STEP.DISMISS + 0.5 })}
       >
         {children}
       </Transition>

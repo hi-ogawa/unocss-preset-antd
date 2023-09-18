@@ -22,11 +22,12 @@ export class ReactToastManager extends ToastManager<ReactToastData> {
     position: "top-center",
   };
 
-  create(
+  // TODO: naming
+  createWrapper(
     node: React.ReactNode,
     options?: Partial<ReactToastOptions & ToastCoreOptions>
   ) {
-    this.createCore(
+    this.create(
       {
         node,
         ...this.defaultOptions,

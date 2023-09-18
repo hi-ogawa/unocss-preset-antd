@@ -541,7 +541,7 @@ export function StoryToast() {
             <button
               className="flex-1 antd-btn antd-btn-default px-2"
               onClick={() => {
-                toast.create("Successfuly toasted!", {
+                toast.createWrapper("Successfuly toasted!", {
                   type: "success",
                   position,
                   duration,
@@ -553,7 +553,7 @@ export function StoryToast() {
             <button
               className="flex-1 antd-btn antd-btn-default px-2"
               onClick={() => {
-                toast.create("This didn't work.", {
+                toast.createWrapper("This didn't work.", {
                   type: "error",
                   position,
                   duration,
@@ -565,7 +565,7 @@ export function StoryToast() {
             <button
               className="flex-1 antd-btn antd-btn-default px-2"
               onClick={() => {
-                toast.create("Some info", {
+                toast.createWrapper("Some info", {
                   type: "info",
                   position,
                   duration,
@@ -577,7 +577,7 @@ export function StoryToast() {
             <button
               className="flex-1 antd-btn antd-btn-default px-2"
               onClick={() => {
-                toast.create("Some neutral message", {
+                toast.createWrapper("Some neutral message", {
                   position,
                   duration,
                 });

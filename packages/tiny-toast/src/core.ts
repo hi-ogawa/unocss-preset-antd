@@ -25,7 +25,7 @@ export class ToastManager<T> {
     duration: 4000,
   };
 
-  createCore(data: T, options?: Partial<ToastCoreOptions>) {
+  create(data: T, options?: Partial<ToastCoreOptions>) {
     const duration = options?.duration ?? this.defaultCoreOptions.duration;
     const item: ToastItem<T> = {
       id: generateId(), // TODO: support upsert by id?
@@ -44,7 +44,7 @@ export class ToastManager<T> {
     this.notify();
   }
 
-  updateCore(id: string, newItem: Partial<ToastItem<T>>) {
+  update(id: string, newItem: Partial<ToastItem<T>>) {
     const index = this.items.findIndex((item) => item.id === id);
     if (index >= 0) {
       this.items = [...this.items];
@@ -54,7 +54,7 @@ export class ToastManager<T> {
   }
 
   dismiss(id: string) {
-    this.updateCore(id, { step: TOAST_STEP.DISMISS });
+    this.update(id, { step: TOAST_STEP.DISMISS });
   }
 
   dismissAll() {
