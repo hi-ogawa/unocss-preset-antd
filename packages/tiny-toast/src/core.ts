@@ -21,12 +21,8 @@ export const TOAST_STEP = {
 export class ToastManager<T> {
   public items: ToastItem<T>[] = [];
   public paused = false;
-  public defaultCoreOptions: ToastCoreOptions = {
-    duration: 4000,
-  };
 
-  create(data: T, options?: Partial<ToastCoreOptions>) {
-    const duration = options?.duration ?? this.defaultCoreOptions.duration;
+  create(data: T, { duration }: ToastCoreOptions) {
     const item: ToastItem<T> = {
       id: generateId(), // TODO: support upsert by id?
       step: TOAST_STEP.START,

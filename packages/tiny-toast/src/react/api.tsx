@@ -28,16 +28,21 @@ export interface ReactToastData {
   className?: string;
 }
 
-type ReactToastOptions = Omit<ReactToastData, "render">;
-
 export type ReactToastItem = ToastItem<ReactToastData>;
 
+type ReactToastOptions = Omit<ReactToastData, "render"> &
+  Pick<ReactToastItem, "duration">;
+
+const DEFAULT_OPTIONS: ReactToastOptions = {
+  duration: 4000,
+  position: "top-center",
+  type: "blank",
+};
+
 export class ReactToastManager extends ToastManager<ReactToastData> {
-  // TODO: api is awkward... use constructor?
-  public defaultOptions: ReactToastOptions = {
-    position: "top-center",
-    type: "blank",
-  };
+  constructor(public defaultOptions?: Partial<ReactToastOptions>) {
+    super();
+  }
 
   success = createByTypeFactory("success");
   error = createByTypeFactory("error");
@@ -55,11 +60,15 @@ function createByTypeFactory(type: ToastType) {
     this.create(
       {
         render: typeof node === "function" ? node : () => node,
+        ...DEFAULT_OPTIONS,
         ...this.defaultOptions,
         ...options,
         type,
       },
-      options
+      {
+        ...DEFAULT_OPTIONS,
+        ...this.defaultOptions,
+      }
     );
   };
 }
