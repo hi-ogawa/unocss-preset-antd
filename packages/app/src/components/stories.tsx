@@ -485,8 +485,8 @@ export function StoryToast() {
   const form = createTinyForm(
     useTinyStoreStorage("unocss-preset-antd:StoryToast-v2", {
       animationType: "default",
-      duration: 2000,
-      position: "bottom-left" as ToastPosition,
+      duration: 4000,
+      position: "top-center" as ToastPosition,
     })
   );
   const { duration, position } = form.data;
