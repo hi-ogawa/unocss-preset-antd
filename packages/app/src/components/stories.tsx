@@ -541,12 +541,14 @@ export function StoryToast() {
             <button
               className="flex-1 antd-btn antd-btn-default px-2"
               onClick={() => {
-                toast.create({
-                  node: "Successfuly toasted!",
-                  type: "success",
-                  position,
-                  duration,
-                });
+                toast.create(
+                  {
+                    node: "Successfuly toasted!",
+                    type: "success",
+                    position,
+                  },
+                  { duration }
+                );
               }}
             >
               Success
@@ -554,12 +556,14 @@ export function StoryToast() {
             <button
               className="flex-1 antd-btn antd-btn-default px-2"
               onClick={() => {
-                toast.create({
-                  node: "This didn't work.",
-                  type: "error",
-                  position,
-                  duration,
-                });
+                toast.create(
+                  {
+                    node: "This didn't work.",
+                    type: "error",
+                    position,
+                  },
+                  { duration }
+                );
               }}
             >
               Error
@@ -567,12 +571,14 @@ export function StoryToast() {
             <button
               className="flex-1 antd-btn antd-btn-default px-2"
               onClick={() => {
-                toast.create({
-                  node: "Some info",
-                  type: "info",
-                  position,
-                  duration,
-                });
+                toast.create(
+                  {
+                    node: "Some info",
+                    type: "info",
+                    position,
+                  },
+                  { duration }
+                );
               }}
             >
               Info
@@ -580,11 +586,13 @@ export function StoryToast() {
             <button
               className="flex-1 antd-btn antd-btn-default px-2"
               onClick={() => {
-                toast.create({
-                  node: "Some neutral message",
-                  position,
-                  duration,
-                });
+                toast.create(
+                  {
+                    node: "Some neutral message",
+                    position,
+                  },
+                  { duration }
+                );
               }}
             >
               Default

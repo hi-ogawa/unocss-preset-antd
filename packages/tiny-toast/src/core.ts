@@ -3,8 +3,7 @@ import { PauseableTimeout, generateId } from "./utils";
 export type ToastItem<T> = {
   id: string;
   step: number;
-  // TODO
-  // duration: number;
+  duration: number;
   dismissTimeout: PauseableTimeout;
   data: T; // feels awkward to be aware of `data`...
 };
@@ -18,13 +17,25 @@ export const TOAST_STEP = {
 export class ToastManager<T> {
   public items: ToastItem<T>[] = [];
   public paused = false;
+  public defaultOptions = {
+    duration: 4000,
+  };
 
-  create(data: T) {
+  create(
+    data: T,
+    options?: {
+      duration?: number;
+    }
+  ) {
+    const duration = options?.duration ?? this.defaultOptions.duration;
     const item: ToastItem<T> = {
       id: generateId(), // TODO: support upsert by id?
       step: TOAST_STEP.START,
-      // TODO: configurable timeout
-      dismissTimeout: new PauseableTimeout(() => this.dismiss(item.id), 4000),
+      duration,
+      dismissTimeout: new PauseableTimeout(
+        () => this.dismiss(item.id),
+        duration
+      ),
       data,
     };
     if (!this.paused) {

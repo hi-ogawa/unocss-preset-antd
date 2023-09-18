@@ -8,7 +8,6 @@ export type ToastPosition = (typeof TOAST_POSITIONS)[number];
 // allow interface argumentation?
 export interface ReactToastData {
   node: React.ReactNode;
-  duration: number;
   position: ToastPosition;
   type?: "success" | "error" | "info";
   style?: React.CSSProperties;
