@@ -17,6 +17,7 @@
     "@floating-ui/react": "^0.24.2",
     "@hiogawa/tiny-store": "0.0.1-pre.1",
     "@hiogawa/tiny-form": "workspace:*",
+    "@hiogawa/tiny-toast": "workspace:*",
     "@hiogawa/tiny-transition": "workspace:*",
     "@hiogawa/unocss-preset-antd": "workspace:*",
     "react": "^18.2.0",
@@ -28,7 +29,7 @@
   "devDependencies": {
     "@iconify-json/ri": "^1.1.4",
     "@types/node": "^16.18.12",
-    "@types/react": "^18.0.27",
+    "@types/react": "^18.2.14",
     "@types/react-dom": "^18.0.10"
   }
 }

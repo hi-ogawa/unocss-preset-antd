@@ -1,5 +1,9 @@
 import { createTinyForm } from "@hiogawa/tiny-form";
 import { useTinyStoreStorage } from "@hiogawa/tiny-store/dist/react";
+import {
+  TOAST_POSITIONS,
+  type ToastPosition,
+} from "@hiogawa/tiny-toast/dist/react";
 import { Transition } from "@hiogawa/tiny-transition/dist/react";
 import { ANTD_VARS } from "@hiogawa/unocss-preset-antd";
 import { objectPickBy, range } from "@hiogawa/utils";
@@ -12,12 +16,8 @@ import { getCollapseProps } from "./collapse";
 import { useModal } from "./modal";
 import { PopoverSimple } from "./popover";
 import { SimpleSelect } from "./select";
-import {
-  TOAST_POSITIONS,
-  type ToastPosition,
-  toast,
-} from "./toast/example/api";
-import { ToastContainer } from "./toast/example/ui";
+import { toast } from "./toast/api";
+import { CustomToastItemComponent, ToastContainer } from "./toast/custom";
 import { TopProgressBar, useProgress } from "./top-progress-bar";
 
 export function StoryButton() {
@@ -483,13 +483,19 @@ export function StoryCollapse() {
 
 export function StoryToast() {
   const form = createTinyForm(
-    useTinyStoreStorage("unocss-preset-antd:StoryToast", {
-      animationType: "2",
+    useTinyStoreStorage("unocss-preset-antd:StoryToast-v2", {
+      animationType: "default",
       duration: 2000,
       position: "bottom-left" as ToastPosition,
     })
   );
   const { duration, position } = form.data;
+
+  React.useSyncExternalStore(
+    toast.subscribe,
+    toast.getSnapshot,
+    toast.getSnapshot
+  );
 
   return (
     <div className="flex flex-col items-center gap-3 m-2">
@@ -497,16 +503,11 @@ export function StoryToast() {
         <h2 className="text-xl">Toast</h2>
         <div className="flex flex-col gap-1">
           Animation Type
-          <select
+          <SimpleSelect
             className="antd-input p-1"
-            {...form.fields.animationType.props()}
-          >
-            {[1, 2].map((v) => (
-              <option key={v} value={v}>
-                {v}
-              </option>
-            ))}
-          </select>
+            options={["default", "custom", "none"]}
+            {...form.fields.animationType.rawProps()}
+          />
         </div>
         <div className="flex flex-col gap-1">
           Duration
@@ -526,14 +527,12 @@ export function StoryToast() {
           />
         </div>
         <div className="flex flex-col gap-1">
-          Toast Type
+          Toast Status
           <div className="flex gap-2">
             <button
               className="flex-1 antd-btn antd-btn-default px-2"
               onClick={() => {
-                toast.create({
-                  node: "Successfuly toasted!",
-                  type: "success",
+                toast.success("Successfuly toasted!", {
                   position,
                   duration,
                 });
@@ -544,9 +543,7 @@ export function StoryToast() {
             <button
               className="flex-1 antd-btn antd-btn-default px-2"
               onClick={() => {
-                toast.create({
-                  node: "This didn't work.",
-                  type: "error",
+                toast.error("This didn't work.", {
                   position,
                   duration,
                 });
@@ -557,15 +554,38 @@ export function StoryToast() {
             <button
               className="flex-1 antd-btn antd-btn-default px-2"
               onClick={() => {
-                toast.create({
-                  node: "Some neutral message",
-                  type: "default",
+                toast.info("Some info", {
                   position,
                   duration,
                 });
               }}
             >
-              Default
+              Info
+            </button>
+            <button
+              className="flex-1 antd-btn antd-btn-default px-2"
+              onClick={() => {
+                toast.blank("Just message", {
+                  position,
+                  duration,
+                });
+              }}
+            >
+              Blank
+            </button>
+            <button
+              className="flex-1 antd-btn antd-btn-default px-2"
+              onClick={() => {
+                toast.custom(
+                  (props) => <CustomToastItemComponent {...props} />,
+                  {
+                    position,
+                    duration,
+                  }
+                );
+              }}
+            >
+              Custom
             </button>
           </div>
         </div>
@@ -575,9 +595,7 @@ export function StoryToast() {
             <button
               className="antd-btn antd-btn-default px-4"
               onClick={() => {
-                for (const item of toast.items) {
-                  toast.dismiss(item.id);
-                }
+                toast.dismissAll();
               }}
             >
               Dismiss all
@@ -585,33 +603,37 @@ export function StoryToast() {
             <button
               className="antd-btn antd-btn-default px-4"
               onClick={() => {
-                toast.items = [];
-                toast.notify();
+                toast.removeAll();
               }}
             >
               Remove all
             </button>
+            <button
+              className="antd-btn antd-btn-default px-4 w-[100px]"
+              onClick={() => {
+                toast.pause(!toast.paused);
+              }}
+            >
+              {toast.paused ? "Unpause" : "Pause"}
+            </button>
           </div>
         </div>
-        <div className="border h-[500px] p-3 flex flex-col relative overflow-hidden">
+        <div className="border h-[500px] flex flex-col relative overflow-hidden">
           <ToastContainer
             toast={toast}
             animationType={form.data.animationType}
           />
         </div>
-        <DebugToast />
+        <Debug
+          className="text-xs"
+          debug={{
+            paused: toast.paused,
+            items: toast.items,
+          }}
+        />
       </section>
     </div>
   );
-}
-
-function DebugToast() {
-  React.useSyncExternalStore(
-    toast.subscribe,
-    toast.getSnapshot,
-    toast.getSnapshot
-  );
-  return <Debug debug={toast.items} />;
 }
 
 export function StoryPopover() {

@@ -1,19 +1,15 @@
-//
-// framework agnostic toast core logic
-//
-
-// TODO: create `tiny-toast` pacakge
-
-// HTMLElement based api?
-// - setContainerElement
-// - setItemElement
-// - track unmount for remove
-// - track mouseover for pause
+import { PauseableTimeout, generateId } from "./utils";
 
 export type ToastItem<T> = {
   id: string;
   step: number;
+  duration: number;
+  dismissTimeout: PauseableTimeout;
   data: T;
+};
+
+export type ToastCoreOptions = {
+  duration: number;
 };
 
 // animation can utilize intermediate step between [0, 1] and [1, oo)
@@ -24,18 +20,26 @@ export const TOAST_STEP = {
 
 export class ToastManager<T> {
   public items: ToastItem<T>[] = [];
+  public paused = false;
 
-  create(data: T) {
-    this.items = [...this.items];
-    this.items.push({
+  create(data: T, { duration }: ToastCoreOptions) {
+    const item: ToastItem<T> = {
       id: generateId(), // TODO: support upsert by id?
       step: TOAST_STEP.START,
+      duration,
+      dismissTimeout: new PauseableTimeout(
+        () => this.dismiss(item.id),
+        duration
+      ),
       data,
-    });
+    };
+    if (!this.paused) {
+      item.dismissTimeout.start();
+    }
+    this.items = [...this.items, item];
     this.notify();
   }
 
-  // TODO: SetAction
   update(id: string, newItem: Partial<ToastItem<T>>) {
     const index = this.items.findIndex((item) => item.id === id);
     if (index >= 0) {
@@ -49,8 +53,31 @@ export class ToastManager<T> {
     this.update(id, { step: TOAST_STEP.DISMISS });
   }
 
+  dismissAll() {
+    for (const item of this.items) {
+      this.dismiss(item.id);
+    }
+  }
+
   remove(id: string) {
     this.items = this.items.filter((item) => item.id !== id);
+    this.notify();
+  }
+
+  removeAll() {
+    this.items = [];
+    this.notify();
+  }
+
+  pause(paused: boolean) {
+    this.paused = paused;
+    for (const item of this.items) {
+      if (paused) {
+        item.dismissTimeout.stop();
+      } else {
+        item.dismissTimeout.start();
+      }
+    }
     this.notify();
   }
 
@@ -59,6 +86,7 @@ export class ToastManager<T> {
   //
 
   private listeners = new Set<() => void>();
+  private snapshot = {};
 
   subscribe = (listener: () => void) => {
     this.listeners.add(listener);
@@ -67,14 +95,10 @@ export class ToastManager<T> {
     };
   };
 
-  getSnapshot = () => this.items;
+  getSnapshot = () => this.snapshot;
 
   notify() {
+    this.snapshot = {};
     this.listeners.forEach((f) => f());
   }
-}
-
-function generateId() {
-  // prettier-ignore
-  return Math.floor(Math.random() * 2 ** 50).toString(32).padStart(10, "0");
 }
