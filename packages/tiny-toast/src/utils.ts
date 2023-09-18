@@ -1,3 +1,72 @@
+type PauseableTimeoutState =
+  | {
+      t: "stopped";
+    }
+  | {
+      t: "started";
+      startedAt: number;
+      stop: () => void;
+    }
+  | {
+      t: "disposed";
+    };
+
+export class PauseableTimeout {
+  public state: PauseableTimeoutState = { t: "stopped" };
+  public runningMs = 0;
+
+  // TODO: handle ms === Infinity
+  constructor(private callback: () => void, private ms: number) {}
+
+  start() {
+    if (this.state.t === "stopped") {
+      this.state = {
+        t: "started",
+        startedAt: Date.now(),
+        stop: setupTimeout(() => {
+          this.state = { t: "disposed" };
+          this.callback();
+          this.notify();
+        }, this.ms - this.runningMs),
+      };
+      this.notify();
+    }
+  }
+
+  stop() {
+    if (this.state.t === "started") {
+      this.state.stop();
+      this.runningMs += Date.now() - this.state.startedAt;
+      this.state = { t: "stopped" };
+      this.notify();
+    }
+  }
+
+  dispose() {
+    if (this.state.t === "started") {
+      this.state.stop();
+    }
+    this.state = { t: "disposed" };
+    this.notify();
+  }
+
+  // external store api
+  private listeners = new Set<() => void>();
+
+  subscribe = (listener: () => void) => {
+    this.listeners.add(listener);
+    return () => {
+      this.listeners.delete(listener);
+    };
+  };
+
+  getSnapshot = () => this.state;
+
+  notify() {
+    this.listeners.forEach((f) => f());
+  }
+}
+
 // pause-able setTimeout
 export function createPauseableTimeout(
   callback: () => void,
@@ -20,7 +89,7 @@ export function createPauseableTimeout(
       };
 
   let state: State = { t: "stopped" };
-  let totalMs = 0;
+  let runningMs = 0;
 
   function callbackWrapper() {
     state = { t: "disposed" };
@@ -34,14 +103,14 @@ export function createPauseableTimeout(
         state = {
           t: "started",
           startedAt: Date.now(),
-          stop: setupTimeout(callbackWrapper, ms - totalMs),
+          stop: setupTimeout(callbackWrapper, ms - runningMs),
         };
       }
     },
     stop: () => {
       if (state.t === "started") {
         state.stop();
-        totalMs += Date.now() - state.startedAt;
+        runningMs += Date.now() - state.startedAt;
         state = { t: "stopped" };
       }
     },

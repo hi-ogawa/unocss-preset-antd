@@ -1,4 +1,4 @@
-import { generateId } from "./utils";
+import { createPauseableTimeout, generateId } from "./utils";
 
 export type ToastItem<T> = {
   id: string;
@@ -15,6 +15,11 @@ export const TOAST_STEP = {
 export class ToastManager<T> {
   public items: ToastItem<T>[] = [];
   public paused = false;
+  // TODO
+  private timeouts = new Map<
+    string,
+    ReturnType<typeof createPauseableTimeout>
+  >();
 
   create(data: T) {
     this.items = [...this.items];
@@ -23,6 +28,7 @@ export class ToastManager<T> {
       step: TOAST_STEP.START,
       data,
     });
+    this.timeouts;
     this.notify();
   }
 

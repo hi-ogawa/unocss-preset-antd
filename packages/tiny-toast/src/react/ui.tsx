@@ -2,7 +2,7 @@ import { Transition } from "@hiogawa/tiny-transition/dist/react";
 import { groupBy } from "@hiogawa/utils";
 import React from "react";
 import { TOAST_STEP } from "../core";
-import { cls, createPauseableTimeout } from "../utils";
+import { PauseableTimeout, cls } from "../utils";
 import type {
   ReactToastContainerOptions,
   ReactToastItem,
@@ -148,13 +148,15 @@ function ItemComponent({
   // auto-dismiss timeout
   // TODO: move to core
 
-  const [timeout] = React.useState(() => {
-    const timeout = createPauseableTimeout(
-      () => toast.dismiss(item.id),
-      item.data.duration
-    );
-    return timeout;
-  });
+  const [timeout] = React.useState(
+    () => new PauseableTimeout(() => toast.dismiss(item.id), item.data.duration)
+  );
+
+  React.useSyncExternalStore(
+    timeout.subscribe,
+    timeout.getSnapshot,
+    timeout.getSnapshot
+  );
 
   // cannot dispose since React.StrictMode would break it...
   React.useEffect(() => {
@@ -189,6 +191,9 @@ function ItemComponent({
             )}
           />
         )}
+        <div>
+          ({timeout.state.t}, {timeout.runningMs})
+        </div>
         <div className="= flex-1">{item.data.node}</div>
       </div>
     </div>
