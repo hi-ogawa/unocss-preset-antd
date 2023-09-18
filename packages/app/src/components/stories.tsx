@@ -605,9 +605,7 @@ export function StoryToast() {
             <button
               className="antd-btn antd-btn-default px-4"
               onClick={() => {
-                for (const item of toast.items) {
-                  toast.dismiss(item.id);
-                }
+                toast.dismissAll();
               }}
             >
               Dismiss all
@@ -615,8 +613,7 @@ export function StoryToast() {
             <button
               className="antd-btn antd-btn-default px-4"
               onClick={() => {
-                toast.items = [];
-                toast.notify();
+                toast.removeAll();
               }}
             >
               Remove all
