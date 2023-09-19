@@ -717,6 +717,7 @@ export function StoryCubicBezier() {
     React.useState({
       input: "0.25, 0.1, 0.25, 1",
       preset: none<Preset>(),
+      duration: "3s",
       play: false,
     })
   );
@@ -772,11 +773,15 @@ export function StoryCubicBezier() {
               {isValid && renderSvg({ numbers })}
             </svg>
           </div>
+          <label className="flex flex-col gap-1">
+            <span className="text-colorTextSecondary">Duration</span>
+            <input
+              className="antd-input p-1"
+              {...form.fields.duration.props()}
+            />
+          </label>
           <button
-            className={cls(
-              "antd-btn antd-btn-primary p-1",
-              !form.data.play && "brightness-80"
-            )}
+            className="antd-btn antd-btn-primary p-1"
             disabled={!isValid}
             onClick={() => {
               form.fields.play.onChange((prev) => !prev);
@@ -795,7 +800,7 @@ export function StoryCubicBezier() {
                     className="absolute inset-0 bg-colorSuccess"
                     style={{
                       transformOrigin: "0 0",
-                      transition: "transform 4s linear",
+                      transition: `transform ${form.data.duration} linear`,
                     }}
                     enterFrom="scale-x-0"
                     enterTo="scale-x-100"
@@ -813,7 +818,7 @@ export function StoryCubicBezier() {
                     className="absolute inset-0 bg-colorSuccess"
                     style={{
                       transformOrigin: "0 0",
-                      transition: `transform 4s cubic-bezier(${form.data.input})`,
+                      transition: `transform ${form.data.duration} cubic-bezier(${form.data.input})`,
                     }}
                     enterFrom="scale-x-0"
                     enterTo="scale-x-100"
