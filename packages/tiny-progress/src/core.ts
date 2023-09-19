@@ -37,7 +37,7 @@ export class TinyProgress {
     },
   } satisfies Record<string, Partial<CSSStyleDeclaration>>;
 
-  private el: HTMLElement | undefined;
+  public el: HTMLElement | undefined;
 
   start() {
     this.el?.remove();
