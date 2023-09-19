@@ -394,9 +394,8 @@ export function StoryFakeProgress() {
           {loading ? "Finish" : "Start"}
         </button>
         <div className="fixed top-0 left-0 right-0 h-1 pointer-events-none">
-          {/* cf. https://github.com/badrap/bar-of-progress/blob/master/src/index.ts */}
           <Transition
-            show={loading}
+            show={false}
             className="absolute inset-0 bg-colorPrimary"
             style={{
               transformOrigin: "0 0",
@@ -418,9 +417,87 @@ export function StoryFakeProgress() {
             leaveTo="scale-x-100 opacity-0 brightness-150"
           />
         </div>
+        <FakeProgressReact loading={loading} />
       </section>
     </div>
   );
+}
+
+function FakeProgressReact(props: { loading: boolean }) {
+  const [progress] = React.useState(() => new FakeProgress());
+
+  React.useEffect(() => {
+    props.loading ? progress.start() : progress.finish();
+  }, [props.loading]);
+
+  return null;
+}
+
+export class FakeProgress {
+  // inspired by https://github.com/badrap/bar-of-progress/blob/master/src/index.ts
+  public styles = {
+    base: {
+      position: "fixed",
+      top: "0",
+      left: "0",
+      right: "0",
+      height: "4px",
+      pointerEvents: "none",
+      backgroundColor: "#1668dc", // ant-design dark colorPrimary
+      transformOrigin: "0 0",
+    },
+    enter: {
+      transition: "transform 10s cubic-bezier(0.05, 0.5, 0, 1)",
+    },
+    enterFrom: {
+      transform: "scaleX(0)",
+    },
+    enterTo: {
+      transform: "scaleX(0.97)",
+    },
+    leave: {
+      transition: [
+        "transform 0.1s linear",
+        "filter 0.3s ease-in-out",
+        "opacity 0.5s ease-in-out 0.3s",
+      ].join(", "),
+    },
+    leaveFrom: {
+      opacity: "1",
+      filter: "brightness(1)",
+    },
+    leaveTo: {
+      opacity: "0",
+      filter: "brightness(1.5)",
+      transform: "scaleX(1)",
+    },
+  } satisfies Record<string, Partial<CSSStyleDeclaration>>;
+
+  private el: HTMLElement | undefined;
+
+  start() {
+    this.el?.remove();
+    this.el = document.body.appendChild(document.createElement("div"));
+    const el = this.el;
+    Object.assign(
+      el.style,
+      this.styles.base,
+      this.styles.enter,
+      this.styles.enterFrom
+    );
+    requestAnimationFrame(() => {
+      Object.assign(el.style, this.styles.enterTo);
+    });
+  }
+
+  finish() {
+    if (!this.el) return;
+    const el = this.el;
+    Object.assign(el.style, this.styles.leave, this.styles.leaveFrom);
+    requestAnimationFrame(() => {
+      Object.assign(el.style, this.styles.leaveTo);
+    });
+  }
 }
 
 export function StoryModal() {
