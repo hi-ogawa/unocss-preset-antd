@@ -6,7 +6,7 @@ import {
 } from "@hiogawa/tiny-toast/dist/react";
 import { Transition } from "@hiogawa/tiny-transition/dist/react";
 import { ANTD_VARS } from "@hiogawa/unocss-preset-antd";
-import { objectPickBy, range } from "@hiogawa/utils";
+import { none, objectKeys, objectPickBy, range } from "@hiogawa/utils";
 import { Debug, toSetSetState, useDelay } from "@hiogawa/utils-react";
 import React from "react";
 import ReactSelect from "react-select";
@@ -698,4 +698,155 @@ export function StoryPopover() {
       </section>
     </div>
   );
+}
+
+// cf.
+// https://developer.mozilla.org/en-US/docs/Web/SVG/Tutorial/Paths#b%C3%A9zier_curves
+// https://drafts.csswg.org/css-easing-2/#cubic-bezier-easing-functions
+// https://developer.mozilla.org/en-US/docs/Web/CSS/transition-timing-function
+export function StoryCubicBezier() {
+  const PRESETS = {
+    ease: [0.25, 0.1, 0.25, 1],
+    "ease-in": [0.42, 0, 1, 1],
+    "ease-out": [0, 0, 0.58, 1],
+    "ease-in-out": [0.42, 0, 0.58, 1],
+  };
+  type Preset = keyof typeof PRESETS;
+
+  const form = createTinyForm(
+    React.useState({
+      input: "0.25, 0.1, 0.25, 1",
+      preset: none<Preset>(),
+      duration: "3s",
+      play: false,
+    })
+  );
+
+  const numbers = form.data.input.split(",").map((v) => Number.parseFloat(v));
+  const [x1, _y1, x2, _y2] = numbers;
+  const isValid =
+    numbers.length === 4 &&
+    numbers.every((n) => Number.isFinite(n)) &&
+    0 <= x1 &&
+    x1 <= 1 &&
+    0 <= x2 &&
+    x2 <= 1;
+
+  return (
+    <div className="flex flex-col items-center gap-3 m-2">
+      <section className="flex flex-col gap-3 w-full max-w-lg border p-4">
+        <h2 className="text-xl">Cubic Bézier</h2>
+        <div className="flex flex-col gap-3">
+          <label className="flex flex-col gap-1">
+            <div className="flex items-center">
+              <span className="text-colorTextSecondary flex-1">
+                x1, y1, x2, y2
+              </span>
+              <SimpleSelect
+                className="antd-input px-1 text-sm"
+                value={form.fields.preset.value}
+                options={[undefined, ...objectKeys(PRESETS)]}
+                labelFn={(v) => v ?? "- Preset -"}
+                onChange={(v) => {
+                  if (v) {
+                    form.fields.input.onChange(PRESETS[v].join(", "));
+                  }
+                  form.fields.preset.onChange(v);
+                }}
+              />
+            </div>
+            <input
+              className="antd-input p-1"
+              aria-invalid={!isValid}
+              {...form.fields.input.props()}
+            />
+          </label>
+          <div className="self-center w-full">
+            <svg
+              // flip y for conventional axis direction
+              style={{ transform: "matrix(1, 0, 0, -1, 0, 0)" }}
+              viewBox="-5 -5 110 110"
+              stroke="currentColor"
+              fill="transparent"
+            >
+              <rect x="0" y="0" width="100" height="100" opacity={0.2} />
+              {isValid && renderSvg({ numbers })}
+            </svg>
+          </div>
+          <label className="flex flex-col gap-1">
+            <span className="text-colorTextSecondary">Duration</span>
+            <input
+              className="antd-input p-1"
+              {...form.fields.duration.props()}
+            />
+          </label>
+          <button
+            className="antd-btn antd-btn-primary p-1"
+            disabled={!isValid}
+            onClick={() => {
+              form.fields.play.onChange((prev) => !prev);
+            }}
+          >
+            Play
+          </button>
+          <div className="flex flex-col gap-5">
+            <label className="flex flex-col gap-1">
+              <span className="text-colorTextSecondary">linear</span>
+              <div className="h-1 w-full relative bg-colorBorder">
+                {form.data.play && (
+                  <Transition
+                    show
+                    appear
+                    className="absolute inset-0 bg-colorSuccess"
+                    style={{
+                      transformOrigin: "0 0",
+                      transition: `transform ${form.data.duration} linear`,
+                    }}
+                    enterFrom="scale-x-0"
+                    enterTo="scale-x-100"
+                  />
+                )}
+              </div>
+            </label>
+            <label className="flex flex-col gap-1">
+              <span className="text-colorTextSecondary">cubic-bezier</span>
+              <div className="h-1 w-full relative bg-colorBorder">
+                {form.data.play && (
+                  <Transition
+                    show
+                    appear
+                    className="absolute inset-0 bg-colorSuccess"
+                    style={{
+                      transformOrigin: "0 0",
+                      transition: `transform ${form.data.duration} cubic-bezier(${form.data.input})`,
+                    }}
+                    enterFrom="scale-x-0"
+                    enterTo="scale-x-100"
+                  />
+                )}
+              </div>
+            </label>
+          </div>
+        </div>
+      </section>
+    </div>
+  );
+
+  function renderSvg({ numbers }: { numbers: number[] }) {
+    const [x1, y1, x2, y2] = numbers.map((n) => n * 100);
+    return (
+      <>
+        <path d={`M 0 0 C ${x1} ${y1}, ${x2} ${y2}, 100 100`} />
+        <g className="text-colorPrimary" fill="currentColor">
+          <path d={`M 0 0 L ${x1} ${y1}`} />
+          <path d={`M ${x2} ${y2} L 100 100`} />
+          {/* TODO: interactive circle? */}
+          <circle cx="0" cy="0" r="1" />
+          <circle cx={x1} cy={y1} r="1" />
+          <circle cx={x2} cy={y2} r="1" />
+          <circle cx="100" cy="100" r="1" />
+        </g>
+      </>
+    );
+  }
 }
