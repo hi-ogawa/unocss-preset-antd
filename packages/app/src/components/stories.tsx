@@ -346,7 +346,7 @@ export function StoryTab() {
   );
 }
 
-export function StoryTopProgressBar() {
+export function StoryTopProgressBarOld() {
   const [loading, setLoading] = React.useState(false);
   const progress = useProgress(loading);
 
