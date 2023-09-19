@@ -840,6 +840,7 @@ export function StoryCubicBezier() {
         <g className="text-colorPrimary" fill="currentColor">
           <path d={`M 0 0 L ${x1} ${y1}`} />
           <path d={`M ${x2} ${y2} L 100 100`} />
+          {/* TODO: interactive circle? */}
           <circle cx="0" cy="0" r="1" />
           <circle cx={x1} cy={y1} r="1" />
           <circle cx={x2} cy={y2} r="1" />
