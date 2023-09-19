@@ -407,7 +407,7 @@ export function StoryTinyProgress() {
         >
           {form.data.show ? "Finish" : "Start"}
         </button>
-        {/* TODO: currently tiny-transition doesn't support multiple transitions */}
+        {/* implement with tiny-transition */}
         {form.data.debug === 2 && (
           <div className="fixed top-0 left-0 right-0 h-[2px] pointer-events-none">
             <Transition
