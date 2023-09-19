@@ -704,7 +704,7 @@ export function StoryPopover() {
 // https://developer.mozilla.org/en-US/docs/Web/SVG/Tutorial/Paths#b%C3%A9zier_curves
 // https://drafts.csswg.org/css-easing-2/#cubic-bezier-easing-functions
 // https://developer.mozilla.org/en-US/docs/Web/CSS/transition-timing-function
-export function StoryCubicBézier() {
+export function StoryCubicBezier() {
   const PRESETS = {
     ease: [0.25, 0.1, 0.25, 1],
     "ease-in": [0.42, 0, 1, 1],
