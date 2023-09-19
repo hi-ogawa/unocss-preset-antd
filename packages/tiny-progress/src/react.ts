@@ -16,6 +16,8 @@ export function useTinyProgress(props: {
   }, [props.show]);
 
   React.useEffect(() => {
-    progress.finish();
+    () => {
+      progress.finish();
+    };
   }, []);
 }
