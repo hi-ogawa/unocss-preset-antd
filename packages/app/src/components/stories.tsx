@@ -393,7 +393,7 @@ export function StoryFakeProgress() {
         >
           {loading ? "Finish" : "Start"}
         </button>
-        <div className="fixed top-0 left-0 right-0 h-1">
+        <div className="fixed top-0 left-0 right-0 h-1 pointer-events-none">
           {/* cf. https://github.com/badrap/bar-of-progress/blob/master/src/index.ts */}
           <Transition
             show={loading}
@@ -402,13 +402,17 @@ export function StoryFakeProgress() {
               transformOrigin: "0 0",
             }}
             onEnterFrom={(el) => {
-              el.style.transition = "transform 10s cubic-bezier(0.05, 0, 0, 1)";
+              el.style.transition =
+                "transform 10s cubic-bezier(0.05, 0.5, 0, 1)";
             }}
             enterFrom="scale-x-0"
             enterTo="scale-x-95"
             onLeaveFrom={(el) => {
-              el.style.transition =
-                "transform 0.1s linear, filter 0.2s linear, opacity 0.8s linear 0.2s";
+              el.style.transition = [
+                "transform 0.1s linear",
+                "filter 0.3s ease-in-out",
+                "opacity 0.5s ease-in-out 0.3s",
+              ].join(",");
             }}
             leaveFrom="opacity-1 brightness-100"
             leaveTo="scale-x-100 opacity-0 brightness-150"
