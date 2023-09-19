@@ -28,9 +28,9 @@ export const Transition = simpleForawrdRef(function Transition(
     render?: (props: Record<string, any>) => React.ReactNode;
   } & TransitionClassProps &
     TransitionCallbackProps & {
-      // to rollup dts, we need to inline Pick<JSX.IntrinsicElements["div"], ...>
+      // choose only common props from `JSX.IntrinsicElements["div"]` to simplify auto-complete
       className?: string;
-      style?: unknown;
+      style?: React.CSSProperties;
       children?: React.ReactNode;
     },
   ref: React.ForwardedRef<HTMLElement>
