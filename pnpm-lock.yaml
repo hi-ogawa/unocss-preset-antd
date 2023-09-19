@@ -89,6 +89,9 @@ importers:
       '@hiogawa/tiny-form':
         specifier: workspace:*
         version: link:../tiny-form
+      '@hiogawa/tiny-progress':
+        specifier: workspace:*
+        version: link:../tiny-progress
       '@hiogawa/tiny-store':
         specifier: 0.0.1-pre.1
         version: 0.0.1-pre.1(react@18.2.0)

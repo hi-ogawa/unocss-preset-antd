@@ -1,5 +1,6 @@
 import { createTinyForm } from "@hiogawa/tiny-form";
 import { useTinyForm } from "@hiogawa/tiny-form/dist/react";
+import { TinyProgressReact } from "@hiogawa/tiny-progress/dist/react";
 import { useTinyStoreStorage } from "@hiogawa/tiny-store/dist/react";
 import {
   TOAST_POSITIONS,
@@ -404,6 +405,7 @@ export function StoryTinyProgress() {
           {loading ? "Finish" : "Start"}
         </button>
         {form.data.debug === 1 && <TinyProgressReact loading={loading} />}
+        {/* implementation based on Transition component */}
         {form.data.debug === 2 && (
           <div className="fixed top-0 left-0 right-0 h-1 pointer-events-none">
             <Transition
@@ -433,83 +435,6 @@ export function StoryTinyProgress() {
       </section>
     </div>
   );
-}
-
-function TinyProgressReact(props: { loading: boolean }) {
-  const [progress] = React.useState(() => new TinyProgress());
-
-  React.useEffect(() => {
-    props.loading ? progress.start() : progress.finish();
-  }, [props.loading]);
-
-  return null;
-}
-
-class TinyProgress {
-  // inspired by https://github.com/badrap/bar-of-progress/blob/master/src/index.ts
-  public styles = {
-    base: {
-      position: "fixed",
-      top: "0",
-      left: "0",
-      right: "0",
-      height: "4px",
-      pointerEvents: "none",
-      backgroundColor: "#1668dc", // ant-design dark colorPrimary
-      transformOrigin: "0 0",
-    },
-    enter: {
-      transition: "transform 10s cubic-bezier(0.05, 0.5, 0, 1)",
-    },
-    enterFrom: {
-      transform: "scaleX(0)",
-    },
-    enterTo: {
-      transform: "scaleX(0.97)",
-    },
-    leave: {
-      transition: [
-        "transform 0.1s linear",
-        "filter 0.3s ease-in-out",
-        "opacity 0.5s ease-in-out 0.3s",
-      ].join(", "),
-    },
-    leaveFrom: {
-      opacity: "1",
-      filter: "brightness(1)",
-    },
-    leaveTo: {
-      opacity: "0",
-      filter: "brightness(1.5)",
-      transform: "scaleX(1)",
-    },
-  } satisfies Record<string, Partial<CSSStyleDeclaration>>;
-
-  private el: HTMLElement | undefined;
-
-  start() {
-    this.el?.remove();
-    this.el = document.body.appendChild(document.createElement("div"));
-    const el = this.el;
-    Object.assign(
-      el.style,
-      this.styles.base,
-      this.styles.enter,
-      this.styles.enterFrom
-    );
-    requestAnimationFrame(() => {
-      Object.assign(el.style, this.styles.enterTo);
-    });
-  }
-
-  finish() {
-    if (!this.el) return;
-    const el = this.el;
-    Object.assign(el.style, this.styles.leave, this.styles.leaveFrom);
-    requestAnimationFrame(() => {
-      Object.assign(el.style, this.styles.leaveTo);
-    });
-  }
 }
 
 export function StoryModal() {
