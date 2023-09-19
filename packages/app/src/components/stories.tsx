@@ -378,6 +378,48 @@ export function StoryTopProgressBar() {
   );
 }
 
+export function StoryFakeProgress() {
+  const [loading, setLoading] = React.useState(false);
+
+  return (
+    <div className="flex flex-col items-center gap-3 m-2">
+      <section className="flex flex-col gap-3 w-full max-w-lg border p-3">
+        <h2 className="text-xl">FakeProgress</h2>
+        <button
+          className="antd-btn antd-btn-primary p-1"
+          onClick={() => {
+            setLoading((prev) => !prev);
+          }}
+        >
+          {loading ? "Finish" : "Start"}
+        </button>
+        <div className="fixed top-0 left-0 right-0 h-1">
+          {/* cf. https://github.com/badrap/bar-of-progress/blob/master/src/index.ts */}
+          <Transition
+            show={loading}
+            className="absolute inset-0 bg-colorPrimary"
+            style={{
+              transformOrigin: "0 0",
+            }}
+            onEnterFrom={(el) => {
+              el.style.transition = "transform 10s cubic-bezier(0.05, 0, 0, 1)";
+            }}
+            enterFrom="scale-x-0"
+            enterTo="scale-x-95"
+            onLeaveFrom={(el) => {
+              el.style.transition = "transform 0.5s cubic-bezier(0, 1, 0, 1)";
+              // TODO: fix TransitionManager to handle multiple durations
+              // el.style.transition = "transform 0.5s cubic-bezier(0, 1, 0, 1), opacity 1s linear 0.5s";
+            }}
+            leaveFrom="opacity-1"
+            leaveTo="scale-x-100"
+          />
+        </div>
+      </section>
+    </div>
+  );
+}
+
 export function StoryModal() {
   const modal = useModal();
 
