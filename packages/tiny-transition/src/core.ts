@@ -1,3 +1,5 @@
+import { tinyassert } from "@hiogawa/utils";
+
 //
 // callback type
 //
@@ -159,12 +161,10 @@ function onTransitionEnd(el: HTMLElement, callback: () => void) {
   el.addEventListener("transitionend", handler);
 
   // additionally setup `transitionDuration` timeout as a fallback
-  const duration = getComputedStyle(el).transitionDuration;
-  const durationMs = parseDuration(duration);
   const subscription = window.setTimeout(() => {
     dispose();
     callback();
-  }, durationMs);
+  }, computeTransitionTimeout(el));
 
   function dispose() {
     el.removeEventListener("transitionend", handler);
@@ -174,12 +174,33 @@ function onTransitionEnd(el: HTMLElement, callback: () => void) {
   return dispose;
 }
 
-function parseDuration(s: string): number {
-  if (s.endsWith("ms")) {
-    return Number(s.slice(0, -2));
+function computeTransitionTimeout(el: HTMLElement): number {
+  const style = getComputedStyle(el);
+  const [duration, delay] = [
+    style.transitionDuration,
+    style.transitionDelay,
+  ].map((s) => Math.max(...parseDuration(s)));
+  return duration + delay;
+}
+
+function parseDuration(s: string): number[] {
+  // handle multiple transition e.g.
+  //   transition: width 0.1s ease-out, opacity 0.5s ease 0.2s;
+  return s
+    .trim()
+    .split(",")
+    .map((s) => parseDurationSingle(s.trim()));
+}
+
+function parseDurationSingle(s: string): number {
+  let ms: number = 0;
+  if (!s) {
+    ms = 0;
+  } else if (s.endsWith("ms")) {
+    ms = Number.parseFloat(s.slice(0, -2));
+  } else if (s.endsWith("s")) {
+    ms = Number.parseFloat(s.slice(0, -1)) * 1000;
   }
-  if (s.endsWith("s")) {
-    return Number(s.slice(0, -1)) * 1000;
-  }
-  return 0;
+  tinyassert(Number.isFinite(ms), `Failed to parse css duration '${s}'`);
+  return ms;
 }
