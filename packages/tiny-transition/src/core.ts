@@ -151,28 +151,13 @@ function onNextFrame(callback: () => void) {
 }
 
 function onTransitionEnd(el: HTMLElement, callback: () => void) {
-  // listen "transitionend"
-  const handler = (e: HTMLElementEventMap["transitionend"]) => {
-    if (e.target === e.currentTarget) {
-      dispose();
-      callback();
-    }
+  // setup `transitionDuration + transitionDelay` timeout
+  // ("transitionend" event cannot be used when multiple transition)
+  const timeoutDuration = computeTransitionTimeout(el);
+  const handle = window.setTimeout(() => callback(), timeoutDuration);
+  return () => {
+    window.clearTimeout(handle);
   };
-  // TODO: this doesn't work for multiple transition
-  // el.addEventListener("transitionend", handler);
-
-  // additionally setup `transitionDuration` timeout as a fallback
-  const subscription = window.setTimeout(() => {
-    dispose();
-    callback();
-  }, computeTransitionTimeout(el));
-
-  function dispose() {
-    el.removeEventListener("transitionend", handler);
-    window.clearTimeout(subscription);
-  }
-
-  return dispose;
 }
 
 function computeTransitionTimeout(el: HTMLElement): number {
@@ -186,7 +171,7 @@ function computeTransitionTimeout(el: HTMLElement): number {
 
 function parseDuration(s: string): number[] {
   // handle multiple transition e.g.
-  //   transition: width 0.1s ease-out, opacity 0.5s ease 0.2s;
+  //   transition: transform 0.1s linear, opacity 1s linear 0.2s;
   return s
     .trim()
     .split(",")
@@ -202,6 +187,6 @@ function parseDurationSingle(s: string): number {
   } else if (s.endsWith("s")) {
     ms = Number.parseFloat(s.slice(0, -1)) * 1000;
   }
-  tinyassert(Number.isFinite(ms), `Failed to parse css duration '${s}'`);
+  tinyassert(Number.isFinite(ms), `failed to parse css duration '${s}'`);
   return ms;
 }
