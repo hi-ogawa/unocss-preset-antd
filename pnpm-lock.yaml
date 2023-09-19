@@ -189,6 +189,15 @@ importers:
         specifier: ^18.2.0
         version: 18.2.0
 
+  packages/tiny-progress:
+    devDependencies:
+      '@types/react':
+        specifier: ^18.2.21
+        version: 18.2.21
+      react:
+        specifier: ^18.2.0
+        version: 18.2.0
+
   packages/tiny-toast:
     devDependencies:
       '@hiogawa/tiny-transition':
