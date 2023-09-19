@@ -144,9 +144,9 @@ export class TransitionManager {
 }
 
 function onNextFrame(callback: () => void) {
-  const id = window.requestAnimationFrame(callback);
+  const id = requestAnimationFrame(callback);
   return () => {
-    window.cancelAnimationFrame(id);
+    cancelAnimationFrame(id);
   };
 }
 
@@ -154,9 +154,9 @@ function onTransitionEnd(el: HTMLElement, callback: () => void) {
   // setup `transitionDuration + transitionDelay` timeout
   // ("transitionend" event cannot be used when multiple transition)
   const timeoutDuration = computeTransitionTimeout(el);
-  const handle = window.setTimeout(() => callback(), timeoutDuration);
+  const handle = setTimeout(() => callback(), timeoutDuration);
   return () => {
-    window.clearTimeout(handle);
+    clearTimeout(handle);
   };
 }
 
