@@ -1,5 +1,4 @@
 export class TinyProgress {
-  // cf. https://github.com/badrap/bar-of-progress/blob/master/src/index.ts
   public styles = {
     base: {
       position: "fixed",
@@ -7,7 +6,7 @@ export class TinyProgress {
       left: "0",
       right: "0",
       height: "2px",
-      backgroundColor: "#38f",
+      backgroundColor: "#48f",
       pointerEvents: "none",
       transformOrigin: "0 0",
     },
