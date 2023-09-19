@@ -7,6 +7,31 @@ import { cls } from "../utils/misc";
 
 // based on https://github.com/hi-ogawa/ytsub-v3/blob/859264f683e8d1c6331ca1c630101c037a78dd94/app/components/top-progress-bar.tsx#L1-L2
 
+export class ProgressBarManager {
+  baseEl: HTMLElement | undefined;
+  moveEl: HTMLElement | undefined;
+  glowEl: HTMLElement | undefined;
+
+  start() {
+    const el = document.createElement("div");
+    Object.assign(el.style, {
+      height: "3px",
+      width: "100%",
+      transform: "scaleX(0)",
+      transformOrigin: "0 0",
+      transition: "transform 10s cubic-bezier(0, 0.5, 1, 0)",
+    } satisfies Partial<CSSStyleDeclaration>);
+
+    typeof el.style.transition || console.log("unreachable"); // force paint
+
+    Object.assign(el.style, {
+      transform: "scaleX(0.95)",
+    } satisfies Partial<CSSStyleDeclaration>);
+  }
+
+  finish() {}
+}
+
 export function TopProgressBar({ loading }: { loading: boolean }) {
   const progress = useProgress(loading);
 
