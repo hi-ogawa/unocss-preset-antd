@@ -1,4 +1,5 @@
 import { createTinyForm } from "@hiogawa/tiny-form";
+import { useTinyForm } from "@hiogawa/tiny-form/dist/react";
 import { useTinyStoreStorage } from "@hiogawa/tiny-store/dist/react";
 import {
   TOAST_POSITIONS,
@@ -380,11 +381,20 @@ export function StoryTopProgressBar() {
 
 export function StoryFakeProgress() {
   const [loading, setLoading] = React.useState(false);
+  const form = useTinyForm({ debug: 1 });
 
   return (
     <div className="flex flex-col items-center gap-3 m-2">
       <section className="flex flex-col gap-3 w-full max-w-lg border p-3">
         <h2 className="text-xl">FakeProgress</h2>
+        <label className="flex items-center gap-2">
+          Debug
+          <SimpleSelect
+            className="antd-input p-1"
+            options={[1, 2]}
+            {...form.fields.debug.rawProps()}
+          />
+        </label>
         <button
           className="antd-btn antd-btn-primary p-1"
           onClick={() => {
@@ -393,31 +403,33 @@ export function StoryFakeProgress() {
         >
           {loading ? "Finish" : "Start"}
         </button>
-        <div className="fixed top-0 left-0 right-0 h-1 pointer-events-none">
-          <Transition
-            show={false}
-            className="absolute inset-0 bg-colorPrimary"
-            style={{
-              transformOrigin: "0 0",
-            }}
-            onEnterFrom={(el) => {
-              el.style.transition =
-                "transform 10s cubic-bezier(0.05, 0.5, 0, 1)";
-            }}
-            enterFrom="scale-x-0"
-            enterTo="scale-x-95"
-            onLeaveFrom={(el) => {
-              el.style.transition = [
-                "transform 0.1s linear",
-                "filter 0.3s ease-in-out",
-                "opacity 0.5s ease-in-out 0.3s",
-              ].join(",");
-            }}
-            leaveFrom="opacity-1 brightness-100"
-            leaveTo="scale-x-100 opacity-0 brightness-150"
-          />
-        </div>
-        <FakeProgressReact loading={loading} />
+        {form.data.debug === 1 && <FakeProgressReact loading={loading} />}
+        {form.data.debug === 2 && (
+          <div className="fixed top-0 left-0 right-0 h-1 pointer-events-none">
+            <Transition
+              show={loading}
+              className="absolute inset-0 bg-colorPrimary"
+              style={{
+                transformOrigin: "0 0",
+              }}
+              onEnterFrom={(el) => {
+                el.style.transition =
+                  "transform 10s cubic-bezier(0.05, 0.5, 0, 1)";
+              }}
+              enterFrom="scale-x-0"
+              enterTo="scale-x-95"
+              onLeaveFrom={(el) => {
+                el.style.transition = [
+                  "transform 0.1s linear",
+                  "filter 0.3s ease-in-out",
+                  "opacity 0.5s ease-in-out 0.3s",
+                ].join(",");
+              }}
+              leaveFrom="opacity-1 brightness-100"
+              leaveTo="scale-x-100 opacity-0 brightness-150"
+            />
+          </div>
+        )}
       </section>
     </div>
   );
