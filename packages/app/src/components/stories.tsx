@@ -379,7 +379,7 @@ export function StoryTopProgressBar() {
   );
 }
 
-export function StoryFakeProgress() {
+export function StoryTinyProgress() {
   const [loading, setLoading] = React.useState(false);
   const form = useTinyForm({ debug: 1 });
 
@@ -403,7 +403,7 @@ export function StoryFakeProgress() {
         >
           {loading ? "Finish" : "Start"}
         </button>
-        {form.data.debug === 1 && <FakeProgressReact loading={loading} />}
+        {form.data.debug === 1 && <TinyProgressReact loading={loading} />}
         {form.data.debug === 2 && (
           <div className="fixed top-0 left-0 right-0 h-1 pointer-events-none">
             <Transition
@@ -435,8 +435,8 @@ export function StoryFakeProgress() {
   );
 }
 
-function FakeProgressReact(props: { loading: boolean }) {
-  const [progress] = React.useState(() => new FakeProgress());
+function TinyProgressReact(props: { loading: boolean }) {
+  const [progress] = React.useState(() => new TinyProgress());
 
   React.useEffect(() => {
     props.loading ? progress.start() : progress.finish();
@@ -445,7 +445,7 @@ function FakeProgressReact(props: { loading: boolean }) {
   return null;
 }
 
-export class FakeProgress {
+class TinyProgress {
   // inspired by https://github.com/badrap/bar-of-progress/blob/master/src/index.ts
   public styles = {
     base: {
