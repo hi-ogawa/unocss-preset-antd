@@ -6,9 +6,9 @@ export class TinyProgress {
       top: "0",
       left: "0",
       right: "0",
-      height: "3px",
+      height: "2px",
+      backgroundColor: "#38f",
       pointerEvents: "none",
-      backgroundColor: "#28e",
       transformOrigin: "0 0",
     },
     enter: {

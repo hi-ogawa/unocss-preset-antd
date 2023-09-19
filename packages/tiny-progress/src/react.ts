@@ -1,12 +1,21 @@
 import React from "react";
 import { TinyProgress } from "./core";
 
-export function TinyProgressReact(props: { loading: boolean }) {
-  const [progress] = React.useState(() => new TinyProgress());
+export function useTinyProgress(props: {
+  show: boolean;
+  config?: (p: TinyProgress) => void;
+}) {
+  const [progress] = React.useState(() => {
+    const progress = new TinyProgress();
+    props.config?.(progress);
+    return progress;
+  });
 
   React.useEffect(() => {
-    props.loading ? progress.start() : progress.finish();
-  }, [props.loading]);
+    props.show ? progress.start() : progress.finish();
+  }, [props.show]);
 
-  return null;
+  React.useEffect(() => {
+    progress.finish();
+  }, []);
 }
