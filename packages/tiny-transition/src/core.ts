@@ -158,7 +158,8 @@ function onTransitionEnd(el: HTMLElement, callback: () => void) {
       callback();
     }
   };
-  el.addEventListener("transitionend", handler);
+  // TODO: this doesn't work for multiple transition
+  // el.addEventListener("transitionend", handler);
 
   // additionally setup `transitionDuration` timeout as a fallback
   const subscription = window.setTimeout(() => {

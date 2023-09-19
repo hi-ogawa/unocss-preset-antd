@@ -407,12 +407,11 @@ export function StoryFakeProgress() {
             enterFrom="scale-x-0"
             enterTo="scale-x-95"
             onLeaveFrom={(el) => {
-              el.style.transition = "transform 0.5s cubic-bezier(0, 1, 0, 1)";
-              // TODO: fix TransitionManager to handle multiple durations
-              // el.style.transition = "transform 0.5s cubic-bezier(0, 1, 0, 1), opacity 1s linear 0.5s";
+              el.style.transition =
+                "transform 0.1s linear, filter 0.2s linear, opacity 0.8s linear 0.2s";
             }}
-            leaveFrom="opacity-1"
-            leaveTo="scale-x-100"
+            leaveFrom="opacity-1 brightness-100"
+            leaveTo="scale-x-100 opacity-0 brightness-150"
           />
         </div>
       </section>
