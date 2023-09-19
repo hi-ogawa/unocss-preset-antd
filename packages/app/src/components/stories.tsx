@@ -1,6 +1,6 @@
 import { createTinyForm } from "@hiogawa/tiny-form";
 import { useTinyForm } from "@hiogawa/tiny-form/dist/react";
-import { TinyProgressReact } from "@hiogawa/tiny-progress/dist/react";
+import { useTinyProgress } from "@hiogawa/tiny-progress/dist/react";
 import { useTinyStoreStorage } from "@hiogawa/tiny-store/dist/react";
 import {
   TOAST_POSITIONS,
@@ -381,8 +381,11 @@ export function StoryTopProgressBarOld() {
 }
 
 export function StoryTinyProgress() {
-  const [loading, setLoading] = React.useState(false);
-  const form = useTinyForm({ debug: 1 });
+  const form = useTinyForm({ debug: 1, show: false });
+
+  useTinyProgress({
+    show: form.data.debug === 1 && form.data.show,
+  });
 
   return (
     <div className="flex flex-col items-center gap-3 m-2">
@@ -399,17 +402,16 @@ export function StoryTinyProgress() {
         <button
           className="antd-btn antd-btn-primary p-1"
           onClick={() => {
-            setLoading((prev) => !prev);
+            form.fields.show.onChange((prev) => !prev);
           }}
         >
-          {loading ? "Finish" : "Start"}
+          {form.data.show ? "Finish" : "Start"}
         </button>
-        {form.data.debug === 1 && <TinyProgressReact loading={loading} />}
-        {/* implementation based on Transition component */}
+        {/* TODO: currently tiny-transition doesn't support multiple transitions */}
         {form.data.debug === 2 && (
-          <div className="fixed top-0 left-0 right-0 h-1 pointer-events-none">
+          <div className="fixed top-0 left-0 right-0 h-[2px] pointer-events-none">
             <Transition
-              show={loading}
+              show={form.data.show}
               className="absolute inset-0 bg-colorPrimary"
               style={{
                 transformOrigin: "0 0",
