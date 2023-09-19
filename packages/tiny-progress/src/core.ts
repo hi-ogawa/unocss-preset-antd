@@ -1,14 +1,13 @@
 export class TinyProgress {
-  // cf. https://github.com/badrap/bar-of-progress/blob/master/src/index.ts
   public styles = {
     base: {
       position: "fixed",
       top: "0",
       left: "0",
       right: "0",
-      height: "4px",
+      height: "2px",
+      backgroundColor: "#48f",
       pointerEvents: "none",
-      backgroundColor: "#1668dc", // ant-design dark colorPrimary
       transformOrigin: "0 0",
     },
     enter: {
@@ -38,7 +37,7 @@ export class TinyProgress {
     },
   } satisfies Record<string, Partial<CSSStyleDeclaration>>;
 
-  private el: HTMLElement | undefined;
+  public el: HTMLElement | undefined;
 
   start() {
     this.el?.remove();
