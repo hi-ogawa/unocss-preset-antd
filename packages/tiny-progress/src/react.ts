@@ -3,7 +3,7 @@ import { TinyProgress } from "./core";
 
 export function useTinyProgress(props: {
   show: boolean;
-  config?: (p: TinyProgress) => void;
+  config?: (progress: TinyProgress) => void;
 }) {
   const [progress] = React.useState(() => {
     const progress = new TinyProgress();
