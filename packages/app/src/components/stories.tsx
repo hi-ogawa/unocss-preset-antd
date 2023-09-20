@@ -131,7 +131,7 @@ const ANTD_COLORS_OPTIONS = Object.entries(ANTD_COLORS).map(
 export function StoryColor() {
   const form = createTinyForm(
     useTinyStoreStorage("unocss-preset-antd:StoryColor", {
-      reactSelect: false,
+      reactSelect: true,
       color: ANTD_VARS.colorText,
       backgroundColor: ANTD_VARS.colorBgContainer,
       borderColor: ANTD_VARS.colorBorderSecondary,
@@ -194,11 +194,24 @@ export function StoryColor() {
               placeholder: () => "text-colorTextSecondary",
               menu: () => "border antd-floating mt-2",
               menuList: () => "flex flex-col gap-1 py-1",
-              option: (state) =>
-                cls(
-                  "antd-menu-item cursor-pointer p-1 px-2 text-sm",
-                  state.isSelected && "antd-menu-item-active"
-                ),
+            }}
+            components={{
+              Option: (props) => (
+                <div
+                  className={cls(
+                    "antd-menu-item cursor-pointer p-1 px-2 flex items-center",
+                    props.isSelected && "antd-menu-item-active"
+                  )}
+                  ref={props.innerRef}
+                  {...props.innerProps}
+                >
+                  <span className="flex-1">{props.children}</span>
+                  <span
+                    className="w-5 h-5 border border-white"
+                    style={{ backgroundColor: props.data.value }}
+                  ></span>
+                </div>
+              ),
             }}
           />
         ) : (
