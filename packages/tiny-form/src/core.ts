@@ -6,7 +6,7 @@ import { objectHas } from "@hiogawa/utils";
 
 export type TinyFormHelper<T> = {
   data: T;
-  fields: { [K in keyof T]: FormFieldHelper<T[K]> };
+  fields: { [K in keyof T]: TinyFormFieldHelper<T[K]> };
   handleSubmit: (callback: () => void) => (e: unknown) => void;
 };
 
@@ -36,7 +36,7 @@ export function createTinyForm<T extends {}>([state, setState]: readonly [
 // Proxy-based field record helper
 //
 
-type FieldRecordHelper<T> = { [K in keyof T]: FormFieldHelper<T[K]> };
+type FieldRecordHelper<T> = { [K in keyof T]: TinyFormFieldHelper<T[K]> };
 
 function createFieldRecordHelper<T extends {}>([state, setState]: readonly [
   T,
@@ -47,7 +47,7 @@ function createFieldRecordHelper<T extends {}>([state, setState]: readonly [
     {
       get(_target, p, _receiver) {
         const k = p as keyof T & string;
-        return createFormFieldHelper(k, [
+        return createTinyFormField(k, [
           state[k],
           (newValue) =>
             setState((prev) => ({
@@ -71,7 +71,7 @@ function resolveNewValue<T>(prev: T, newValue: NewValue<T>): T {
 // form field helper
 //
 
-type FormFieldHelper<T> = {
+type TinyFormFieldHelper<T> = {
   name: string;
   value: T;
   onChange: SetState<T>;
@@ -90,10 +90,10 @@ type FormFieldHelper<T> = {
   };
 };
 
-function createFormFieldHelper<T>(
+export function createTinyFormField<T>(
   name: string,
   [state, setState]: readonly [T, SetState<T>]
-): FormFieldHelper<T> {
+): TinyFormFieldHelper<T> {
   const rawProps = {
     name,
     value: state,
