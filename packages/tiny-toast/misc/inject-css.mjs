@@ -5,7 +5,7 @@ import fs from "node:fs";
 
 const MARKER = "/*__INJECT_CSS__*/";
 
-const TARGET_FILES = ["./dist/react.js", "./dist/react.cjs"];
+const TARGET_FILES = ["./dist/react/index.js", "./dist/react/index.cjs"];
 
 const CSS_FILE = "dist/react.css";
 

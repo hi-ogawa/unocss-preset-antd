@@ -11,12 +11,12 @@
       "require": "./dist/index.cjs",
       "types": "./dist/index.d.ts"
     },
-    "./react": {
+    "./dist/react": {
       "import": "./dist/react/index.js",
       "require": "./dist/react/index.cjs",
       "types": "./dist/react/index.d.ts"
     },
-    "./preact": {
+    "./dist/preact": {
       "import": "./dist/preact/index.js",
       "require": "./dist/preact/index.cjs",
       "types": "./dist/preact/index.d.ts"
@@ -36,7 +36,7 @@
     "dev": "vite --no-clearScreen",
     "build": "pnpm run --seq /^build:/",
     "build:tsup": "tsup",
-    "build:unocss": "unocss dist/react.js dist/react.cjs --write-transformed --out-file dist/react.css",
+    "build:unocss": "unocss dist/react/index.js dist/react/index.cjs --write-transformed --out-file dist/react/index.css",
     "build:inject-css": "node misc/inject-css.mjs",
     "release": "pnpm publish --no-git-checks --access public"
   },
