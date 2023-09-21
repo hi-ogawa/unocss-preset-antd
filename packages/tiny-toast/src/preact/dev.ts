@@ -27,6 +27,28 @@ function Demo() {
         },
         type
       )
+    ),
+    h(
+      "button",
+      {
+        class: "antd-btn antd-btn-default px-2 capitalize",
+        onClick: () => {
+          toast.custom(({ h, toast, item }) =>
+            h("div", { class: "flex items-center gap-2" }, [
+              h("span", {
+                class: "i-ri-aliens-fill text-colorPrimary text-2xl",
+              }),
+              h("span", {}, "Custom"),
+              h("button", {
+                class:
+                  "antd-btn antd-btn-ghost i-ri-close-line text-colorTextSecondary text-lg",
+                onClick: () => toast.dismiss(item.id),
+              }),
+            ])
+          );
+        },
+      },
+      "Custom"
     )
   );
 }
