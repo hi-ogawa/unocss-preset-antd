@@ -1,6 +1,6 @@
 import { h } from "snabbdom";
 import { TOAST_STEP, type ToastItem, ToastManager } from "../core";
-import { initRender } from "./utils";
+import { batchTimeout, initRender } from "./utils";
 
 export interface SnabbdomToastData {
   message: string;
@@ -15,8 +15,9 @@ export class SnabbdomToastManager extends ToastManager<SnabbdomToastData> {
 
   init(el: Element) {
     const render = initRender(el, () => RenderContainer({ toast: this }));
+    const batchRender = batchTimeout(render, 0); // otherwise `render` would be called recursively on some hooks
     render();
-    return this.subscribe(() => render());
+    return this.subscribe(() => batchRender());
   }
 }
 
@@ -65,5 +66,9 @@ function RenderItem({
 }) {
   toast;
   item;
-  return h("div", {}, item.data.message);
+  return h(
+    "div",
+    { attrs: { style: "border: 1px solid black;" } },
+    item.data.message
+  );
 }
