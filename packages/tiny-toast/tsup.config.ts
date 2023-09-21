@@ -4,7 +4,6 @@ export default defineConfig({
   entry: [
     "src/index.ts",
     "src/react.tsx",
-    "src/snabbdom.ts",
     "src/preact/index.ts",
   ],
   format: ["esm", "cjs"],
