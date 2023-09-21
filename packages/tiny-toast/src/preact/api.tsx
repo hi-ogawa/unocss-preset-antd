@@ -1,5 +1,6 @@
+import { TransitionManager } from "@hiogawa/tiny-transition";
 import { h, render } from "preact";
-import { useEffect, useReducer } from "preact/hooks";
+import { useCallback, useEffect, useReducer, useState } from "preact/hooks";
 import { TOAST_STEP, type ToastItem, ToastManager } from "../core";
 
 export interface PreactToastData {
@@ -17,18 +18,12 @@ export class PreactToastManager extends ToastManager<PreactToastData> {
 
   render(el: Element) {
     render(h(ToastContainer, { toast: this }), el);
-    return render(null, el);
+    return () => render(null, el);
   }
 }
 
 function ToastContainer({ toast }: { toast: PreactToastManager }) {
-  // TODO: reduce ~2KB by rewriting it to class component without useReducer?
-  const rerender = useReducer<boolean, void>((prev) => !prev, false)[1];
-
-  useEffect(() => {
-    const dispose = toast.subscribe(() => rerender());
-    return () => dispose();
-  }, []);
+  useSubscribe(toast.subscribe);
 
   return h(
     "div",
@@ -48,7 +43,10 @@ function ToastContainer({ toast }: { toast: PreactToastManager }) {
         {
           class: "absolute top-3 flex flex-col-reverse items-center w-full",
         },
-        toast.items.map((item) => ToastAnimation({ toast, item }))
+        // how to type prop?
+        toast.items.map((item) =>
+          h(ToastAnimation, { key: item.id, toast, item })
+        )
       ),
     ]
   );
@@ -61,14 +59,74 @@ function ToastAnimation({
   toast: PreactToastManager;
   item: PreactToastItem;
 }) {
+  const [manager] = useState(
+    () =>
+      new TransitionManager({
+        defaultEntered: false,
+        onEnterFrom: (el) => {
+          console.log("== onEnterFrom", item.id, el);
+          collapse(el);
+          Object.assign(el.style, TRANSITION_STYLES.enterFrom);
+        },
+        onEnterTo: (el) => {
+          console.log("== onEnterTo", item.id, el);
+          uncollapse(el);
+          Object.assign(el.style, TRANSITION_STYLES.enterTo);
+        },
+        onEntered: (el) => {
+          console.log("== onEntered", item.id, el);
+          resetCollapse(el);
+        },
+        onLeaveFrom: (el) => {
+          console.log("== onLeaveFrom", item.id, el);
+          Object.assign(el.style, TRANSITION_STYLES.enterTo);
+          uncollapse(el);
+        },
+        onLeaveTo: (el) => {
+          console.log("== onLeaveTo", item.id, el);
+          Object.assign(el.style, TRANSITION_STYLES.enterFrom);
+          collapse(el);
+        },
+        onLeft: () => toast.remove(item.id),
+      })
+  );
+  useSubscribe(manager.subscribe);
+
   useEffect(() => {
-    if (item.step === TOAST_STEP.DISMISS) {
-      toast.remove(item.id);
-    }
+    manager.show(item.step < TOAST_STEP.DISMISS);
   }, [item.step]);
 
-  return h("div", {}, ToastItemComponent({ toast, item }));
+  // useEffect(() => {
+  //   console.log("== shouldRender", item.id, manager.shouldRender());
+  // }, [manager.shouldRender()]);
+
+  return (
+    manager.shouldRender() &&
+    h(
+      "div",
+      {
+        // ref: useCallback((el: HTMLElement | null) => {
+        //   console.log("== ref", item.id, el);
+        //   manager.setElement(el);
+        // }, []),
+        ref: manager.setElement,
+        class: "duration-300 transform",
+      },
+      h("div", { class: "py-1" }, h(ToastItemComponent, { toast, item }))
+    )
+  );
 }
+
+const TRANSITION_STYLES = {
+  enterFrom: {
+    opacity: "0",
+    transform: "scale(0) translateY(-120%)",
+  },
+  enterTo: {
+    opacity: "1",
+    transform: "scale(1) translateY(0)",
+  },
+} satisfies Record<string, Partial<CSSStyleDeclaration>>;
 
 function ToastItemComponent({
   item,
@@ -90,4 +148,27 @@ function ToastItemComponent({
       ]
     ),
   ]);
+}
+
+function useSubscribe(subscribe: (callback: () => void) => () => void) {
+  // TODO: we could reduce ~2KB by rewriting to class component without useReducer/useState?
+  const rerender = useReducer<boolean, void>((prev) => !prev, false)[1];
+
+  useEffect(() => {
+    return subscribe(() => rerender());
+  }, [subscribe]);
+}
+
+function uncollapse(el: HTMLElement) {
+  if (el.firstElementChild) {
+    el.style.height = el.firstElementChild.clientHeight + "px";
+  }
+}
+
+function collapse(el: HTMLElement) {
+  el.style.height = "0px";
+}
+
+function resetCollapse(el: HTMLElement) {
+  el.style.height = "";
 }
