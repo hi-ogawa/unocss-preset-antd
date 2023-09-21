@@ -1,4 +1,5 @@
 import "virtual:uno.css";
+import { capitalize } from "@hiogawa/utils";
 import { h, render } from "preact";
 import { PreactToastManager } from "./api";
 
@@ -15,28 +16,18 @@ function Demo() {
     {
       class: "p-2 flex gap-2",
     },
-    [
+    (["success", "error", "info", "blank"] as const).map((type) =>
       h(
         "button",
         {
-          class: "antd-btn antd-btn-default px-1",
+          class: "antd-btn antd-btn-default px-2 capitalize",
           onClick: () => {
-            toast.info("hello");
+            toast[type](capitalize(type));
           },
         },
-        "hello"
-      ),
-      h(
-        "button",
-        {
-          class: "antd-btn antd-btn-default px-1",
-          onClick: () => {
-            toast.info("world");
-          },
-        },
-        "world"
-      ),
-    ]
+        type
+      )
+    )
   );
 }
 

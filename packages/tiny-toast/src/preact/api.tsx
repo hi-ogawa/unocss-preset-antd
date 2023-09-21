@@ -1,6 +1,7 @@
 import { TransitionManager } from "@hiogawa/tiny-transition";
 import { type ComponentChild, h, render } from "preact";
 import { useEffect, useReducer, useState } from "preact/hooks";
+import type { ToastType } from "../common";
 import { TOAST_STEP, type ToastItem, ToastManager } from "../core";
 
 //
@@ -15,26 +16,40 @@ type RenderItem = (props: {
 
 type MaybeRenderItem = RenderItem | Exclude<ComponentChild, object>;
 
-export interface PreactToastData {
+interface PreactToastData {
   render: RenderItem;
+  type: ToastType;
   style?: string;
   class?: string;
 }
 
-export type PreactToastItem = ToastItem<PreactToastData>;
+type PreactToastItem = ToastItem<PreactToastData>;
 
 export class PreactToastManager extends ToastManager<PreactToastData> {
-  info(render: MaybeRenderItem) {
-    this.create(
-      { render: typeof render === "function" ? render : () => render },
-      { duration: 4000 }
-    );
-  }
-
   render(el: Element) {
     render(h(ToastContainer, { toast: this }), el);
     return () => render(null, el);
   }
+
+  success = createByTypeFactory("success");
+  error = createByTypeFactory("error");
+  info = createByTypeFactory("info");
+  blank = createByTypeFactory("blank");
+  custom = createByTypeFactory("custom");
+}
+
+function createByTypeFactory(type: ToastType) {
+  return function (this: PreactToastManager, render: MaybeRenderItem) {
+    this.create(
+      {
+        render: typeof render === "function" ? render : () => render,
+        type,
+      },
+      {
+        duration: 4000,
+      }
+    );
+  };
 }
 
 //
@@ -116,7 +131,7 @@ function ToastAnimation({
     "div",
     {
       ref: manager.setElement,
-      class: "duration-300 transform pointer-events-auto",
+      class: "duration-200 transform pointer-events-auto",
     },
     h("div", { class: "py-1" }, h(ToastItemComponent, { toast, item }))
   );
@@ -150,10 +165,16 @@ function ToastItemComponent({
       h(
         "div",
         {
-          class: "flex items-center p-3",
+          class: "flex items-center p-2",
         },
         [
-          h("span", {
+          item.data.type ==="success" && h("span", {
+            class: "i-ri-checkbox-circle-fill text-green text-2xl",
+          }),
+          item.data.type ==="error" && h("span", {
+            class: "i-ri-close-circle-fill text-red text-2xl",
+          }),
+          item.data.type ==="info" && h("span", {
             class: "i-ri-information-line text-blue text-2xl",
           }),
           h("div", { class: "px-2" }, item.data.render({ h, toast, item })),

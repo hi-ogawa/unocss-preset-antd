@@ -1,19 +1,6 @@
 import type React from "react";
+import type { ToastPosition, ToastType } from "../common";
 import { type ToastCoreOptions, type ToastItem, ToastManager } from "../core";
-
-export const TOAST_POSITIONS = ["bottom-left", "top-center"] as const;
-
-export type ToastPosition = (typeof TOAST_POSITIONS)[number];
-
-export const TOAST_TYPES = [
-  "success",
-  "error",
-  "info",
-  "blank",
-  "custom",
-] as const;
-
-export type ToastType = (typeof TOAST_TYPES)[number];
 
 type RenderReactNode = (props: {
   item: ReactToastItem;
