@@ -168,15 +168,18 @@ function ToastItemComponent({
           class: "flex items-center p-2",
         },
         [
-          item.data.type ==="success" && h("span", {
-            class: "i-ri-checkbox-circle-fill text-green text-2xl",
-          }),
-          item.data.type ==="error" && h("span", {
-            class: "i-ri-close-circle-fill text-red text-2xl",
-          }),
-          item.data.type ==="info" && h("span", {
-            class: "i-ri-information-line text-blue text-2xl",
-          }),
+          item.data.type === "success" &&
+            h("span", {
+              class: "i-ri-checkbox-circle-fill text-green text-2xl",
+            }),
+          item.data.type === "error" &&
+            h("span", {
+              class: "i-ri-close-circle-fill text-red text-2xl",
+            }),
+          item.data.type === "info" &&
+            h("span", {
+              class: "i-ri-information-line text-blue text-2xl",
+            }),
           h("div", { class: "px-2" }, item.data.render({ h, toast, item })),
         ]
       ),
