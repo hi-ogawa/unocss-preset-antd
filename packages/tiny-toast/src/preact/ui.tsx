@@ -1,10 +1,9 @@
 import { TransitionManager } from "@hiogawa/tiny-transition";
+import type * as CSS from "csstype";
 import { h } from "preact";
 import { useEffect, useReducer, useState } from "preact/hooks";
 import { TOAST_STEP } from "../core";
 import type { PreactToastItem, PreactToastManager } from "./api";
-
-// TODO: rewrite with inline style instead of unocss class
 
 export function ToastContainer({ toast }: { toast: PreactToastManager }) {
   useSubscribe(toast.subscribe);
@@ -13,7 +12,12 @@ export function ToastContainer({ toast }: { toast: PreactToastManager }) {
   return h(
     "div",
     {
-      class: "fixed inset-0 z-9999 pointer-events-none",
+      style: istyle({
+        position: "fixed",
+        inset: 0,
+        zIndex: 9999,
+        pointerEvents: "none",
+      }),
       onMouseEnter: () => {
         toast.pause(true);
       },
@@ -25,7 +29,14 @@ export function ToastContainer({ toast }: { toast: PreactToastManager }) {
       h(
         "div",
         {
-          class: "absolute top-3 flex flex-col-reverse items-center w-full",
+          style: istyle({
+            position: "absolute",
+            top: "3px",
+            width: "100%",
+            display: "flex",
+            flexDirection: "column-reverse",
+            alignItems: "center",
+          }),
         },
         toast.items.map((item) =>
           h(ToastAnimation, { key: item.id, toast, item })
@@ -82,7 +93,10 @@ function ToastAnimation({
     "div",
     {
       ref: manager.setElement,
-      class: "duration-200 transform pointer-events-auto",
+      style: istyle({
+        transitionDuration: "200ms",
+        pointerEvents: "auto",
+      }),
     },
     h("div", { class: "py-1" }, h(ToastItemComponent, { toast, item }))
   );
@@ -109,16 +123,27 @@ function ToastItemComponent({
   return h(
     "div",
     {
-      class: item.data.class ?? "rounded-lg shadow-lg",
-      style: item.data.style,
+      class: item.data.class,
+      style:
+        item.data.style ??
+        istyle({
+          borderRadius: "8px",
+          boxShadow:
+            "0 3px 10px rgba(0, 0, 0, 0.1), 0 3px 3px rgba(0, 0, 0, 0.05)",
+        }),
     },
     [
       h(
         "div",
         {
-          class: "flex items-center p-2",
+          style: istyle({
+            display: "flex",
+            alignItems: "center",
+            padding: "0.5rem",
+          }),
         },
         [
+          // TODO: inline icon
           item.data.type === "success" &&
             h("span", {
               class: "i-ri-checkbox-circle-fill text-green text-2xl",
@@ -131,7 +156,11 @@ function ToastItemComponent({
             h("span", {
               class: "i-ri-information-line text-blue text-2xl",
             }),
-          h("div", { class: "px-2" }, item.data.render({ h, toast, item })),
+          h(
+            "div",
+            { style: istyle({ padding: "0 0.5rem" }) },
+            item.data.render({ h, toast, item })
+          ),
         ]
       ),
     ]
@@ -158,4 +187,12 @@ function collapse(el: HTMLElement) {
 
 function resetCollapse(el: HTMLElement) {
   el.style.height = "";
+}
+
+// type-safe inline style util based on csstype
+// cf. https://github.com/cristianbote/goober/blob/a849b2d644146d96fa1dd1c560f6418ee1e1c469/src/core/parse.js#L48
+function istyle(props: CSS.Properties): string {
+  return Object.entries(props)
+    .map(([k, v]) => `${k.replace(/[A-Z]/g, "-$&").toLowerCase()}:${v}`)
+    .join(";");
 }
