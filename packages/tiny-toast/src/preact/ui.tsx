@@ -4,9 +4,12 @@ import { useEffect, useReducer, useState } from "preact/hooks";
 import { TOAST_STEP } from "../core";
 import type { PreactToastItem, PreactToastManager } from "./api";
 
+// TODO: rewrite with inline style instead of unocss class
+
 export function ToastContainer({ toast }: { toast: PreactToastManager }) {
   useSubscribe(toast.subscribe);
 
+  // TODO: handle ToastPosition
   return h(
     "div",
     {
