@@ -14,7 +14,7 @@ import React from "react";
 import ReactSelect from "react-select";
 import { tw } from "../styles/tw";
 import { cls } from "../utils/misc";
-import { useUrlQuery } from "../utils/url-utils";
+import { useUrlParam } from "../utils/url-utils";
 import { getCollapseProps } from "./collapse";
 import { useModal } from "./modal";
 import { PopoverSimple } from "./popover";
@@ -788,11 +788,7 @@ export function StoryCubicBezier() {
   };
   type Preset = keyof typeof PRESETS;
 
-  const query = createTinyForm(
-    useUrlQuery({
-      input: "0.25, 0.1, 0.25, 1",
-    })
-  );
+  const [input = "0.25, 01, 0.25, 1", setInput] = useUrlParam("input");
 
   const form = createTinyForm(
     React.useState({
@@ -802,7 +798,7 @@ export function StoryCubicBezier() {
     })
   );
 
-  const numbers = query.data.input.split(",").map((v) => Number.parseFloat(v));
+  const numbers = input.split(",").map((v) => Number.parseFloat(v));
   const [x1, _y1, x2, _y2] = numbers;
   const isValid =
     numbers.length === 4 &&
@@ -829,7 +825,7 @@ export function StoryCubicBezier() {
                 labelFn={(v) => v ?? "- Preset -"}
                 onChange={(v) => {
                   if (v) {
-                    query.fields.input.onChange(PRESETS[v].join(", "));
+                    setInput(PRESETS[v].join(", "));
                   }
                   form.fields.preset.onChange(v);
                 }}
@@ -838,7 +834,8 @@ export function StoryCubicBezier() {
             <input
               className="antd-input p-1"
               aria-invalid={!isValid}
-              {...query.fields.input.props()}
+              value={input}
+              onChange={(e) => setInput(e.target.value)}
             />
           </label>
           <div className="self-center w-full">
@@ -898,7 +895,7 @@ export function StoryCubicBezier() {
                     className="absolute inset-0 bg-colorSuccess"
                     style={{
                       transformOrigin: "0 0",
-                      transition: `transform ${form.data.duration} cubic-bezier(${query.data.input})`,
+                      transition: `transform ${form.data.duration} cubic-bezier(${input})`,
                     }}
                     enterFrom="scale-x-0"
                     enterTo="scale-x-100"
