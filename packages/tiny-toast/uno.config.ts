@@ -1,3 +1,4 @@
+import { unocssPresetAntd } from "@hiogawa/unocss-preset-antd";
 import {
   defineConfig,
   presetIcons,
@@ -8,11 +9,12 @@ import {
 export default defineConfig({
   content: {
     pipeline: {
-      // need to transform dist js files which is excluded by default
-      include: [/.*\.js/, /.*\.cjs/],
+      include: [/\.c?[jt]sx?$/],
     },
   },
   presets: [
+    // @ts-ignore peer dep version
+    unocssPresetAntd(),
     presetUno(),
     presetIcons({
       extraProperties: {

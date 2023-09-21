@@ -26,13 +26,33 @@ export class SnabbdomToastManager extends ToastManager<SnabbdomToastData> {
 //
 
 function RenderContainer({ toast }: { toast: SnabbdomToastManager }) {
-  return h("div", {}, [
-    h(
-      "div",
-      {},
-      toast.items.map((item) => RenderAnimation({ toast, item }))
-    ),
-  ]);
+  return h(
+    "div",
+    {
+      attrs: {
+        class: "fixed inset-0 z-9999 pointer-events-none",
+      },
+      on: {
+        mouseenter: () => {
+          toast.pause(true);
+        },
+        mouseleave: () => {
+          toast.pause(false);
+        },
+      },
+    },
+    [
+      h(
+        "div",
+        {
+          attrs: {
+            class: "absolute top-3 flex flex-col-reverse items-center w-full",
+          },
+        },
+        toast.items.map((item) => RenderAnimation({ toast, item }))
+      ),
+    ]
+  );
 }
 
 function RenderAnimation({
@@ -68,7 +88,20 @@ function RenderItem({
   item;
   return h(
     "div",
-    { attrs: { style: "border: 1px solid black;" } },
-    item.data.message
+    { attrs: { class: "pointer-events-auto rounded-lg shadow-lg" } },
+    [
+      h(
+        "div",
+        {
+          attrs: { class: "flex items-center p-3" },
+        },
+        [
+          h("span", {
+            attrs: { class: "i-ri-information-line text-blue text-2xl" },
+          }),
+          h("div", { attrs: { class: "px-2" } }, item.data.message),
+        ]
+      ),
+    ]
   );
 }

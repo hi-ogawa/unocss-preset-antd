@@ -206,6 +206,9 @@ importers:
       '@hiogawa/tiny-transition':
         specifier: workspace:*
         version: link:../tiny-transition
+      '@hiogawa/unocss-preset-antd':
+        specifier: workspace:*
+        version: link:../lib
       '@hiogawa/utils':
         specifier: 1.6.1-pre.7
         version: 1.6.1-pre.7

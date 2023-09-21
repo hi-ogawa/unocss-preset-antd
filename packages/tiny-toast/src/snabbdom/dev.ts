@@ -1,3 +1,4 @@
+import "virtual:uno.css";
 import { tinyassert } from "@hiogawa/utils";
 import { h } from "snabbdom";
 import { SnabbdomToastManager } from "./api";
@@ -20,30 +21,44 @@ function main() {
 }
 
 function RenderDemo() {
-  return h("div", {}, [
-    h(
-      "button",
-      {
-        on: {
-          click: () => {
-            toast.create({ message: "hello" }, { duration: 4000 });
+  return h(
+    "div",
+    {
+      attrs: {
+        class: "p-2 flex gap-2",
+      },
+    },
+    [
+      h(
+        "button",
+        {
+          attrs: {
+            class: "antd-btn antd-btn-default px-1",
+          },
+          on: {
+            click: () => {
+              toast.create({ message: "hello" }, { duration: 4000 });
+            },
           },
         },
-      },
-      "hello"
-    ),
-    h(
-      "button",
-      {
-        on: {
-          click: () => {
-            toast.create({ message: "world" }, { duration: 4000 });
+        "hello"
+      ),
+      h(
+        "button",
+        {
+          attrs: {
+            class: "antd-btn antd-btn-default px-1",
+          },
+          on: {
+            click: () => {
+              toast.create({ message: "world" }, { duration: 4000 });
+            },
           },
         },
-      },
-      "world"
-    ),
-  ]);
+        "world"
+      ),
+    ]
+  );
 }
 
 main();
