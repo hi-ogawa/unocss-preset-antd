@@ -1,19 +1,34 @@
 import { TransitionManager } from "@hiogawa/tiny-transition";
-import { h, render } from "preact";
+import { type ComponentChild, h, render } from "preact";
 import { useEffect, useReducer, useState } from "preact/hooks";
 import { TOAST_STEP, type ToastItem, ToastManager } from "../core";
 
+//
+// api
+//
+
+type RenderItem = (props: {
+  h: typeof h;
+  item: PreactToastItem;
+  toast: PreactToastManager;
+}) => ComponentChild;
+
+type MaybeRenderItem = RenderItem | Exclude<ComponentChild, object>;
+
 export interface PreactToastData {
-  message: string;
-  // style?: CSSStyleDeclaration;
-  // class?: string;
+  render: RenderItem;
+  style?: string;
+  class?: string;
 }
 
 export type PreactToastItem = ToastItem<PreactToastData>;
 
 export class PreactToastManager extends ToastManager<PreactToastData> {
-  info(message: string) {
-    this.create({ message }, { duration: 4000 });
+  info(render: MaybeRenderItem) {
+    this.create(
+      { render: typeof render === "function" ? render : () => render },
+      { duration: 4000 }
+    );
   }
 
   render(el: Element) {
@@ -21,6 +36,10 @@ export class PreactToastManager extends ToastManager<PreactToastData> {
     return () => render(null, el);
   }
 }
+
+//
+// ui
+//
 
 function ToastContainer({ toast }: { toast: PreactToastManager }) {
   useSubscribe(toast.subscribe);
@@ -97,7 +116,7 @@ function ToastAnimation({
     "div",
     {
       ref: manager.setElement,
-      class: "duration-300 transform",
+      class: "duration-300 transform pointer-events-auto",
     },
     h("div", { class: "py-1" }, h(ToastItemComponent, { toast, item }))
   );
@@ -115,25 +134,33 @@ const TRANSITION_STYLES = {
 } satisfies Record<string, Partial<CSSStyleDeclaration>>;
 
 function ToastItemComponent({
+  toast,
   item,
 }: {
   toast: PreactToastManager;
   item: PreactToastItem;
 }) {
-  return h("div", { class: "pointer-events-auto rounded-lg shadow-lg" }, [
-    h(
-      "div",
-      {
-        class: "flex items-center p-3",
-      },
-      [
-        h("span", {
-          class: "i-ri-information-line text-blue text-2xl",
-        }),
-        h("div", { class: "px-2" }, item.data.message),
-      ]
-    ),
-  ]);
+  return h(
+    "div",
+    {
+      class: item.data.class ?? "rounded-lg shadow-lg",
+      style: item.data.style,
+    },
+    [
+      h(
+        "div",
+        {
+          class: "flex items-center p-3",
+        },
+        [
+          h("span", {
+            class: "i-ri-information-line text-blue text-2xl",
+          }),
+          h("div", { class: "px-2" }, item.data.render({ h, toast, item })),
+        ]
+      ),
+    ]
+  );
 }
 
 //
@@ -141,7 +168,6 @@ function ToastItemComponent({
 //
 
 function useSubscribe(subscribe: (callback: () => void) => () => void) {
-  // TODO: we could reduce ~2KB by rewriting to class component without useReducer/useState?
   const rerender = useReducer<boolean, void>((prev) => !prev, false)[1];
 
   useEffect(() => {
