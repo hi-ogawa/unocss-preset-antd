@@ -28,7 +28,7 @@
     "directory": "packages/tiny-transition"
   },
   "scripts": {
-    "vite": "vite --no-clearScreen",
+    "dev": "vite --no-clearScreen",
     "build": "pnpm run --seq /^build:/",
     "build:tsup": "tsup",
     "build:unocss": "unocss dist/react.js dist/react.cjs --write-transformed --out-file dist/react.css",

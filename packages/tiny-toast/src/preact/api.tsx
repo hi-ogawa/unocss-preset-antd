@@ -1,6 +1,6 @@
 import { TransitionManager } from "@hiogawa/tiny-transition";
 import { h, render } from "preact";
-import { useCallback, useEffect, useReducer, useState } from "preact/hooks";
+import { useEffect, useReducer, useState } from "preact/hooks";
 import { TOAST_STEP, type ToastItem, ToastManager } from "../core";
 
 export interface PreactToastData {
@@ -28,7 +28,6 @@ function ToastContainer({ toast }: { toast: PreactToastManager }) {
   return h(
     "div",
     {
-      ref: () => {},
       class: "fixed inset-0 z-9999 pointer-events-none",
       onMouseEnter: () => {
         toast.pause(true);
@@ -43,7 +42,6 @@ function ToastContainer({ toast }: { toast: PreactToastManager }) {
         {
           class: "absolute top-3 flex flex-col-reverse items-center w-full",
         },
-        // how to type prop?
         toast.items.map((item) =>
           h(ToastAnimation, { key: item.id, toast, item })
         )
@@ -64,28 +62,23 @@ function ToastAnimation({
       new TransitionManager({
         defaultEntered: false,
         onEnterFrom: (el) => {
-          console.log("== onEnterFrom", item.id, el);
           collapse(el);
           Object.assign(el.style, TRANSITION_STYLES.enterFrom);
         },
         onEnterTo: (el) => {
-          console.log("== onEnterTo", item.id, el);
           uncollapse(el);
           Object.assign(el.style, TRANSITION_STYLES.enterTo);
         },
         onEntered: (el) => {
-          console.log("== onEntered", item.id, el);
           resetCollapse(el);
         },
         onLeaveFrom: (el) => {
-          console.log("== onLeaveFrom", item.id, el);
-          Object.assign(el.style, TRANSITION_STYLES.enterTo);
           uncollapse(el);
+          Object.assign(el.style, TRANSITION_STYLES.enterTo);
         },
         onLeaveTo: (el) => {
-          console.log("== onLeaveTo", item.id, el);
-          Object.assign(el.style, TRANSITION_STYLES.enterFrom);
           collapse(el);
+          Object.assign(el.style, TRANSITION_STYLES.enterFrom);
         },
         onLeft: () => toast.remove(item.id),
       })
@@ -96,24 +89,17 @@ function ToastAnimation({
     manager.show(item.step < TOAST_STEP.DISMISS);
   }, [item.step]);
 
-  // useEffect(() => {
-  //   console.log("== shouldRender", item.id, manager.shouldRender());
-  // }, [manager.shouldRender()]);
+  if (!manager.shouldRender()) {
+    return null;
+  }
 
-  return (
-    manager.shouldRender() &&
-    h(
-      "div",
-      {
-        // ref: useCallback((el: HTMLElement | null) => {
-        //   console.log("== ref", item.id, el);
-        //   manager.setElement(el);
-        // }, []),
-        ref: manager.setElement,
-        class: "duration-300 transform",
-      },
-      h("div", { class: "py-1" }, h(ToastItemComponent, { toast, item }))
-    )
+  return h(
+    "div",
+    {
+      ref: manager.setElement,
+      class: "duration-300 transform",
+    },
+    h("div", { class: "py-1" }, h(ToastItemComponent, { toast, item }))
   );
 }
 
@@ -149,6 +135,10 @@ function ToastItemComponent({
     ),
   ]);
 }
+
+//
+// utils
+//
 
 function useSubscribe(subscribe: (callback: () => void) => () => void) {
   // TODO: we could reduce ~2KB by rewriting to class component without useReducer/useState?
