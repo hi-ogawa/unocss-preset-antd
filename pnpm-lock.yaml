@@ -218,6 +218,9 @@ importers:
       react:
         specifier: ^18.2.0
         version: 18.2.0
+      snabbdom:
+        specifier: ^3.5.1
+        version: 3.5.1
 
   packages/tiny-transition:
     devDependencies:
@@ -5752,6 +5755,11 @@ packages:
       strip-ansi: 6.0.1
       wcwidth: 1.0.1
       yargs: 15.4.1
+    dev: true
+
+  /snabbdom@3.5.1:
+    resolution: {integrity: sha512-wHMNIOjkm/YNE5EM3RCbr/+DVgPg6AqQAX1eOxO46zYNvCXjKP5Y865tqQj3EXnaMBjkxmQA5jFuDpDK/dbfiA==}
+    engines: {node: '>=8.3.0'}
     dev: true
 
   /solid-js@1.7.6:
