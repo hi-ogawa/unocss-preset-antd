@@ -74,6 +74,7 @@ function ToastAnimation({
     });
     return manager;
   });
+
   useSubscribe(manager.subscribe);
 
   useEffect(() => {
@@ -89,13 +90,13 @@ function ToastAnimation({
     {
       ref: manager.setElement,
       style: istyle({
-        transitionDuration: "200ms",
         pointerEvents: "auto",
+        transitionDuration: "200ms",
       }),
     },
     h(
       "div",
-      { style: istyle({ padding: "0.25rem 0" }) },
+      { style: istyle({ display: "inline-block", padding: "0.25rem 0" }) },
       h(ToastItemComponent, { toast, item })
     )
   );
@@ -115,6 +116,8 @@ function ToastItemComponent({
       style:
         item.data.style ??
         istyle({
+          display: "flex",
+          alignItems: "center",
           padding: "8px 10px",
           borderRadius: "8px",
           boxShadow:
@@ -122,36 +125,21 @@ function ToastItemComponent({
         }),
     },
     [
-      // TODO: remove this intermediate div
+      includesGuard(["success", "error", "info"] as const, item.data.type) &&
+        h("span", {
+          style: istyle({
+            width: "1.5rem",
+            height: "1.5rem",
+            color: TOAST_TYPE_ICON_COLORS[item.data.type],
+          }),
+          dangerouslySetInnerHTML: {
+            __html: TOAST_TYPE_ICONS[item.data.type],
+          },
+        }),
       h(
         "div",
-        {
-          style: istyle({
-            display: "flex",
-            alignItems: "center",
-          }),
-        },
-        [
-          includesGuard(
-            ["success", "error", "info"] as const,
-            item.data.type
-          ) &&
-            h("span", {
-              style: istyle({
-                width: "1.5rem",
-                height: "1.5rem",
-                color: TOAST_TYPE_ICON_COLORS[item.data.type],
-              }),
-              dangerouslySetInnerHTML: {
-                __html: TOAST_TYPE_ICONS[item.data.type],
-              },
-            }),
-          h(
-            "div",
-            { style: istyle({ padding: "0 0.5rem" }) },
-            item.data.render({ h, toast, item })
-          ),
-        ]
+        { style: istyle({ padding: "0 0.5rem" }) },
+        item.data.render({ h, toast, item })
       ),
     ]
   );
@@ -163,20 +151,6 @@ function useSubscribe(subscribe: (callback: () => void) => () => void) {
   useEffect(() => {
     return subscribe(() => rerender());
   }, [subscribe]);
-}
-
-function uncollapse(el: HTMLElement) {
-  if (el.firstElementChild) {
-    el.style.height = el.firstElementChild.clientHeight + "px";
-  }
-}
-
-function collapse(el: HTMLElement) {
-  el.style.height = "0px";
-}
-
-function resetCollapse(el: HTMLElement) {
-  el.style.height = "";
 }
 
 // type-safe inline style util based on csstype
