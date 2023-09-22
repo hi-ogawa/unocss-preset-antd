@@ -42,6 +42,7 @@ function Demo() {
               h("button", {
                 class:
                   "antd-btn antd-btn-ghost i-ri-close-line text-colorTextSecondary text-lg",
+                // TODO: collapsing in the middle of toast list not working?
                 onClick: () => toast.dismiss(item.id),
               }),
             ])
