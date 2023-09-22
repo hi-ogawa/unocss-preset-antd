@@ -1,4 +1,4 @@
-import { type ComponentChild, h, render } from "preact";
+import { h, render } from "preact";
 import type { ToastPosition, ToastType } from "../common";
 import { type ToastItem, ToastManager } from "../core";
 import { ToastContainer } from "./ui";
@@ -7,13 +7,26 @@ import { ToastContainer } from "./ui";
 // mostly duplicate of src/react
 // think about refactoring later
 
+// vendor preact types to avoid peer-dep typing
+type VendorPreact = {
+  h: (...args: any[]) => VendorPreact["VNode"];
+  VNode: { props: {} };
+  ComponentChild:
+    | string
+    | number
+    | boolean
+    | null
+    | undefined
+    | VendorPreact["VNode"];
+};
+
 type RenderItem = (props: {
-  h: typeof h; // TODO: eliminate type peer-dep by typing inline?
+  h: VendorPreact["h"];
   item: PreactToastItem;
   toast: PreactToastManager;
-}) => ComponentChild;
+}) => VendorPreact["ComponentChild"];
 
-type MaybeRenderItem = RenderItem | Exclude<ComponentChild, object>;
+type MaybeRenderItem = RenderItem | VendorPreact["ComponentChild"];
 
 interface PreactToastData {
   render: RenderItem;
