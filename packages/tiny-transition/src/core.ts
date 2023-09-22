@@ -81,6 +81,7 @@ export class TransitionManager {
     this.disposables.add(
       onNextFrame(() => {
         // "enterTo" on next frame
+        forceStyle(el); // TODO: don't need next frame if forceStyle?
         this.options.onEnterTo?.(el);
 
         // notify "entered"
@@ -105,6 +106,7 @@ export class TransitionManager {
     this.disposables.add(
       onNextFrame(() => {
         // "leaveTo" on next frame
+        forceStyle(el);
         this.options.onLeaveTo?.(el);
 
         // notify "left"
@@ -189,4 +191,8 @@ function parseDurationSingle(s: string): number {
   }
   tinyassert(Number.isFinite(ms), `failed to parse css duration '${s}'`);
   return ms;
+}
+
+export function forceStyle(el: HTMLElement) {
+  typeof getComputedStyle(el).transition || console.log("unreachable");
 }

@@ -1,4 +1,5 @@
-import { cls, forceStyle, styleAssign } from "./utils";
+import { tinyassert } from "@hiogawa/utils";
+import { cls, styleAssign } from "./utils";
 
 // TODO: support all 6 positions
 export const TOAST_POSITIONS = ["bottom-left", "top-center"] as const;
@@ -37,33 +38,70 @@ export function slideScaleCollapseTransition({
   position: ToastPosition;
 }) {
   // steps
-  // - slide out + scale down + collapse
   // - slide in + scale up + uncollapse
+  // - slide out + scale down + collapse
   return {
-    out: (el: HTMLElement) => {
+    enterFrom: (el: HTMLElement) => {
+      tinyassert(el.firstElementChild instanceof HTMLElement);
       styleAssign(el.style, {
-        opacity: "0",
+        transition: "all 0.35s cubic-bezier(0, 0.8, 0.5, 1)",
+        height: "0",
+      });
+      styleAssign(el.firstElementChild.style, {
+        transition: "all 0.35s cubic-bezier(0, 0.8, 0.5, 1)",
+        opacity: "0.5",
         transform: cls(
-          "scale(0)",
-          position === "bottom-left" && "translateY(120%)",
-          position === "top-center" && "translateY(-120%)"
+          "scale(0.5)",
+          position === "bottom-left" && "translateY(200%)",
+          position === "top-center" && "translateY(-200%)"
         ),
       });
-      forceStyle(el); // somehow order matters and without this preact animation glitches
-      el.style.height = "0px";
     },
-    in: (el: HTMLElement) => {
-      if (el.firstElementChild) {
-        el.style.height = el.firstElementChild.clientHeight + "px";
-        forceStyle(el);
-      }
+    enterTo: (el: HTMLElement) => {
+      tinyassert(el.firstElementChild instanceof HTMLElement);
       styleAssign(el.style, {
+        height: el.firstElementChild.clientHeight + "px",
+      });
+      styleAssign(el.firstElementChild.style, {
         opacity: "1",
         transform: "scale(1) translateY(0)",
       });
     },
-    reset: (el: HTMLElement) => {
-      el.style.height = "";
+    entered: (el: HTMLElement) => {
+      tinyassert(el.firstElementChild instanceof HTMLElement);
+      styleAssign(el.style, {
+        transition: "",
+        height: "",
+      });
+      styleAssign(el.firstElementChild.style, {
+        transition: "",
+      });
+    },
+    leaveFrom: (el: HTMLElement) => {
+      tinyassert(el.firstElementChild instanceof HTMLElement);
+      styleAssign(el.style, {
+        transition: "all 0.25s ease",
+        height: el.firstElementChild.clientHeight + "px",
+      });
+      styleAssign(el.firstElementChild.style, {
+        transition: "all 0.25s ease",
+        opacity: "1",
+        transform: "scale(1) translateY(0)",
+      });
+    },
+    leaveTo: (el: HTMLElement) => {
+      tinyassert(el.firstElementChild instanceof HTMLElement);
+      styleAssign(el.style, {
+        height: "0",
+      });
+      styleAssign(el.firstElementChild.style, {
+        opacity: "0",
+        transform: cls(
+          "scale(0)",
+          position === "bottom-left" && "translateY(150%)",
+          position === "top-center" && "translateY(-150%)"
+        ),
+      });
     },
   };
 }

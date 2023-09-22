@@ -53,7 +53,7 @@ export function ToastContainer({ toast }: { toast: PreactToastManager }) {
         {
           style: istyle({
             position: "absolute",
-            top: "3px",
+            top: "0.5rem",
             width: "100%",
             display: "flex",
             flexDirection: "column-reverse",
@@ -81,11 +81,11 @@ function ToastAnimation({
     });
     const manager = new TransitionManager({
       defaultEntered: false,
-      onEnterFrom: transition.out,
-      onEnterTo: transition.in,
-      onEntered: transition.reset,
-      onLeaveFrom: transition.in,
-      onLeaveTo: transition.out,
+      onEnterFrom: transition.enterFrom,
+      onEnterTo: transition.enterTo,
+      onEntered: transition.entered,
+      onLeaveFrom: transition.leaveFrom,
+      onLeaveTo: transition.leaveTo,
       onLeft: () => toast.remove(item.id),
     });
     return manager;
@@ -107,7 +107,6 @@ function ToastAnimation({
       ref: manager.setElement,
       style: istyle({
         pointerEvents: "auto",
-        transitionDuration: "200ms",
       }),
     },
     h(

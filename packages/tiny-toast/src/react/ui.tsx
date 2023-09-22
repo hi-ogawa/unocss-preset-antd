@@ -106,11 +106,11 @@ function AnimationWrapper({
         pointerEvents: "auto",
         transitionDuration: "200ms",
       }}
-      onEnterFrom={transition.out}
-      onEnterTo={transition.in}
-      onEntered={transition.reset}
-      onLeaveFrom={transition.in}
-      onLeaveTo={transition.out}
+      onEnterFrom={transition.enterFrom}
+      onEnterTo={transition.enterTo}
+      onEntered={transition.entered}
+      onLeaveFrom={transition.leaveFrom}
+      onLeaveTo={transition.leaveTo}
       onLeft={() => toast.remove(item.id)}
     >
       <div style={{ display: "inline-block", padding: "0.25rem 0" }}>
