@@ -58,13 +58,14 @@ export function slideScaleCollapseTransition({
       });
     },
     in: (el: HTMLElement) => {
+      // order matters?
+      if (el.firstElementChild) {
+        el.style.height = el.firstElementChild.clientHeight + "px";
+      }
       styleAssign(el.style, {
         opacity: "1",
         transform: "scale(1) translateY(0)",
       });
-      if (el.firstElementChild) {
-        el.style.height = el.firstElementChild.clientHeight + "px";
-      }
     },
     reset: (el: HTMLElement) => {
       el.style.height = "";
