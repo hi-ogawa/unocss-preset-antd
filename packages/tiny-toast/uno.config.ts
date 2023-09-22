@@ -7,11 +7,6 @@ import {
 } from "unocss";
 
 export default defineConfig({
-  content: {
-    pipeline: {
-      include: [/\.c?[jt]sx?$/],
-    },
-  },
   presets: [
     // @ts-ignore peer dep version
     unocssPresetAntd(),

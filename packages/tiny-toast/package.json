@@ -34,10 +34,7 @@
   },
   "scripts": {
     "dev": "vite --no-clearScreen",
-    "build": "pnpm run --seq /^build:/",
-    "build:tsup": "tsup",
-    "xbuild:unocss": "unocss dist/react/index.js dist/react/index.cjs --write-transformed --out-file dist/react/index.css",
-    "xbuild:inject-css": "node misc/inject-css.mjs",
+    "build": "tsup",
     "release": "pnpm publish --no-git-checks --access public"
   },
   "devDependencies": {
