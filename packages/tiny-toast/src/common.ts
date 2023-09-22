@@ -1,3 +1,5 @@
+import { cls } from "./utils";
+
 // TODO: support all 6 positions
 export const TOAST_POSITIONS = ["bottom-left", "top-center"] as const;
 
@@ -33,3 +35,39 @@ export const styleAssign = Object.assign<
   Partial<CSSStyleDeclaration>,
   Partial<CSSStyleDeclaration>
 >;
+
+// default animation
+export function slideScaleCollapseTransition({
+  position,
+}: {
+  position: ToastPosition;
+}) {
+  // steps
+  // - slide out + scale down + collapse
+  // - slide in + scale up + uncollapse
+  return {
+    out: (el: HTMLElement) => {
+      styleAssign(el.style, {
+        height: "0px",
+        opacity: "0",
+        transform: cls(
+          "scale(0)",
+          position === "bottom-left" && "translateY(120%)",
+          position === "top-center" && "translateY(-120%)"
+        ),
+      });
+    },
+    in: (el: HTMLElement) => {
+      styleAssign(el.style, {
+        opacity: "1",
+        transform: "scale(1) translateY(0)",
+      });
+      if (el.firstElementChild) {
+        el.style.height = el.firstElementChild.clientHeight + "px";
+      }
+    },
+    reset: (el: HTMLElement) => {
+      el.style.height = "";
+    },
+  };
+}

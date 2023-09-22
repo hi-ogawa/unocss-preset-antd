@@ -4,10 +4,9 @@ import React from "react";
 import {
   TOAST_TYPE_ICONS,
   TOAST_TYPE_ICON_COLORS,
-  styleAssign,
+  slideScaleCollapseTransition,
 } from "../common";
 import { TOAST_STEP } from "../core";
-import { cls } from "../utils";
 import type {
   ReactToastContainerOptions,
   ReactToastItem,
@@ -95,36 +94,9 @@ function AnimationWrapper({
   toast: ReactToastManager;
   children?: React.ReactNode;
 }) {
-  // steps
-  // 0. slide in + scale up + uncollapse
-  // 1. slide out + scale down + collapse
-
-  // TODO: to common?
-  const transitionOps = {
-    out: (el: HTMLElement) => {
-      styleAssign(el.style, {
-        height: "0px",
-        opacity: "0",
-        transform: cls(
-          "scale(0)",
-          item.data.position === "bottom-left" && "translateY(120%)",
-          item.data.position === "top-center" && "translateY(-120%)"
-        ),
-      });
-    },
-    in: (el: HTMLElement) => {
-      styleAssign(el.style, {
-        opacity: "1",
-        transform: "scale(1) translateY(0)",
-      });
-      if (el.firstElementChild) {
-        el.style.height = el.firstElementChild.clientHeight + "px";
-      }
-    },
-    reset: (el: HTMLElement) => {
-      el.style.height = "";
-    },
-  };
+  const transition = slideScaleCollapseTransition({
+    position: item.data.position,
+  });
 
   return (
     <Transition
@@ -132,13 +104,13 @@ function AnimationWrapper({
       show={item.step < TOAST_STEP.DISMISS}
       style={{
         pointerEvents: "auto",
-        transitionDuration: "300ms",
+        transitionDuration: "200ms",
       }}
-      onEnterFrom={transitionOps.out}
-      onEnterTo={transitionOps.in}
-      onEntered={transitionOps.reset}
-      onLeaveFrom={transitionOps.in}
-      onLeaveTo={transitionOps.out}
+      onEnterFrom={transition.out}
+      onEnterTo={transition.in}
+      onEntered={transition.reset}
+      onLeaveFrom={transition.in}
+      onLeaveTo={transition.out}
       onLeft={() => toast.remove(item.id)}
     >
       <div style={{ display: "inline-block", padding: "0.25rem 0" }}>

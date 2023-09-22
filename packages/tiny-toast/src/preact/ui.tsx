@@ -1,7 +1,13 @@
 import { TransitionManager } from "@hiogawa/tiny-transition";
+import { includesGuard } from "@hiogawa/utils";
 import type * as CSS from "csstype";
 import { h } from "preact";
 import { useEffect, useReducer, useState } from "preact/hooks";
+import {
+  TOAST_TYPE_ICONS,
+  TOAST_TYPE_ICON_COLORS,
+  slideScaleCollapseTransition,
+} from "../common";
 import { TOAST_STEP } from "../core";
 import type { PreactToastItem, PreactToastManager } from "./api";
 
@@ -53,32 +59,21 @@ function ToastAnimation({
   toast: PreactToastManager;
   item: PreactToastItem;
 }) {
-  const [manager] = useState(
-    () =>
-      new TransitionManager({
-        defaultEntered: false,
-        onEnterFrom: (el) => {
-          collapse(el);
-          Object.assign(el.style, TRANSITION_STYLES.enterFrom);
-        },
-        onEnterTo: (el) => {
-          uncollapse(el);
-          Object.assign(el.style, TRANSITION_STYLES.enterTo);
-        },
-        onEntered: (el) => {
-          resetCollapse(el);
-        },
-        onLeaveFrom: (el) => {
-          uncollapse(el);
-          Object.assign(el.style, TRANSITION_STYLES.enterTo);
-        },
-        onLeaveTo: (el) => {
-          collapse(el);
-          Object.assign(el.style, TRANSITION_STYLES.enterFrom);
-        },
-        onLeft: () => toast.remove(item.id),
-      })
-  );
+  const [manager] = useState(() => {
+    const transition = slideScaleCollapseTransition({
+      position: item.data.position,
+    });
+    const manager = new TransitionManager({
+      defaultEntered: false,
+      onEnterFrom: transition.out,
+      onEnterTo: transition.in,
+      onEntered: transition.reset,
+      onLeaveFrom: transition.in,
+      onLeaveTo: transition.out,
+      onLeft: () => toast.remove(item.id),
+    });
+    return manager;
+  });
   useSubscribe(manager.subscribe);
 
   useEffect(() => {
@@ -105,17 +100,6 @@ function ToastAnimation({
     )
   );
 }
-
-const TRANSITION_STYLES = {
-  enterFrom: {
-    opacity: "0",
-    transform: "scale(0) translateY(-120%)",
-  },
-  enterTo: {
-    opacity: "1",
-    transform: "scale(1) translateY(0)",
-  },
-} satisfies Record<string, Partial<CSSStyleDeclaration>>;
 
 function ToastItemComponent({
   toast,
@@ -148,40 +132,18 @@ function ToastItemComponent({
           }),
         },
         [
-          item.data.type === "success" &&
+          includesGuard(
+            ["success", "error", "info"] as const,
+            item.data.type
+          ) &&
             h("span", {
               style: istyle({
                 width: "1.5rem",
                 height: "1.5rem",
-                color: "#61d345",
+                color: TOAST_TYPE_ICON_COLORS[item.data.type],
               }),
-              // https://remixicon.com/icon/checkbox-circle-fill
               dangerouslySetInnerHTML: {
-                __html: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path fill="none" d="M0 0h24v24H0z"></path><path d="M12 22C6.47715 22 2 17.5228 2 12C2 6.47715 6.47715 2 12 2C17.5228 2 22 6.47715 22 12C22 17.5228 17.5228 22 12 22ZM11.0026 16L18.0737 8.92893L16.6595 7.51472L11.0026 13.1716L8.17421 10.3431L6.75999 11.7574L11.0026 16Z"></path></svg>`,
-              },
-            }),
-          item.data.type === "error" &&
-            h("span", {
-              style: istyle({
-                width: "1.5rem",
-                height: "1.5rem",
-                color: "#ff4b4b",
-              }),
-              // https://remixicon.com/icon/close-circle-fill
-              dangerouslySetInnerHTML: {
-                __html: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M12 22C6.47715 22 2 17.5228 2 12C2 6.47715 6.47715 2 12 2C17.5228 2 22 6.47715 22 12C22 17.5228 17.5228 22 12 22ZM12 10.5858L9.17157 7.75736L7.75736 9.17157L10.5858 12L7.75736 14.8284L9.17157 16.2426L12 13.4142L14.8284 16.2426L16.2426 14.8284L13.4142 12L16.2426 9.17157L14.8284 7.75736L12 10.5858Z"></path></svg>`,
-              },
-            }),
-          item.data.type === "info" &&
-            h("span", {
-              style: istyle({
-                width: "1.5rem",
-                height: "1.5rem",
-                color: "#1677ff",
-              }),
-              // https://remixicon.com/icon/information-fill
-              dangerouslySetInnerHTML: {
-                __html: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M12 22C6.47715 22 2 17.5228 2 12C2 6.47715 6.47715 2 12 2C17.5228 2 22 6.47715 22 12C22 17.5228 17.5228 22 12 22ZM11 11V17H13V11H11ZM11 7V9H13V7H11Z"></path></svg>`,
+                __html: TOAST_TYPE_ICONS[item.data.type],
               },
             }),
           h(
