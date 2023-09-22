@@ -1,5 +1,5 @@
 import { TransitionManager } from "@hiogawa/tiny-transition";
-import { includesGuard } from "@hiogawa/utils";
+import { groupBy, includesGuard } from "@hiogawa/utils";
 import type * as CSS from "csstype";
 import { h } from "preact";
 import { useEffect, useReducer, useState } from "preact/hooks";
@@ -14,7 +14,8 @@ import type { PreactToastItem, PreactToastManager } from "./api";
 export function ToastContainer({ toast }: { toast: PreactToastManager }) {
   useSubscribe(toast.subscribe);
 
-  // TODO: handle ToastPosition
+  const itemsByPosition = groupBy(toast.items, (item) => item.data.position);
+
   return h(
     "div",
     {
@@ -37,6 +38,21 @@ export function ToastContainer({ toast }: { toast: PreactToastManager }) {
         {
           style: istyle({
             position: "absolute",
+            bottom: "0.5rem",
+            left: "0.75rem",
+            display: "flex",
+            flexDirection: "column",
+          }),
+        },
+        itemsByPosition
+          .get("bottom-left")
+          ?.map((item) => h(ToastAnimation, { key: item.id, toast, item }))
+      ),
+      h(
+        "div",
+        {
+          style: istyle({
+            position: "absolute",
             top: "3px",
             width: "100%",
             display: "flex",
@@ -44,9 +60,9 @@ export function ToastContainer({ toast }: { toast: PreactToastManager }) {
             alignItems: "center",
           }),
         },
-        toast.items.map((item) =>
-          h(ToastAnimation, { key: item.id, toast, item })
-        )
+        itemsByPosition
+          .get("top-center")
+          ?.map((item) => h(ToastAnimation, { key: item.id, toast, item }))
       ),
     ]
   );
