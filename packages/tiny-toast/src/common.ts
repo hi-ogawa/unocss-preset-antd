@@ -1,4 +1,4 @@
-import { cls } from "./utils";
+import { cls, forceStyle } from "./utils";
 
 // TODO: support all 6 positions
 export const TOAST_POSITIONS = ["bottom-left", "top-center"] as const;
@@ -48,7 +48,6 @@ export function slideScaleCollapseTransition({
   return {
     out: (el: HTMLElement) => {
       styleAssign(el.style, {
-        height: "0px",
         opacity: "0",
         transform: cls(
           "scale(0)",
@@ -56,11 +55,13 @@ export function slideScaleCollapseTransition({
           position === "top-center" && "translateY(-120%)"
         ),
       });
+      forceStyle(el); // somehow order matters and without this preact animation glitches
+      el.style.height = "0px";
     },
     in: (el: HTMLElement) => {
-      // order matters?
       if (el.firstElementChild) {
         el.style.height = el.firstElementChild.clientHeight + "px";
+        forceStyle(el);
       }
       styleAssign(el.style, {
         opacity: "1",

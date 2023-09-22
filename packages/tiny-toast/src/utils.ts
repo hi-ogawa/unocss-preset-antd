@@ -66,3 +66,7 @@ export function generateId() {
 export function cls(...args: unknown[]) {
   return args.filter(Boolean).join(" ");
 }
+
+export function forceStyle(el: HTMLElement) {
+  typeof getComputedStyle(el).transition || console.log("unreachable");
+}
