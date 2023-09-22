@@ -36,13 +36,12 @@ function Demo() {
           toast.custom(({ h, toast, item }) =>
             h("div", { class: "flex items-center gap-2" }, [
               h("span", {
-                class: "i-ri-aliens-fill text-colorPrimary text-2xl",
+                class: "i-ri-aliens-fill text-colorWarning text-2xl",
               }),
               h("span", {}, "Custom"),
               h("button", {
                 class:
                   "antd-btn antd-btn-ghost i-ri-close-line text-colorTextSecondary text-lg",
-                // TODO: collapsing in the middle of toast list not working?
                 onClick: () => toast.dismiss(item.id),
               }),
             ])

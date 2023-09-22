@@ -249,7 +249,7 @@ export function StoryToast() {
                 toast.custom(({ h, toast, item }) =>
                   h("div", { class: "flex items-center gap-2" }, [
                     h("span", {
-                      class: "i-ri-aliens-fill text-colorPrimary text-2xl",
+                      class: "i-ri-aliens-fill text-colorWarning text-2xl",
                     }),
                     h("span", {}, "Custom"),
                     h("button", {
