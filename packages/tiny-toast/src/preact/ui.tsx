@@ -124,24 +124,22 @@ function ToastItemComponent({
             "0 3px 10px rgba(0, 0, 0, 0.1), 0 3px 3px rgba(0, 0, 0, 0.05)",
         }),
     },
-    [
-      includesGuard(["success", "error", "info"] as const, item.data.type) &&
-        h("span", {
-          style: istyle({
-            width: "1.5rem",
-            height: "1.5rem",
-            color: TOAST_TYPE_ICON_COLORS[item.data.type],
-          }),
-          dangerouslySetInnerHTML: {
-            __html: TOAST_TYPE_ICONS[item.data.type],
-          },
+    includesGuard(["success", "error", "info"] as const, item.data.type) &&
+      h("span", {
+        style: istyle({
+          width: "1.5rem",
+          height: "1.5rem",
+          color: TOAST_TYPE_ICON_COLORS[item.data.type],
         }),
-      h(
-        "div",
-        { style: istyle({ padding: "0 0.5rem" }) },
-        item.data.render({ h, toast, item })
-      ),
-    ]
+        dangerouslySetInnerHTML: {
+          __html: TOAST_TYPE_ICONS[item.data.type],
+        },
+      }),
+    h(
+      "div",
+      { style: istyle({ padding: "0 0.5rem" }) },
+      item.data.render({ h, toast, item })
+    )
   );
 }
 
