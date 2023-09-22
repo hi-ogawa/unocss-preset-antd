@@ -36,8 +36,8 @@
     "dev": "vite --no-clearScreen",
     "build": "pnpm run --seq /^build:/",
     "build:tsup": "tsup",
-    "build:unocss": "unocss dist/react/index.js dist/react/index.cjs --write-transformed --out-file dist/react/index.css",
-    "build:inject-css": "node misc/inject-css.mjs",
+    "xbuild:unocss": "unocss dist/react/index.js dist/react/index.cjs --write-transformed --out-file dist/react/index.css",
+    "xbuild:inject-css": "node misc/inject-css.mjs",
     "release": "pnpm publish --no-git-checks --access public"
   },
   "devDependencies": {

@@ -3,8 +3,12 @@ import type { ToastPosition, ToastType } from "../common";
 import { type ToastItem, ToastManager } from "../core";
 import { ToastContainer } from "./ui";
 
+// TODO
+// mostly duplicate of src/react
+// think about refactoring later
+
 type RenderItem = (props: {
-  h: typeof h;
+  h: typeof h; // TODO: eliminate type peer-dep by typing inline?
   item: PreactToastItem;
   toast: PreactToastManager;
 }) => ComponentChild;

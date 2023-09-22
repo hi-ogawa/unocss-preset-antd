@@ -138,6 +138,7 @@ function ToastItemComponent({
         }),
     },
     [
+      // TODO: remove this intermediate div
       h(
         "div",
         {
