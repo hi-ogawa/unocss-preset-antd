@@ -27,3 +27,9 @@ export const TOAST_TYPE_ICON_COLORS = {
   error: `#ff4b4b`,
   info: `#1677ff`,
 };
+
+// type-safe styles assignment
+export const styleAssign = Object.assign<
+  Partial<CSSStyleDeclaration>,
+  Partial<CSSStyleDeclaration>
+>;

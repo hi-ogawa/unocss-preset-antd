@@ -1,7 +1,11 @@
 import { Transition } from "@hiogawa/tiny-transition/dist/react";
 import { groupBy, includesGuard } from "@hiogawa/utils";
 import React from "react";
-import { TOAST_TYPE_ICONS, TOAST_TYPE_ICON_COLORS } from "../common";
+import {
+  TOAST_TYPE_ICONS,
+  TOAST_TYPE_ICON_COLORS,
+  styleAssign,
+} from "../common";
 import { TOAST_STEP } from "../core";
 import { cls } from "../utils";
 import type {
@@ -91,85 +95,58 @@ function AnimationWrapper({
   toast: ReactToastManager;
   children?: React.ReactNode;
 }) {
-  // TODO: can implement without @hiogawa/tiny-transition?
-  // TODO: can merge two <Transition /> into one
-
   // steps
   // 0. slide in + scale up + uncollapse
   // 1. slide out + scale down + collapse
 
   // TODO: to common?
-  const styles = {
-    out: {
-      opacity: "0",
-      transform: cls(
-        "scale(0)",
-        item.data.position === "bottom-left" && "translateY(120%)",
-        item.data.position === "top-center" && "translateY(-120%)"
-      ),
+  const transitionOps = {
+    out: (el: HTMLElement) => {
+      styleAssign(el.style, {
+        height: "0px",
+        opacity: "0",
+        transform: cls(
+          "scale(0)",
+          item.data.position === "bottom-left" && "translateY(120%)",
+          item.data.position === "top-center" && "translateY(-120%)"
+        ),
+      });
     },
-    in: {
-      opacity: "1",
-      transform: "scale(1) translateY(0)",
+    in: (el: HTMLElement) => {
+      styleAssign(el.style, {
+        opacity: "1",
+        transform: "scale(1) translateY(0)",
+      });
+      if (el.firstElementChild) {
+        el.style.height = el.firstElementChild.clientHeight + "px";
+      }
     },
-  } satisfies Record<string, Partial<CSSStyleDeclaration>>;
+    reset: (el: HTMLElement) => {
+      el.style.height = "";
+    },
+  };
 
   return (
     <Transition
       appear
       show={item.step < TOAST_STEP.DISMISS}
       style={{
-        transitionDuration: "300ms",
         pointerEvents: "auto",
+        transitionDuration: "300ms",
       }}
-      onEnterFrom={collapseOps.out}
-      onEnterTo={collapseOps.in}
-      onEntered={collapseOps.reset}
-      onLeaveFrom={collapseOps.in}
-      onLeaveTo={collapseOps.out}
+      onEnterFrom={transitionOps.out}
+      onEnterTo={transitionOps.in}
+      onEntered={transitionOps.reset}
+      onLeaveFrom={transitionOps.in}
+      onLeaveTo={transitionOps.out}
       onLeft={() => toast.remove(item.id)}
     >
-      <Transition
-        appear
-        show={item.step < TOAST_STEP.DISMISS}
-        style={{
-          display: "inline-block",
-          transitionDuration: "300ms",
-          padding: "0.25rem 0",
-        }}
-        onEnterFrom={(el) => {
-          Object.assign(el.style, styles.out);
-        }}
-        onEnterTo={(el) => {
-          Object.assign(el.style, styles.in);
-        }}
-        onLeaveFrom={(el) => {
-          Object.assign(el.style, styles.in);
-        }}
-        onLeaveTo={(el) => {
-          Object.assign(el.style, styles.out);
-        }}
-      >
+      <div style={{ display: "inline-block", padding: "0.25rem 0" }}>
         {children}
-      </Transition>
+      </div>
     </Transition>
   );
 }
-
-// TODO: to common
-const collapseOps = {
-  out: (el: HTMLElement) => {
-    el.style.height = "0px";
-  },
-  in: (el: HTMLElement) => {
-    if (el.firstElementChild) {
-      el.style.height = el.firstElementChild.clientHeight + "px";
-    }
-  },
-  reset: (el: HTMLElement) => {
-    el.style.height = "";
-  },
-};
 
 function ItemComponent({
   item,
