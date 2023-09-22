@@ -70,3 +70,9 @@ export function cls(...args: unknown[]) {
 export function forceStyle(el: HTMLElement) {
   typeof getComputedStyle(el).transition || console.log("unreachable");
 }
+
+// type-safe styles assignment
+export const styleAssign = Object.assign<
+  Partial<CSSStyleDeclaration>,
+  Partial<CSSStyleDeclaration>
+>;

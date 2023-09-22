@@ -1,4 +1,4 @@
-import { cls, forceStyle } from "./utils";
+import { cls, forceStyle, styleAssign } from "./utils";
 
 // TODO: support all 6 positions
 export const TOAST_POSITIONS = ["bottom-left", "top-center"] as const;
@@ -29,12 +29,6 @@ export const TOAST_TYPE_ICON_COLORS = {
   error: `#ff4b4b`,
   info: `#1677ff`,
 };
-
-// type-safe styles assignment
-export const styleAssign = Object.assign<
-  Partial<CSSStyleDeclaration>,
-  Partial<CSSStyleDeclaration>
->;
 
 // default animation
 export function slideScaleCollapseTransition({
