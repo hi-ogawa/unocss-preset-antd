@@ -81,7 +81,7 @@ export class TransitionManager {
     this.disposables.add(
       onNextFrame(() => {
         // "enterTo" on next frame
-        forceStyle(el); // TODO: don't need next frame if forceStyle?
+        forceStyle(el);
         this.options.onEnterTo?.(el);
 
         // notify "entered"
@@ -193,6 +193,6 @@ function parseDurationSingle(s: string): number {
   return ms;
 }
 
-export function forceStyle(el: HTMLElement) {
+function forceStyle(el: HTMLElement) {
   typeof getComputedStyle(el).transition || console.log("unreachable");
 }

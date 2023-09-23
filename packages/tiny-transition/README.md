@@ -6,4 +6,4 @@ Rendering framework agnostic transition/animation utility.
 
 - always `remount`
 - no `Transition.Child`
-  - can workaround by setting same animation duration for all components + set `appear` for inner components
+  - can workaround by setting same animation duration for all components
