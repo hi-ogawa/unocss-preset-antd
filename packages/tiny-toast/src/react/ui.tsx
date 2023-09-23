@@ -102,10 +102,7 @@ function AnimationWrapper({
     <Transition
       appear
       show={item.step < TOAST_STEP.DISMISS}
-      style={{
-        pointerEvents: "auto",
-        transitionDuration: "200ms",
-      }}
+      style={{ pointerEvents: "auto" }}
       onEnterFrom={transition.enterFrom}
       onEnterTo={transition.enterTo}
       onEntered={transition.entered}
@@ -135,7 +132,7 @@ function ItemComponent({
       style={{
         display: "flex",
         alignItems: "center",
-        padding: "8px 10px",
+        padding: "10px 10px",
         borderRadius: "8px",
         boxShadow:
           "0 3px 10px rgba(0, 0, 0, 0.1), 0 3px 3px rgba(0, 0, 0, 0.05)",
@@ -155,7 +152,7 @@ function ItemComponent({
           }}
         />
       )}
-      <div style={{ padding: "0 0.5rem" }}>
+      <div style={{ padding: "0 10px" }}>
         {item.data.render({ item, toast })}
       </div>
     </div>
