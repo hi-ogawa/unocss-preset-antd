@@ -59,7 +59,6 @@ export class PreactToastManager extends ToastManager<PreactToastData> {
   success = createByTypeFactory("success");
   error = createByTypeFactory("error");
   info = createByTypeFactory("info");
-  blank = createByTypeFactory("blank");
   custom = createByTypeFactory("custom");
 }
 

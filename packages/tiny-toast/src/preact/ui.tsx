@@ -133,7 +133,7 @@ function ToastItemComponent({
         istyle({
           display: "flex",
           alignItems: "center",
-          padding: "8px 10px",
+          padding: "10px 10px",
           borderRadius: "8px",
           boxShadow:
             "0 3px 10px rgba(0, 0, 0, 0.1), 0 3px 3px rgba(0, 0, 0, 0.05)",
@@ -152,7 +152,7 @@ function ToastItemComponent({
       }),
     h(
       "div",
-      { style: istyle({ padding: "0 0.5rem" }) },
+      { style: istyle({ padding: "0 10px" }) },
       item.data.render({ h, toast, item })
     )
   );
