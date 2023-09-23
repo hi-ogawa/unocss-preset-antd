@@ -199,8 +199,9 @@ export function StoryToast() {
   const toast = new PreactToastManager();
   toast.defaultOptions.class = "antd-floating";
 
-  const dispose = toast.render();
-  onCleanup(() => dispose());
+  onMount(() => {
+    onCleanup(toast.render());
+  });
 
   return (
     <div class="flex flex-col items-center w-full max-w-2xl gap-3 p-3 border">

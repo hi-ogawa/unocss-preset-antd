@@ -53,6 +53,7 @@ export class PreactToastManager extends ToastManager<PreactToastData> {
 
   render() {
     const el = document.createElement("div");
+    el.setAttribute("data-tiny-toast", "");
     document.body.appendChild(el);
     render(h(ToastContainer, { toast: this }), el);
     return () => {
