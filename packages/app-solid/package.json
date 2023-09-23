@@ -1,5 +1,6 @@
 {
   "name": "@hiogawa/unocss-preset-antd-app-solid",
+  "private": true,
   "scripts": {
     "dev": "vite --no-clearScreen",
     "build": "run-s build:*",
