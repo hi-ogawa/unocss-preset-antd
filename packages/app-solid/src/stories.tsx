@@ -205,8 +205,8 @@ export function StoryToast() {
   onCleanup(() => el.remove());
 
   return (
-    <div class="flex flex-col items-center gap-3 m-2">
-      <section class="flex flex-col gap-4 w-full max-w-2xl border p-3">
+    <div class="flex flex-col items-center w-full max-w-2xl gap-3 p-3 border">
+      <section class="flex flex-col gap-4 w-full">
         <h2 class="text-xl">Toast</h2>
         <div class="flex flex-col gap-1">
           Type
@@ -234,14 +234,6 @@ export function StoryToast() {
               }}
             >
               Info
-            </button>
-            <button
-              class="flex-1 antd-btn antd-btn-default px-2"
-              onClick={() => {
-                toast.blank("Just message");
-              }}
-            >
-              Blank
             </button>
             <button
               class="flex-1 antd-btn antd-btn-default px-2"

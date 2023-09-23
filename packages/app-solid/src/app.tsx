@@ -58,10 +58,8 @@ function AppInner() {
           <AppNavMenu />
         </div>
         <div class="flex-1 m-4">
-          <div class="flex justify-center">
-            <div class="flex flex-col gap-4 p-4">
-              {createComponent(outlet(), {})}
-            </div>
+          <div class="flex justify-center p-4">
+            {createComponent(outlet(), {})}
           </div>
         </div>
       </div>
