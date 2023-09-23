@@ -129,7 +129,6 @@ function ToastItemComponent({
     {
       class: item.data.class,
       style:
-        item.data.style ??
         istyle({
           display: "flex",
           alignItems: "center",
@@ -137,7 +136,7 @@ function ToastItemComponent({
           borderRadius: "8px",
           boxShadow:
             "0 3px 10px rgba(0, 0, 0, 0.1), 0 3px 3px rgba(0, 0, 0, 0.05)",
-        }),
+        }) + (item.data.style ?? ""),
     },
     includesGuard(["success", "error", "info"] as const, item.data.type) &&
       h("span", {
@@ -170,6 +169,6 @@ function useSubscribe(subscribe: (callback: () => void) => () => void) {
 // cf. https://github.com/cristianbote/goober/blob/a849b2d644146d96fa1dd1c560f6418ee1e1c469/src/core/parse.js#L48
 function istyle(props: CSS.Properties): string {
   return Object.entries(props)
-    .map(([k, v]) => `${k.replace(/[A-Z]/g, "-$&").toLowerCase()}:${v}`)
-    .join(";");
+    .map(([k, v]) => `${k.replace(/[A-Z]/g, "-$&").toLowerCase()}:${v};`)
+    .join("");
 }
