@@ -66,3 +66,9 @@ export function generateId() {
 export function cls(...args: unknown[]) {
   return args.filter(Boolean).join(" ");
 }
+
+// type-safe styles assignment
+export const styleAssign = Object.assign<
+  Partial<CSSStyleDeclaration>,
+  Partial<CSSStyleDeclaration>
+>;

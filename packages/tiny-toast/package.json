@@ -1,6 +1,6 @@
 {
   "name": "@hiogawa/tiny-toast",
-  "version": "0.1.1-pre.1",
+  "version": "0.1.1-pre.7",
   "type": "module",
   "main": "./dist/index.js",
   "module": "./dist/index.js",
@@ -12,9 +12,14 @@
       "types": "./dist/index.d.ts"
     },
     "./dist/react": {
-      "import": "./dist/react.js",
-      "require": "./dist/react.cjs",
-      "types": "./dist/react.d.ts"
+      "import": "./dist/react/index.js",
+      "require": "./dist/react/index.cjs",
+      "types": "./dist/react/index.d.ts"
+    },
+    "./dist/preact": {
+      "import": "./dist/preact/index.js",
+      "require": "./dist/preact/index.cjs",
+      "types": "./dist/preact/index.d.ts"
     }
   },
   "files": [
@@ -28,17 +33,17 @@
     "directory": "packages/tiny-transition"
   },
   "scripts": {
-    "build": "pnpm run --seq /^build:/",
-    "build:tsup": "tsup",
-    "build:unocss": "unocss dist/react.js dist/react.cjs --write-transformed --out-file dist/react.css",
-    "build:inject-css": "node misc/inject-css.mjs",
+    "dev": "vite --no-clearScreen",
+    "build": "tsup",
     "release": "pnpm publish --no-git-checks --access public"
   },
   "devDependencies": {
     "@hiogawa/tiny-transition": "workspace:*",
+    "@hiogawa/unocss-preset-antd": "workspace:*",
     "@hiogawa/utils": "1.6.1-pre.7",
     "@hiogawa/utils-react": "^1.3.1-pre.0",
     "@types/react": "^18.2.14",
+    "preact": "^10.15.1",
     "react": "^18.2.0"
   },
   "peerDependencies": {

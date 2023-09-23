@@ -2,10 +2,7 @@ import { createTinyForm } from "@hiogawa/tiny-form";
 import { useTinyForm } from "@hiogawa/tiny-form/dist/react";
 import { useTinyProgress } from "@hiogawa/tiny-progress/dist/react";
 import { useTinyStoreStorage } from "@hiogawa/tiny-store/dist/react";
-import {
-  TOAST_POSITIONS,
-  type ToastPosition,
-} from "@hiogawa/tiny-toast/dist/react";
+import { TOAST_POSITIONS, type ToastPosition } from "@hiogawa/tiny-toast";
 import { Transition } from "@hiogawa/tiny-transition/dist/react";
 import { ANTD_VARS } from "@hiogawa/unocss-preset-antd";
 import { none, objectKeys, objectPickBy, range } from "@hiogawa/utils";

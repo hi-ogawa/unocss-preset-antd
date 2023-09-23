@@ -1,8 +1,12 @@
 import { Transition } from "@hiogawa/tiny-transition/dist/react";
-import { groupBy } from "@hiogawa/utils";
+import { groupBy, includesGuard } from "@hiogawa/utils";
 import React from "react";
+import {
+  TOAST_TYPE_ICONS,
+  TOAST_TYPE_ICON_COLORS,
+  slideScaleCollapseTransition,
+} from "../common";
 import { TOAST_STEP } from "../core";
-import { cls } from "../utils";
 import type {
   ReactToastContainerOptions,
   ReactToastItem,
@@ -42,23 +46,39 @@ export function ReactToastContainer({
 
   return (
     <div
-      style={options?.style}
-      className={cls(
-        options?.className,
-        "= fixed inset-0 z-9999 pointer-events-none"
-      )}
+      style={{
+        position: "fixed",
+        inset: 0,
+        zIndex: 9999,
+        pointerEvents: "none",
+        ...options?.style,
+      }}
+      className={options?.className}
       onMouseEnter={() => toast.pause(true)}
       onMouseLeave={() => toast.pause(false)}
     >
-      <style
-        // injected by misc/inject-css.mjs at build time
-        dangerouslySetInnerHTML={{ __html: `/*__INJECT_CSS__*/` }}
-      />
-      {/* note that AnimationWrapper's py-1.5 gives uniform gap */}
-      <div className="= [&_*]:pointer-events-auto absolute bottom-3 left-4 flex flex-col">
+      {/* note that we use AnimationWrapper's "py" to give uniform gap for collapse animation */}
+      <div
+        style={{
+          position: "absolute",
+          bottom: "0.5rem",
+          left: "0.75rem",
+          display: "flex",
+          flexDirection: "column",
+        }}
+      >
         {itemsByPosition.get("bottom-left")?.map((item) => render(item))}
       </div>
-      <div className="= [&_*]:pointer-events-auto absolute top-3 flex flex-col-reverse items-center w-full">
+      <div
+        style={{
+          position: "absolute",
+          top: "0.5rem",
+          width: "100%",
+          display: "flex",
+          flexDirection: "column-reverse",
+          alignItems: "center",
+        }}
+      >
         {itemsByPosition.get("top-center")?.map((item) => render(item))}
       </div>
     </div>
@@ -74,65 +94,27 @@ function AnimationWrapper({
   toast: ReactToastManager;
   children?: React.ReactNode;
 }) {
-  // TODO: can implement without @hiogawa/tiny-transition?
+  const transition = slideScaleCollapseTransition({
+    position: item.data.position,
+  });
 
-  // steps
-  // 0. slide in + scale up
-  // 1. slide out + scale down + collapse down
   return (
     <Transition
       appear
       show={item.step < TOAST_STEP.DISMISS}
-      className="= duration-300"
+      style={{ pointerEvents: "auto" }}
+      onEnterFrom={transition.enterFrom}
+      onEnterTo={transition.enterTo}
+      onEntered={transition.entered}
+      onLeaveFrom={transition.leaveFrom}
+      onLeaveTo={transition.leaveTo}
       onLeft={() => toast.remove(item.id)}
-      {...getCollapseProps()}
     >
-      <Transition
-        appear
-        show={item.step < TOAST_STEP.DISMISS}
-        className="= inline-block duration-300 transform py-1"
-        enterFrom={cls(
-          "= scale-0 opacity-10",
-          item.data.position === "bottom-left" && "= translate-y-[120%]",
-          item.data.position === "top-center" && "= translate-y-[-120%]"
-        )}
-        enterTo="= translate-y-0 scale-100 opacity-100"
-        leaveFrom="= translate-y-0 scale-100 opacity-100"
-        leaveTo={cls(
-          "= scale-0 opacity-10",
-          item.data.position === "bottom-left" && "= translate-y-[120%]",
-          item.data.position === "top-center" && "= translate-y-[-120%]"
-        )}
-      >
+      <div style={{ display: "inline-block", padding: "0.25rem 0" }}>
         {children}
-      </Transition>
+      </div>
     </Transition>
   );
-}
-
-// cf. packages/app/src/components/collapse.tsx
-function getCollapseProps(): Partial<React.ComponentProps<typeof Transition>> {
-  function uncollapse(el: HTMLElement) {
-    if (el.firstElementChild) {
-      el.style.height = el.firstElementChild.clientHeight + "px";
-    }
-  }
-
-  function collapse(el: HTMLElement) {
-    el.style.height = "0px";
-  }
-
-  function reset(el: HTMLElement) {
-    el.style.height = "";
-  }
-
-  return {
-    onEnterFrom: collapse,
-    onEnterTo: uncollapse,
-    onEntered: reset,
-    onLeaveFrom: uncollapse,
-    onLeaveTo: collapse,
-  };
 }
 
 function ItemComponent({
@@ -147,23 +129,31 @@ function ItemComponent({
   }
   return (
     <div
-      style={item.data.style}
-      className={cls(item.data.className, "= rounded-lg shadow-lg")}
+      style={{
+        display: "flex",
+        alignItems: "center",
+        padding: "10px 10px",
+        borderRadius: "8px",
+        boxShadow:
+          "0 3px 10px rgba(0, 0, 0, 0.1), 0 3px 3px rgba(0, 0, 0, 0.05)",
+        ...item.data.style,
+      }}
+      className={item.data.className}
     >
-      <div className="= flex items-center p-3">
-        {item.data.type && (
-          <span
-            className={cls(
-              item.data.type === "success" &&
-                "= i-ri-checkbox-circle-fill text-green text-2xl",
-              item.data.type === "error" &&
-                "= i-ri-close-circle-fill text-red text-2xl",
-              item.data.type === "info" &&
-                "= i-ri-information-line text-blue text-2xl"
-            )}
-          />
-        )}
-        <div className="= flex-1 px-2">{item.data.render({ item, toast })}</div>
+      {includesGuard(["success", "error", "info"] as const, item.data.type) && (
+        <span
+          style={{
+            width: "1.5rem",
+            height: "1.5rem",
+            color: TOAST_TYPE_ICON_COLORS[item.data.type],
+          }}
+          dangerouslySetInnerHTML={{
+            __html: TOAST_TYPE_ICONS[item.data.type],
+          }}
+        />
+      )}
+      <div style={{ padding: "0 10px" }}>
+        {item.data.render({ item, toast })}
       </div>
     </div>
   );

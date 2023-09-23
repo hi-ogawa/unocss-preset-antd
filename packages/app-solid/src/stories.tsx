@@ -1,7 +1,8 @@
 import type { Placement } from "@floating-ui/dom";
+import { PreactToastManager } from "@hiogawa/tiny-toast/dist/preact";
 import { range } from "@hiogawa/utils";
 import { Ref } from "@solid-primitives/refs";
-import { Index, Show, createSignal } from "solid-js";
+import { Index, Show, createSignal, onCleanup, onMount } from "solid-js";
 import { Drawer } from "./components/drawer";
 import { Modal } from "./components/modal";
 import { FloatingArrow, Popover } from "./components/popover";
@@ -192,4 +193,70 @@ export function StoryPopover() {
       />
     );
   }
+}
+
+export function StoryToast() {
+  const toast = new PreactToastManager();
+  toast.defaultOptions.class = "antd-floating";
+
+  onMount(() => {
+    onCleanup(toast.render());
+  });
+
+  return (
+    <div class="flex flex-col items-center w-full max-w-2xl gap-3 p-3 border">
+      <section class="flex flex-col gap-4 w-full">
+        <h2 class="text-xl">Toast</h2>
+        <div class="flex flex-col gap-1">
+          Type
+          <div class="flex gap-2">
+            <button
+              class="flex-1 antd-btn antd-btn-default px-2"
+              onClick={() => {
+                toast.success("Successfuly toasted!");
+              }}
+            >
+              Success
+            </button>
+            <button
+              class="flex-1 antd-btn antd-btn-default px-2"
+              onClick={() => {
+                toast.error("This didn't work.");
+              }}
+            >
+              Error
+            </button>
+            <button
+              class="flex-1 antd-btn antd-btn-default px-2"
+              onClick={() => {
+                toast.info("Some info");
+              }}
+            >
+              Info
+            </button>
+            <button
+              class="flex-1 antd-btn antd-btn-default px-2"
+              onClick={() => {
+                toast.custom(({ h, toast, item }) =>
+                  h("div", { class: "flex items-center gap-2" }, [
+                    h("span", {
+                      class: "i-ri-aliens-fill text-colorWarning text-2xl",
+                    }),
+                    h("span", {}, "Custom"),
+                    h("button", {
+                      class:
+                        "antd-btn antd-btn-ghost i-ri-close-line text-colorTextSecondary text-lg",
+                      onClick: () => toast.dismiss(item.id),
+                    }),
+                  ])
+                );
+              }}
+            >
+              Custom
+            </button>
+          </div>
+        </div>
+      </section>
+    </div>
+  );
 }
