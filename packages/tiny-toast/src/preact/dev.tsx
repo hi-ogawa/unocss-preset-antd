@@ -5,7 +5,7 @@ import { PreactToastManager } from "./api";
 const toast = new PreactToastManager();
 
 function main() {
-  toast.render(document.getElementById("root-toast")!);
+  toast.render();
   render(h(Demo, {}), document.getElementById("root")!);
 }
 

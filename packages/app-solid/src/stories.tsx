@@ -2,7 +2,7 @@ import type { Placement } from "@floating-ui/dom";
 import { PreactToastManager } from "@hiogawa/tiny-toast/dist/preact";
 import { range } from "@hiogawa/utils";
 import { Ref } from "@solid-primitives/refs";
-import { Index, Show, createSignal, onCleanup } from "solid-js";
+import { Index, Show, createSignal, onCleanup, onMount } from "solid-js";
 import { Drawer } from "./components/drawer";
 import { Modal } from "./components/modal";
 import { FloatingArrow, Popover } from "./components/popover";
@@ -199,10 +199,8 @@ export function StoryToast() {
   const toast = new PreactToastManager();
   toast.defaultOptions.class = "antd-floating";
 
-  const el = document.body.appendChild(document.createElement("div"));
-  toast.render(el);
-
-  onCleanup(() => el.remove());
+  const dispose = toast.render();
+  onCleanup(() => dispose());
 
   return (
     <div class="flex flex-col items-center w-full max-w-2xl gap-3 p-3 border">

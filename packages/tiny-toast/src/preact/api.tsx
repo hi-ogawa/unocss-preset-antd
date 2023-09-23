@@ -51,9 +51,14 @@ export class PreactToastManager extends ToastManager<PreactToastData> {
     duration: 4000,
   };
 
-  render(el: Element) {
+  render() {
+    const el = document.createElement("div");
+    document.body.appendChild(el);
     render(h(ToastContainer, { toast: this }), el);
-    return () => render(null, el);
+    return () => {
+      render(null, el);
+      el.remove();
+    };
   }
 
   success = createByTypeFactory("success");
