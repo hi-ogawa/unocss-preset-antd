@@ -77,7 +77,9 @@ function createByTypeFactory(type: ToastType) {
         style: options?.style ?? this.defaultOptions.style,
       },
       {
-        duration: options?.duration ?? this.defaultOptions.duration,
+        duration:
+          options?.duration ??
+          this.defaultOptions.duration / (type === "success" ? 2 : 1),
       }
     );
   };
