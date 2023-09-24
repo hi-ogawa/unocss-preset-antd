@@ -1,4 +1,5 @@
 import {
+  FloatingOverlay,
   FloatingPortal,
   useDismiss,
   useFloating,
@@ -8,7 +9,6 @@ import {
 import { Transition } from "@hiogawa/tiny-transition/dist/react";
 import { tinyassert } from "@hiogawa/utils";
 import React from "react";
-import { RemoveScroll } from "react-remove-scroll";
 import { cls } from "../utils/misc";
 
 // copied from https://github.com/hi-ogawa/web-ext-tab-manager/blame/81710dead04859525b9c8be3a73a71926cae6da4/src/components/modal.tsx
@@ -47,9 +47,9 @@ function Modal(props: {
           leaveTo="opacity-0"
         />
         {/* content */}
-        <RemoveScroll
-          className="fixed inset-0 overflow-hidden flex justify-center items-center"
-          removeScrollBar={false}
+        <FloatingOverlay
+          lockScroll
+          className="flex justify-center items-center"
         >
           <Transition
             appear
@@ -72,7 +72,7 @@ function Modal(props: {
               {props.children}
             </div>
           </Transition>
-        </RemoveScroll>
+        </FloatingOverlay>
       </Transition>
     </FloatingPortal>
   );

@@ -1,4 +1,5 @@
 import {
+  FloatingOverlay,
   FloatingPortal,
   useDismiss,
   useFloating,
@@ -8,7 +9,6 @@ import {
 import { Transition } from "@hiogawa/tiny-transition/dist/react";
 import { tinyassert } from "@hiogawa/utils";
 import type React from "react";
-import { RemoveScroll } from "react-remove-scroll";
 
 export function Drawer(props: {
   open: boolean;
@@ -42,10 +42,7 @@ export function Drawer(props: {
           leaveTo="opacity-0"
         />
         {/* content */}
-        <RemoveScroll
-          className="fixed inset-0 overflow-hidden"
-          removeScrollBar={false}
-        >
+        <FloatingOverlay lockScroll>
           <Transition
             appear
             show={props.open}
@@ -64,7 +61,7 @@ export function Drawer(props: {
               {props.children}
             </div>
           </Transition>
-        </RemoveScroll>
+        </FloatingOverlay>
       </Transition>
     </FloatingPortal>
   );
