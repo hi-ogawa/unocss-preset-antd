@@ -47,7 +47,10 @@ function Modal(props: {
           leaveTo="opacity-0"
         />
         {/* content */}
-        <RemoveScroll className="fixed inset-0 overflow-hidden flex justify-center items-center">
+        <RemoveScroll
+          className="fixed inset-0 overflow-hidden flex justify-center items-center"
+          removeScrollBar={false}
+        >
           <Transition
             appear
             show={props.open}
