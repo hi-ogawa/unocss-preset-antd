@@ -46,7 +46,7 @@ export class TransitionManager {
   show(show: boolean) {
     if (show && this.state !== "entering" && this.state !== "entered") {
       this.state = "entering";
-      // `startEnter` is usually handled in `onLayout` since `this.el` is null for normal cases.
+      // `startEnter` is usually handled in `setElement` since `this.el` is null for normal cases.
       // however `this.el` can be non-null when `show` flips (true -> false -> true) faster than transition animation.
       this.startEnter();
       this.notify();
@@ -63,6 +63,8 @@ export class TransitionManager {
     this.dispose();
     this.el = el;
     if (!el) return;
+
+    // TODO: animation style should applied during `useLayoutEffect` instead of `ref` callback?
     if (this.state === "entered") {
       this.options.onEntered?.(el);
     } else if (this.state === "entering") {
