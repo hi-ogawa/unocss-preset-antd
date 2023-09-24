@@ -42,7 +42,10 @@ export function Drawer(props: {
           leaveTo="opacity-0"
         />
         {/* content */}
-        <RemoveScroll className="fixed inset-0 overflow-hidden">
+        <RemoveScroll
+          className="fixed inset-0 overflow-hidden"
+          removeScrollBar={false}
+        >
           <Transition
             appear
             show={props.open}

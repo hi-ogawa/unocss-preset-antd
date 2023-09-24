@@ -120,7 +120,7 @@ function Header() {
               <span className="i-ri-menu-line w-5 h-5"></span>
             </button>
           </div>
-          <div className="p-1.5">
+          <div className="p-1.5 overflow-y-auto">
             <NavMenu onClick={() => setMenuOpen(false)} />
           </div>
         </div>
