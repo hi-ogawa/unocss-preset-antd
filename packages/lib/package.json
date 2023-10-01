@@ -13,9 +13,7 @@
     }
   },
   "files": [
-    "dist/index.*",
-    "dist/reset-dev.*",
-    "dist/reset.css"
+    "dist"
   ],
   "license": "MIT",
   "homepage": "https://github.com/hi-ogawa/unocss-preset-antd/packages/lib",
