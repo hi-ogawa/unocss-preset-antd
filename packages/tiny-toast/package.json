@@ -1,10 +1,14 @@
 {
   "name": "@hiogawa/tiny-toast",
   "version": "0.1.1-pre.7",
+  "homepage": "https://github.com/hi-ogawa/unocss-preset-antd/tree/main/packages/tiny-toast",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/hi-ogawa/unocss-preset-antd/",
+    "directory": "packages/tiny-transition"
+  },
+  "license": "MIT",
   "type": "module",
-  "main": "./dist/index.js",
-  "module": "./dist/index.js",
-  "types": "./dist/index.d.ts",
   "exports": {
     ".": {
       "import": "./dist/index.js",
@@ -22,16 +26,12 @@
       "types": "./dist/preact/index.d.ts"
     }
   },
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
   "files": [
     "dist"
   ],
-  "license": "MIT",
-  "homepage": "https://github.com/hi-ogawa/unocss-preset-antd/tree/main/packages/tiny-toast",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/hi-ogawa/unocss-preset-antd/",
-    "directory": "packages/tiny-transition"
-  },
   "scripts": {
     "dev": "vite --no-clearScreen",
     "build": "tsup",
