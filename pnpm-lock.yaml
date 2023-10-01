@@ -199,6 +199,9 @@ importers:
 
   packages/tiny-toast:
     devDependencies:
+      '@hiogawa/tiny-react':
+        specifier: 0.0.1-pre.1
+        version: 0.0.1-pre.1
       '@hiogawa/tiny-transition':
         specifier: workspace:*
         version: link:../tiny-transition
@@ -1551,6 +1554,10 @@ packages:
         optional: true
     dependencies:
       vite: 4.4.9(@types/node@18.17.17)
+    dev: true
+
+  /@hiogawa/tiny-react@0.0.1-pre.1:
+    resolution: {integrity: sha512-gtFyXvE6G75BgtkXD3bm4wYK5DJsPT8EYdL2uetP2wJ92pN4TTx9IrxU81SzIVzZl6Gsxm137d6GI897SxigPg==}
     dev: true
 
   /@hiogawa/tiny-store@0.0.1-pre.1(react@18.2.0):
