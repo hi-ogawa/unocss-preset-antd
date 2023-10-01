@@ -1,6 +1,6 @@
 {
   "name": "@hiogawa/unocss-preset-antd",
-  "version": "2.2.1-pre.6",
+  "version": "2.2.1-pre.7",
   "homepage": "https://github.com/hi-ogawa/unocss-preset-antd/packages/lib",
   "repository": {
     "type": "git",
@@ -24,11 +24,11 @@
   ],
   "scripts": {
     "dev": "tsup --watch",
-    "build": "tsup",
-    "build-theme": "pnpm -s ts ./src/build-theme.ts > ./src/theme.ts",
+    "build": "pnpm run --seq /^build:/",
+    "build:theme": "tsx ./src/build-theme.ts > ./src/theme.ts",
+    "build:tsup": "tsup",
     "generate-tw": "unocss-typescript-dsl --outDir src/tw",
     "generate-tw-test": "unocss-typescript-dsl --stdout | diff src/tw/types.ts -",
-    "ts": "node -r esbuild-register",
     "release": "pnpm publish --no-git-checks --access public"
   },
   "devDependencies": {
