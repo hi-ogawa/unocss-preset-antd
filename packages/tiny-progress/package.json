@@ -1,10 +1,14 @@
 {
   "name": "@hiogawa/tiny-progress",
   "version": "0.0.1-pre.2",
+  "homepage": "https://github.com/hi-ogawa/unocss-preset-antd/tree/main/packages/tiny-progress",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/hi-ogawa/unocss-preset-antd/",
+    "directory": "packages/tiny-progress"
+  },
+  "license": "MIT",
   "type": "module",
-  "main": "./dist/index.js",
-  "module": "./dist/index.js",
-  "types": "./dist/index.d.ts",
   "exports": {
     ".": {
       "import": "./dist/index.js",
@@ -17,16 +21,12 @@
       "types": "./dist/react.d.ts"
     }
   },
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
   "files": [
     "dist"
   ],
-  "license": "MIT",
-  "homepage": "https://github.com/hi-ogawa/unocss-preset-antd/tree/main/packages/tiny-progress",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/hi-ogawa/unocss-preset-antd/",
-    "directory": "packages/tiny-progress"
-  },
   "scripts": {
     "dev": "tsup --watch",
     "build": "tsup",
