@@ -32,7 +32,8 @@
     "release": "pnpm publish --no-git-checks --access public"
   },
   "devDependencies": {
-    "antd": "^5.1.7"
+    "antd": "^5.1.7",
+    "unocss": "^0.55.7"
   },
   "peerDependencies": {
     "unocss": "*"
