@@ -1,4 +1,3 @@
-import "virtual:uno.css";
 import { h, render } from "preact";
 import { PreactToastManager } from "./api";
 

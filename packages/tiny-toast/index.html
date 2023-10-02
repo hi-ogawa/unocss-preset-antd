@@ -21,8 +21,25 @@
     </style>
   </head>
   <body>
+    <ul class="flex flex-col gap-1 p-2">
+      <a href="/?preact" class="antd-link flex items-center"
+        ><span class="i-ri-arrow-right-s-fill w-4 h-4"></span>preact</a
+      >
+      <a href="/?tiny-react" class="antd-link flex items-center"
+        ><span class="i-ri-arrow-right-s-fill w-4 h-4"></span>tiny-react</a
+      >
+    </ul>
     <div id="root"></div>
     <div id="root-toast"></div>
-    <script src="./src/preact/dev.tsx" type="module"></script>
+    <script type="module">
+      import "virtual:uno.css";
+
+      if (window.location.search === "?preact") {
+        import("./src/preact/dev.tsx");
+      }
+      if (window.location.search === "?tiny-react") {
+        import("./src/tiny-react/dev.tsx");
+      }
+    </script>
   </body>
 </html>

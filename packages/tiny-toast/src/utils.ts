@@ -1,3 +1,5 @@
+import type * as CSS from "csstype";
+
 type PauseableTimeoutState =
   | {
       t: "stopped";
@@ -72,3 +74,11 @@ export const styleAssign = Object.assign<
   Partial<CSSStyleDeclaration>,
   Partial<CSSStyleDeclaration>
 >;
+
+// type-safe inline style util based on csstype
+// cf. https://github.com/cristianbote/goober/blob/a849b2d644146d96fa1dd1c560f6418ee1e1c469/src/core/parse.js#L48
+export function istyle(props: CSS.Properties): string {
+  return Object.entries(props)
+    .map(([k, v]) => `${k.replace(/[A-Z]/g, "-$&").toLowerCase()}:${v};`)
+    .join("");
+}
