@@ -1,9 +1,22 @@
-import { h, useEffect, useReducer } from "@hiogawa/tiny-react";
+import {
+  Fragment,
+  h,
+  useEffect,
+  useReducer,
+  useState,
+} from "@hiogawa/tiny-react";
+import { TransitionManager } from "@hiogawa/tiny-transition";
 import { includesGuard } from "@hiogawa/utils";
-import { TOAST_TYPE_ICONS, TOAST_TYPE_ICON_COLORS } from "../common";
+import {
+  TOAST_TYPE_ICONS,
+  TOAST_TYPE_ICON_COLORS,
+  slideScaleCollapseTransition,
+} from "../common";
 import { TOAST_STEP } from "../core";
 import { istyle } from "../utils";
 import type { XToastItem, XToastManager } from "./api";
+
+// almost same as preact
 
 export function ToastContainer({ toast }: { toast: XToastManager }) {
   useSubscribe(toast.subscribe);
@@ -42,21 +55,46 @@ function ToastAnimation({
   toast: XToastManager;
   item: XToastItem;
 }) {
+  const [manager] = useState(() => {
+    const transition = slideScaleCollapseTransition({
+      position: "top-center",
+    });
+    const manager = new TransitionManager({
+      defaultEntered: false,
+      onEnterFrom: transition.enterFrom,
+      onEnterTo: transition.enterTo,
+      onEntered: transition.entered,
+      onLeaveFrom: transition.leaveFrom,
+      onLeaveTo: transition.leaveTo,
+      onLeft: () => toast.remove(item.id),
+    });
+    return manager;
+  });
+
+  useSubscribe(manager.subscribe);
+
   useEffect(() => {
-    if (item.step >= TOAST_STEP.DISMISS) {
-      toast.remove(item.id);
-    }
+    manager.show(item.step < TOAST_STEP.DISMISS);
   }, [item.step]);
+
+  if (!manager.shouldRender()) {
+    return h(Fragment, {});
+  }
 
   return h.div(
     {
-      style: istyle({
-        pointerEvents: "auto",
-        display: "inline-block",
-        padding: "0.25rem 0",
-      }),
+      ref: manager.setElement,
     },
-    h(ToastItemComponent, { toast, item })
+    h.div(
+      {
+        style: istyle({
+          pointerEvents: "auto",
+          display: "inline-block",
+          padding: "0.25rem 0",
+        }),
+      },
+      h(ToastItemComponent, { toast, item })
+    )
   );
 }
 

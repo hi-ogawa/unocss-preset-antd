@@ -44,11 +44,11 @@ export function slideScaleCollapseTransition({
     enterFrom: (el: HTMLElement) => {
       tinyassert(el.firstElementChild instanceof HTMLElement);
       styleAssign(el.style, {
-        transition: "all 0.35s cubic-bezier(0, 0.8, 0.5, 1)",
+        transition: "all 0.3s cubic-bezier(0, 0.8, 0.5, 1)",
         height: "0",
       });
       styleAssign(el.firstElementChild.style, {
-        transition: "all 0.35s cubic-bezier(0, 0.8, 0.5, 1)",
+        transition: "all 0.3s cubic-bezier(0, 0.8, 0.5, 1)",
         opacity: "0.5",
         transform: cls(
           "scale(0.5)",
