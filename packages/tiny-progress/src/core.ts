@@ -2,6 +2,7 @@ export class TinyProgress {
   public styles = {
     base: {
       position: "fixed",
+      zIndex: "10000",
       top: "0",
       left: "0",
       right: "0",
