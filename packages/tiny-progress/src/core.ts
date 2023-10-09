@@ -1,7 +1,6 @@
 export class TinyProgress {
-  public delay = 80;
-
-  public styles = {
+  delay = 80;
+  styles = {
     base: {
       position: "fixed",
       zIndex: "10000",
@@ -41,7 +40,6 @@ export class TinyProgress {
   } satisfies Record<string, Partial<CSSStyleDeclaration>>;
 
   private el: HTMLElement | undefined;
-
   private timeout: ReturnType<typeof setTimeout> | undefined;
 
   start() {
