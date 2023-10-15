@@ -1,8 +1,8 @@
 import { h, render } from "@hiogawa/tiny-react";
 import { tinyassert } from "@hiogawa/utils";
-import { TinyToastManager } from "./api";
+import { TinyReactToastManager } from "./api";
 
-const toast = new TinyToastManager();
+const toast = new TinyReactToastManager();
 
 function Demo() {
   return h.div(

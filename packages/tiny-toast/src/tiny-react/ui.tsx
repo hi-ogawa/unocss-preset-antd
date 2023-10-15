@@ -14,11 +14,11 @@ import {
 } from "../common";
 import { TOAST_STEP } from "../core";
 import { istyle } from "../utils";
-import type { TinyToastItem, TinyToastManager } from "./api";
+import type { TinyReactToastManager, TinyToastItem } from "./api";
 
 // almost same as preact
 
-export function ToastContainer({ toast }: { toast: TinyToastManager }) {
+export function ToastContainer({ toast }: { toast: TinyReactToastManager }) {
   useSyncExternalStore(toast.subscribe, toast.getSnapshot, toast.getSnapshot);
 
   return h.div(
@@ -58,7 +58,7 @@ function ToastAnimation({
   toast,
   item,
 }: {
-  toast: TinyToastManager;
+  toast: TinyReactToastManager;
   item: TinyToastItem;
 }) {
   const [manager] = useState(() => {
@@ -112,7 +112,7 @@ function ToastItemComponent({
   toast,
   item,
 }: {
-  toast: TinyToastManager;
+  toast: TinyReactToastManager;
   item: TinyToastItem;
 }) {
   return h.div(

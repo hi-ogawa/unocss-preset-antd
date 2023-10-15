@@ -21,14 +21,14 @@ interface DefaultOptions {
 type RenderItem = (props: {
   h: (...args: any[]) => unknown;
   item: TinyToastItem;
-  toast: TinyToastManager;
+  toast: TinyReactToastManager;
 }) => unknown;
 
 type MaybeRenderItem = RenderItem | string;
 
 export type TinyToastItem = ToastItem<TinyToastData>;
 
-export class TinyToastManager extends ToastManager<TinyToastData> {
+export class TinyReactToastManager extends ToastManager<TinyToastData> {
   public defaultOptions: DefaultOptions = {
     position: "top-center",
     duration: 4000,
@@ -53,7 +53,7 @@ export class TinyToastManager extends ToastManager<TinyToastData> {
 
 function createByTypeFactory(type: ToastType) {
   return function (
-    this: TinyToastManager,
+    this: TinyReactToastManager,
     message: MaybeRenderItem,
     options?: Partial<DefaultOptions>
   ) {

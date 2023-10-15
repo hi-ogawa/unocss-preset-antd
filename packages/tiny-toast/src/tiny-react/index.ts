@@ -1,1 +1,1 @@
-export { TinyToastManager } from "./api";
+export { TinyReactToastManager as TinyToastManager } from "./api";
