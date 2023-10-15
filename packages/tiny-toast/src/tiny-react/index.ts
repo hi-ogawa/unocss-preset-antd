@@ -1,1 +1,1 @@
-export { XToastManager } from "./api";
+export { TinyToastManager } from "./api";

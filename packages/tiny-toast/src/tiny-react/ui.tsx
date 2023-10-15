@@ -2,8 +2,8 @@ import {
   Fragment,
   h,
   useEffect,
-  useReducer,
   useState,
+  useSyncExternalStore,
 } from "@hiogawa/tiny-react";
 import { TransitionManager } from "@hiogawa/tiny-transition";
 import { includesGuard } from "@hiogawa/utils";
@@ -14,12 +14,12 @@ import {
 } from "../common";
 import { TOAST_STEP } from "../core";
 import { istyle } from "../utils";
-import type { XToastItem, XToastManager } from "./api";
+import type { TinyToastItem, TinyToastManager } from "./api";
 
 // almost same as preact
 
-export function ToastContainer({ toast }: { toast: XToastManager }) {
-  useSubscribe(toast.subscribe);
+export function ToastContainer({ toast }: { toast: TinyToastManager }) {
+  useSyncExternalStore(toast.subscribe, toast.getSnapshot, toast.getSnapshot);
 
   return h.div(
     {
@@ -29,6 +29,12 @@ export function ToastContainer({ toast }: { toast: XToastManager }) {
         zIndex: 9999,
         pointerEvents: "none",
       }),
+      onmouseenter: () => {
+        toast.pause(true);
+      },
+      onmouseleave: () => {
+        toast.pause(false);
+      },
     },
     h.div(
       {
@@ -52,8 +58,8 @@ function ToastAnimation({
   toast,
   item,
 }: {
-  toast: XToastManager;
-  item: XToastItem;
+  toast: TinyToastManager;
+  item: TinyToastItem;
 }) {
   const [manager] = useState(() => {
     const transition = slideScaleCollapseTransition({
@@ -71,7 +77,11 @@ function ToastAnimation({
     return manager;
   });
 
-  useSubscribe(manager.subscribe);
+  useSyncExternalStore(
+    manager.subscribe,
+    manager.getSnapshot,
+    manager.getSnapshot
+  );
 
   useEffect(() => {
     manager.show(item.step < TOAST_STEP.DISMISS);
@@ -99,28 +109,31 @@ function ToastAnimation({
 }
 
 function ToastItemComponent({
+  toast,
   item,
 }: {
-  toast: XToastManager;
-  item: XToastItem;
+  toast: TinyToastManager;
+  item: TinyToastItem;
 }) {
   return h.div(
     {
-      style: istyle({
-        display: "flex",
-        alignItems: "center",
-        padding: "10px 10px",
-        borderRadius: "8px",
-        boxShadow:
-          "0 3px 10px rgba(0, 0, 0, 0.1), 0 3px 3px rgba(0, 0, 0, 0.05)",
-      }),
+      className: item.data.className,
+      style:
+        istyle({
+          display: "flex",
+          alignItems: "center",
+          padding: "10px 10px",
+          borderRadius: "8px",
+          boxShadow:
+            "0 3px 10px rgba(0, 0, 0, 0.1), 0 3px 3px rgba(0, 0, 0, 0.05)",
+        }) + (item.data.style ?? ""),
     },
     includesGuard(["success", "error", "info"] as const, item.data.type) &&
       h.span({
         key: item.data.type,
         // ref callback to imitate dangerouslySetInnerHTML
         ref: (el) => {
-          if (el) {
+          if (el && !el.innerHTML) {
             el.innerHTML = TOAST_TYPE_ICONS[item.data.type as "success"];
           }
         },
@@ -130,18 +143,9 @@ function ToastItemComponent({
           color: TOAST_TYPE_ICON_COLORS[item.data.type],
         }),
       }),
-    h.div({ style: istyle({ padding: "0 10px" }) }, item.data.message)
+    h.div(
+      { style: istyle({ padding: "0 10px" }) },
+      item.data.message({ h, item, toast }) as any
+    )
   );
-}
-
-//
-// utils
-//
-
-function useSubscribe(subscribe: (callback: () => void) => () => void) {
-  const rerender = useReducer<boolean, void>((prev) => !prev, false)[1];
-
-  useEffect(() => {
-    return subscribe(() => rerender());
-  }, [subscribe]);
 }
