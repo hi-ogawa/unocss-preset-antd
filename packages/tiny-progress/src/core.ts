@@ -1,7 +1,9 @@
 export class TinyProgress {
-  public styles = {
+  delay = 80;
+  styles = {
     base: {
       position: "fixed",
+      zIndex: "10000",
       top: "0",
       left: "0",
       right: "0",
@@ -37,10 +39,16 @@ export class TinyProgress {
     },
   } satisfies Record<string, Partial<CSSStyleDeclaration>>;
 
-  public el: HTMLElement | undefined;
+  private el: HTMLElement | undefined;
+  private timeout: ReturnType<typeof setTimeout> | undefined;
 
   start() {
-    this.el?.remove();
+    if (this.el) {
+      this.el.remove();
+    }
+    if (typeof this.timeout !== "undefined") {
+      clearTimeout(this.timeout);
+    }
     this.el = document.body.appendChild(document.createElement("div"));
     const el = this.el;
     Object.assign(
@@ -49,13 +57,22 @@ export class TinyProgress {
       this.styles.enter,
       this.styles.enterFrom
     );
-    requestAnimationFrame(() => {
+    this.timeout = setTimeout(() => {
+      this.timeout = undefined;
       Object.assign(el.style, this.styles.enterTo);
-    });
+    }, this.delay);
   }
 
   finish() {
-    if (!this.el) return;
+    if (!this.el) {
+      return;
+    }
+    if (typeof this.timeout !== "undefined") {
+      clearTimeout(this.timeout);
+      this.timeout = undefined;
+      this.el.remove();
+      return;
+    }
     const el = this.el;
     Object.assign(el.style, this.styles.leave, this.styles.leaveFrom);
     requestAnimationFrame(() => {
