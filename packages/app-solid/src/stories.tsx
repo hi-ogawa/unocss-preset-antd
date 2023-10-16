@@ -1,5 +1,5 @@
 import type { Placement } from "@floating-ui/dom";
-import { PreactToastManager } from "@hiogawa/tiny-toast/dist/preact";
+import { TinyReactToastManager } from "@hiogawa/tiny-toast";
 import { range } from "@hiogawa/utils";
 import { Ref } from "@solid-primitives/refs";
 import { Index, Show, createSignal, onCleanup, onMount } from "solid-js";
@@ -196,8 +196,8 @@ export function StoryPopover() {
 }
 
 export function StoryToast() {
-  const toast = new PreactToastManager();
-  toast.defaultOptions.class = "antd-floating";
+  const toast = new TinyReactToastManager();
+  toast.defaultOptions.className = "antd-floating";
 
   onMount(() => {
     onCleanup(toast.render());
@@ -238,13 +238,13 @@ export function StoryToast() {
               class="flex-1 antd-btn antd-btn-default px-2"
               onClick={() => {
                 toast.custom(({ h, toast, item }) =>
-                  h("div", { class: "flex items-center gap-2" }, [
+                  h("div", { className: "flex items-center gap-2" }, [
                     h("span", {
-                      class: "i-ri-aliens-fill text-colorWarning text-2xl",
+                      className: "i-ri-aliens-fill text-colorWarning text-2xl",
                     }),
                     h("span", {}, "Custom"),
                     h("button", {
-                      class:
+                      className:
                         "antd-btn antd-btn-ghost i-ri-close-line text-colorTextSecondary text-lg",
                       onClick: () => toast.dismiss(item.id),
                     }),

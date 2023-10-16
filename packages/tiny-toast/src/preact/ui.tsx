@@ -1,6 +1,5 @@
 import { TransitionManager } from "@hiogawa/tiny-transition";
 import { groupBy, includesGuard } from "@hiogawa/utils";
-import type * as CSS from "csstype";
 import { h } from "preact";
 import { useEffect, useReducer, useState } from "preact/hooks";
 import {
@@ -9,6 +8,7 @@ import {
   slideScaleCollapseTransition,
 } from "../common";
 import { TOAST_STEP } from "../core";
+import { istyle } from "../utils";
 import type { PreactToastItem, PreactToastManager } from "./api";
 
 export function ToastContainer({ toast }: { toast: PreactToastManager }) {
@@ -163,12 +163,4 @@ function useSubscribe(subscribe: (callback: () => void) => () => void) {
   useEffect(() => {
     return subscribe(() => rerender());
   }, [subscribe]);
-}
-
-// type-safe inline style util based on csstype
-// cf. https://github.com/cristianbote/goober/blob/a849b2d644146d96fa1dd1c560f6418ee1e1c469/src/core/parse.js#L48
-function istyle(props: CSS.Properties): string {
-  return Object.entries(props)
-    .map(([k, v]) => `${k.replace(/[A-Z]/g, "-$&").toLowerCase()}:${v};`)
-    .join("");
 }

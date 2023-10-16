@@ -1,6 +1,6 @@
 {
   "name": "@hiogawa/tiny-toast",
-  "version": "0.1.1-pre.7",
+  "version": "0.1.1-pre.8",
   "homepage": "https://github.com/hi-ogawa/unocss-preset-antd/tree/main/packages/tiny-toast",
   "repository": {
     "type": "git",
@@ -38,6 +38,7 @@
     "release": "pnpm publish --no-git-checks --access public"
   },
   "devDependencies": {
+    "@hiogawa/tiny-react": "0.0.1-pre.10",
     "@hiogawa/tiny-transition": "workspace:*",
     "@hiogawa/unocss-preset-antd": "workspace:*",
     "@hiogawa/utils": "1.6.1-pre.7",

@@ -199,6 +199,9 @@ importers:
 
   packages/tiny-toast:
     devDependencies:
+      '@hiogawa/tiny-react':
+        specifier: 0.0.1-pre.10
+        version: 0.0.1-pre.10(vite@4.4.9)
       '@hiogawa/tiny-transition':
         specifier: workspace:*
         version: link:../tiny-transition
@@ -1544,6 +1547,17 @@ packages:
 
   /@hiogawa/theme-script@0.0.3(vite@4.4.9):
     resolution: {integrity: sha512-DUdloidQhKFo/o7uVrhw7U75SkKMnDN51vrRHz6+DIiSqRdhrbS0dbDkRDt9j9MVvp3H+xJYXg0WdO3oW+XGCg==}
+    peerDependencies:
+      vite: '*'
+    peerDependenciesMeta:
+      vite:
+        optional: true
+    dependencies:
+      vite: 4.4.9(@types/node@18.17.17)
+    dev: true
+
+  /@hiogawa/tiny-react@0.0.1-pre.10(vite@4.4.9):
+    resolution: {integrity: sha512-XTAOsLKXqbPaPe2FHHj2ekFCKCUTeub5VK05H5gCX5I6i4wlDnt9tFpI8Y/E0gPz3dT6eFZAnkkNhfJBF8mvbQ==}
     peerDependencies:
       vite: '*'
     peerDependenciesMeta:
