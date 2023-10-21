@@ -45,10 +45,10 @@ export const Transition = simpleForawrdRef(function Transition(
         ...convertClassPropsToCallbackProps(props.className, props),
       })
   );
-  React.useSyncExternalStore(
+  const shouldRender = React.useSyncExternalStore(
     manager.subscribe,
-    manager.getSnapshot,
-    manager.getSnapshot
+    manager.shouldRender,
+    manager.shouldRender
   );
 
   //
@@ -80,7 +80,7 @@ export const Transition = simpleForawrdRef(function Transition(
 
   return (
     <>
-      {manager.shouldRender() &&
+      {shouldRender &&
         render({
           ref: mergedRefs,
           ...delegatedProps,
