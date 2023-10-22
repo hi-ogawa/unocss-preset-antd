@@ -1,19 +1,15 @@
 import { useEffect, useState, useSyncExternalStore } from "react";
-import { LaggedBoolean, type LaggedBooleanState } from "./core";
+import {
+  LaggedBoolean,
+  type LaggedBooleanOptions,
+  type LaggedBooleanState,
+} from "./core";
 
 export function useLaggedBoolean(
   value: boolean,
-  lagDuration: number | { true: number; false: number }
+  options: LaggedBooleanOptions
 ): LaggedBooleanState {
-  const [lagged] = useState(
-    () =>
-      new LaggedBoolean(
-        value,
-        typeof lagDuration === "number"
-          ? { true: lagDuration, false: lagDuration }
-          : lagDuration
-      )
-  );
+  const [lagged] = useState(() => new LaggedBoolean(value, options));
 
   useEffect(() => {
     lagged.set(value);

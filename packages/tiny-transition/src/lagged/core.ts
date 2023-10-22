@@ -2,8 +2,6 @@
 // https://github.com/solidjs-community/solid-primitives/pull/414#issuecomment-1520787178
 // https://github.com/solidjs-community/solid-primitives/pull/437
 
-// TODO: "appear" effect?
-
 // animation in each direction requires two intemediate states
 //   false -(true)-> enterFrom -(next frame)-> enterTo -(timeout)-> true
 export type LaggedBooleanState =
@@ -13,16 +11,18 @@ export type LaggedBooleanState =
   | "leaveFrom"
   | "leaveTo";
 
+export interface LaggedBooleanOptions {
+  duration: number;
+  appear?: boolean;
+}
+
 export class LaggedBoolean {
   private state: LaggedBooleanState;
   private listeners = new Set<() => void>();
   private timeoutId: ReturnType<typeof setTimeout> | undefined;
 
-  constructor(
-    defaultValue: boolean,
-    private lagDuration: { true: number; false: number }
-  ) {
-    this.state = defaultValue;
+  constructor(value: boolean, private options: LaggedBooleanOptions) {
+    this.state = options?.appear ? !value : value;
   }
 
   get = () => this.state;
@@ -58,7 +58,7 @@ export class LaggedBoolean {
         this.state = value;
         this.notify();
         this.disposeTimeout();
-      }, this.lagDuration[`${value}`]);
+      }, this.options.duration);
     }, 0);
   }
 
