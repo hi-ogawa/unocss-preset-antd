@@ -529,8 +529,14 @@ export function StorySlide() {
 
 export function StoryCollapse() {
   const [show, setShow] = React.useState(true);
+
+  // experiment with "lagged boolean" approach.
+  // limitations are
+  // - collapse (height) animation requires accessing dom height directly.
+  // - same `duration` has to be manually set in two places
+  // - "appear" effect not implemented
   const [show2, setShow2] = React.useState(true);
-  const lagged2 = useLaggedBoolean(show2, 500);
+  const lagged = useLaggedBoolean(show2, 500);
 
   return (
     <div className="flex flex-col items-center gap-3 m-2">
@@ -551,7 +557,7 @@ export function StoryCollapse() {
           </button>
         </div>
         <pre className="text-sm text-colorTextSecondary">
-          debug: {JSON.stringify({ show, show2, lagged2 })}
+          debug: {JSON.stringify({ show, show2, lagged2: lagged })}
         </pre>
         <div className="flex flex-col p-3 border">
           <div>Fixed Div (1)</div>
@@ -559,6 +565,10 @@ export function StoryCollapse() {
             appear
             show={show}
             className="duration-500 overflow-hidden"
+            enterFrom="opacity-0"
+            enterTo="opacity-100"
+            leaveFrom="opacity-100"
+            leaveTo="opacity-0"
             {...getCollapseProps()}
           >
             <div className="pt-3">Collapsable Div</div>
@@ -566,11 +576,14 @@ export function StoryCollapse() {
         </div>
         <div className="flex flex-col p-3 border">
           <div>Fixed Div (2)</div>
-          {lagged2 && (
+          {lagged && (
             <div
               className={cls(
-                "duration-500 transition overflow-hidden opacity-100",
-                lagged2 === "falseing" && "!opacity-0"
+                "duration-500 overflow-hidden",
+                lagged === "enterFrom" && "max-h-0 opacity-0",
+                lagged === "enterTo" && "max-h-[50px] opacity-100",
+                lagged === "leaveFrom" && "max-h-[50px] opacity-100",
+                lagged === "leaveTo" && "max-h-0 opacity-0"
               )}
             >
               <div className="pt-3">Collapsable Div</div>

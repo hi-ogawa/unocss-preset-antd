@@ -1,4 +1,4 @@
-import { useLayoutEffect, useState, useSyncExternalStore } from "react";
+import { useEffect, useState, useSyncExternalStore } from "react";
 import { LaggedBoolean, type LaggedBooleanState } from "./core";
 
 export function useLaggedBoolean(
@@ -15,7 +15,10 @@ export function useLaggedBoolean(
       )
   );
 
-  useLayoutEffect(() => {
+  // trigger transition in each effect regardless of value change
+  // useEffect(() => lagged.set(value));
+
+  useEffect(() => {
     lagged.set(value);
   }, [value]);
 
