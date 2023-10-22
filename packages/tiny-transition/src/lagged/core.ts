@@ -3,7 +3,7 @@
 // https://github.com/solidjs-community/solid-primitives/pull/437
 
 // animation in each direction requires two intemediate steps
-//   false --(true)----> enterFrom --(next frame)--> enterTo   ---(timeout)-> true
+//   false --(true)----> enterFrom --(next frame)--> enterTo  ---(timeout)-> true
 //         <-(timeout)-- leaveTo   <-(next frame)-- leaveFrom <--(false)----
 export type LaggedBooleanState =
   | boolean
