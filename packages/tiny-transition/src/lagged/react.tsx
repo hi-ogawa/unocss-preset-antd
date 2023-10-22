@@ -44,9 +44,9 @@ export function useLaggedBoolean(
         if (state === false) options.onLeft?.();
         if (state === "enterFrom") options.onEnterFrom?.();
         if (state === "enterTo") options.onEnterTo?.();
+        if (state === true) options.onEntered?.();
         if (state === "leaveFrom") options.onLeaveFrom?.();
         if (state === "leaveTo") options.onLeaveTo?.();
-        if (state === true) options.onLeft?.();
         listener();
       });
     }, []),
@@ -93,8 +93,13 @@ export const TransitionV2 = simpleForawrdRef(function TransitionV2(
     ...stableCallbackPropsWithRef,
   });
 
-  // render
-  const mergedRefs = useMergeRefs(ref, elRef);
+  const mergedRefs = useMergeRefs(ref, elRef, (el: HTMLElement | null) => {
+    // hacky way to deal with `onEnterFrom`
+    // since "enterFrom" event comes before we render dom...
+    if (el) {
+      callbackProps.onEnterFrom?.(el);
+    }
+  });
   const render = props.render ?? defaultRender;
 
   return (
