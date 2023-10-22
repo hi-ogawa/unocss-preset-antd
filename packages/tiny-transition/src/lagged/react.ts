@@ -9,11 +9,11 @@ export function useLaggedBoolean(
   value: boolean,
   options: LaggedBooleanOptions
 ): LaggedBooleanState {
-  const [lagged] = useState(() => new LaggedBoolean(value, options));
+  const [manager] = useState(() => new LaggedBoolean(value, options));
 
   useEffect(() => {
-    lagged.set(value);
+    manager.set(value);
   }, [value]);
 
-  return useSyncExternalStore(lagged.subscribe, lagged.get, lagged.get);
+  return useSyncExternalStore(manager.subscribe, manager.get, manager.get);
 }
