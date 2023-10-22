@@ -84,7 +84,7 @@ class AsyncOperation {
 
   requestAnimationFrame(callback: () => void) {
     const id = requestAnimationFrame(callback);
-    return () => cancelAnimationFrame(id);
+    this.disposables.add(() => cancelAnimationFrame(id));
   }
 
   dispose() {
