@@ -3,8 +3,8 @@
 // https://github.com/solidjs-community/solid-primitives/pull/437
 
 // animation in each direction requires two intemediate steps
-//   false --(true)----> enterFrom --(true)--> enterTo   ---(timeout)-> true
-//         <-(timeout)-- leaveTo   <-(false)-- leaveFrom <--(false)----
+//   false --(true)----> enterFrom --(next frame)--> enterTo   ---(timeout)-> true
+//         <-(timeout)-- leaveTo   <-(next frame)-- leaveFrom <--(false)----
 export type LaggedBooleanState =
   | boolean
   | "enterFrom"
@@ -20,7 +20,7 @@ export interface LaggedBooleanOptions {
 export class LaggedBoolean {
   private state: LaggedBooleanState;
   private listeners = new Set<() => void>();
-  private timeoutId: ReturnType<typeof setTimeout> | undefined;
+  private asyncOp = new AsyncOperation();
 
   constructor(value: boolean, private options: LaggedBooleanOptions) {
     this.state = options?.appear ? !value : value;
@@ -43,24 +43,22 @@ export class LaggedBoolean {
   }
 
   private setLagged(value: boolean) {
-    this.disposeTimeout();
+    this.asyncOp.dispose();
 
     this.state = value ? "enterFrom" : "leaveFrom";
     this.notify();
 
-    // does react guarantee re-rendering after `notify` before `setTimeout(..., 0)`?
-    // otherwise, `useLaggedBoolean` might directly see "enterTo" without passing through "enterFrom".
-    this.timeoutId = setTimeout(() => {
+    // does react scheduling guarantee re-rendering between two `notify` separated by `requestAnimationFrame`?
+    // if that's not the case, `useLaggedBoolean` might directly see "enterTo" without passing through "enterFrom".
+    this.asyncOp.requestAnimationFrame(() => {
       this.state = value ? "enterTo" : "leaveTo";
       this.notify();
-      this.disposeTimeout();
 
-      this.timeoutId = setTimeout(() => {
+      this.asyncOp.setTimeout(() => {
         this.state = value;
         this.notify();
-        this.disposeTimeout();
       }, this.options.duration);
-    }, 0);
+    });
   }
 
   subscribe = (listener: () => void) => {
@@ -68,15 +66,28 @@ export class LaggedBoolean {
     return () => this.listeners.delete(listener);
   };
 
-  private disposeTimeout() {
-    if (typeof this.timeoutId !== "undefined") {
-      clearTimeout(this.timeoutId);
-    }
-  }
-
   private notify() {
     for (const listener of this.listeners) {
       listener();
     }
+  }
+}
+
+class AsyncOperation {
+  private disposables = new Set<() => void>();
+
+  setTimeout(callback: () => void, ms: number) {
+    const id = setTimeout(callback, ms);
+    this.disposables.add(() => clearTimeout(id));
+  }
+
+  requestAnimationFrame(callback: () => void) {
+    const id = requestAnimationFrame(callback);
+    return () => cancelAnimationFrame(id);
+  }
+
+  dispose() {
+    this.disposables.forEach((f) => f());
+    this.disposables.clear();
   }
 }
