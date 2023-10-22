@@ -77,17 +77,17 @@ function ToastAnimation({
     return manager;
   });
 
-  useSyncExternalStore(
+  const shouldRender = useSyncExternalStore(
     manager.subscribe,
-    manager.getSnapshot,
-    manager.getSnapshot
+    manager.shouldRender,
+    manager.shouldRender
   );
 
   useEffect(() => {
     manager.show(item.step < TOAST_STEP.DISMISS);
   }, [item.step]);
 
-  if (!manager.shouldRender()) {
+  if (!shouldRender) {
     return h(Fragment, {});
   }
 

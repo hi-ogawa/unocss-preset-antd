@@ -39,9 +39,7 @@ export class TransitionManager {
     this.state = this.options.defaultEntered ? "entered" : "left";
   }
 
-  shouldRender(): boolean {
-    return this.state !== "left";
-  }
+  shouldRender = () => this.state !== "left";
 
   show(show: boolean) {
     if (show && this.state !== "entering" && this.state !== "entered") {
@@ -127,18 +125,13 @@ export class TransitionManager {
     this.disposables.clear();
   }
 
-  //
-  // api for React.useSyncExternalStore
-  //
-
+  // React.useSyncExternalStore compatible subscription
   subscribe = (listener: () => void) => {
     this.listeners.add(listener);
     return () => {
       this.listeners.delete(listener);
     };
   };
-
-  getSnapshot = () => this.state;
 
   private notify(callback?: () => void) {
     if (this.listeners.size === 0) return;
