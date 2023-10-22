@@ -18,6 +18,7 @@
     "@hiogawa/inline-template": "0.0.1-pre.4",
     "@hiogawa/isort-ts": "1.1.2-pre.0",
     "@hiogawa/theme-script": "^0.0.3",
+    "@hiogawa/tiny-refresh": "0.0.1-pre.9",
     "@hiogawa/unocss-typescript-dsl": "2.0.0-pre.8",
     "@hiogawa/utils": "1.6.1-pre.9",
     "@hiogawa/utils-react": "1.3.1-pre.0",
