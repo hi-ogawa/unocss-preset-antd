@@ -3,7 +3,10 @@ import { useTinyForm } from "@hiogawa/tiny-form/dist/react";
 import { useTinyProgress } from "@hiogawa/tiny-progress/dist/react";
 import { useTinyStoreStorage } from "@hiogawa/tiny-store/dist/react";
 import { TOAST_POSITIONS, type ToastPosition } from "@hiogawa/tiny-toast";
-import { Transition } from "@hiogawa/tiny-transition/dist/react";
+import {
+  Transition,
+  useLaggedBoolean,
+} from "@hiogawa/tiny-transition/dist/react";
 import { ANTD_VARS } from "@hiogawa/unocss-preset-antd";
 import { none, objectKeys, objectPickBy, range } from "@hiogawa/utils";
 import { Debug, toSetSetState, useDelay } from "@hiogawa/utils-react";
@@ -526,19 +529,32 @@ export function StorySlide() {
 
 export function StoryCollapse() {
   const [show, setShow] = React.useState(true);
+  const [show2, setShow2] = React.useState(true);
+  const lagged2 = useLaggedBoolean(show2, 500);
 
   return (
     <div className="flex flex-col items-center gap-3 m-2">
       <section className="flex flex-col gap-3 w-full max-w-lg border p-3">
         <h2 className="text-xl">Collapse</h2>
-        <button
-          className="antd-btn antd-btn-default px-2"
-          onClick={() => setShow(!show)}
-        >
-          {show ? "Uncollapse" : "Collapse"}
-        </button>
+        <div className="flex gap-2">
+          <button
+            className="flex-1 antd-btn antd-btn-default px-2"
+            onClick={() => setShow(!show)}
+          >
+            {show ? "Uncollapse" : "Collapse"} (1)
+          </button>
+          <button
+            className="flex-1 antd-btn antd-btn-default px-2"
+            onClick={() => setShow2(!show2)}
+          >
+            {show2 ? "Uncollapse" : "Collapse"} (2)
+          </button>
+        </div>
+        <pre className="text-sm text-colorTextSecondary">
+          debug: {JSON.stringify({ show, show2, lagged2 })}
+        </pre>
         <div className="flex flex-col p-3 border">
-          <div>Fixed Div</div>
+          <div>Fixed Div (1)</div>
           <Transition
             appear
             show={show}
@@ -547,6 +563,19 @@ export function StoryCollapse() {
           >
             <div className="pt-3">Collapsable Div</div>
           </Transition>
+        </div>
+        <div className="flex flex-col p-3 border">
+          <div>Fixed Div (2)</div>
+          {lagged2 && (
+            <div
+              className={cls(
+                "duration-500 transition overflow-hidden opacity-100",
+                lagged2 === "falseing" && "!opacity-0"
+              )}
+            >
+              <div className="pt-3">Collapsable Div</div>
+            </div>
+          )}
         </div>
       </section>
     </div>

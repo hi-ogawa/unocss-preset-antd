@@ -1,4 +1,4 @@
-import { useState, useSyncExternalStore } from "react";
+import { useLayoutEffect, useState, useSyncExternalStore } from "react";
 import { LaggedBoolean, type LaggedBooleanState } from "./core";
 
 export function useLaggedBoolean(
@@ -14,5 +14,10 @@ export function useLaggedBoolean(
           : lagDuration
       )
   );
+
+  useLayoutEffect(() => {
+    lagged.set(value);
+  }, [value]);
+
   return useSyncExternalStore(lagged.subscribe, lagged.get, lagged.get);
 }

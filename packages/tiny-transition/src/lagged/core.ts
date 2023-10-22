@@ -2,6 +2,9 @@
 // https://github.com/solidjs-community/solid-primitives/pull/414#issuecomment-1520787178
 // https://github.com/solidjs-community/solid-primitives/pull/437
 
+// this is not enough to achieve
+//   left -(true)-> enterFrom -(next frame)-> enterTo -(timeout)-> entered
+
 export type LaggedBooleanState = boolean | "trueing" | "falseing";
 
 export class LaggedBoolean {
@@ -19,14 +22,11 @@ export class LaggedBoolean {
   get = () => this.state;
 
   set(value: boolean) {
-    if (this.state === false && value) {
+    if (value && (this.state === false || this.state === "falseing")) {
       this.setLagged(true);
-    } else if (this.state === "trueing" && !value) {
+    }
+    if (!value && (this.state === true || this.state === "trueing")) {
       this.setLagged(false);
-    } else if (this.state === true && !value) {
-      this.setLagged(false);
-    } else if (this.state === "falseing" && value) {
-      this.setLagged(true);
     }
   }
 
