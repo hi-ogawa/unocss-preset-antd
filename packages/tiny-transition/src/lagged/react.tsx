@@ -16,6 +16,7 @@ import {
   TRANSITION_CALLBACK_TYPES,
   type TransitionCallbackProps,
   type TransitionCallbackType,
+  computeTransitionTimeout,
 } from "../core";
 import { simpleForawrdRef } from "../react";
 import {
@@ -60,7 +61,6 @@ export const TransitionV2 = simpleForawrdRef(function TransitionV2(
     show: boolean;
     appear?: boolean;
     render?: (props: Record<string, any>) => React.ReactNode;
-    duration: number;
   } & TransitionClassProps &
     TransitionCallbackProps & {
       // choose only common props from `JSX.IntrinsicElements["div"]` to simplify auto-complete
@@ -87,17 +87,24 @@ export const TransitionV2 = simpleForawrdRef(function TransitionV2(
   );
 
   // lagged state
+  const durationRef = useRef(0);
   const state = useLaggedBoolean(props.show, {
-    duration: props.duration,
+    get duration() {
+      return durationRef.current;
+    },
     appear: props.appear,
     ...stableCallbackPropsWithRef,
   });
 
   const mergedRefs = useMergeRefs(ref, elRef, (el: HTMLElement | null) => {
-    // hacky way to deal with `onEnterFrom`
-    // since "enterFrom" event comes before we render dom...
     if (el) {
+      // hacky way to deal with `onEnterFrom`
+      // since "enterFrom" event comes before we render dom...
       callbackProps.onEnterFrom?.(el);
+
+      // derive timeout duration
+      // (note that this "force styles" so it must be called after "onEnterFrom")
+      durationRef.current = computeTransitionTimeout(el);
     }
   });
   const render = props.render ?? defaultRender;

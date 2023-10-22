@@ -5,6 +5,7 @@ import { useTinyStoreStorage } from "@hiogawa/tiny-store/dist/react";
 import { TOAST_POSITIONS, type ToastPosition } from "@hiogawa/tiny-toast";
 import {
   Transition,
+  TransitionV2,
   useLaggedBoolean,
 } from "@hiogawa/tiny-transition/dist/react";
 import { ANTD_VARS } from "@hiogawa/unocss-preset-antd";
@@ -510,7 +511,7 @@ export function StorySlide() {
           >
             <span className="border px-2 py-1">hello from top/right</span>
           </Transition>
-          <Transition
+          <TransitionV2
             appear
             show={show}
             className="absolute bottom-2 left-2 inline-block duration-500 transform"
@@ -520,7 +521,7 @@ export function StorySlide() {
             leaveTo="translate-x-[-200%]"
           >
             <span className="border px-2 py-1">hello from bottom/left</span>
-          </Transition>
+          </TransitionV2>
         </div>
       </section>
     </div>
