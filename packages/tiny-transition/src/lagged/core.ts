@@ -51,6 +51,7 @@ export class LaggedBoolean {
     // does react scheduling guarantee re-rendering between two `notify` separated by `requestAnimationFrame`?
     // if that's not the case, `useLaggedBoolean` might directly see "enterTo" without passing through "enterFrom".
     this.asyncOp.requestAnimationFrame(() => {
+      forceStyle(); // `appear` doesn't work reliably without this?
       this.state = value ? "enterTo" : "leaveTo";
       this.notify();
 
@@ -90,4 +91,8 @@ class AsyncOperation {
     this.disposables.forEach((f) => f());
     this.disposables.clear();
   }
+}
+
+function forceStyle() {
+  typeof document.body.offsetHeight || console.log("unreachable");
 }
