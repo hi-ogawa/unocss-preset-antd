@@ -39,51 +39,7 @@ export class LaggedBoolean {
     ) {
       this.setLagged(value);
     }
-    // if (value) {
-    //   if (
-    //     this.state === false ||
-    //     this.state === "leaveTo" ||
-    //     this.state === "leaveFrom"
-    //   ) {
-    //     this.setLagged(value);
-    //   }
-    //   // if (
-    //   //   this.state === false ||
-    //   //   this.state === "leaveTo"
-    //   // ) {
-    //   //   this.initState(value);
-    //   // } else if (this.state === "enterFrom") {
-    //   //   this.startTimeout(value);
-    //   // } else if (this.state === "leaveFrom") {
-    //   //   this.state = value;
-    //   // }
-    // } else {
-    //   if (
-    //     this.state === true ||
-    //     this.state === "enterFrom" ||
-    //     this.state === "enterTo"
-    //   ) {
-    //     this.setLagged(value);
-    //   }
-    // }
   }
-
-  // private initState(value: boolean) {
-  //   this.disposeTimeout();
-  //   this.state = value ? "enterFrom" : "leaveFrom";
-  // }
-
-  // private startTimeout(value: boolean) {
-  //   this.disposeTimeout();
-  //   this.state = value ? "enterTo" : "leaveTo";
-  //   this.notify();
-
-  //   this.timeoutId = setTimeout(() => {
-  //     this.state = value;
-  //     this.notify();
-  //     this.disposeTimeout();
-  //   }, this.lagDuration[`${value}`]);
-  // }
 
   private setLagged(value: boolean) {
     this.disposeTimeout();

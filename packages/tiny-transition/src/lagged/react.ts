@@ -15,9 +15,6 @@ export function useLaggedBoolean(
       )
   );
 
-  // trigger transition in each effect regardless of value change
-  // useEffect(() => lagged.set(value));
-
   useEffect(() => {
     lagged.set(value);
   }, [value]);
