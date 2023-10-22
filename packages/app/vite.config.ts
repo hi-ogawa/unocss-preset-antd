@@ -1,6 +1,6 @@
 import { execSync } from "node:child_process";
 import { themeScriptPlugin } from "@hiogawa/theme-script/dist/vite";
-import react from "@vitejs/plugin-react";
+import { vitePluginTinyRefresh } from "@hiogawa/tiny-refresh/dist/vite";
 import unocss from "unocss/vite";
 import { type Plugin, defineConfig } from "vite";
 
@@ -10,8 +10,8 @@ export default defineConfig({
   },
   plugins: [
     unocss(),
-    react(),
     unocssDepHmrPlugin([require.resolve("@hiogawa/unocss-preset-antd")]),
+    vitePluginTinyRefresh(),
     themeScriptPlugin({
       storageKey: "unocss-preset-antd-app:theme",
     }),

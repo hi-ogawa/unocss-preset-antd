@@ -3,6 +3,6 @@
   "include": ["src"],
   "compilerOptions": {
     "types": ["vite/client"],
-    "jsx": "preserve"
+    "jsx": "react-jsx"
   }
 }
