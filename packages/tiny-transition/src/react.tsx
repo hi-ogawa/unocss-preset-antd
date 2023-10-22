@@ -14,7 +14,7 @@ import {
 export * from "./lagged/react";
 
 // cheat typing to simplify dts rollup
-function simpleForawrdRef<
+export function simpleForawrdRef<
   P,
   T,
   F extends (props: P, ref: React.ForwardedRef<T>) => JSX.Element
