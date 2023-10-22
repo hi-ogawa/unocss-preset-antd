@@ -125,7 +125,7 @@ export class TransitionManager {
     this.disposables.clear();
   }
 
-  // React.useSyncExternalStore compatible
+  // React.useSyncExternalStore compatible subscription
   subscribe = (listener: () => void) => {
     this.listeners.add(listener);
     return () => {
