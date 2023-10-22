@@ -2,8 +2,9 @@
 // https://github.com/solidjs-community/solid-primitives/pull/414#issuecomment-1520787178
 // https://github.com/solidjs-community/solid-primitives/pull/437
 
-// animation in each direction requires two intemediate states
-//   false -(true)-> enterFrom -(next frame)-> enterTo -(timeout)-> true
+// animation in each direction requires two intemediate steps
+//   false --(true)----> enterFrom --(true)--> enterTo   ---(timeout)-> true
+//         <-(timeout)-- leaveTo   <-(false)-- leaveFrom <--(false)----
 export type LaggedBooleanState =
   | boolean
   | "enterFrom"
@@ -37,29 +38,30 @@ export class LaggedBoolean {
           this.state === "enterFrom" ||
           this.state === "enterTo"
     ) {
-      this.setLagged(value);
+      this.startFrom(value);
+    } else if (this.state === "enterFrom" || this.state === "leaveFrom") {
+      setTimeout(() => {
+        this.startTo(value);
+      }, 0);
     }
   }
 
-  private setLagged(value: boolean) {
+  private startFrom(value: boolean) {
     this.disposeTimeout();
-
     this.state = value ? "enterFrom" : "leaveFrom";
     this.notify();
+  }
 
-    // does react guarantee re-rendering after `notify` before `setTimeout(..., 0)`?
-    // otherwise, `useLaggedBoolean` might directly see "enterTo" without passing through "enterFrom".
+  private startTo(value: boolean) {
+    this.disposeTimeout();
+    this.state = value ? "enterTo" : "leaveTo";
+    this.notify();
+
     this.timeoutId = setTimeout(() => {
-      this.state = value ? "enterTo" : "leaveTo";
+      this.state = value;
       this.notify();
       this.disposeTimeout();
-
-      this.timeoutId = setTimeout(() => {
-        this.state = value;
-        this.notify();
-        this.disposeTimeout();
-      }, this.options.duration);
-    }, 0);
+    }, this.options.duration);
   }
 
   subscribe = (listener: () => void) => {
