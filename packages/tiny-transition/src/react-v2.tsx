@@ -14,10 +14,14 @@ import { TransitionManagerV2 } from "./core-v2";
 
 export function useTransitionManager(
   value: boolean,
-  options?: { appear?: boolean }
+  options?: { appear?: boolean; callbacks?: TransitionCallbackProps }
 ) {
   const [manager] = React.useState(
-    () => new TransitionManagerV2(options?.appear ? !value : value)
+    () =>
+      new TransitionManagerV2(
+        options?.appear ? !value : value,
+        options?.callbacks
+      )
   );
 
   React.useEffect(() => {
@@ -47,9 +51,7 @@ export const TransitionV2 = simpleForawrdRef(function TransitionV2(
     & TransitionCallbackProps,
   ref: React.ForwardedRef<HTMLElement>
 ) {
-  //
   // define stable callbacks with ref element
-  //
   const elRef = React.useRef<HTMLElement | null>(null);
   const callbacks = objectMapValues(
     convertClassPropsToCallbackProps(props.className, props),
@@ -61,47 +63,28 @@ export const TransitionV2 = simpleForawrdRef(function TransitionV2(
       })
   );
 
-  //
   // transition manager
-  //
-  const [manager] = React.useState(
-    () =>
-      new TransitionManagerV2(
-        props.appear ? !props.show : props.show,
-        callbacks
-      )
-  );
+  const manager = useTransitionManager(props.show, {
+    appear: props.appear,
+    callbacks,
+  });
 
-  React.useSyncExternalStore(
-    manager.subscribe,
-    () => manager.state,
-    () => manager.state
-  );
-
-  React.useEffect(() => {
-    manager.set(props.show);
-  }, [props.show]);
-
-  //
   // render
-  //
   const mergedRefs = useMergeRefs(ref, elRef, manager.ref);
   const render = props.render ?? defaultRender;
-
-  if (!manager.state) {
-    return null;
-  }
-
-  return render({
-    ref: mergedRefs,
-    ...objectOmit(props, [
-      "show",
-      "appear",
-      "render",
-      ...TRANSITION_CLASS_TYPES,
-      ...TRANSITION_CALLBACK_TYPES,
-    ]),
-  });
+  return (
+    manager.state &&
+    render({
+      ref: mergedRefs,
+      ...objectOmit(props, [
+        "show",
+        "appear",
+        "render",
+        ...TRANSITION_CLASS_TYPES,
+        ...TRANSITION_CALLBACK_TYPES,
+      ]),
+    })
+  );
 });
 
 function defaultRender(props: any) {
