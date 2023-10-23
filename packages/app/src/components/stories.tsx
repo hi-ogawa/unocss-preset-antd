@@ -7,6 +7,7 @@ import {
   Transition,
   TransitionV2,
   useLaggedBoolean,
+  useTransitionManagerV2,
 } from "@hiogawa/tiny-transition/dist/react";
 import { ANTD_VARS } from "@hiogawa/unocss-preset-antd";
 import { none, objectKeys, objectPickBy, range } from "@hiogawa/utils";
@@ -488,6 +489,7 @@ export function StoryModal() {
 
 export function StorySlide() {
   const [show, setShow] = React.useState(true);
+  const manager = useTransitionManagerV2(show, { appear: true });
 
   return (
     <div className="flex flex-col items-center gap-3 m-2">
@@ -522,6 +524,20 @@ export function StorySlide() {
           >
             <span className="border px-2 py-1">hello from bottom/left</span>
           </TransitionV2>
+          {manager.state && (
+            <div
+              ref={manager.ref}
+              className={cls(
+                "absolute top-2 left-2 inline-block duration-500 transform",
+                manager.state === "enterFrom" && "translate-y-[-200%]",
+                manager.state === "enterTo" && "translate-y-0",
+                manager.state === "leaveFrom" && "translate-y-0",
+                manager.state === "leaveTo" && "translate-y-[-200%]"
+              )}
+            >
+              <span className="border px-2 py-1">hello from top/left</span>
+            </div>
+          )}
         </div>
       </section>
     </div>

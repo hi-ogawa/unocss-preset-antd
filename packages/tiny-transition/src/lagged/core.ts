@@ -3,8 +3,8 @@
 // https://github.com/solidjs-community/solid-primitives/pull/437
 
 // animation in each direction requires two intemediate steps
-//   false --(true)----> enterFrom --(next frame)--> enterTo  ---(timeout)-> true
-//         <-(timeout)-- leaveTo   <-(next frame)-- leaveFrom <--(false)----
+//   false --(true)----> enterFrom --(mount + next frame)--> enterTo   ---(timeout)-> true
+//         <-(timeout)-- leaveTo   <-(next frame)----------- leaveFrom <--(false)----
 export type LaggedBooleanState =
   | boolean
   | "enterFrom"
@@ -74,7 +74,7 @@ export class LaggedBoolean {
   }
 }
 
-class AsyncOperation {
+export class AsyncOperation {
   private disposables = new Set<() => void>();
 
   setTimeout(callback: () => void, ms: number) {
@@ -93,6 +93,6 @@ class AsyncOperation {
   }
 }
 
-function forceStyle() {
+export function forceStyle() {
   typeof document.body.offsetHeight || console.log("unreachable");
 }

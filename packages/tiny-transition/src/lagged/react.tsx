@@ -24,6 +24,26 @@ import {
   type LaggedBooleanOptions,
   type LaggedBooleanState,
 } from "./core";
+import { TransitionManagerV2 } from "./v2";
+
+export function useTransitionManagerV2(
+  value: boolean,
+  options?: { appear?: boolean }
+) {
+  const [manager] = useState(() => new TransitionManagerV2(value, options));
+
+  useEffect(() => {
+    manager.set(value);
+  }, [value]);
+
+  useSyncExternalStore(
+    manager.subscribe,
+    () => manager.state,
+    () => manager.state
+  );
+
+  return manager;
+}
 
 export function useLaggedBoolean(
   value: boolean,

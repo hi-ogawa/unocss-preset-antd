@@ -158,7 +158,7 @@ function onTransitionEnd(el: HTMLElement, callback: () => void) {
 }
 
 export function computeTransitionTimeout(el: HTMLElement): number {
-  // this probably also `forceStyle`
+  // this probably also flush style/paint because of `getComputedStyle`
   const style = getComputedStyle(el);
   const [duration, delay] = [
     style.transitionDuration,
