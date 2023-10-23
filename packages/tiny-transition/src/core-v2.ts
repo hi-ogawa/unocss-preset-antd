@@ -26,20 +26,26 @@ export class TransitionManagerV2 {
   }
 
   set = (value: boolean) => {
-    const isTruthy =
+    const current =
       this.state === true ||
       this.state === "enterFrom" ||
       this.state === "enterTo";
-    if (value !== isTruthy) {
-      this.startTransition(value);
+    if (value && !current) {
+      if (!this.el) {
+        this.update("enterFrom");
+      } else {
+        this.startTransition(true);
+      }
+    }
+    if (!value && current) {
+      this.startTransition(false);
     }
   };
 
   ref = (el: HTMLElement | null) => {
     this.el = el;
     if (el && this.state === "enterFrom") {
-      // listener for "enterFrom" will be called twice before and after mounted,
-      // which is critical for `Transition` component callbacks to work.
+      // notify "enterFrom" again after mounted
       this.startTransition(true);
     }
     if (!el) {
@@ -48,14 +54,11 @@ export class TransitionManagerV2 {
   };
 
   private startTransition(value: boolean) {
+    if (!this.el) return;
+
     this.asyncOp.dispose();
 
     this.update(value ? "enterFrom" : "leaveFrom");
-
-    // delay "enterTo" transition until mountq
-    if (!this.el) {
-      return;
-    }
 
     const duration = computeTransitionTimeout(this.el);
 
