@@ -57,15 +57,15 @@ export class TransitionManagerV2 {
     if (!this.el) return;
 
     this.asyncOp.dispose();
-
     this.update(value ? "enterFrom" : "leaveFrom");
 
-    const duration = computeTransitionTimeout(this.el);
-
     this.asyncOp.requestAnimationFrame(() => {
+      if (!this.el) return;
+
       forceStyle(); // `appear` breaks without this. not entirely sure why.
       this.update(value ? "enterTo" : "leaveTo");
 
+      const duration = computeTransitionTimeout(this.el);
       this.asyncOp.setTimeout(() => {
         this.update(value);
       }, duration);
