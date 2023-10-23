@@ -487,7 +487,7 @@ export function StoryModal() {
 
 export function StorySlide() {
   const [show, setShow] = React.useState(true);
-  const manager = useTransitionManager(show, { appear: true });
+  const manager = useTransitionManager(show);
   const manager2 = useTransitionManager(show, { appear: true });
 
   return (
@@ -510,7 +510,7 @@ export function StorySlide() {
             leaveFrom="translate-y-0"
             leaveTo="translate-y-[-200%]"
           >
-            <span className="border px-2 py-1">hello from top/right</span>
+            <span className="border px-2 py-1">top/right</span>
           </Transition>
           <Transition
             appear
@@ -521,7 +521,7 @@ export function StorySlide() {
             leaveFrom="translate-x-0"
             leaveTo="translate-x-[-200%]"
           >
-            <span className="border px-2 py-1">hello from bottom/left</span>
+            <span className="border px-2 py-1">bottom/left</span>
           </Transition>
           {manager.state && (
             <div
@@ -534,7 +534,9 @@ export function StorySlide() {
                 manager.state === "leaveTo" && "translate-y-[-200%]"
               )}
             >
-              <span className="border px-2 py-1">hello from top/left</span>
+              <span className="border px-2 py-1">
+                top/left (appear = false)
+              </span>
             </div>
           )}
           {manager2.state && (
@@ -548,7 +550,7 @@ export function StorySlide() {
                 manager2.state === "leaveTo" && "translate-y-[200%]"
               )}
             >
-              <span className="border px-2 py-1">hello from bottom/right</span>
+              <span className="border px-2 py-1">bottom/right</span>
             </div>
           )}
         </div>
