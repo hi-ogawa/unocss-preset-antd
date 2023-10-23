@@ -19,7 +19,7 @@ export function useTransitionManager(
   const [manager] = React.useState(
     () =>
       new TransitionManagerV2(
-        options?.appear ? !value : value,
+        options?.appear ? false : value,
         options?.callbacks
       )
   );
