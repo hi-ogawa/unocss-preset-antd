@@ -37,11 +37,12 @@ export class TransitionManagerV2 {
 
   ref = (el: HTMLElement | null) => {
     this.el = el;
-    if (el) {
-      if (this.state === "enterFrom") {
-        this.startTransition(true);
-      }
-    } else {
+    if (el && this.state === "enterFrom") {
+      // listener for "enterFrom" will be called twice before and after mounted,
+      // which is critical for `Transition` component callbacks to work.
+      this.startTransition(true);
+    }
+    if (!el) {
       this.state = false;
     }
   };
@@ -51,7 +52,7 @@ export class TransitionManagerV2 {
 
     this.update(value ? "enterFrom" : "leaveFrom");
 
-    // delay "enterTo" transition until mount
+    // delay "enterTo" transition until mountq
     if (!this.el) {
       return;
     }
@@ -69,9 +70,6 @@ export class TransitionManagerV2 {
   }
 
   private update(state: LaggedBooleanState) {
-    if (this.state === state) {
-      return;
-    }
     this.state = state;
     for (const listener of this.listeners) {
       listener();
