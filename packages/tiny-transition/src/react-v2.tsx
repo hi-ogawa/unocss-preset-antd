@@ -1,14 +1,6 @@
 import { objectMapValues, objectOmit } from "@hiogawa/utils";
 import { useMergeRefs, useStableCallback } from "@hiogawa/utils-react";
-import {
-  createElement,
-  forwardRef,
-  useCallback,
-  useEffect,
-  useRef,
-  useState,
-  useSyncExternalStore,
-} from "react";
+import * as React from "react";
 import {
   TRANSITION_CLASS_TYPES,
   type TransitionClassProps,
@@ -24,30 +16,21 @@ export function useTransitionManager(
   value: boolean,
   options?: { appear?: boolean }
 ) {
-  const [manager] = useState(
+  const [manager] = React.useState(
     () => new TransitionManagerV2(options?.appear ? !value : value)
   );
 
-  useEffect(() => {
+  React.useEffect(() => {
     manager.set(value);
   }, [value]);
 
-  useSyncExternalStore(
+  React.useSyncExternalStore(
     manager.subscribe,
     () => manager.state,
     () => manager.state
   );
 
   return manager;
-}
-
-// cheat typing to simplify dts rollup
-function simpleForawrdRef<
-  P,
-  T,
-  F extends (props: P, ref: React.ForwardedRef<T>) => React.ReactNode
->(f: F): (props: P & { ref?: React.Ref<T> }) => React.ReactNode {
-  return forwardRef(f) as any;
 }
 
 export const TransitionV2 = simpleForawrdRef(function TransitionV2(
@@ -67,7 +50,7 @@ export const TransitionV2 = simpleForawrdRef(function TransitionV2(
   //
   // define stable callbacks with ref element
   //
-  const elRef = useRef<HTMLElement | null>(null);
+  const elRef = React.useRef<HTMLElement | null>(null);
   const callbacks = objectMapValues(
     convertClassPropsToCallbackProps(props.className, props),
     (callback) =>
@@ -81,13 +64,13 @@ export const TransitionV2 = simpleForawrdRef(function TransitionV2(
   //
   // transition manager
   //
-  const [manager] = useState(
+  const [manager] = React.useState(
     () => new TransitionManagerV2(props.appear ? !props.show : props.show)
   );
 
   // TODO: move callback logic to core?
-  useSyncExternalStore(
-    useCallback((listener) => {
+  React.useSyncExternalStore(
+    React.useCallback((listener) => {
       // implement state callback outside of core.
       // we don't use `useEffect` deps since it would be clumsy to deal with StrictMode double effect.
       return manager.subscribe(() => {
@@ -105,7 +88,7 @@ export const TransitionV2 = simpleForawrdRef(function TransitionV2(
     () => manager.state
   );
 
-  useEffect(() => {
+  React.useEffect(() => {
     manager.set(props.show);
   }, [props.show]);
 
@@ -132,5 +115,14 @@ export const TransitionV2 = simpleForawrdRef(function TransitionV2(
 });
 
 function defaultRender(props: any) {
-  return createElement("div", props);
+  return React.createElement("div", props);
+}
+
+// simplify forwardRef typing for dts rollup
+function simpleForawrdRef<
+  P,
+  T,
+  F extends (props: P, ref: React.ForwardedRef<T>) => React.ReactNode
+>(f: F): (props: P & { ref?: React.Ref<T> }) => React.ReactNode {
+  return React.forwardRef(f) as any;
 }
