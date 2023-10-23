@@ -8,7 +8,7 @@ import { computeTransitionTimeout } from "./core";
 // but they are not completely symmetric since "enterTo" has to wait element mount.
 //   false --(true)----> enterFrom --(mount + next frame)--> enterTo   ---(timeout)-> true
 //         <-(timeout)-- leaveTo   <-(next frame)----------- leaveFrom <--(false)----
-export type LaggedBooleanState =
+export type TransitionState =
   | boolean
   | "enterFrom"
   | "enterTo"
@@ -16,7 +16,7 @@ export type LaggedBooleanState =
   | "leaveTo";
 
 export class TransitionManagerV2 {
-  state: LaggedBooleanState;
+  state: TransitionState;
   private el: HTMLElement | null = null;
   private listeners = new Set<() => void>();
   private asyncOp = new AsyncOperation();
@@ -69,7 +69,7 @@ export class TransitionManagerV2 {
     });
   }
 
-  private update(state: LaggedBooleanState) {
+  private update(state: TransitionState) {
     this.state = state;
     for (const listener of this.listeners) {
       listener();
