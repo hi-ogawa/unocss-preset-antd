@@ -13,7 +13,7 @@ import {
   useId,
   useInteractions,
 } from "@floating-ui/react";
-import { Transition } from "@hiogawa/tiny-transition/dist/react";
+import { TransitionV2 as Transition } from "@hiogawa/tiny-transition/dist/react";
 import React from "react";
 import { cls } from "../utils/misc";
 

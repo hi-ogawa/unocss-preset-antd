@@ -4,7 +4,7 @@ import { useTinyProgress } from "@hiogawa/tiny-progress/dist/react";
 import { useTinyStoreStorage } from "@hiogawa/tiny-store/dist/react";
 import { TOAST_POSITIONS, type ToastPosition } from "@hiogawa/tiny-toast";
 import {
-  TransitionV2,
+  TransitionV2 as Transition,
   useTransitionManager,
 } from "@hiogawa/tiny-transition/dist/react";
 import { ANTD_VARS } from "@hiogawa/unocss-preset-antd";
@@ -67,7 +67,7 @@ export function StoryButton() {
           </span>
         </h2>
         <div className="flex w-28">
-          <TransitionV2
+          <Transition
             appear
             show={fab.has(0)}
             className="transition duration-500"
@@ -82,9 +82,9 @@ export function StoryButton() {
             >
               <span className="i-ri-check-line w-6 h-6" />
             </button>
-          </TransitionV2>
+          </Transition>
           <div className="flex-1"></div>
-          <TransitionV2
+          <Transition
             // appear
             show={fab.has(1)}
             className="transition duration-500"
@@ -99,7 +99,7 @@ export function StoryButton() {
             >
               <span className="i-ri-close-line w-6 h-6" />
             </button>
-          </TransitionV2>
+          </Transition>
         </div>
         <pre>fab = {JSON.stringify([...fab])}</pre>
       </section>
@@ -424,7 +424,7 @@ export function StoryTinyProgress() {
         {/* implement with tiny-transition */}
         {form.data.debug === 2 && (
           <div className="fixed top-0 left-0 right-0 h-[2px] pointer-events-none">
-            <TransitionV2
+            <Transition
               show={form.data.show}
               className="absolute inset-0 bg-colorPrimary"
               style={{
@@ -500,7 +500,7 @@ export function StorySlide() {
           {show ? "Hide" : "Show"}
         </button>
         <div className="border h-[100px] overflow-hidden relative">
-          <TransitionV2
+          <Transition
             appear
             show={show}
             className="absolute top-2 right-2 inline-block duration-500 transform"
@@ -510,8 +510,8 @@ export function StorySlide() {
             leaveTo="translate-y-[-200%]"
           >
             <span className="border px-2 py-1">top/right</span>
-          </TransitionV2>
-          <TransitionV2
+          </Transition>
+          <Transition
             appear
             show={show}
             className="absolute bottom-2 left-2 inline-block duration-500 transform"
@@ -521,8 +521,8 @@ export function StorySlide() {
             leaveTo="translate-x-[-200%]"
           >
             <span className="border px-2 py-1">bottom/left</span>
-          </TransitionV2>
-          <TransitionV2
+          </Transition>
+          <Transition
             show={show}
             className="absolute top-2 left-2 inline-block duration-1500 transform"
             enterFrom="translate-y-[-200%]"
@@ -531,7 +531,7 @@ export function StorySlide() {
             leaveTo="translate-y-[-200%]"
           >
             <span className="border px-2 py-1">top/left (appear = false)</span>
-          </TransitionV2>
+          </Transition>
           {manager.state && (
             <div
               ref={manager.ref}
@@ -567,7 +567,7 @@ export function StoryCollapse() {
         </button>
         <div className="flex flex-col p-3 border">
           <div>Fixed Div</div>
-          <TransitionV2
+          <Transition
             appear
             show={show}
             className="duration-500 overflow-hidden"
@@ -578,7 +578,7 @@ export function StoryCollapse() {
               <div>Collapsable Div</div>
               <div>Collapsable Div</div>
             </div>
-          </TransitionV2>
+          </Transition>
         </div>
       </section>
     </div>
@@ -900,7 +900,7 @@ export function StoryCubicBezier() {
               <span className="text-colorTextSecondary">linear</span>
               <div className="h-1 w-full relative bg-colorBorder">
                 {form.data.play && (
-                  <TransitionV2
+                  <Transition
                     show
                     appear
                     className="absolute inset-0 bg-colorSuccess"
@@ -918,7 +918,7 @@ export function StoryCubicBezier() {
               <span className="text-colorTextSecondary">cubic-bezier</span>
               <div className="h-1 w-full relative bg-colorBorder">
                 {form.data.play && (
-                  <TransitionV2
+                  <Transition
                     show
                     appear
                     className="absolute inset-0 bg-colorSuccess"

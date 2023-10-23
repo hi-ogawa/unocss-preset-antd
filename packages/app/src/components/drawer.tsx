@@ -6,7 +6,7 @@ import {
   useId,
   useInteractions,
 } from "@floating-ui/react";
-import { Transition } from "@hiogawa/tiny-transition/dist/react";
+import { TransitionV2 as Transition } from "@hiogawa/tiny-transition/dist/react";
 import { tinyassert } from "@hiogawa/utils";
 import type React from "react";
 
