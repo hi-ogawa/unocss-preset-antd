@@ -21,8 +21,8 @@ export class TransitionManagerV2 {
   private listeners = new Set<() => void>();
   private asyncOp = new AsyncOperation();
 
-  constructor(value: boolean, options?: { appear?: boolean }) {
-    this.state = options?.appear ? !value : value;
+  constructor(value: boolean) {
+    this.state = value;
   }
 
   set = (value: boolean) => {

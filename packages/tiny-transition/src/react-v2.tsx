@@ -24,7 +24,9 @@ export function useTransitionManager(
   value: boolean,
   options?: { appear?: boolean }
 ) {
-  const [manager] = useState(() => new TransitionManagerV2(value, options));
+  const [manager] = useState(
+    () => new TransitionManagerV2(options?.appear ? !value : value)
+  );
 
   useEffect(() => {
     manager.set(value);
@@ -83,6 +85,7 @@ export const TransitionV2 = simpleForawrdRef(function TransitionV2(
     () => new TransitionManagerV2(props.appear ? !props.show : props.show)
   );
 
+  // TODO: move callback logic to core?
   useSyncExternalStore(
     useCallback((listener) => {
       // implement state callback outside of core.
