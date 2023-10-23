@@ -4,7 +4,6 @@ import { useTinyProgress } from "@hiogawa/tiny-progress/dist/react";
 import { useTinyStoreStorage } from "@hiogawa/tiny-store/dist/react";
 import { TOAST_POSITIONS, type ToastPosition } from "@hiogawa/tiny-toast";
 import {
-  Transition,
   TransitionV2,
   useTransitionManager,
 } from "@hiogawa/tiny-transition/dist/react";
@@ -68,7 +67,7 @@ export function StoryButton() {
           </span>
         </h2>
         <div className="flex w-28">
-          <Transition
+          <TransitionV2
             appear
             show={fab.has(0)}
             className="transition duration-500"
@@ -83,9 +82,9 @@ export function StoryButton() {
             >
               <span className="i-ri-check-line w-6 h-6" />
             </button>
-          </Transition>
+          </TransitionV2>
           <div className="flex-1"></div>
-          <Transition
+          <TransitionV2
             // appear
             show={fab.has(1)}
             className="transition duration-500"
@@ -100,7 +99,7 @@ export function StoryButton() {
             >
               <span className="i-ri-close-line w-6 h-6" />
             </button>
-          </Transition>
+          </TransitionV2>
         </div>
         <pre>fab = {JSON.stringify([...fab])}</pre>
       </section>
@@ -425,7 +424,7 @@ export function StoryTinyProgress() {
         {/* implement with tiny-transition */}
         {form.data.debug === 2 && (
           <div className="fixed top-0 left-0 right-0 h-[2px] pointer-events-none">
-            <Transition
+            <TransitionV2
               show={form.data.show}
               className="absolute inset-0 bg-colorPrimary"
               style={{
@@ -501,7 +500,7 @@ export function StorySlide() {
           {show ? "Hide" : "Show"}
         </button>
         <div className="border h-[100px] overflow-hidden relative">
-          <Transition
+          <TransitionV2
             appear
             show={show}
             className="absolute top-2 right-2 inline-block duration-500 transform"
@@ -511,7 +510,7 @@ export function StorySlide() {
             leaveTo="translate-y-[-200%]"
           >
             <span className="border px-2 py-1">top/right</span>
-          </Transition>
+          </TransitionV2>
           <TransitionV2
             appear
             show={show}
@@ -568,14 +567,18 @@ export function StoryCollapse() {
         </button>
         <div className="flex flex-col p-3 border">
           <div>Fixed Div</div>
-          <Transition
+          <TransitionV2
             appear
             show={show}
             className="duration-500 overflow-hidden"
             {...getCollapseProps()}
           >
-            <div className="pt-3">Collapsable Div</div>
-          </Transition>
+            <div className="pt-3 flex flex-col gap-3">
+              <div>Collapsable Div</div>
+              <div>Collapsable Div</div>
+              <div>Collapsable Div</div>
+            </div>
+          </TransitionV2>
         </div>
       </section>
     </div>
@@ -897,7 +900,7 @@ export function StoryCubicBezier() {
               <span className="text-colorTextSecondary">linear</span>
               <div className="h-1 w-full relative bg-colorBorder">
                 {form.data.play && (
-                  <Transition
+                  <TransitionV2
                     show
                     appear
                     className="absolute inset-0 bg-colorSuccess"
@@ -915,7 +918,7 @@ export function StoryCubicBezier() {
               <span className="text-colorTextSecondary">cubic-bezier</span>
               <div className="h-1 w-full relative bg-colorBorder">
                 {form.data.play && (
-                  <Transition
+                  <TransitionV2
                     show
                     appear
                     className="absolute inset-0 bg-colorSuccess"
