@@ -488,8 +488,7 @@ export function StoryModal() {
 
 export function StorySlide() {
   const [show, setShow] = React.useState(true);
-  const manager = useTransitionManager(show);
-  const manager2 = useTransitionManager(show, { appear: true });
+  const manager = useTransitionManager(show, { appear: true });
 
   return (
     <div className="flex flex-col items-center gap-3 m-2">
@@ -524,31 +523,25 @@ export function StorySlide() {
           >
             <span className="border px-2 py-1">bottom/left</span>
           </TransitionV2>
+          <TransitionV2
+            show={show}
+            className="absolute top-2 left-2 inline-block duration-1500 transform"
+            enterFrom="translate-y-[-200%]"
+            enterTo="translate-y-0"
+            leaveFrom="translate-y-0"
+            leaveTo="translate-y-[-200%]"
+          >
+            <span className="border px-2 py-1">top/left (appear = false)</span>
+          </TransitionV2>
           {manager.state && (
             <div
               ref={manager.ref}
               className={cls(
-                "absolute top-2 left-2 inline-block duration-1500 transform",
-                manager.state === "enterFrom" && "translate-y-[-200%]",
+                "absolute bottom-2 right-2 inline-block duration-1000 transform",
+                manager.state === "enterFrom" && "translate-y-[200%]",
                 manager.state === "enterTo" && "translate-y-0",
                 manager.state === "leaveFrom" && "translate-y-0",
-                manager.state === "leaveTo" && "translate-y-[-200%]"
-              )}
-            >
-              <span className="border px-2 py-1">
-                top/left (appear = false)
-              </span>
-            </div>
-          )}
-          {manager2.state && (
-            <div
-              ref={manager2.ref}
-              className={cls(
-                "absolute bottom-2 right-2 inline-block duration-1000 transform",
-                manager2.state === "enterFrom" && "translate-y-[200%]",
-                manager2.state === "enterTo" && "translate-y-0",
-                manager2.state === "leaveFrom" && "translate-y-0",
-                manager2.state === "leaveTo" && "translate-y-[200%]"
+                manager.state === "leaveTo" && "translate-y-[200%]"
               )}
             >
               <span className="border px-2 py-1">bottom/right</span>

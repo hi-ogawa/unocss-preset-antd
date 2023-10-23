@@ -65,25 +65,15 @@ export const TransitionV2 = simpleForawrdRef(function TransitionV2(
   // transition manager
   //
   const [manager] = React.useState(
-    () => new TransitionManagerV2(props.appear ? !props.show : props.show)
+    () =>
+      new TransitionManagerV2(
+        props.appear ? !props.show : props.show,
+        callbacks
+      )
   );
 
-  // TODO: move callback logic to core?
   React.useSyncExternalStore(
-    React.useCallback((listener) => {
-      // implement state callback outside of core.
-      // we don't use `useEffect` deps since it would be clumsy to deal with StrictMode double effect.
-      return manager.subscribe(() => {
-        const state = manager.state;
-        if (state === false) callbacks.onLeft?.();
-        if (state === "enterFrom") callbacks.onEnterFrom?.();
-        if (state === "enterTo") callbacks.onEnterTo?.();
-        if (state === true) callbacks.onEntered?.();
-        if (state === "leaveFrom") callbacks.onLeaveFrom?.();
-        if (state === "leaveTo") callbacks.onLeaveTo?.();
-        listener();
-      });
-    }, []),
+    manager.subscribe,
     () => manager.state,
     () => manager.state
   );

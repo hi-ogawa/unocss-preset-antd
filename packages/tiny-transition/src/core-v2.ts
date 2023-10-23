@@ -1,11 +1,11 @@
-import { computeTransitionTimeout } from "./core";
+import { type TransitionCallbackProps, computeTransitionTimeout } from "./core";
 
 // inspired by discussions in solid `createPresense`
 // https://github.com/solidjs-community/solid-primitives/pull/414#issuecomment-1520787178
 // https://github.com/solidjs-community/solid-primitives/pull/437
 
 // Animation in each direction requires two intemediate steps
-// but they are not completely symmetric since "enterTo" has to wait element mount.
+// but they are not completely symmetric since "enterFrom -> enterTo" has to wait for element mount.
 //   false --(true)----> enterFrom --(mount + next frame)--> enterTo   ---(timeout)-> true
 //         <-(timeout)-- leaveTo   <-(next frame)----------- leaveFrom <--(false)----
 export type TransitionStateV2 =
@@ -21,7 +21,7 @@ export class TransitionManagerV2 {
   private listeners = new Set<() => void>();
   private asyncOp = new AsyncOperation();
 
-  constructor(value: boolean) {
+  constructor(value: boolean, private callbacks?: TransitionCallbackProps) {
     this.state = value;
   }
 
@@ -74,6 +74,14 @@ export class TransitionManagerV2 {
 
   private update(state: TransitionStateV2) {
     this.state = state;
+    if (this.listeners.size > 0 && this.el) {
+      if (state === false) this.callbacks?.onLeft?.(this.el);
+      if (state === "enterFrom") this.callbacks?.onEnterFrom?.(this.el);
+      if (state === "enterTo") this.callbacks?.onEnterTo?.(this.el);
+      if (state === true) this.callbacks?.onEntered?.(this.el);
+      if (state === "leaveFrom") this.callbacks?.onLeaveFrom?.(this.el);
+      if (state === "leaveTo") this.callbacks?.onLeaveTo?.(this.el);
+    }
     for (const listener of this.listeners) {
       listener();
     }
