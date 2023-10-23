@@ -3,7 +3,10 @@ import { useTinyForm } from "@hiogawa/tiny-form/dist/react";
 import { useTinyProgress } from "@hiogawa/tiny-progress/dist/react";
 import { useTinyStoreStorage } from "@hiogawa/tiny-store/dist/react";
 import { TOAST_POSITIONS, type ToastPosition } from "@hiogawa/tiny-toast";
-import { Transition } from "@hiogawa/tiny-transition/dist/react";
+import {
+  Transition,
+  useTransitionManager,
+} from "@hiogawa/tiny-transition/dist/react";
 import { ANTD_VARS } from "@hiogawa/unocss-preset-antd";
 import { none, objectKeys, objectPickBy, range } from "@hiogawa/utils";
 import { Debug, toSetSetState, useDelay } from "@hiogawa/utils-react";
@@ -484,6 +487,8 @@ export function StoryModal() {
 
 export function StorySlide() {
   const [show, setShow] = React.useState(true);
+  const manager = useTransitionManager(show, { appear: true });
+  const manager2 = useTransitionManager(show, { appear: true });
 
   return (
     <div className="flex flex-col items-center gap-3 m-2">
@@ -518,6 +523,34 @@ export function StorySlide() {
           >
             <span className="border px-2 py-1">hello from bottom/left</span>
           </Transition>
+          {manager.state && (
+            <div
+              ref={manager.ref}
+              className={cls(
+                "absolute top-2 left-2 inline-block duration-1500 transform",
+                manager.state === "enterFrom" && "translate-y-[-200%]",
+                manager.state === "enterTo" && "translate-y-0",
+                manager.state === "leaveFrom" && "translate-y-0",
+                manager.state === "leaveTo" && "translate-y-[-200%]"
+              )}
+            >
+              <span className="border px-2 py-1">hello from top/left</span>
+            </div>
+          )}
+          {manager2.state && (
+            <div
+              ref={manager2.ref}
+              className={cls(
+                "absolute bottom-2 right-2 inline-block duration-1000 transform",
+                manager2.state === "enterFrom" && "translate-y-[200%]",
+                manager2.state === "enterTo" && "translate-y-0",
+                manager2.state === "leaveFrom" && "translate-y-0",
+                manager2.state === "leaveTo" && "translate-y-[200%]"
+              )}
+            >
+              <span className="border px-2 py-1">hello from bottom/right</span>
+            </div>
+          )}
         </div>
       </section>
     </div>

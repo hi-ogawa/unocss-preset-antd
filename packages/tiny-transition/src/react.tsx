@@ -11,6 +11,7 @@ import {
   type TransitionCallbackProps,
   TransitionManager,
 } from "./core";
+export * from "./react-v2";
 
 // cheat typing to simplify dts rollup
 function simpleForawrdRef<

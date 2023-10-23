@@ -1,7 +1,9 @@
 import { useEffect, useState, useSyncExternalStore } from "react";
 import { TransitionManagerV2 } from "./core-v2";
 
-export function useTransitionManagerV2(
+// TODO: Transition component
+
+export function useTransitionManager(
   value: boolean,
   options?: { appear?: boolean }
 ) {
