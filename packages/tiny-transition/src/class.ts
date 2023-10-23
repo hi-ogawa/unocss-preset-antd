@@ -1,6 +1,7 @@
 import type { TransitionCallbackProps } from "./core";
 
 // helper to use css class as a callback
+// TODO: but relying on callback means it won't be rendered during SSR.
 
 export const TRANSITION_CLASS_TYPES = [
   "enter",
