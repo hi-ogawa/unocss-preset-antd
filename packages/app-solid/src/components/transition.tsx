@@ -53,7 +53,11 @@ export function Transition(
 
   return (
     <Show when={shouldRender()}>
-      <div ref={(el) => manager.setElement(el)} style={props.style}>
+      <div
+        ref={(el) => manager.setElement(el)}
+        class={props.class}
+        style={props.style}
+      >
         {props.children}
       </div>
     </Show>
@@ -91,7 +95,11 @@ export function TransitionV2(
 
   return (
     <Show when={state()}>
-      <div ref={(el) => manager.ref(el)} style={props.style}>
+      <div
+        ref={(el) => manager.ref(el)}
+        class={props.class}
+        style={props.style}
+      >
         {props.children}
       </div>
     </Show>
