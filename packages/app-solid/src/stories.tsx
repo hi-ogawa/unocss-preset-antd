@@ -6,7 +6,7 @@ import { Index, Show, createSignal, onCleanup, onMount } from "solid-js";
 import { Drawer } from "./components/drawer";
 import { Modal } from "./components/modal";
 import { FloatingArrow, Popover } from "./components/popover";
-import { Transition } from "./components/transition";
+import { TransitionV2 as Transition } from "./components/transition";
 import { cls } from "./components/utils";
 
 export function StoryForm() {

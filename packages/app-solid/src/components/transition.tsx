@@ -2,6 +2,7 @@ import {
   type TransitionCallbackProps,
   type TransitionClassProps,
   TransitionManager,
+  TransitionManagerV2,
   convertClassPropsToCallbackProps,
 } from "@hiogawa/tiny-transition";
 import {
@@ -53,6 +54,44 @@ export function Transition(
   return (
     <Show when={shouldRender()}>
       <div ref={(el) => manager.setElement(el)} style={props.style}>
+        {props.children}
+      </div>
+    </Show>
+  );
+}
+
+export function TransitionV2(
+  // prettier-ignore
+  props: {
+    show: boolean;
+    appear?: boolean;
+  } & TransitionClassProps
+    & TransitionCallbackProps
+    & Pick<JSX.HTMLElementTags["div"], "class" | "children" | "style">
+) {
+  const manager = untrack(
+    () =>
+      new TransitionManagerV2(
+        props.appear ? false : props.show,
+        convertClassPropsToCallbackProps(props.class, props)
+      )
+  );
+  const [state, setState] = createSignal(manager.state);
+
+  createEffect(() => {
+    const unsubscribe = manager.subscribe(() => {
+      setState(manager.state);
+    });
+    onCleanup(() => unsubscribe());
+  });
+
+  createEffect(() => {
+    manager.set(props.show);
+  });
+
+  return (
+    <Show when={state()}>
+      <div ref={(el) => manager.ref(el)} style={props.style}>
         {props.children}
       </div>
     </Show>
