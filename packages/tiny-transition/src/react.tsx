@@ -43,7 +43,7 @@ export const Transition = simpleForawrdRef(function Transition(
     () =>
       new TransitionManager({
         defaultEntered: Boolean(props.show && !props.appear),
-        ...convertClassPropsToCallbackProps(props.className, props),
+        ...convertClassPropsToCallbackProps(props),
       })
   );
   const shouldRender = React.useSyncExternalStore(
@@ -60,10 +60,7 @@ export const Transition = simpleForawrdRef(function Transition(
   }, [props.show]);
 
   React.useEffect(() => {
-    Object.assign(
-      manager.options,
-      convertClassPropsToCallbackProps(props.className, props)
-    );
+    Object.assign(manager.options, convertClassPropsToCallbackProps(props));
   }, [props]);
 
   //

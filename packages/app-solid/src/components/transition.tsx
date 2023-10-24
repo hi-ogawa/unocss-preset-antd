@@ -24,7 +24,7 @@ export function Transition(
     Pick<JSX.HTMLElementTags["div"], "class" | "children" | "style">
 ) {
   const callbackOptions = createMemo(() =>
-    convertClassPropsToCallbackProps(props.class, props)
+    convertClassPropsToCallbackProps(props)
   );
 
   const manager = new TransitionManager(
@@ -73,7 +73,7 @@ export function TransitionV2(
     () =>
       new TransitionManagerV2(
         props.appear ? false : props.show,
-        convertClassPropsToCallbackProps(props.class, props)
+        convertClassPropsToCallbackProps(props)
       )
   );
   const [state, setState] = createSignal(manager.state);

@@ -54,7 +54,7 @@ export const TransitionV2 = simpleForawrdRef(function TransitionV2(
   // define stable callbacks with ref element
   const elRef = React.useRef<HTMLElement | null>(null);
   const callbacks = objectMapValues(
-    convertClassPropsToCallbackProps(props.className, props),
+    convertClassPropsToCallbackProps(props),
     (callback) =>
       useStableCallback(() => {
         if (callback && elRef.current) {

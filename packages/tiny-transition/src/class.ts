@@ -19,11 +19,9 @@ export type TransitionClassType = (typeof TRANSITION_CLASS_TYPES)[number];
 export type TransitionClassProps = Partial<Record<TransitionClassType, string>>;
 
 export function convertClassPropsToCallbackProps(
-  base: string | undefined,
   props: TransitionClassProps & TransitionCallbackProps
 ): TransitionCallbackProps {
   const cl = {
-    base: splitClass(base ?? ""),
     enter: splitClass(props.enter ?? ""),
     enterFrom: splitClass(props.enterFrom ?? ""),
     enterTo: splitClass(props.enterTo ?? ""),
@@ -38,32 +36,31 @@ export function convertClassPropsToCallbackProps(
   return {
     onEnterFrom: (el) => {
       el.classList.remove(...all);
-      el.classList.add(...cl.base, ...cl.enterFrom, ...cl.enter);
+      el.classList.add(...cl.enterFrom, ...cl.enter);
       props.onEnterFrom?.(el);
     },
     onEnterTo: (el) => {
       el.classList.remove(...all);
-      el.classList.add(...cl.base, ...cl.enterTo, ...cl.enter);
+      el.classList.add(...cl.enterTo, ...cl.enter);
       props.onEnterTo?.(el);
     },
     onEntered: (el) => {
       el.classList.remove(...all);
-      el.classList.add(...cl.base, ...cl.enterTo, ...cl.entered);
+      el.classList.add(...cl.enterTo, ...cl.entered);
       props.onEntered?.(el);
     },
     onLeaveFrom: (el) => {
       el.classList.remove(...all);
-      el.classList.add(...cl.base, ...cl.leaveFrom, ...cl.leave);
+      el.classList.add(...cl.leaveFrom, ...cl.leave);
       props.onLeaveFrom?.(el);
     },
     onLeaveTo: (el) => {
       el.classList.remove(...all);
-      el.classList.add(...cl.base, ...cl.leaveTo, ...cl.leave);
+      el.classList.add(...cl.leaveTo, ...cl.leave);
       props.onLeaveTo?.(el);
     },
     onLeft: (el) => {
       el.classList.remove(...all);
-      el.classList.add(...cl.base);
       props.onLeft?.(el);
     }
   };
