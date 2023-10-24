@@ -43,10 +43,10 @@ export const TransitionV2 = simpleForawrdRef(function TransitionV2(
     show: boolean;
     appear?: boolean;
     render?: (props: Record<string, any>) => React.ReactNode;
-    // choose only common props from `JSX.IntrinsicElements["div"]` to simplify auto-complete
+    children?: React.ReactNode;
+    // all props will be delegated to <div /> but we pick only two to reduce noisy auto-completion
     className?: string;
     style?: React.CSSProperties;
-    children?: React.ReactNode;
   } & TransitionClassProps
     & TransitionCallbackProps,
   ref: React.ForwardedRef<HTMLElement>
