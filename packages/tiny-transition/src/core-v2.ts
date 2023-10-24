@@ -56,7 +56,7 @@ export class TransitionManagerV2 {
   private startTransition(value: boolean) {
     if (!this.el) return;
 
-    this.asyncOp.dispose();
+    this.asyncOp.reset();
     this.update(value ? "enterFrom" : "leaveFrom");
 
     this.asyncOp.requestAnimationFrame(() => {
@@ -106,7 +106,7 @@ class AsyncOperation {
     this.disposables.add(() => cancelAnimationFrame(id));
   }
 
-  dispose() {
+  reset() {
     this.disposables.forEach((f) => f());
     this.disposables.clear();
   }
