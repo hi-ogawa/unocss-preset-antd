@@ -15,7 +15,9 @@ import {
   untrack,
 } from "solid-js";
 
-export function Transition(
+// TODO: remove
+Transition;
+function Transition(
   props: {
     show: boolean;
     appear?: boolean;
