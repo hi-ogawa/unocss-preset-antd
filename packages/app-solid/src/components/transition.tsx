@@ -14,6 +14,7 @@ import {
   onCleanup,
   untrack,
 } from "solid-js";
+import { className as solidClassName, style as solidStyle } from "solid-js/web";
 
 export function Transition(
   props: {
@@ -96,7 +97,26 @@ export function TransitionV2(
   return (
     <Show when={state()}>
       <div
-        ref={(el) => manager.ref(el)}
+        ref={(el) => {
+          // TODO: need to ensure class/style applied before manager.ref?
+          // TODO: should move `manager.ref` to `createRenderEffect`?
+          if (props.class) {
+            solidClassName(el, props.class);
+          }
+          if (props.style) {
+            solidStyle(el, props.style as any);
+          }
+          // untrack(() => {
+          //   if (props.class) {
+          //     solidClassName(el, props.class);
+          //   }
+          //   if (props.style) {
+          //     solidStyle(el, props.style as any);
+          //   }
+          // });
+          // console.log(el.className, el.style.cssText);
+          manager.ref(el);
+        }}
         class={props.class}
         style={props.style}
       >
