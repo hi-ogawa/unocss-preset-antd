@@ -2,6 +2,7 @@ import type { TransitionCallbackProps } from "./core";
 
 // helper to use css class as a callback
 // TODO: but relying on callback means it won't be rendered during SSR.
+//       for example, when `show=true, appear=false`, we should render `entered` class during SSR.
 
 export const TRANSITION_CLASS_TYPES = [
   "enter",
@@ -21,7 +22,6 @@ export function convertClassPropsToCallbackProps(
   base: string | undefined,
   props: TransitionClassProps & TransitionCallbackProps
 ): TransitionCallbackProps {
-  // TODO: render `onEntered` classes already during ssr when `show=true appear=false`?
   const cl = {
     base: splitClass(base ?? ""),
     enter: splitClass(props.enter ?? ""),
