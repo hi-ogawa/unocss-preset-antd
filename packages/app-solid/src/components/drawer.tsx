@@ -2,7 +2,7 @@ import { Ref } from "@solid-primitives/refs";
 import { type ParentProps, type Setter, createSignal } from "solid-js";
 import { Portal } from "solid-js/web";
 import { createDismissInteraction } from "./popover";
-import { TransitionV2 as Transition } from "./transition";
+import { Transition } from "./transition";
 
 export function Drawer(
   props: ParentProps & { open: boolean; setOpen: Setter<boolean> }

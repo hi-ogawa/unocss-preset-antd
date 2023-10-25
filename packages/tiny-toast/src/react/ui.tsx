@@ -1,4 +1,4 @@
-import { TransitionV2 as Transition } from "@hiogawa/tiny-transition/dist/react";
+import { Transition } from "@hiogawa/tiny-transition/dist/react";
 import { groupBy, includesGuard } from "@hiogawa/utils";
 import React from "react";
 import {

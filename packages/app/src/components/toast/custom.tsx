@@ -4,7 +4,7 @@ import {
   type ReactToastItem,
   type ReactToastManager,
 } from "@hiogawa/tiny-toast/dist/react";
-import { TransitionV2 as Transition } from "@hiogawa/tiny-transition/dist/react";
+import { Transition } from "@hiogawa/tiny-transition/dist/react";
 import React from "react";
 import { getCollapseProps } from "../collapse";
 

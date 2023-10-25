@@ -1,4 +1,4 @@
-import type { TransitionV2 as Transition } from "@hiogawa/tiny-transition/dist/react";
+import type { Transition } from "@hiogawa/tiny-transition/dist/react";
 
 export function getCollapseProps(): Partial<
   React.ComponentProps<typeof Transition>

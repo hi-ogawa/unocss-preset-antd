@@ -1,5 +1,5 @@
 import { FloatingPortal } from "@floating-ui/react";
-import { TransitionV2 as Transition } from "@hiogawa/tiny-transition/dist/react";
+import { Transition } from "@hiogawa/tiny-transition/dist/react";
 import { useDelay, usePrevious, useRafTime } from "@hiogawa/utils-react";
 import React from "react";
 import { tw } from "../styles/tw";

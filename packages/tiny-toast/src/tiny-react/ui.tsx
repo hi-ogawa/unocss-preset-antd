@@ -5,7 +5,7 @@ import {
   useState,
   useSyncExternalStore,
 } from "@hiogawa/tiny-react";
-import { TransitionManagerV2 as TransitionManager } from "@hiogawa/tiny-transition";
+import { TransitionManager } from "@hiogawa/tiny-transition";
 import { includesGuard } from "@hiogawa/utils";
 import {
   TOAST_TYPE_ICONS,

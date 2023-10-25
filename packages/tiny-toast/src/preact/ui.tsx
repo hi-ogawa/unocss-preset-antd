@@ -1,4 +1,4 @@
-import { TransitionManagerV2 as TransitionManager } from "@hiogawa/tiny-transition";
+import { TransitionManager } from "@hiogawa/tiny-transition";
 import { groupBy, includesGuard } from "@hiogawa/utils";
 import { h } from "preact";
 import { useEffect, useReducer, useState } from "preact/hooks";

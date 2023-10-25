@@ -4,7 +4,7 @@ import { useTinyProgress } from "@hiogawa/tiny-progress/dist/react";
 import { useTinyStoreStorage } from "@hiogawa/tiny-store/dist/react";
 import { TOAST_POSITIONS, type ToastPosition } from "@hiogawa/tiny-toast";
 import {
-  TransitionV2 as Transition,
+  Transition,
   useTransitionManager,
 } from "@hiogawa/tiny-transition/dist/react";
 import { ANTD_VARS } from "@hiogawa/unocss-preset-antd";
