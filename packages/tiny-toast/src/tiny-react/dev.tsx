@@ -84,12 +84,12 @@ function Root() {
         {
           className: "flex flex-col gap-2",
         },
-        h.span({ className: "text-colorTextSecondary text-sm" }, "Show toast"),
+        h.span({ className: "text-colorTextSecondary text-sm" }, "Toast type"),
         h(Buttons, {})
       ),
       h.label(
         {
-          className: "flex flex-col gap-2",
+          className: "flex flex-col gap-1.5",
         },
         h.span({ className: "text-colorTextSecondary text-sm" }, "Position"),
         h.select(
@@ -106,6 +106,28 @@ function Root() {
             },
           },
           TOAST_POSITIONS.map((value) => h.option({ key: value, value }, value))
+        )
+      ),
+      h.label(
+        {
+          className: "flex flex-col gap-1.5",
+        },
+        h.span({ className: "text-colorTextSecondary text-sm" }, "Duration (ms)"),
+        h.select(
+          {
+            className: "antd-input p-1",
+            ref(el) {
+              if (el) {
+                el.value = String(toast.defaultOptions.duration);
+              }
+            },
+            oninput: (e) => {
+              toast.defaultOptions.duration = parseFloat(e.currentTarget.value);
+            },
+          },
+          ["2000", "4000", "8000", "Infinity"].map((value) =>
+            h.option({ key: value, value }, value)
+          )
         )
       )
     ),
