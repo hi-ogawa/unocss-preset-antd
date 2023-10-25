@@ -112,7 +112,10 @@ function Root() {
         {
           className: "flex flex-col gap-1.5",
         },
-        h.span({ className: "text-colorTextSecondary text-sm" }, "Duration (ms)"),
+        h.span(
+          { className: "text-colorTextSecondary text-sm" },
+          "Duration (ms)"
+        ),
         h.select(
           {
             className: "antd-input p-1",
