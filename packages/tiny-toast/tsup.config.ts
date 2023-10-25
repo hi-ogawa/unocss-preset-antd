@@ -4,8 +4,7 @@ export default defineConfig({
   entry: [
     "src/index.ts",
     "src/react/index.ts",
-    "src/preact/index.ts",
-    "src/tiny-react/index.ts",
+    "src/preact/index.ts"
   ],
   format: ["esm", "cjs"],
   dts: true,
