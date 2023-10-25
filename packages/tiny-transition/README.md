@@ -10,6 +10,7 @@ API is similar to [headlessui's `Transition`](https://headlessui.com/react/trans
 - https://unocss-preset-antd-hiro18181.vercel.app/Toast
 - https://unocss-preset-antd-hiro18181.vercel.app/Modal
 - https://unocss-preset-antd-hiro18181.vercel.app/Popover
+- https://unocss-preset-antd-solidjs-hiro18181.vercel.app/Transition
 - https://unocss-preset-antd-solidjs-hiro18181.vercel.app/Drawer
 - https://unocss-preset-antd-solidjs-hiro18181.vercel.app/Popover
 
