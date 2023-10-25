@@ -1,4 +1,4 @@
-import { Fragment, h, render } from "@hiogawa/tiny-react";
+import { createRoot, h } from "@hiogawa/tiny-react";
 import type { ToastPosition, ToastType } from "../common";
 import { type ToastItem, ToastManager } from "../core";
 import { ToastContainer } from "./ui";
@@ -41,9 +41,10 @@ export class TinyReactToastManager extends ToastManager<TinyToastData> {
     const el = document.createElement("div");
     el.setAttribute("data-tiny-toast", "");
     document.body.appendChild(el);
-    render(h(ToastContainer, { toast: this }), el);
+    const root = createRoot(el);
+    root.render(h(ToastContainer, { toast: this }));
     return () => {
-      render(h(Fragment, {}), el);
+      root.unmount();
       el.remove();
     };
   }
