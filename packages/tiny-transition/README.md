@@ -1,9 +1,9 @@
 # tiny-transition
 
-Rendering framework agnostic transition/animation utility.
+Simple framework-agnostic transition-based animation utility.
 
 ## limitation compared to `@headlessui/react`
 
 - always `remount`
 - no `Transition.Child`
-  - can workaround by setting same animation duration for all components
+  - this can be mostly workaround by setting same animation duration for all components
