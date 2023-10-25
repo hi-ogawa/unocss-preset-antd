@@ -65,8 +65,7 @@ function ToastAnimation({
     const transition = slideScaleCollapseTransition({
       position: "top-center",
     });
-    const manager = new TransitionManager({
-      defaultEntered: false,
+    return new TransitionManager(false, {
       onEnterFrom: transition.enterFrom,
       onEnterTo: transition.enterTo,
       onEntered: transition.entered,
@@ -74,26 +73,25 @@ function ToastAnimation({
       onLeaveTo: transition.leaveTo,
       onLeft: () => toast.remove(item.id),
     });
-    return manager;
   });
 
-  const shouldRender = useSyncExternalStore(
+  const state = useSyncExternalStore(
     manager.subscribe,
-    manager.shouldRender,
-    manager.shouldRender
+    () => manager.state,
+    () => manager.state
   );
 
   useEffect(() => {
-    manager.show(item.step < TOAST_STEP.DISMISS);
+    manager.set(item.step < TOAST_STEP.DISMISS);
   }, [item.step]);
 
-  if (!shouldRender) {
+  if (!state) {
     return h(Fragment, {});
   }
 
   return h.div(
     {
-      ref: manager.setElement,
+      ref: manager.ref,
     },
     h.div(
       {

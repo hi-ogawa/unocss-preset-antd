@@ -1,8 +1,19 @@
 import { tinyassert } from "@hiogawa/utils";
 
-//
-// callback type
-//
+// inspired by discussions in solid `createPresense`
+// https://github.com/solidjs-community/solid-primitives/pull/414#issuecomment-1520787178
+// https://github.com/solidjs-community/solid-primitives/pull/437
+
+// Animation in each direction requires two intemediate steps
+// but they are not completely symmetric since "enterFrom -> enterTo" has to wait for element mount.
+//   false --(true)----> enterFrom --(mount + next frame)--> enterTo   ---(timeout)-> true
+//         <-(timeout)-- leaveTo   <-(next frame)----------- leaveFrom <--(false)----
+export type TransitionState =
+  | boolean
+  | "enterFrom"
+  | "enterTo"
+  | "leaveFrom"
+  | "leaveTo";
 
 export const TRANSITION_CALLBACK_TYPES = [
   "onEnterFrom",
@@ -19,142 +30,105 @@ export type TransitionCallbackProps = Partial<
   Record<TransitionCallbackType, (el: HTMLElement) => void>
 >;
 
-//
-// manager
-//
-
-export type TransitionState = "left" | "entering" | "entered" | "leaving";
-
 export class TransitionManager {
+  state: TransitionState;
+  el: HTMLElement | null = null;
   private listeners = new Set<() => void>();
-  private disposables = new Set<() => void>();
-  private state: TransitionState = "left";
-  private el: HTMLElement | null = null;
+  private asyncOp = new AsyncOperation();
 
-  constructor(
-    public options: {
-      defaultEntered: boolean;
-    } & TransitionCallbackProps
-  ) {
-    this.state = this.options.defaultEntered ? "entered" : "left";
+  constructor(value: boolean, public callbacks?: TransitionCallbackProps) {
+    this.state = value;
   }
 
-  shouldRender = () => this.state !== "left";
-
-  show(show: boolean) {
-    if (show && this.state !== "entering" && this.state !== "entered") {
-      this.state = "entering";
-      // `startEnter` is usually handled in `setElement` since `this.el` is null for normal cases.
-      // however `this.el` can be non-null when `show` flips (true -> false -> true) faster than transition animation.
-      this.startEnter();
-      this.notify();
+  set = (value: boolean) => {
+    const current =
+      this.state === true ||
+      this.state === "enterFrom" ||
+      this.state === "enterTo";
+    if (value && !current) {
+      if (!this.el) {
+        this.update("enterFrom");
+      } else {
+        this.startTransition(true);
+      }
     }
-    if (!show && this.state !== "leaving" && this.state !== "left") {
-      this.state = "leaving";
-      this.startLeave();
-      this.notify();
-    }
-  }
-
-  // api compatible with ref callback
-  setElement = (el: HTMLElement | null) => {
-    this.dispose();
-    this.el = el;
-    if (!el) return;
-
-    // TODO: animation style should applied during `useLayoutEffect` instead of `ref` callback?
-    if (this.state === "entered") {
-      this.options.onEntered?.(el);
-    } else if (this.state === "entering") {
-      this.startEnter();
+    if (!value && current) {
+      this.startTransition(false);
     }
   };
 
-  private startEnter() {
+  ref = (el: HTMLElement | null) => {
+    this.el = el;
+    if (el && this.state === "enterFrom") {
+      // notify "enterFrom" again after mounted
+      this.startTransition(true);
+    }
+    if (!el) {
+      this.state = false;
+    }
+  };
+
+  private startTransition(value: boolean) {
     if (!this.el) return;
-    const el = this.el;
 
-    // "enterFrom"
-    this.options.onEnterFrom?.(el);
+    this.asyncOp.reset();
+    this.update(value ? "enterFrom" : "leaveFrom");
 
-    this.dispose();
-    this.disposables.add(
-      onNextFrame(() => {
-        // "enterTo" on next frame
-        forceStyle(el);
-        this.options.onEnterTo?.(el);
+    this.asyncOp.requestAnimationFrame(() => {
+      if (!this.el) return;
 
-        // notify "entered"
-        this.disposables.add(
-          onTransitionEnd(el, () => {
-            this.state = "entered";
-            this.notify(() => this.options.onEntered?.(el));
-          })
-        );
-      })
-    );
+      forceStyle(); // `appear` breaks without this. not entirely sure why.
+      this.update(value ? "enterTo" : "leaveTo");
+
+      const duration = computeTransitionTimeout(this.el);
+      this.asyncOp.setTimeout(() => {
+        this.update(value);
+      }, duration);
+    });
   }
 
-  private startLeave() {
-    if (!this.el) return;
-    const el = this.el;
-
-    // "leaveFrom"
-    this.options.onLeaveFrom?.(el);
-
-    this.dispose();
-    this.disposables.add(
-      onNextFrame(() => {
-        // "leaveTo" on next frame
-        forceStyle(el);
-        this.options.onLeaveTo?.(el);
-
-        // notify "left"
-        this.disposables.add(
-          onTransitionEnd(el, () => {
-            this.state = "left";
-            this.notify(() => this.options.onLeft?.(el));
-          })
-        );
-      })
-    );
+  private update(state: TransitionState) {
+    this.state = state;
+    if (this.listeners.size > 0 && this.el) {
+      if (state === false) this.callbacks?.onLeft?.(this.el);
+      if (state === "enterFrom") this.callbacks?.onEnterFrom?.(this.el);
+      if (state === "enterTo") this.callbacks?.onEnterTo?.(this.el);
+      if (state === true) this.callbacks?.onEntered?.(this.el);
+      if (state === "leaveFrom") this.callbacks?.onLeaveFrom?.(this.el);
+      if (state === "leaveTo") this.callbacks?.onLeaveTo?.(this.el);
+    }
+    for (const listener of this.listeners) {
+      listener();
+    }
   }
 
-  private dispose() {
+  subscribe = (listener: () => void) => {
+    this.listeners.add(listener);
+    return () => this.listeners.delete(listener);
+  };
+}
+
+//
+// utils
+//
+
+class AsyncOperation {
+  private disposables = new Set<() => void>();
+
+  setTimeout(callback: () => void, ms: number) {
+    const id = setTimeout(callback, ms);
+    this.disposables.add(() => clearTimeout(id));
+  }
+
+  requestAnimationFrame(callback: () => void) {
+    const id = requestAnimationFrame(callback);
+    this.disposables.add(() => cancelAnimationFrame(id));
+  }
+
+  reset() {
     this.disposables.forEach((f) => f());
     this.disposables.clear();
   }
-
-  // React.useSyncExternalStore compatible subscription
-  subscribe = (listener: () => void) => {
-    this.listeners.add(listener);
-    return () => {
-      this.listeners.delete(listener);
-    };
-  };
-
-  private notify(callback?: () => void) {
-    if (this.listeners.size === 0) return;
-    callback?.();
-    this.listeners.forEach((f) => f());
-  }
-}
-
-function onNextFrame(callback: () => void) {
-  const id = requestAnimationFrame(callback);
-  return () => {
-    cancelAnimationFrame(id);
-  };
-}
-
-function onTransitionEnd(el: HTMLElement, callback: () => void) {
-  // setup `transitionDuration + transitionDelay` timeout
-  // ("transitionend" event cannot be used when multiple transition)
-  const timeoutDuration = computeTransitionTimeout(el);
-  const handle = setTimeout(() => callback(), timeoutDuration);
-  return () => {
-    clearTimeout(handle);
-  };
 }
 
 function computeTransitionTimeout(el: HTMLElement): number {
@@ -188,6 +162,6 @@ function parseDurationSingle(s: string): number {
   return ms;
 }
 
-function forceStyle(el: HTMLElement) {
-  typeof getComputedStyle(el).transition || console.log("unreachable");
+function forceStyle() {
+  typeof document.body.offsetHeight || console.log("unreachable");
 }

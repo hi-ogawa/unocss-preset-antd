@@ -1,6 +1,6 @@
 import type { TransitionCallbackProps } from "./core";
 
-// helper to use css class as a callback
+// helper to use css class for callbacks
 
 export const TRANSITION_CLASS_TYPES = [
   "enter",
@@ -20,7 +20,6 @@ export function convertClassPropsToCallbackProps(
   base: string | undefined,
   props: TransitionClassProps & TransitionCallbackProps
 ): TransitionCallbackProps {
-  // TODO: render `onEntered` classes already during ssr when `show=true appear=false`?
   const cl = {
     base: splitClass(base ?? ""),
     enter: splitClass(props.enter ?? ""),

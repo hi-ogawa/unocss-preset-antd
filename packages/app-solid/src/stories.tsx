@@ -23,28 +23,38 @@ export function StoryForm() {
 }
 
 export function StoryTransition() {
-  const [show, setShow] = createSignal(false);
+  const [show, setShow] = createSignal(true);
 
   return (
     <div class="flex flex-col gap-3 p-2 border w-sm">
-      <h1 class="text-xl">Transition</h1>
+      <h1 class="text-xl">Transition / Slide</h1>
       <button
         class="antd-btn antd-btn-primary p-1"
         onClick={() => setShow(!show())}
       >
-        Toggle ({show() ? "on" : "off"})
+        {show() ? "Hide" : "Show"}
       </button>
-      <div class="h-[80px] flex items-center justify-center relative">
-        <div class="text-lg">Hello</div>
+      <div class="border h-[100px] overflow-hidden relative">
+        <Transition
+          appear
+          show={show()}
+          class="absolute top-2 right-2 inline-block duration-500 transform"
+          enterFrom="translate-y-[-200%]"
+          enterTo="translate-y-0"
+          leaveFrom="translate-y-0"
+          leaveTo="translate-y-[-200%]"
+        >
+          <span class="border px-2 py-1">top/right</span>
+        </Transition>
         <Transition
           show={show()}
-          class="absolute inset-0 antd-body flex items-center justify-center duration-1000"
-          enterFrom="opacity-0"
-          enterTo="opacity-80"
-          leaveFrom="opacity-80"
-          leaveTo="opacity-0"
+          class="absolute bottom-2 left-2 inline-block duration-500 transform"
+          enterFrom="translate-x-[-200%]"
+          enterTo="translate-x-0"
+          leaveFrom="translate-x-0"
+          leaveTo="translate-x-[-200%]"
         >
-          <div class="antd-spin w-8 h-8"></div>
+          <span class="border px-2 py-1">bottom/left (appear = false)</span>
         </Transition>
       </div>
     </div>

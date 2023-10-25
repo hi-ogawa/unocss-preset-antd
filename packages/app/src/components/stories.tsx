@@ -3,7 +3,10 @@ import { useTinyForm } from "@hiogawa/tiny-form/dist/react";
 import { useTinyProgress } from "@hiogawa/tiny-progress/dist/react";
 import { useTinyStoreStorage } from "@hiogawa/tiny-store/dist/react";
 import { TOAST_POSITIONS, type ToastPosition } from "@hiogawa/tiny-toast";
-import { Transition } from "@hiogawa/tiny-transition/dist/react";
+import {
+  Transition,
+  useTransitionManager,
+} from "@hiogawa/tiny-transition/dist/react";
 import { ANTD_VARS } from "@hiogawa/unocss-preset-antd";
 import { none, objectKeys, objectPickBy, range } from "@hiogawa/utils";
 import { Debug, toSetSetState, useDelay } from "@hiogawa/utils-react";
@@ -484,6 +487,7 @@ export function StoryModal() {
 
 export function StorySlide() {
   const [show, setShow] = React.useState(true);
+  const manager = useTransitionManager(show, { appear: true });
 
   return (
     <div className="flex flex-col items-center gap-3 m-2">
@@ -505,7 +509,7 @@ export function StorySlide() {
             leaveFrom="translate-y-0"
             leaveTo="translate-y-[-200%]"
           >
-            <span className="border px-2 py-1">hello from top/right</span>
+            <span className="border px-2 py-1">top/right</span>
           </Transition>
           <Transition
             appear
@@ -516,8 +520,32 @@ export function StorySlide() {
             leaveFrom="translate-x-0"
             leaveTo="translate-x-[-200%]"
           >
-            <span className="border px-2 py-1">hello from bottom/left</span>
+            <span className="border px-2 py-1">bottom/left</span>
           </Transition>
+          <Transition
+            show={show}
+            className="absolute top-2 left-2 inline-block duration-1500 transform"
+            enterFrom="translate-y-[-200%]"
+            enterTo="translate-y-0"
+            leaveFrom="translate-y-0"
+            leaveTo="translate-y-[-200%]"
+          >
+            <span className="border px-2 py-1">top/left (appear = false)</span>
+          </Transition>
+          {manager.state && (
+            <div
+              ref={manager.ref}
+              className={cls(
+                "absolute bottom-2 right-2 inline-block duration-1000 transform",
+                manager.state === "enterFrom" && "translate-y-[200%]",
+                manager.state === "enterTo" && "translate-y-0",
+                manager.state === "leaveFrom" && "translate-y-0",
+                manager.state === "leaveTo" && "translate-y-[200%]"
+              )}
+            >
+              <span className="border px-2 py-1">bottom/right</span>
+            </div>
+          )}
         </div>
       </section>
     </div>
@@ -545,7 +573,11 @@ export function StoryCollapse() {
             className="duration-500 overflow-hidden"
             {...getCollapseProps()}
           >
-            <div className="pt-3">Collapsable Div</div>
+            <div className="pt-3 flex flex-col gap-3">
+              <div>Collapsable Div</div>
+              <div>Collapsable Div</div>
+              <div>Collapsable Div</div>
+            </div>
           </Transition>
         </div>
       </section>

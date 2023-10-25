@@ -79,8 +79,7 @@ function ToastAnimation({
     const transition = slideScaleCollapseTransition({
       position: item.data.position,
     });
-    const manager = new TransitionManager({
-      defaultEntered: false,
+    return new TransitionManager(false, {
       onEnterFrom: transition.enterFrom,
       onEnterTo: transition.enterTo,
       onEntered: transition.entered,
@@ -88,23 +87,22 @@ function ToastAnimation({
       onLeaveTo: transition.leaveTo,
       onLeft: () => toast.remove(item.id),
     });
-    return manager;
   });
 
   useSubscribe(manager.subscribe);
 
   useEffect(() => {
-    manager.show(item.step < TOAST_STEP.DISMISS);
+    manager.set(item.step < TOAST_STEP.DISMISS);
   }, [item.step]);
 
-  if (!manager.shouldRender()) {
+  if (!manager.state) {
     return null;
   }
 
   return h(
     "div",
     {
-      ref: manager.setElement,
+      ref: manager.ref,
       style: istyle({
         pointerEvents: "auto",
       }),
