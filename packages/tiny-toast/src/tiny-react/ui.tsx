@@ -132,6 +132,8 @@ function ToastItemComponent({
       className: item.data.className,
       style:
         istyle({
+          color: "rgba(0, 0, 0, 0.88)",
+          background: "white",
           display: "flex",
           alignItems: "center",
           padding: "10px 10px",
