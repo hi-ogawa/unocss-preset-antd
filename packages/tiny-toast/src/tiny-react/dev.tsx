@@ -136,7 +136,7 @@ function Root() {
     ),
     h.div(
       {
-        className: "flex-1 flex flex-col border p-2",
+        className: "flex-1 flex flex-col border",
       },
       h.div({
         // force "position: absolute" in ToastContainer
