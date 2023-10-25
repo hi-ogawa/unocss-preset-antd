@@ -8,6 +8,7 @@ import {
 import { TransitionManager } from "@hiogawa/tiny-transition";
 import { groupBy, includesGuard } from "@hiogawa/utils";
 import {
+  TOAST_POSITIONS,
   TOAST_TYPE_ICONS,
   TOAST_TYPE_ICON_COLORS,
   slideScaleCollapseTransition,
@@ -36,37 +37,50 @@ export function ToastContainer({ toast }: { toast: TinyReactToastManager }) {
         toast.pause(false);
       },
     },
-    h.div(
-      {
-        style: istyle({
-          position: "absolute",
-          bottom: "0.5rem",
-          left: "0.75rem",
-          display: "flex",
-          flexDirection: "column",
-        }),
-      },
-      itemsByPosition
-        .get("bottom-left")
-        ?.map((item) => h(ToastAnimation, { key: item.id, toast, item }))
-    ),
-    h.div(
-      {
-        style: istyle({
-          position: "absolute",
-          top: "0.5rem",
-          width: "100%",
-          display: "flex",
-          flexDirection: "column-reverse",
-          alignItems: "center",
-        }),
-      },
-      itemsByPosition
-        .get("top-center")
-        ?.map((item) => h(ToastAnimation, { key: item.id, toast, item }))
-    )
+    TOAST_POSITIONS.map((position) => {
+      const items = itemsByPosition.get(position);
+      if (!items) {
+        return null;
+      }
+      const [y, x] = position.split("-") as ["top", "center"];
+      return h.div(
+        {
+          style:
+            CONTAINER_POSITION_STYLES.base +
+            CONTAINER_POSITION_STYLES[x] +
+            CONTAINER_POSITION_STYLES[y],
+        },
+        items.map((item) => h(ToastAnimation, { key: item.id, toast, item }))
+      );
+    })
   );
 }
+
+const CONTAINER_POSITION_STYLES = {
+  base: istyle({
+    display: "flex",
+    position: "absolute",
+  }),
+  bottom: istyle({
+    flexDirection: "column",
+    bottom: "0.5rem",
+  }),
+  top: istyle({
+    flexDirection: "column-reverse",
+    top: "0.5rem",
+  }),
+  left: istyle({
+    left: "0.75rem",
+  }),
+  // TODO: aligh children to right
+  right: istyle({
+    right: "0.75rem",
+  }),
+  center: istyle({
+    alignItems: "center",
+    width: "100%",
+  }),
+};
 
 function ToastAnimation({
   toast,
