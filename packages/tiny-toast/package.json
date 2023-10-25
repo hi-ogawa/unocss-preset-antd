@@ -1,6 +1,6 @@
 {
   "name": "@hiogawa/tiny-toast",
-  "version": "0.1.1-pre.8",
+  "version": "0.1.1-pre.9",
   "homepage": "https://github.com/hi-ogawa/unocss-preset-antd/tree/main/packages/tiny-toast",
   "repository": {
     "type": "git",
@@ -19,11 +19,6 @@
       "import": "./dist/react/index.js",
       "require": "./dist/react/index.cjs",
       "types": "./dist/react/index.d.ts"
-    },
-    "./dist/preact": {
-      "import": "./dist/preact/index.js",
-      "require": "./dist/preact/index.cjs",
-      "types": "./dist/preact/index.d.ts"
     }
   },
   "main": "./dist/index.js",
@@ -34,11 +29,16 @@
   ],
   "scripts": {
     "dev": "vite --no-clearScreen",
-    "build": "tsup",
-    "release": "pnpm publish --no-git-checks --access public"
+    "build": "pnpm run --seq /^build:/",
+    "build:tsup": "tsup",
+    "build:demo": "vite build",
+    "build:vercel": "bash misc/vercel/build.sh",
+    "release": "pnpm publish --no-git-checks --access public",
+    "release-demo": "vercel deploy --prebuilt .",
+    "release-demo-production": "vercel deploy --prebuilt . --prod"
   },
   "devDependencies": {
-    "@hiogawa/tiny-react": "0.0.1-pre.10",
+    "@hiogawa/tiny-react": "0.0.2-pre.3",
     "@hiogawa/tiny-transition": "workspace:*",
     "@hiogawa/unocss-preset-antd": "workspace:*",
     "@hiogawa/utils": "1.6.1-pre.7",

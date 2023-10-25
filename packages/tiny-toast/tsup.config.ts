@@ -1,13 +1,7 @@
 import { defineConfig } from "tsup";
 
 export default defineConfig({
-  entry: [
-    "src/index.ts",
-    "src/react/index.ts",
-    "src/preact/index.ts",
-    "src/tiny-react/index.ts",
-  ],
+  entry: ["src/index.ts", "src/react/index.ts", "src/preact/index.ts"],
   format: ["esm", "cjs"],
   dts: true,
-  splitting: false,
 });

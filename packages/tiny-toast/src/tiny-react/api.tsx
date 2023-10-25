@@ -1,7 +1,10 @@
-import { Fragment, h, render } from "@hiogawa/tiny-react";
+import { createRoot, h } from "@hiogawa/tiny-react";
 import type { ToastPosition, ToastType } from "../common";
 import { type ToastItem, ToastManager } from "../core";
 import { ToastContainer } from "./ui";
+
+// almost identical to preact
+// not sure how would it be possible to share code
 
 interface TinyToastData {
   message: RenderItem;
@@ -38,9 +41,10 @@ export class TinyReactToastManager extends ToastManager<TinyToastData> {
     const el = document.createElement("div");
     el.setAttribute("data-tiny-toast", "");
     document.body.appendChild(el);
-    render(h(ToastContainer, { toast: this }), el);
+    const root = createRoot(el);
+    root.render(h(ToastContainer, { toast: this }));
     return () => {
-      render(h(Fragment, {}), el);
+      root.unmount();
       el.remove();
     };
   }
