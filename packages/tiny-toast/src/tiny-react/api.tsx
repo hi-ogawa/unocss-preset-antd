@@ -37,15 +37,19 @@ export class TinyReactToastManager extends ToastManager<TinyToastData> {
     duration: 4000,
   };
 
-  render() {
-    const el = document.createElement("div");
-    el.setAttribute("data-tiny-toast", "");
-    document.body.appendChild(el);
+  render(userEl?: HTMLElement) {
+    const el = userEl ?? document.createElement("div");
+    if (!userEl) {
+      el.setAttribute("data-tiny-toast", "");
+      document.body.appendChild(el);
+    }
     const root = createRoot(el);
     root.render(h(ToastContainer, { toast: this }));
     return () => {
       root.unmount();
-      el.remove();
+      if (!userEl) {
+        el.remove();
+      }
     };
   }
 

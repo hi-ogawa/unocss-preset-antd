@@ -1,8 +1,14 @@
 import { tinyassert } from "@hiogawa/utils";
 import { cls, styleAssign } from "./utils";
 
-// TODO: support all 6 positions
-export const TOAST_POSITIONS = ["bottom-left", "top-center"] as const;
+export const TOAST_POSITIONS = [
+  "bottom-left",
+  "bottom-center",
+  "bottom-right",
+  "top-left",
+  "top-center",
+  "top-right",
+] as const;
 
 export type ToastPosition = (typeof TOAST_POSITIONS)[number];
 
@@ -40,6 +46,10 @@ export function slideScaleCollapseTransition({
   // steps
   // - slide in + scale up + uncollapse
   // - slide out + scale down + collapse
+  const isBottom =
+    position === "bottom-left" ||
+    position === "bottom-center" ||
+    position === "bottom-right";
   return {
     enterFrom: (el: HTMLElement) => {
       tinyassert(el.firstElementChild instanceof HTMLElement);
@@ -52,8 +62,7 @@ export function slideScaleCollapseTransition({
         opacity: "0.5",
         transform: cls(
           "scale(0.5)",
-          position === "bottom-left" && "translateY(200%)",
-          position === "top-center" && "translateY(-200%)"
+          isBottom ? "translateY(200%)" : "translateY(-200%)"
         ),
       });
     },
@@ -98,8 +107,7 @@ export function slideScaleCollapseTransition({
         opacity: "0",
         transform: cls(
           "scale(0)",
-          position === "bottom-left" && "translateY(150%)",
-          position === "top-center" && "translateY(-150%)"
+          isBottom ? "translateY(150%)" : "translateY(-150%)"
         ),
       });
     },
