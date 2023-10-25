@@ -114,7 +114,6 @@ function Root() {
 
 function main() {
   toast.render();
-  // toast.defaultOptions.position = ""
 
   const el = document.getElementById("root");
   tinyassert(el);
