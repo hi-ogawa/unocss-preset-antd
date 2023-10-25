@@ -42,9 +42,24 @@ export function Transition(
     manager.set(props.show);
   });
 
+  let workaroundNoAppear = manager.state && !props.appear;
+
   return (
     <Show when={state()}>
-      <div ref={(el) => manager.ref(el)} style={props.style}>
+      <div
+        // TODO: solidjs runs `ref` before assigning `style/class` which breaks transition.
+        // class={props.class}
+        // style={props.style}
+        ref={(el) => {
+          manager.ref(el);
+          // since we don't cannot use `style/class` as explained above,
+          // we workaround `show=true appear=false` by manual callback calls on mount
+          if (workaroundNoAppear) {
+            workaroundNoAppear = false;
+            manager.callbacks?.onEntered?.(el);
+          }
+        }}
+      >
         {props.children}
       </div>
     </Show>

@@ -32,11 +32,11 @@ export type TransitionCallbackProps = Partial<
 
 export class TransitionManager {
   state: TransitionState;
-  private el: HTMLElement | null = null;
+  el: HTMLElement | null = null;
   private listeners = new Set<() => void>();
   private asyncOp = new AsyncOperation();
 
-  constructor(value: boolean, private callbacks?: TransitionCallbackProps) {
+  constructor(value: boolean, public callbacks?: TransitionCallbackProps) {
     this.state = value;
   }
 
