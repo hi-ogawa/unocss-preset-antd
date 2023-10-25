@@ -6,7 +6,7 @@ import {
   useSyncExternalStore,
 } from "@hiogawa/tiny-react";
 import { TransitionManager } from "@hiogawa/tiny-transition";
-import { includesGuard } from "@hiogawa/utils";
+import { groupBy, includesGuard } from "@hiogawa/utils";
 import {
   TOAST_TYPE_ICONS,
   TOAST_TYPE_ICON_COLORS,
@@ -18,6 +18,8 @@ import type { TinyReactToastManager, TinyToastItem } from "./api";
 
 export function ToastContainer({ toast }: { toast: TinyReactToastManager }) {
   useSyncExternalStore(toast.subscribe, toast.getSnapshot, toast.getSnapshot);
+
+  const itemsByPosition = groupBy(toast.items, (item) => item.data.position);
 
   return h.div(
     {
@@ -38,6 +40,20 @@ export function ToastContainer({ toast }: { toast: TinyReactToastManager }) {
       {
         style: istyle({
           position: "absolute",
+          bottom: "0.5rem",
+          left: "0.75rem",
+          display: "flex",
+          flexDirection: "column",
+        }),
+      },
+      itemsByPosition
+        .get("bottom-left")
+        ?.map((item) => h(ToastAnimation, { key: item.id, toast, item }))
+    ),
+    h.div(
+      {
+        style: istyle({
+          position: "absolute",
           top: "0.5rem",
           width: "100%",
           display: "flex",
@@ -45,9 +61,9 @@ export function ToastContainer({ toast }: { toast: TinyReactToastManager }) {
           alignItems: "center",
         }),
       },
-      toast.items.map((item) =>
-        h(ToastAnimation, { key: item.id, toast, item })
-      )
+      itemsByPosition
+        .get("top-center")
+        ?.map((item) => h(ToastAnimation, { key: item.id, toast, item }))
     )
   );
 }
@@ -61,7 +77,7 @@ function ToastAnimation({
 }) {
   const [manager] = useState(() => {
     const transition = slideScaleCollapseTransition({
-      position: "top-center",
+      position: item.data.position,
     });
     return new TransitionManager(false, {
       onEnterFrom: transition.enterFrom,

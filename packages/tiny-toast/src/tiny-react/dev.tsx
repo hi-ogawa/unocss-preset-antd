@@ -1,12 +1,13 @@
-import { h, render } from "@hiogawa/tiny-react";
+import { createRoot, h } from "@hiogawa/tiny-react";
 import { tinyassert } from "@hiogawa/utils";
+import { TOAST_POSITIONS } from "../common";
 import { TinyReactToastManager } from "./api";
 
 const toast = new TinyReactToastManager();
 
-function Demo() {
+function Buttons() {
   return h.div(
-    { className: "p-2 flex gap-2" },
+    { className: "flex gap-2" },
     h.button(
       {
         className: "antd-btn antd-btn-default px-2",
@@ -72,12 +73,53 @@ function Demo() {
   );
 }
 
+function Root() {
+  return h.div(
+    {
+      className: "flex p-3",
+    },
+    h.div(
+      { className: "flex flex-col gap-3 border p-3 h-full" },
+      h.div(
+        {
+          className: "flex flex-col gap-2",
+        },
+        h.span({ className: "text-colorTextSecondary text-sm" }, "Show toast"),
+        h(Buttons, {})
+      ),
+      h.label(
+        {
+          className: "flex flex-col gap-2",
+        },
+        h.span({ className: "text-colorTextSecondary text-sm" }, "Position"),
+        h.select(
+          {
+            className: "antd-input p-1",
+            // ref to mimic defaultValue
+            ref(el) {
+              if (el) {
+                el.value = toast.defaultOptions.position;
+              }
+            },
+            oninput: (e) => {
+              toast.defaultOptions.position = e.currentTarget.value as any;
+            },
+          },
+          TOAST_POSITIONS.map((value) => h.option({ key: value, value }, value))
+        )
+      )
+    )
+  );
+}
+
 function main() {
+  toast.render();
+  // toast.defaultOptions.position = ""
+
   const el = document.getElementById("root");
   tinyassert(el);
   el.textContent = "";
-  render(h(Demo, {}), el);
-  toast.render();
+  createRoot(el).render(h(Root, {}));
 }
 
 main();
