@@ -29,8 +29,13 @@
   ],
   "scripts": {
     "dev": "vite --no-clearScreen",
-    "build": "tsup",
-    "release": "pnpm publish --no-git-checks --access public"
+    "build": "pnpm run --seq /^build:/",
+    "build:tsup": "tsup",
+    "build:demo": "vite build",
+    "build:vercel": "bash misc/vercel/build.sh",
+    "release": "pnpm publish --no-git-checks --access public",
+    "release-demo": "vercel deploy --prebuilt .",
+    "release-demo-production": "vercel deploy --prebuilt . --prod"
   },
   "devDependencies": {
     "@hiogawa/tiny-react": "0.0.2-pre.3",
