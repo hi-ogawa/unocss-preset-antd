@@ -16,8 +16,6 @@ import { TOAST_STEP } from "../core";
 import { istyle } from "../utils";
 import type { TinyReactToastManager, TinyToastItem } from "./api";
 
-// almost same as preact
-
 export function ToastContainer({ toast }: { toast: TinyReactToastManager }) {
   useSyncExternalStore(toast.subscribe, toast.getSnapshot, toast.getSnapshot);
 

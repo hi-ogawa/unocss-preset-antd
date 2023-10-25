@@ -6,6 +6,8 @@ import {
   transformerCompileClass,
 } from "unocss";
 
+// unocss is only used for dev
+
 export default defineConfig({
   presets: [
     // @ts-ignore peer dep version

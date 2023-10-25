@@ -19,11 +19,6 @@
       "import": "./dist/react/index.js",
       "require": "./dist/react/index.cjs",
       "types": "./dist/react/index.d.ts"
-    },
-    "./dist/preact": {
-      "import": "./dist/preact/index.js",
-      "require": "./dist/preact/index.cjs",
-      "types": "./dist/preact/index.d.ts"
     }
   },
   "main": "./dist/index.js",

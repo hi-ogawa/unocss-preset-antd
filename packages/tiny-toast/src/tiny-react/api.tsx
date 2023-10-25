@@ -3,6 +3,9 @@ import type { ToastPosition, ToastType } from "../common";
 import { type ToastItem, ToastManager } from "../core";
 import { ToastContainer } from "./ui";
 
+// almost identical to preact
+// not sure how would it be possible to share code
+
 interface TinyToastData {
   message: RenderItem;
   type: ToastType;
