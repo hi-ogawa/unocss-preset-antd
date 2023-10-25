@@ -53,7 +53,7 @@ export function Transition(
         style={props.style}
         ref={(el) => {
           manager.ref(el);
-          // since we don't cannot use `style/class` as explained above,
+          // since we cannot use `class` as explained above,
           // we workaround `show=true appear=false` by manual callback calls on mount
           if (workaroundNoAppear) {
             workaroundNoAppear = false;
