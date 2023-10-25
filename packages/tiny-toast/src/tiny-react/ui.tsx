@@ -40,11 +40,12 @@ export function ToastContainer({ toast }: { toast: TinyReactToastManager }) {
     TOAST_POSITIONS.map((position) => {
       const items = itemsByPosition.get(position);
       if (!items) {
-        return null;
+        return h(Fragment, { key: position });
       }
       const [y, x] = position.split("-") as ["top", "center"];
       return h.div(
         {
+          key: position,
           style:
             CONTAINER_POSITION_STYLES.base +
             CONTAINER_POSITION_STYLES[x] +
@@ -71,10 +72,11 @@ const CONTAINER_POSITION_STYLES = {
   }),
   left: istyle({
     left: "0.75rem",
+    alignItems: "flex-start",
   }),
-  // TODO: aligh children to right
   right: istyle({
     right: "0.75rem",
+    alignItems: "flex-end",
   }),
   center: istyle({
     alignItems: "center",
