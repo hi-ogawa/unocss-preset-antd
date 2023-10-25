@@ -47,9 +47,10 @@ export function Transition(
   return (
     <Show when={state()}>
       <div
-        // TODO: solidjs runs `ref` before assigning `style/class` which breaks transition.
+        // TODO: solidjs runs `ref` before assigning `class` which breaks transition?
+        //       for some reason, `style` works fine and this is required for popover currently.
         // class={props.class}
-        // style={props.style}
+        style={props.style}
         ref={(el) => {
           manager.ref(el);
           // since we don't cannot use `style/class` as explained above,

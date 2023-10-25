@@ -46,7 +46,6 @@ export function StoryTransition() {
         >
           <span class="border px-2 py-1">top/right</span>
         </Transition>
-        {/* TODO: appear=false broken */}
         <Transition
           show={show()}
           class="absolute bottom-2 left-2 inline-block duration-500 transform"
