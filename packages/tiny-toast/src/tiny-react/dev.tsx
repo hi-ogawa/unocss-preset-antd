@@ -1,4 +1,4 @@
-import { createRoot, h } from "@hiogawa/tiny-react";
+import { createRoot, h, useCallback } from "@hiogawa/tiny-react";
 import { tinyassert } from "@hiogawa/utils";
 import { TOAST_POSITIONS } from "../common";
 import { TinyReactToastManager } from "./api";
@@ -76,10 +76,10 @@ function Buttons() {
 function Root() {
   return h.div(
     {
-      className: "flex p-3",
+      className: "flex flex-col gap-3 p-3 h-full mx-auto w-full max-w-5xl",
     },
     h.div(
-      { className: "flex flex-col gap-3 border p-3 h-full" },
+      { className: "flex flex-col gap-3 border p-3" },
       h.div(
         {
           className: "flex flex-col gap-2",
@@ -108,13 +108,23 @@ function Root() {
           TOAST_POSITIONS.map((value) => h.option({ key: value, value }, value))
         )
       )
+    ),
+    h.div(
+      {
+        className: "flex-1 flex flex-col border p-2",
+      },
+      h.div({
+        // force "position: absolute" in ToastContainer
+        className: "flex-1 relative overflow-hidden ![&>div]:absolute",
+        ref: useCallback((el) => {
+          toast.render(el);
+        }, []),
+      })
     )
   );
 }
 
 function main() {
-  toast.render();
-
   const el = document.getElementById("root");
   tinyassert(el);
   el.textContent = "";
