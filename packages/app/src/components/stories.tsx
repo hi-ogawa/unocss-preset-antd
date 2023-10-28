@@ -966,7 +966,7 @@ export function StoryRuntimeErrorOverlay() {
           <button
             className="flex-1 antd-btn antd-btn-default"
             onClick={() => {
-              throw new Error("error!");
+              throw new Error("test error");
             }}
           >
             error
@@ -974,7 +974,7 @@ export function StoryRuntimeErrorOverlay() {
           <button
             className="flex-1 antd-btn antd-btn-default"
             onClick={async () => {
-              throw new Error("unhandledrejection!");
+              throw new Error("test error (async)");
             }}
           >
             unhandledrejection
