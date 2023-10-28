@@ -70,6 +70,11 @@ export function runtimeErrorOverlayPlugin(): Plugin {
           // deserialize error
           const error = Object.assign(new Error(), data);
 
+          // TODO: utility to construct "frame" https://github.com/vitejs/vite/pull/6274
+          // getStackLineInformation
+          // generateErrorPayload
+          // generateFrame
+
           // https://vitejs.dev/guide/api-plugin.html#client-server-communication
           // https://github.com/vitejs/vite/blob/5b58eca05939c0667cf9698e83f4f4849f3296f4/packages/vite/src/node/server/middlewares/error.ts#L54-L57
           client.send({
