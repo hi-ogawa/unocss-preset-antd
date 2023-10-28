@@ -12,7 +12,7 @@ export default defineConfig({
     unocss(),
     unocssDepHmrPlugin([require.resolve("@hiogawa/unocss-preset-antd")]),
     vitePluginTinyRefresh(),
-    runtimeErrorOverlayDisplay(),
+    runtimeErrorOverlayPlugin(),
     themeScriptPlugin({
       storageKey: "unocss-preset-antd-app:theme",
     }),
@@ -45,9 +45,9 @@ export function unocssDepHmrPlugin(deps: string[]): Plugin {
 // based on the idea in
 // https://github.com/vitejs/vite/pull/6274#issuecomment-1087749460
 // https://github.com/vitejs/vite/issues/2076
-export function runtimeErrorOverlayDisplay(): Plugin {
+export function runtimeErrorOverlayPlugin(): Plugin {
   return {
-    name: "local:" + runtimeErrorOverlayDisplay.name,
+    name: "local:" + runtimeErrorOverlayPlugin.name,
 
     apply(_config, env) {
       return env.command === "serve" && !env.ssrBuild;
@@ -90,7 +90,8 @@ const RUNTIME_ERROR_OVERLAY_MESSAGE_TYPE = "custom:runtime-error";
 const RUNTIME_ERROR_OVERLAY_CLIENT_SCRIPT = /* js */ `
 import { createHotContext } from "/@vite/client";
 
-const hot = createHotContext("/__runtimeErrorOverlayPlugin_client.js");
+// dummy file name to instantiate import.meta.hot
+const hot = createHotContext("/__runtimeErrorOverlayPlugin__.js");
 
 function sendError(error) {
   if (!(error instanceof Error)) {
