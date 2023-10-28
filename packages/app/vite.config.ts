@@ -12,7 +12,7 @@ export default defineConfig({
     unocss(),
     unocssDepHmrPlugin([require.resolve("@hiogawa/unocss-preset-antd")]),
     vitePluginTinyRefresh(),
-    errorOverlayPlugin(),
+    runtimeErrorOverlayDisplay(),
     themeScriptPlugin({
       storageKey: "unocss-preset-antd-app:theme",
     }),
@@ -45,12 +45,27 @@ export function unocssDepHmrPlugin(deps: string[]): Plugin {
 // based on the idea in
 // https://github.com/vitejs/vite/pull/6274#issuecomment-1087749460
 // https://github.com/vitejs/vite/issues/2076
-export function errorOverlayPlugin(): Plugin {
+export function runtimeErrorOverlayDisplay(): Plugin {
   return {
-    name: "local:" + errorOverlayPlugin.name,
+    name: "local:" + runtimeErrorOverlayDisplay.name,
+
+    apply(_config, env) {
+      return env.command === "serve" && !env.ssrBuild;
+    },
+
+    transformIndexHtml() {
+      return [
+        {
+          tag: "script",
+          attrs: { type: "module" },
+          children: RUNTIME_ERROR_OVERLAY_CLIENT_SCRIPT,
+        },
+      ];
+    },
+
     configureServer(server) {
       server.ws.on(
-        "runtime-error",
+        RUNTIME_ERROR_OVERLAY_MESSAGE_TYPE,
         (data: unknown, client: WebSocketClient) => {
           // deserialize error
           const error = Object.assign(new Error(), data);
@@ -69,3 +84,30 @@ export function errorOverlayPlugin(): Plugin {
     },
   };
 }
+
+const RUNTIME_ERROR_OVERLAY_MESSAGE_TYPE = "custom:runtime-error";
+
+const RUNTIME_ERROR_OVERLAY_CLIENT_SCRIPT = /* js */ `
+import { createHotContext } from "/@vite/client";
+
+const hot = createHotContext("/__runtimeErrorOverlayPlugin_client.js");
+
+function sendError(error) {
+  if (!(error instanceof Error)) {
+    error = new Error("(unknown runtime error)");
+  }
+  const serialized = {
+    message: error.message,
+    stack: error.stack,
+  };
+  hot.send("${RUNTIME_ERROR_OVERLAY_MESSAGE_TYPE}", serialized);
+}
+
+window.addEventListener("error", (evt) => {
+  sendError(evt.error);
+});
+
+window.addEventListener("unhandledrejection", (evt) => {
+  sendError(evt.reason);
+});
+`;
