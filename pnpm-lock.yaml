@@ -24,8 +24,8 @@ importers:
         specifier: ^0.0.3
         version: 0.0.3(vite@4.4.9)
       '@hiogawa/tiny-refresh':
-        specifier: 0.0.1-pre.9
-        version: 0.0.1-pre.9(react@18.2.0)(vite@4.4.9)
+        specifier: 0.0.1-pre.11
+        version: 0.0.1-pre.11(react@18.2.0)(vite@4.4.9)
       '@hiogawa/unocss-typescript-dsl':
         specifier: 2.0.0-pre.8
         version: 2.0.0-pre.8(@iconify/utils@2.1.9)(@unocss/config@0.55.7)(@unocss/core@0.55.7)(local-pkg@0.4.3)(magic-string@0.30.3)
@@ -1345,8 +1345,8 @@ packages:
       vite: 4.4.9(@types/node@18.17.17)
     dev: true
 
-  /@hiogawa/tiny-refresh@0.0.1-pre.9(react@18.2.0)(vite@4.4.9):
-    resolution: {integrity: sha512-wc0Pu/PyYQa18ncxd53d+rED2pVe8e8LIMCRPrO1vRRMNKOc32lbwT+cFOnCjRw93aI8dhOqiwy/AESR7rz7Bw==}
+  /@hiogawa/tiny-refresh@0.0.1-pre.11(react@18.2.0)(vite@4.4.9):
+    resolution: {integrity: sha512-rEdYSPxbt09HKzwF8kT/uxjWiRkAtX1+rTHFte2UMvPfVPhfQA6KB5LLbbzccWs4m0hUK+Y/tf/tm8ZVUji8Ww==}
     peerDependencies:
       react: '*'
       vite: '*'
