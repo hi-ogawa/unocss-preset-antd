@@ -956,3 +956,31 @@ export function StoryCubicBezier() {
     );
   }
 }
+
+export function StoryRuntimeErrorOverlay() {
+  return (
+    <main className="flex flex-col items-center gap-3 m-2">
+      <section className="flex flex-col gap-3 w-full max-w-lg border p-3">
+        <h2 className="text-xl">Runtime Error Overlay</h2>
+        <div className="flex gap-3">
+          <button
+            className="flex-1 antd-btn antd-btn-default"
+            onClick={() => {
+              throw new Error("error!");
+            }}
+          >
+            error
+          </button>
+          <button
+            className="flex-1 antd-btn antd-btn-default"
+            onClick={async () => {
+              throw new Error("unhandledrejection!");
+            }}
+          >
+            unhandledrejection
+          </button>
+        </div>
+      </section>
+    </main>
+  );
+}
