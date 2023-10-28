@@ -101,6 +101,9 @@ importers:
       '@hiogawa/unocss-preset-antd':
         specifier: workspace:*
         version: link:../lib
+      '@hiogawa/vite-runtime-error-overlay':
+        specifier: workspace:*
+        version: link:../vite-runtime-error-overlay
       react:
         specifier: ^18.2.0
         version: 18.2.0
@@ -232,6 +235,12 @@ importers:
       react:
         specifier: ^18.2.0
         version: 18.2.0
+
+  packages/vite-runtime-error-overlay:
+    devDependencies:
+      vite:
+        specifier: ^4.4.9
+        version: 4.4.9(@types/node@18.17.17)
 
 packages:
 

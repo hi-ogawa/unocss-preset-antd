@@ -19,6 +19,7 @@
     "@hiogawa/tiny-store": "0.0.1-pre.1",
     "@hiogawa/tiny-toast": "workspace:*",
     "@hiogawa/tiny-transition": "workspace:*",
+    "@hiogawa/vite-runtime-error-overlay": "workspace:*",
     "@hiogawa/unocss-preset-antd": "workspace:*",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
