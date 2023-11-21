@@ -1,6 +1,6 @@
 {
   "name": "@hiogawa/vite-runtime-error-overlay",
-  "version": "0.0.0-pre.0",
+  "version": "0.0.1",
   "homepage": "https://github.com/hi-ogawa/unocss-preset-antd/tree/main/packages/vite-runtime-error-overlay",
   "repository": {
     "type": "git",
