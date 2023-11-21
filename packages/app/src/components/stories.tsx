@@ -983,6 +983,14 @@ export function StoryRuntimeErrorOverlay() {
           >
             unhandledrejection
           </button>
+          <button
+            className="flex-1 antd-btn antd-btn-default"
+            onClick={() => {
+              throw new Error("test error (filter out)");
+            }}
+          >
+            error (filter-out)
+          </button>
         </div>
       </section>
     </main>

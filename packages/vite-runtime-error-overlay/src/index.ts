@@ -10,7 +10,9 @@ import { name as packageName } from "../package.json";
 // generateErrorPayload
 // generateFrame
 
-export function viteRuntimeErrorOverlayPlugin(): Plugin {
+export function viteRuntimeErrorOverlayPlugin(options?: {
+  filter?: (error: Error) => boolean;
+}): Plugin {
   return {
     name: packageName,
 
@@ -33,6 +35,10 @@ export function viteRuntimeErrorOverlayPlugin(): Plugin {
         // deserialize error
         const error = Object.assign(new Error(), data);
 
+        if (options?.filter && !options.filter(error)) {
+          return;
+        }
+
         // https://vitejs.dev/guide/api-plugin.html#client-server-communication
         // https://github.com/vitejs/vite/blob/5b58eca05939c0667cf9698e83f4f4849f3296f4/packages/vite/src/node/server/middlewares/error.ts#L54-L57
         client.send({
@@ -54,7 +60,7 @@ const CLIENT_SCRIPT = /* js */ `
 import { createHotContext } from "/@vite/client";
 
 // dummy file path to instantiate import.meta.hot
-const hot = createHotContext("/__runtimeErrorOverlayPlugin__.js");
+const hot = createHotContext("/__dummy__${packageName}");
 
 function sendError(error) {
   if (!(error instanceof Error)) {

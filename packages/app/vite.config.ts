@@ -13,7 +13,9 @@ export default defineConfig({
     unocss(),
     unocssDepHmrPlugin([require.resolve("@hiogawa/unocss-preset-antd")]),
     vitePluginTinyRefresh(),
-    viteRuntimeErrorOverlayPlugin(),
+    viteRuntimeErrorOverlayPlugin({
+      filter: (error) => !error.message.includes("(filter out)"),
+    }),
     themeScriptPlugin({
       storageKey: "unocss-preset-antd-app:theme",
     }),
