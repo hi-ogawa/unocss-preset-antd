@@ -14,8 +14,8 @@ export function viteRuntimeErrorOverlayPlugin(): Plugin {
   return {
     name: packageName,
 
-    apply(_config, env) {
-      return env.command === "serve" && !env.ssrBuild;
+    apply(config, env) {
+      return env.command === "serve" && !config.ssr;
     },
 
     transformIndexHtml() {
