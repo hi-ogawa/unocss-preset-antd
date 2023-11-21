@@ -1,6 +1,7 @@
 import { execSync } from "node:child_process";
 import { themeScriptPlugin } from "@hiogawa/theme-script/dist/vite";
 import { vitePluginTinyRefresh } from "@hiogawa/tiny-refresh/dist/vite";
+import { viteRuntimeErrorOverlayPlugin } from "@hiogawa/vite-runtime-error-overlay";
 import unocss from "unocss/vite";
 import { type Plugin, defineConfig } from "vite";
 
@@ -12,6 +13,9 @@ export default defineConfig({
     unocss(),
     unocssDepHmrPlugin([require.resolve("@hiogawa/unocss-preset-antd")]),
     vitePluginTinyRefresh(),
+    viteRuntimeErrorOverlayPlugin({
+      filter: (error) => !error.message.includes("(filter out)"),
+    }),
     themeScriptPlugin({
       storageKey: "unocss-preset-antd-app:theme",
     }),

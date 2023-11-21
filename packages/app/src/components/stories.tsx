@@ -956,3 +956,43 @@ export function StoryCubicBezier() {
     );
   }
 }
+
+export function StoryRuntimeErrorOverlay() {
+  return (
+    <main className="flex flex-col items-center gap-3 m-2">
+      <section className="flex flex-col gap-3 w-full max-w-lg border p-3">
+        <h2 className="text-xl">Runtime Error Overlay</h2>
+        <span className="text-colorTextSecondary text-sm">
+          This is enabled only for DEV mode (current mode ={" "}
+          {import.meta.env.DEV ? "DEV" : "PROD"})
+        </span>
+        <div className="flex gap-3">
+          <button
+            className="flex-1 antd-btn antd-btn-default"
+            onClick={() => {
+              throw new Error("test error");
+            }}
+          >
+            error
+          </button>
+          <button
+            className="flex-1 antd-btn antd-btn-default"
+            onClick={async () => {
+              throw new Error("test error (async)");
+            }}
+          >
+            unhandledrejection
+          </button>
+          <button
+            className="flex-1 antd-btn antd-btn-default"
+            onClick={() => {
+              throw new Error("test error (filter out)");
+            }}
+          >
+            error (filter-out)
+          </button>
+        </div>
+      </section>
+    </main>
+  );
+}
