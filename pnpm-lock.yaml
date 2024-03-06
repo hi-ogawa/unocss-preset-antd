@@ -1,4 +1,4 @@
-lockfileVersion: '6.1'
+lockfileVersion: '6.0'
 
 settings:
   autoInstallPeers: true
@@ -13,13 +13,13 @@ importers:
         version: 2.26.2
       '@hiogawa/icheck-ts':
         specifier: 0.0.1-pre.15
-        version: 0.0.1-pre.15(typescript@5.2.2)
+        version: 0.0.1-pre.15(typescript@5.3.3)
       '@hiogawa/inline-template':
         specifier: 0.0.1-pre.4
         version: 0.0.1-pre.4
       '@hiogawa/isort-ts':
         specifier: 1.1.2-pre.0
-        version: 1.1.2-pre.0(prettier@2.8.8)(typescript@5.2.2)
+        version: 1.1.2-pre.0(prettier@2.8.8)(typescript@5.3.3)
       '@hiogawa/theme-script':
         specifier: ^0.0.3
         version: 0.0.3(vite@4.4.9)
@@ -61,13 +61,13 @@ importers:
         version: 2.8.8
       tsup:
         specifier: ^7.2.0
-        version: 7.2.0(postcss@8.4.29)(typescript@5.2.2)
+        version: 7.2.0(postcss@8.4.29)(typescript@5.3.3)
       tsx:
         specifier: ^3.13.0
         version: 3.13.0
       typescript:
-        specifier: ^5.2.2
-        version: 5.2.2
+        specifier: ^5.3.3
+        version: 5.3.3
       unocss:
         specifier: ^0.55.7
         version: 0.55.7(postcss@8.4.29)(vite@4.4.9)
@@ -1304,13 +1304,13 @@ packages:
       - '@types/react'
     dev: false
 
-  /@hiogawa/icheck-ts@0.0.1-pre.15(typescript@5.2.2):
+  /@hiogawa/icheck-ts@0.0.1-pre.15(typescript@5.3.3):
     resolution: {integrity: sha512-3nZH2DfX6qrpDrPqgpYC20qH1n/zHI4J6U7ZB/RQbgvgUncfbmLzguw1tnQ2RllVC5WmS2Jb6W2us1ZcWSSD4g==}
     hasBin: true
     peerDependencies:
       typescript: '*'
     dependencies:
-      typescript: 5.2.2
+      typescript: 5.3.3
     dev: true
 
   /@hiogawa/inline-template@0.0.1-pre.4:
@@ -1318,7 +1318,7 @@ packages:
     hasBin: true
     dev: true
 
-  /@hiogawa/isort-ts@1.1.2-pre.0(prettier@2.8.8)(typescript@5.2.2):
+  /@hiogawa/isort-ts@1.1.2-pre.0(prettier@2.8.8)(typescript@5.3.3):
     resolution: {integrity: sha512-cqbrBLxpkFEORhBsLfE2MKMxyp1r/MTEeCgFG1rzjfZKwQDvekaEgZ96PGxcJqi7amhmJmlAuZJHFH8d1G7jXQ==}
     hasBin: true
     peerDependencies:
@@ -1329,7 +1329,7 @@ packages:
         optional: true
     dependencies:
       prettier: 2.8.8
-      typescript: 5.2.2
+      typescript: 5.3.3
     dev: true
 
   /@hiogawa/theme-script@0.0.3(vite@4.4.9):
@@ -5268,7 +5268,7 @@ packages:
     resolution: {integrity: sha512-336iVw3rtn2BUK7ORdIAHTyxHGRIHVReokCR3XjbckJMK7ms8FysBfhLR8IXnAgy7T0PTPNBWKiH514FOW/WSg==}
     dev: false
 
-  /tsup@7.2.0(postcss@8.4.29)(typescript@5.2.2):
+  /tsup@7.2.0(postcss@8.4.29)(typescript@5.3.3):
     resolution: {integrity: sha512-vDHlczXbgUvY3rWvqFEbSqmC1L7woozbzngMqTtL2PGBODTtWlRwGDDawhvWzr5c1QjKe4OAKqJGfE1xeXUvtQ==}
     engines: {node: '>=16.14'}
     hasBin: true
@@ -5299,7 +5299,7 @@ packages:
       source-map: 0.8.0-beta.0
       sucrase: 3.34.0
       tree-kill: 1.2.2
-      typescript: 5.2.2
+      typescript: 5.3.3
     transitivePeerDependencies:
       - supports-color
       - ts-node
@@ -5388,8 +5388,8 @@ packages:
       is-typed-array: 1.1.12
     dev: true
 
-  /typescript@5.2.2:
-    resolution: {integrity: sha512-mI4WrpHsbCIcwT9cF4FZvr80QUeKvsUsUvKDoR+X/7XHQH98xYD8YHZg7ANtz2GtZt/CBq2QJ0thkGJMHfqc1w==}
+  /typescript@5.3.3:
+    resolution: {integrity: sha512-pXWcraxM0uxAS+tN0AG/BF2TyqmHO014Z070UsJ+pFvYuRSq8KH8DmWpnbXe0pEPDHXZV3FcAbJkijJ5oNEnWw==}
     engines: {node: '>=14.17'}
     hasBin: true
     dev: true

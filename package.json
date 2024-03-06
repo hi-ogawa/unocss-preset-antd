@@ -4,8 +4,8 @@
   "scripts": {
     "build": "pnpm -r build",
     "test": "pnpm -r test",
-    "tsc": "tsc -b",
-    "dev:tsc": "tsc -b --watch --preserveWatchOutput",
+    "tsc": "tsc -b packages/*/tsconfig.json",
+    "dev:tsc": "pnpm tsc --watch --preserveWatchOutput",
     "lint": "pnpm run --seq /^lint:/",
     "lint-check": "pnpm run --seq /^lint-check:/",
     "lint-check:icheck": "icheck-ts --cache $(git grep -l --untracked --exclude-standard . 'packages/app/src/*.ts' 'packages/app/src/*.tsx' 'packages/app-solid/src/*.ts' 'packages/app-solid/src/*.tsx')",
@@ -34,7 +34,7 @@
     "prettier": "^2.8.8",
     "tsup": "^7.2.0",
     "tsx": "^3.13.0",
-    "typescript": "^5.2.2",
+    "typescript": "^5.3.3",
     "unocss": "^0.55.7",
     "vite": "^4.4.9",
     "vitest": "^0.34.4"
