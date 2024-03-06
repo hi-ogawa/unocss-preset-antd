@@ -1,6 +1,6 @@
 # unocss-preset-antd
 
-Simplified [unocss](https://github.com/unocss/unocss) port of [ant-design](https://github.com/ant-design/ant-design)
+[UnoCSS](https://github.com/unocss/unocss) port of [Ant Design](https://github.com/ant-design/ant-design)
 
 ```sh
 pnpm i
