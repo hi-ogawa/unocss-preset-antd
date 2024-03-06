@@ -1,8 +1,8 @@
 import { FloatingPortal } from "@floating-ui/react";
 import { Transition } from "@hiogawa/tiny-transition/dist/react";
+import { tw } from "@hiogawa/unocss-ts";
 import { useDelay, usePrevious, useRafTime } from "@hiogawa/utils-react";
 import React from "react";
-import { tw } from "../styles/tw";
 import { cls } from "../utils/misc";
 
 // based on https://github.com/hi-ogawa/ytsub-v3/blob/859264f683e8d1c6331ca1c630101c037a78dd94/app/components/top-progress-bar.tsx#L1-L2

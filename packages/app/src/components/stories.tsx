@@ -8,11 +8,11 @@ import {
   useTransitionManager,
 } from "@hiogawa/tiny-transition/dist/react";
 import { ANTD_VARS } from "@hiogawa/unocss-preset-antd";
+import { tw } from "@hiogawa/unocss-ts";
 import { none, objectKeys, objectPickBy, range } from "@hiogawa/utils";
 import { Debug, toSetSetState, useDelay } from "@hiogawa/utils-react";
 import React from "react";
 import ReactSelect from "react-select";
-import { tw } from "../styles/tw";
 import { cls } from "../utils/misc";
 import { useUrlParam } from "../utils/url-utils";
 import { getCollapseProps } from "./collapse";
