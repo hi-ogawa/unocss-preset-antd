@@ -27,8 +27,8 @@
     "build": "pnpm run --seq /^build:/",
     "build:theme": "tsx ./src/build-theme.ts > ./src/theme.ts",
     "build:tsup": "tsup",
-    "generate-tw": "unocss-typescript-dsl --outDir src/tw",
-    "generate-tw-test": "unocss-typescript-dsl --stdout | diff src/tw/types.ts -",
+    "generate-tw": "unocss-ts generate --outFile src/tw-types.d.ts",
+    "generate-tw-test": "unocss-ts generate | diff src/tw-types.d.ts -",
     "release": "pnpm publish --no-git-checks --access public"
   },
   "devDependencies": {

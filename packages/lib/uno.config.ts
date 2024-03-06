@@ -1,11 +1,4 @@
-// used to generate tw-api.ts
-
-import {
-  dummyPreset,
-  dummyRule,
-  dummyVariant,
-  filterColorPallete,
-} from "@hiogawa/unocss-typescript-dsl";
+import { filterColorPallete, presetFixAutocomplete } from "@hiogawa/unocss-ts";
 import {
   defineConfig,
   presetUno,
@@ -15,12 +8,10 @@ import {
 import { unocssPresetAntd } from "./src";
 
 export default defineConfig({
-  presets: [filterColorPallete(presetUno()), unocssPresetAntd(), dummyPreset()],
-  rules: [
-    dummyRule("ring-<num>"),
-    dummyRule("opacity-<percent>"),
-    dummyRule("rounded-full"),
+  presets: [
+    filterColorPallete(presetUno()),
+    unocssPresetAntd(),
+    presetFixAutocomplete(),
   ],
-  variants: [dummyVariant("media-$media")],
   transformers: [transformerDirectives(), transformerVariantGroup()],
 });

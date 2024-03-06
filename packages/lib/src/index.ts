@@ -1,8 +1,8 @@
+import { tw } from "@hiogawa/unocss-ts";
 import { objectEntries, objectMapValues, objectPickBy } from "@hiogawa/utils";
 import type { Preset } from "unocss";
 import { name as packageName } from "../package.json";
 import { theme } from "./theme";
-import { tw } from "./tw";
 
 // typed css variable name helper
 //   ANTD_VARS.colorText => "var(--antd-colorText)"

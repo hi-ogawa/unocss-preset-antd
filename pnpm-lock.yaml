@@ -1,4 +1,4 @@
-lockfileVersion: '6.1'
+lockfileVersion: '6.0'
 
 settings:
   autoInstallPeers: true
@@ -26,6 +26,9 @@ importers:
       '@hiogawa/tiny-refresh':
         specifier: 0.0.1-pre.11
         version: 0.0.1-pre.11(react@18.2.0)(vite@4.4.9)
+      '@hiogawa/unocss-ts':
+        specifier: 0.0.1-pre.0
+        version: 0.0.1-pre.0(@unocss/config@0.55.7)(unocss@0.55.7)
       '@hiogawa/unocss-typescript-dsl':
         specifier: 2.0.0-pre.8
         version: 2.0.0-pre.8(@iconify/utils@2.1.9)(@unocss/config@0.55.7)(@unocss/core@0.55.7)(local-pkg@0.4.3)(magic-string@0.30.3)
@@ -1379,6 +1382,17 @@ packages:
     dependencies:
       react: 18.2.0
     dev: false
+
+  /@hiogawa/unocss-ts@0.0.1-pre.0(@unocss/config@0.55.7)(unocss@0.55.7):
+    resolution: {integrity: sha512-L7s0E8ZLItWrGN4gtNydqj/SnLxR6oPSZxotjFadKKTtPyJa+PhZELLGoVGkhxBQvW1c/OanNi2IgedDIf3YPA==}
+    hasBin: true
+    peerDependencies:
+      '@unocss/config': '*'
+      unocss: '*'
+    dependencies:
+      '@unocss/config': 0.55.7
+      unocss: 0.55.7(postcss@8.4.29)(vite@4.4.9)
+    dev: true
 
   /@hiogawa/unocss-typescript-dsl@2.0.0-pre.8(@iconify/utils@2.1.9)(@unocss/config@0.55.7)(@unocss/core@0.55.7)(local-pkg@0.4.3)(magic-string@0.30.3):
     resolution: {integrity: sha512-AY2JT6opqjjuW6/bmhO9EijVxUxsUl3kLDtrRkM4sKR67jU9mzv16W1gDp5Frh5m2k+ewgBJOOhKK6lTXyjn4Q==}
