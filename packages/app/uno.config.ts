@@ -1,11 +1,10 @@
 import { unocssPresetAntd } from "@hiogawa/unocss-preset-antd";
 import {
-  dummyPreset,
-  dummyPresetIconsRules,
-  dummyRule,
   filterColorPallete,
+  presetFixAutocomplete,
   transformerTypescriptDsl,
-} from "@hiogawa/unocss-typescript-dsl";
+} from "@hiogawa/unocss-ts";
+import riIcon from "@iconify-json/ri/icons.json";
 import {
   defineConfig,
   presetIcons,
@@ -28,15 +27,9 @@ export default defineConfig({
         display: "inline-block",
       },
     }),
-    dummyPreset(),
-  ],
-  rules: [
-    dummyRule("absolute"),
-    dummyRule("fixed"),
-    ...dummyPresetIconsRules(["ri"]),
+    presetFixAutocomplete({ icons: [riIcon] }),
   ],
   transformers: [
-    // @ts-ignore peer dep version?
     transformerTypescriptDsl(),
     transformerDirectives(),
     transformerVariantGroup(),

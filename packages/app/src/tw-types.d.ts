@@ -2,6 +2,12 @@
 // AUTO-GENERATED
 //
 
+import "@hiogawa/unocss-ts";
+
+declare module "@hiogawa/unocss-ts" {
+  interface RuntimeType extends Api {}
+}
+
 type Property = RuleStatic | RuleDynamic | Shortcut;
 type Method = Variant;
 
@@ -25,7 +31,7 @@ type ApiToString = {
   $: string;
 };
 
-export type Api = ApiProperty & ApiMethod & ApiCustom & ApiToString;
+type Api = ApiProperty & ApiMethod & ApiCustom & ApiToString;
 
 
 //
@@ -3887,8 +3893,6 @@ export type RuleDynamic =
   | `i_ri_24_hours_line`
   | `i_ri_24_hours_fill`
   | `fixed`
-  | `absolute`
-  | `fixed`
   | `relative`
   | `absolute`
   | `rounded_full`
@@ -3899,6 +3903,7 @@ export type RuleDynamic =
   | `${"max_" | "min_" | ""}${"w" | "h"}_full`
   | `transition`
   | `border`
+  | `bg_${Theme_colors}`
   | `placeholder_opacity`
   | `placeholder_opacity_${Autocomplete_percent}`
   | `placeholder_${Theme_colors}`

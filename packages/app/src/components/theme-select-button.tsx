@@ -1,6 +1,6 @@
 import { getTheme, setTheme } from "@hiogawa/theme-script";
+import { tw } from "@hiogawa/unocss-ts";
 import React from "react";
-import { tw } from "../styles/tw";
 import { cls } from "../utils/misc";
 import { PopoverSimple } from "./popover";
 
